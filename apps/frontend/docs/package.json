@@ -1,0 +1,26 @@
+{
+  "name": "@frontend/docs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@repo/typescript-config": "workspace:",
+    "next": "catalog:next16",
+    "nextra": "catalog:nextra4",
+    "nextra-theme-docs": "catalog:nextra4",
+    "react": "catalog:react19",
+    "react-dom": "catalog:react19"
+  },
+  "devDependencies": {
+    "pagefind": "catalog:nextra4"
+  }
+}
