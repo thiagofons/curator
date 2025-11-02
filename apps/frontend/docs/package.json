@@ -18,7 +18,8 @@
     "nextra": "catalog:nextra4",
     "nextra-theme-docs": "catalog:nextra4",
     "react": "catalog:react19",
-    "react-dom": "catalog:react19"
+    "react-dom": "catalog:react19",
+    "react-medium-image-zoom": "catalog:styling"
   },
   "devDependencies": {
     "pagefind": "catalog:nextra4",

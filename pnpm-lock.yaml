@@ -47,6 +47,10 @@ catalogs:
     react-dom:
       specifier: ^19.2.0
       version: 19.2.0
+  styling:
+    react-medium-image-zoom:
+      specifier: ^5.4.0
+      version: 5.4.0
   tooling:
     '@types/node':
       specifier: 24.5.2
@@ -135,6 +139,9 @@ importers:
       react-dom:
         specifier: catalog:react19
         version: 19.2.0(react@19.2.0)
+      react-medium-image-zoom:
+        specifier: catalog:styling
+        version: 5.4.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
     devDependencies:
       '@types/react':
         specifier: catalog:react19

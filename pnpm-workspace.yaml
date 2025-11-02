@@ -29,6 +29,9 @@ catalogs:
     "@types/react": ^19.0.0
     "@types/react-dom": ^19.0.0
 
+  styling:
+    react-medium-image-zoom: ^5.4.0
+
   tooling:
     chalk: "4"
     dotenv: ^16.4.7
