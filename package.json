@@ -7,6 +7,7 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
+    "docs:dev": "turbo run dev --filter=\"@frontend/docs\"",
     "dev:all": "docker compose -p curator-dev -f docker-compose.development.yml --env-file=.env.development up -d --build",
     "dev:all:stop": "docker compose -p curator-dev -f docker-compose.development.yml --env-file=.env.development down"
   },
