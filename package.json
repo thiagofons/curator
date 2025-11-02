@@ -11,11 +11,11 @@
     "dev:all:stop": "docker compose -p curator-dev -f docker-compose.development.yml --env-file=.env.development down"
   },
   "devDependencies": {
-    "prettier": "^3.6.2",
-    "turbo": "^2.5.8",
-    "typescript": "5.9.2"
+    "prettier": "catalog:code-quality",
+    "turbo": "catalog:tooling",
+    "typescript": "catalog:tooling"
   },
-  "packageManager": "pnpm@9.0.0",
+  "packageManager": "pnpm@9.5.0",
   "engines": {
     "node": ">=18"
   }

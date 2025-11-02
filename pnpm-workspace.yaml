@@ -1,4 +1,25 @@
 packages:
-  - "apps/backend/*"
-  - "apps/frontend/*"
-  - "packages/*"
+  - apps/backend/*
+  - apps/frontend/*
+  - packages/*
+
+catalogs:
+  ai:
+    openai: ^4.85.1
+
+  code-quality:
+    prettier: ^3.3.3
+
+  rabbitmq:
+    amqplib: 0.10.9
+    amqp-connection-manager: ^4.1.14
+    "@types/amqplib": 0.10.7
+
+  tooling:
+    chalk: "4"
+    dotenv: ^16.4.7
+    readline: ^1.3.0
+    turbo: ^2.1.2
+    typescript: 5.9.2
+    "@types/node": 24.5.2
+    viem: ^2.23.2

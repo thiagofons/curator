@@ -1,6 +1,6 @@
 {
   "name": "@backend/agent",
-  "description": "A template for creating an OpenAI assistant using TypeScript and Node.js",
+  "description": "",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -9,20 +9,19 @@
     "dev": "tsc && node dist/index.js"
   },
   "keywords": [],
-  "author": "Thiago Arruda and Jarrod Watts",
-  "license": "MIT",
+  "author": "",
   "packageManager": "pnpm@9.0.0",
   "devDependencies": {
-    "@types/amqplib": "^0.10.7",
-    "@types/node": "^22.13.4",
-    "openai": "^4.85.1",
-    "readline": "^1.3.0",
-    "typescript": "^5.7.3",
-    "viem": "^2.23.2"
+    "openai": "catalog:ai",
+    "@types/amqplib": "catalog:rabbitmq",
+    "@types/node": "catalog:tooling",
+    "readline": "catalog:tooling",
+    "typescript": "catalog:tooling",
+    "viem": "catalog:tooling"
   },
   "dependencies": {
-    "amqplib": "^0.10.9",
-    "chalk": "4",
-    "dotenv": "^16.4.7"
+    "amqplib": "catalog:rabbitmq",
+    "chalk": "catalog:tooling",
+    "dotenv": "catalog:tooling"
   }
 }
