@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next --turbopack",
+    "dev": "next --turbopack --port 4001",
     "build": "next build",
-    "start": "next start",
+    "start": "next start --port 4001",
     "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind"
   },
   "keywords": [],
@@ -21,6 +21,8 @@
     "react-dom": "catalog:react19"
   },
   "devDependencies": {
-    "pagefind": "catalog:nextra4"
+    "pagefind": "catalog:nextra4",
+    "@types/react": "catalog:react19",
+    "@types/react-dom": "catalog:react19"
   }
 }
