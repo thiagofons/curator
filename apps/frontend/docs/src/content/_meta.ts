@@ -5,6 +5,7 @@ const meta: MetaRecord = {
   architecture: "Architecture",
   "platform-and-sre": "Platform and SRE",
   "developer-experience": "Developer Experience",
+  "api-reference": "API Reference",
 };
 
 export default meta;

@@ -1,0 +1,73 @@
+---
+title: "001 - Domain-Driven Design (DDD)"
+---
+
+# 📝 Architecture Decision Record (ADR)
+
+## 001 - Domain-Driven Design (DDD)
+
+|                | Value         |
+| :------------- | :------------ |
+| **Status**     | ✅ Accepted   |
+| **Date**       | 2025-11-02    |
+| **Decider(s)** | Thiago Arruda |
+
+---
+
+## 1. Context
+
+The Curator Platform is expanding its feature set, introducing complex workflows related to Roadmap creation, user interactions, and content synchronization (e.g., AI-Generated Roadmaps). The initial monolithic architecture is showing strain, leading to:
+
+- **Ambiguity:** Lack of clear boundaries between core business logic (Roadmaps) and supporting concerns (Authentication, Identity).
+- **Coupling:** Changes in the Identity module often require non-trivial changes in the Roadmap module.
+- **Scaling Difficulty:** Difficulty in scaling teams and services independently due to shared domain knowledge and overlapping code.
+
+To address this, we need a robust architectural paradigm that allows us to manage complexity, align software structure with business capabilities, and facilitate migration towards a microservices-oriented architecture.
+
+## 2. Decision
+
+We have decided to formally adopt **Domain-Driven Design (DDD)** as the foundational paradigm for all backend services and development practices on the Curator Platform.
+
+This involves:
+
+1.  **Establishing Bounded Contexts:** Defining explicit boundaries for key areas (e.g., `Roadmap Context`, `Identity`, `Interaction`) as outlined in the initial [Domain Model](/architecture/domain-model).
+2.  **Ubiquitous Language:** Enforcing the use of terms defined in the Domain Model across code, tests, and documentation.
+3.  **Modeling Aggregates:** Designing data models around Aggregates and Roots (e.g., `Roadmap` is an Aggregate Root), ensuring transactional consistency within those boundaries.
+
+This approach is chosen because it directly addresses the ambiguity and coupling issues, providing a clear path to independent service deployment.
+
+## 3. Consequences
+
+### ➕ Positive Consequences (Gains)
+
+- **Reduced Complexity:** Clear separation of concerns drastically reduces cognitive load for developers working within a single Bounded Context.
+- **Scalability:** Aligns service boundaries with business boundaries, facilitating future migration to microservices (each Bounded Context can become an independent service).
+- **Clarity in Documentation:** Creates a direct link between business requirements and the code structure, improving the quality of documentation (like the Domain Model).
+
+### ➖ Negative Consequences (Costs/Risks)
+
+- **Learning Curve:** Requires significant investment in training the entire team on DDD concepts (Aggregates, Repositories, Domain Events).
+- **Initial Overhead:** Higher initial development overhead due to stricter modeling requirements (e.g., creating explicit Repository patterns).
+- **Communication Overhead:** Requires strict discipline in communication between Bounded Contexts (e.g., relying on eventual consistency/Domain Events instead of direct database access).
+
+---
+
+## 4. Alternatives Considered
+
+### Alternative A: Standard Layered Architecture (Monolith)
+
+- **Description:** Continue with the current layered monolith but enforce stricter separation with code reviews.
+- **Reason for Rejection:** Does not address the core issue of shared domain knowledge and prevents alignment with the business. It only treats the symptoms (bad code structure) but not the cause (complex domain).
+
+### Alternative B: Event Sourcing / CQRS (More Advanced)
+
+- **Description:** Implement Command Query Responsibility Segregation (CQRS) or full Event Sourcing from the start.
+- **Reason for Rejection:** Overkill for the current complexity. DDD provides sufficient structure now and allows us to introduce CQRS/Event Sourcing later within specific Bounded Contexts if needed.
+
+---
+
+## 5. Related Links
+
+[Domain-Driven Design (Wikipedia)](https://en.wikipedia.org/wiki/Domain-driven_design)
+
+[Initial Domain Model Diagram](/architecture/domain-model#bounded-contexts-diagram)

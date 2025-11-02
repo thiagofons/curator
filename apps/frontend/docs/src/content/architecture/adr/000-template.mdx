@@ -1,0 +1,73 @@
+---
+# Nextra frontmatter metadata (optional, for sidebar index)
+title: "[NUMBER] Short, Descriptive Title"
+---
+
+# 📝 Architecture Decision Record (ADR)
+
+## [NUMBER] Short, Descriptive Title
+
+**Status:** **Date:** YYYY-MM-DD
+
+**Decider(s):** [Name(s) of the person or team who approved the decision]
+
+---
+
+## 1. Context
+
+This section describes the **technical problem** or **challenge** we are facing. Why is this decision necessary?
+
+- Describe the current system scenario (involved components, existing constraints).
+- Identify the driving forces (business requirements, technical limitations, technical debt).
+- Keep this section concise and objective.
+
+> _Example:_ Our current authentication system (module X) relies on a legacy provider scheduled for shutdown in 6 months. We need to migrate to a new provider that supports OAuth 2.0 and can be seamlessly integrated into our _Identity Bounded Context_. The main constraints are the timeline and maintaining zero impact on the user experience.
+
+## 2. Decision
+
+This section records the **final** technical decision made.
+
+- State the decision clearly and explicitly.
+- Briefly explain why this option was chosen over the alternatives.
+
+> _Example:_ We have decided to implement **Auth0** as the new identity provider. The `Identity` module will be refactored to use the OpenID Connect protocol with the new Auth0 SDKs. The session token will be exchanged for a JWT issued by Auth0 during the login flow.
+
+## 3. Consequences
+
+What are the immediate and long-term implications of this decision? List the impacts clearly.
+
+### ➕ Positive Consequences (Gains)
+
+- [E.g., Reduction of technical debt in the authentication module.]
+- [E.g., Native support for Single Sign-On (SSO) with reduced effort.]
+- [E.g., Enhanced security due to automatic provider updates.]
+
+### ➖ Negative Consequences (Costs/Risks)
+
+- [E.g., Additional financial cost for the Auth0 license.]
+- [E.g., Estimated development time of 4 weeks for the migration.]
+- [E.g., Risk of incompatibility with third-party legacy integrations (module Z).]
+
+---
+
+## 4. Alternatives Considered
+
+This section is crucial for providing context to the decision. List the options that were evaluated and the reasons why they were discarded.
+
+### Alternative A: [Name of Alternative]
+
+- **Description:** [E.g., Using self-hosted Keycloak.]
+- **Reason for Rejection:** [E.g., While open-source and free, the operational cost for maintenance, scalability, and security patching is too high for our current team.]
+
+### Alternative B: [Name of Alternative]
+
+- **Description:** [E.g., Developing an in-house identity provider from scratch.]
+- **Reason for Rejection:** [E.g., The security risk and the time required to reach feature parity with market solutions are unacceptable. This is not our *Core Domain*.]
+
+---
+
+## 5. Related Links
+
+[Link to the original issue in Jira/GitHub/etc.]
+[Link to the research document supporting the decision.]
+[Link to an ADR that this decision superseded or was superseded by.]
