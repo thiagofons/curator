@@ -1,26 +1,24 @@
-# infrastructure/modules/static-site/variables.tf
-
 variable "domain_name" {
-  description = "O nome de domínio completo (FQDN) do site. Ex: docs.curator.com.br"
+  description = "The fully qualified domain name (FQDN) of the site. Ex: docs.curator.com.br"
   type        = string
 }
 
 variable "acm_certificate_arn" {
-  description = "O ARN do certificado SSL/TLS no ACM (na região us-east-1)"
+  description = "The ARN of the SSL/TLS certificate in ACM (in the us-east-1 region)"
   type        = string
 }
 
 variable "oidc_provider_arn" {
-  description = "O ARN do provedor OIDC do GitHub (criado na pasta /global)"
+  description = "The ARN of the GitHub OIDC provider (created in the /global folder)"
   type        = string
 }
 
 variable "github_org_repo" {
-  description = "O caminho do repositório no GitHub. Ex: 'SeuTime/curator-monorepo'"
+  description = "The GitHub repository path. Ex: 'YourTeam/curator-monorepo'"
   type        = string
 }
 
 variable "github_branch" {
-  description = "O nome da branch que tem permissão para deploy. Ex: 'main'"
+  description = "The name of the branch that is allowed to deploy. Ex: 'main'"
   type        = string
 }

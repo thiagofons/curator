@@ -1,8 +1,5 @@
-# infrastructure/live/global/providers.tf
-
 terraform {
-  # 1. TRAVANDO A VERSÃO (ESTE É O CONSERTO)
-  # Estamos dizendo que queremos a versão mais recente 5.x do provedor AWS.
+  # 1. Locking the version
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -15,8 +12,7 @@ terraform {
 
   }
 
-  # 2. CONFIGURAÇÃO DO BACKEND
-  # (Vamos mover isso do main.tf para cá para centralizar)
+  # 2. Back-End configuration
   backend "s3" {
     bucket         = "curator-terraform-state-global"
     key            = "global/terraform.tfstate"
@@ -26,7 +22,7 @@ terraform {
   }
 }
 
-# 3. DEFINIÇÃO DOS PROVIDERS
+# 3. Providers definition
 provider "aws" {
   region = "us-east-1"
 }

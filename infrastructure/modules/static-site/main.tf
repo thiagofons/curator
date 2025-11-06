@@ -15,14 +15,11 @@ resource "aws_s3_bucket_public_access_block" "main" {
 }
 
 # --- 2. LOGGING (Pilar SRE/Observabilidade) ---
-# Um bucket separado para os logs de acesso do CloudFront
+# Separate bucket for production logging
 resource "aws_s3_bucket" "logs" {
   bucket = "${var.domain_name}-logs"
 }
 
-# (O CONSESRTO ESTÁ AQUI)
-# O CloudFront Logging é um serviço legado que EXIGE ACLs.
-# Devemos configurar o "owner" do bucket para aceitar ACLs.
 resource "aws_s3_bucket_ownership_controls" "logs" {
   bucket = aws_s3_bucket.logs.id
   rule {
@@ -30,8 +27,6 @@ resource "aws_s3_bucket_ownership_controls" "logs" {
   }
 }
 
-# (O CONSESRTO ESTÁ AQUI)
-# Devemos relaxar o bloqueio de ACLs APENAS para este bucket de logs.
 resource "aws_s3_bucket_public_access_block" "logs" {
   bucket = aws_s3_bucket.logs.id
 
@@ -41,8 +36,6 @@ resource "aws_s3_bucket_public_access_block" "logs" {
   restrict_public_buckets = true
 }
 
-# (O CONSESRTO ESTÁ AQUI)
-# Damos ao CloudFront a permissão de escrita via ACL.
 resource "aws_s3_bucket_acl" "logs" {
   depends_on = [
     aws_s3_bucket_ownership_controls.logs,

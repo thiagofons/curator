@@ -6,8 +6,7 @@ terraform {
     }
   }
 
-  # Backend de State para a infra de PRODUÇÃO
-  # Nota: Chave diferente (key = "production/...")
+  # State backend for production infra
   backend "s3" {
     bucket         = "curator-terraform-state-global" # Mesmo bucket
     key            = "production/terraform.tfstate"     # Caminho diferente

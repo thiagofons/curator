@@ -53,4 +53,3 @@ jobs:
           aws cloudfront create-invalidation \
             --distribution-id E3FRPQU4BALAJH \
             --paths "/*"
-        # TODO: Add Cloudfront distribution ID

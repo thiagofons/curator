@@ -11,7 +11,7 @@ provider "aws" {
   region = "us-east-1" 
 }
 
-# 1. O Bucket S3 para o State (Global)
+# 1. Bucket S3 for State (Global)
 # SRE/DevSecOps: Privacy, Criptography, Versioned
 resource "aws_s3_bucket" "state_global" {
   bucket = "curator-terraform-state-global"
