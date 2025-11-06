@@ -39,5 +39,5 @@
   },
   "material-icon-theme.activeIconPack": "nest",
   "files.eol": "\n",
-  "conventionalCommits.scopes": ["frontend/docs"]
+  "conventionalCommits.scopes": ["frontend/docs", "infrastructure"]
 }
