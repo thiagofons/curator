@@ -1,5 +1,8 @@
 # 📚 Curator Platform Documentation (Docs App)
 
+[![Status](https://img.shields.io/badge/Status-In%20Development-yellow.svg)](https://curator.com)
+[![Documentation](https://img.shields.io/badge/Documentation-Live%20Site-gree.svg)](https://docs.curator.com)
+
 ## 🌟 Project Overview
 
 This repository hosts the documentation source code for the **Curator Platform**, built using **Nextra**. The goal is to provide a single, organized source of truth for all architectural decisions, domain models, setup guides, and operational procedures for our engineering team.
