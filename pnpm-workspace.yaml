@@ -15,6 +15,10 @@ catalogs:
     "react-hook-form": ^7.62.0
     "zod": "^3.23.8"
 
+  docs:
+    typedoc: ^0.28.14
+    "typedoc-plugin-markdown": ^4.9.0
+
   next16:
     next: ^16.0.1
 
@@ -80,8 +84,6 @@ catalogs:
     dotenv: ^16.4.7
     readline: ^1.3.0
     turbo: ^2.1.2
-    postcss: ^8.4.47
-    "postcss-load-config": ^6
     typescript: 5.9.2
     viem: ^2.23.2
 
@@ -97,6 +99,8 @@ catalogs:
     "framer-motion": ^12.23.12
     "input-otp": ^1.4.2
     "lucide-react": ^0.447.0
+    postcss: ^8.4.47
+    "postcss-load-config": ^6
     "react-day-picker": ^9.8.1
     "react-resizable-panels": ^3.0.4
     recharts: 2.15.4

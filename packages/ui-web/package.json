@@ -14,8 +14,8 @@
     "@types/node": "catalog:tooling",
     "@types/react": "catalog:react19",
     "autoprefixer": "catalog:ui-libs",
-    "postcss": "catalog:tooling",
-    "postcss-load-config": "catalog:tooling",
+    "postcss": "catalog:ui-libs",
+    "postcss-load-config": "catalog:ui-libs",
     "tailwindcss": "catalog:ui-libs",
     "typescript": "catalog:tooling"
   },
@@ -47,7 +47,6 @@
     "@radix-ui/react-toggle": "catalog:radix",
     "@radix-ui/react-toggle-group": "catalog:radix",
     "@radix-ui/react-tooltip": "catalog:radix",
-    "@repo/tailwind-config": "workspace:*",
     "@storybook/react": "catalog:storybook9",
     "class-variance-authority": "catalog:ui-libs",
     "clsx": "catalog:ui-libs",

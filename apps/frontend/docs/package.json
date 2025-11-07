@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "next --turbopack --port 4001",
-    "build": "next build",
+    "build": "pnpx docs:generate && next build",
     "start": "next start --port 4001",
-    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind"
+    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind",
+    "docs:generate": "typedoc --plugin typedoc-plugin-markdown --tsconfig ../../../packages/ui-tokens/tsconfig.json --out src/content/api-reference/ui-tokens ../../../packages/ui-tokens/src/index.ts --hideBreadcrumbs true --hidePageTitle true --readme none"
   },
   "keywords": [],
   "author": "",
@@ -23,8 +24,11 @@
     "react-medium-image-zoom": "catalog:styling"
   },
   "devDependencies": {
+    "typedoc": "catalog:docs",
+    "typedoc-plugin-markdown": "catalog:docs",
     "pagefind": "catalog:nextra4",
     "@types/react": "catalog:react19",
-    "@types/react-dom": "catalog:react19"
+    "@types/react-dom": "catalog:react19",
+    "tailwindcss": "catalog:ui-libs"
   }
 }
