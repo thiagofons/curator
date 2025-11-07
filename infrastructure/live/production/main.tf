@@ -23,6 +23,25 @@ module "docs_site" {
   oidc_provider_arn     = data.terraform_remote_state.global.outputs.github_oidc_provider_arn
 }
 
+# Finds the Hosted Zone (que já configuramos no /global)
+data "aws_route53_zone" "primary" {
+  name = "curator.com.br"
+}
+
+# Creates the "Address" 
+resource "aws_route53_record" "docs_site_dns" {
+  zone_id = data.aws_route53_zone.primary.zone_id
+  name    = module.docs_site.domain_name 
+  type    = "A"
+
+  alias {
+    # Pois to our front door at Cloudfront
+    name                   = module.docs_site.cloudfront_distribution_domain_name
+    zone_id                = module.docs_site.cloudfront_distribution_hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
 # 3. Outputs for the PIPELINE (What we need for GitHub)
 output "docs_site_cloudfront_id" {
   description = "Cloudfront distribution ID for the pipeline"
