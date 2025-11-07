@@ -1,0 +1,98 @@
+---
+title: Bounded Contexts
+description: A deep dive into the four Bounded Contexts that define our microservices architecture, from the Core Domain to Supporting Subdomains.
+---
+
+# Bounded Contexts
+
+In Domain-Driven Design (DDD), a **Bounded Context (BC)** is the most important strategic pattern. It defines a hard boundary around a specific part of our business, protecting its unique language and logic.
+
+For our "Curator" platform, this isn't just a theoretical exercise. **Each Bounded Context maps directly to an independent microservice.**
+
+This model is our blueprint for scalability and maintainability. It ensures that our most valuable business logic (the Core Domain) is protected and can evolve independently from other parts of the system.
+
+Here is the high-level map of our domain:
+
+![The Bounded Contexts of the Curator platform](/domain.svg)
+{/* Ensure domain.png is in your /public folder or accessible path */}
+
+Let's explore each context in detail.
+
+---
+
+## 1. 🟥 The Roadmap Context (Our Core Domain)
+
+This is the absolute heart of our business. It's the "why" behind the entire platform and where we create unique value for our _Lifelong Learners_.
+
+- **Core Responsibility:** This context is solely responsible for the creation, structure, persistence, and retrieval of the learning journeys, which we call `Roadmaps`. It manages the logical sequence of `Steps` that form a complete learning path.
+- **Ubiquitous Language:** The key terms here are `Roadmap`, `Step`, `MediaStep` (for content like books, films, or albums), and `InfoStep` (for text-based context from a curator).
+- **Key Entities & Aggregates:**
+  - The **`Roadmap`** is the **Aggregate Root**. This is a critical concept: you cannot have a `Step` that exists without a `Roadmap`. All business rules for adding, removing, or re-ordering `Steps` are enforced by the `Roadmap` aggregate itself. This guarantees that no `Roadmap` can ever exist in an invalid state.
+  - We also model different types of roadmaps, such as `UserGeneratedRoadmap` (created by a human `CuratorUser`) and `AIGeneratedRoadmap` (created by our internal systems).
+
+### 🏛️ Architect's Note: Why This Boundary is Sacred
+
+The most important design decision here is defining what this context _does not_ do.
+
+1.  **It is Not a Social Service:** This service knows _nothing_ about comments, favorites, or ratings. A `Roadmap` has a `creatorId`, but it has no knowledge of who has "liked" it. This separation is vital. We keep our core business logic clean and unpolluted by the "noise" of social interactions, which have very different scalability and data patterns.
+2.  **It is Not an Identity Service:** This service only knows a `userId` (a UUID or string). It does not know the user's name, email, or password. If it needs to display the creator's name, it will _request_ that data from the `Identity` service, never storing a copy of it (or at least, a very limited, read-only cache).
+
+By enforcing these boundaries, we protect our **Core Domain** from the complexities of other subdomains, allowing it to remain focused, agile, and robust.
+
+---
+
+## 2. 🟩 The Identity Context (Supporting Subdomain)
+
+This context answers the question: "**Who** are our users?" It manages the _being_ of a user, not the _acting_ (like logging in).
+
+- **Core Responsibility:** This service is the single source of truth for all user profile information. It manages usernames, display names, biographies, profile pictures, and, most importantly, **Roles**.
+- **Ubiquitous Language:** The terms here are distinct. A `User` is a standard _Learner_ who consumes content. A `CuratorUser` is an _Expert_ with special permissions to create and publish official `Roadmaps`. An `Admin` has system-level permissions.
+- **Key Entities & Aggregates:** The **`User`** is the Aggregate Root. All associated data (like a `UserProfile` Value Object) is managed through this aggregate.
+
+### 🏛️ Architect's Note: The `Identity` vs. `Authentication` Split
+
+Why not just have one "User Service"? This is one of the most common and important architectural splits.
+
+1.  **Different Reasons to Change:** Our `Identity` service will change when the _business_ needs change (e.g., "Let's add a 'Portfolio URL' to the `CuratorUser` profile"). Our `Authentication` service changes when _technology_ or _security_ needs change (e.g., "We need to upgrade our password hashing algorithm from bcrypt to Argon2").
+2.  **Security Isolation:** This split is a major security principle. It isolates the "keys to the kingdom" (passwords, tokens) from the "public-facing" profile data (usernames, bios). A breach in the `Identity` service is serious, but it _does not_ automatically mean the attacker has gained access to the password hashes, which live in a completely separate service and database.
+3.  **Data Flow:** The `Identity` service provides user data _to other services_. The `Roadmap` service, for example, will query this service to get the name of the creator for a given `userId`. Conversely, the `Authentication` service _never_ provides data to other services; it simply validates credentials and issues a token (a JWT) that _other_ services can verify.
+
+---
+
+## 3. 🟨 The Authentication Context (Generic Subdomain)
+
+This context answers a single, critical question: "**Can you prove** who you are?"
+
+- **Core Responsibility:** This service has _one job_: to manage credentials and issue access tokens. It handles user registration (creating the `Login` credential), password hashing and validation, social logins (e.g., "Sign in with Google"), and the minting of JSON Web Tokens (JWTs).
+- **Key Entities:** The primary entity is `Login` or `Credential`. This entity is explicitly _not_ a `User`. It is simply a collection of authentication methods (like a hashed password or a Google OAuth ID) linked to a single `userId`.
+- **Ubiquitous Language:** `Login`, `Credential`, `Password`, `JWT`, `RefreshToken`.
+
+### 🏛️ Architect's Note: The Power of a "Generic Subdomain"
+
+This is a classic **Generic Subdomain**. Authentication is a complex, business-critical problem, but it is _not unique_ to Curator. Every app on earth needs to do this.
+
+By isolating it into its own context and service, we gain a massive strategic advantage: **replaceability**.
+
+Our engineering team can build and maintain this service using best-in-class security practices (like OWASP). However, if we grow to a point where it's no longer cost-effective to manage this ourselves, we can **delete this entire service** and replace it with an off-the-shelf, specialized vendor (like **Auth0**, **Okta**, or **Keycloak**) with _zero impact_ on our `Roadmap` (Core) or `Identity` services. They only care about a valid `userId` and a valid JWT, not _how_ that JWT was created. This is a powerful demonstration of loose coupling.
+
+---
+
+## 4. 🟦 The Interaction Context (Supporting Subdomain)
+
+This context captures all the social engagement and "many-to-many" relationships that form around our core content.
+
+- **Core Responsibility:** This service manages how users _engage_ with `Roadmaps`. Its entire domain revolves around `Favorites` (bookmarks) and `Comments`. In the future, this could expand to include ratings, claps, or sharing.
+- **Key Entities & Aggregates:** `Favorite` and `Comment` are likely their own Aggregate Roots. Each one links a `userId` to a `roadmapId`.
+- **Ubiquitous Language:** `Favorite`, `Comment`, `Engagement`.
+
+### 🏛️ Architect's Note: Scalability and Polyglot Persistence
+
+The most common question here is, "Why not just add a `comments` array to the `Roadmap` document in the `Roadmap` service?" The answer demonstrates several of our key architectural pillars.
+
+1.  **Dramatically Different Scalability Needs:** A single, popular `Roadmap` might have 50 `Steps` but **5,000,000** `Comments`. The `Roadmap` data is _read-heavy_ but has complex business logic. The `Comment` data is _write-heavy_ but has very simple logic (mostly CRUD).
+2.  **Violating the Aggregate Rule:** If `Comments` were part of the `Roadmap` aggregate, adding a _single comment_ would require loading and saving the _entire_ `Roadmap` document, leading to massive write contention and performance issues. A `Comment` is not a true part of the `Roadmap`; it's a separate concept _related_ to it.
+3.  **Enabling Polyglot Persistence:** This is a key pillar. By separating these concerns, we can choose the right database for the job.
+    - The **`Roadmap` Service** might use a Document DB (like **MongoDB**) to flexibly store the complex, nested structure of `Steps`.
+    - The **`Interaction` Service** might use a high-throughput relational database (like **PostgreSQL**) or even a key-value store optimized for fast writes and lookups by `roadmapId`.
+
+This separation allows each service to scale independently, use the best-fit technology, and keeps our `Roadmap` (Core Domain) service clean, fast, and focused exclusively on its primary business purpose.

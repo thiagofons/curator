@@ -1,0 +1,80 @@
+{
+  "name": "@repo/ui-web",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "ui": "pnpx shadcn@latest"
+  },
+  "peerDependencies": {
+    "react": "catalog:react19",
+    "zod": "catalog:core-libs"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "catalog:tooling",
+    "@types/react": "catalog:react19",
+    "autoprefixer": "catalog:ui-libs",
+    "postcss": "catalog:ui-libs",
+    "postcss-load-config": "catalog:ui-libs",
+    "tailwindcss": "catalog:ui-libs",
+    "typescript": "catalog:tooling"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "catalog:core-libs",
+    "@radix-ui/react-accordion": "catalog:radix",
+    "@radix-ui/react-alert-dialog": "catalog:radix",
+    "@radix-ui/react-aspect-ratio": "catalog:radix",
+    "@radix-ui/react-avatar": "catalog:radix",
+    "@radix-ui/react-checkbox": "catalog:radix",
+    "@radix-ui/react-collapsible": "catalog:radix",
+    "@radix-ui/react-context-menu": "catalog:radix",
+    "@radix-ui/react-dialog": "catalog:radix",
+    "@radix-ui/react-dropdown-menu": "catalog:radix",
+    "@radix-ui/react-hover-card": "catalog:radix",
+    "@radix-ui/react-label": "catalog:radix",
+    "@radix-ui/react-menubar": "catalog:radix",
+    "@radix-ui/react-navigation-menu": "catalog:radix",
+    "@radix-ui/react-popover": "catalog:radix",
+    "@radix-ui/react-progress": "catalog:radix",
+    "@radix-ui/react-radio-group": "catalog:radix",
+    "@radix-ui/react-scroll-area": "catalog:radix",
+    "@radix-ui/react-select": "catalog:radix",
+    "@radix-ui/react-separator": "catalog:radix",
+    "@radix-ui/react-slider": "catalog:radix",
+    "@radix-ui/react-slot": "catalog:radix",
+    "@radix-ui/react-switch": "catalog:radix",
+    "@radix-ui/react-tabs": "catalog:radix",
+    "@radix-ui/react-toggle": "catalog:radix",
+    "@radix-ui/react-toggle-group": "catalog:radix",
+    "@radix-ui/react-tooltip": "catalog:radix",
+    "@storybook/react": "catalog:storybook9",
+    "class-variance-authority": "catalog:ui-libs",
+    "clsx": "catalog:ui-libs",
+    "cmdk": "catalog:ui-libs",
+    "date-fns": "catalog:ui-libs",
+    "embla-carousel-react": "catalog:ui-libs",
+    "input-otp": "catalog:ui-libs",
+    "lucide-react": "catalog:ui-libs",
+    "next-themes": "^0.4.6",
+    "react-day-picker": "^9.11.1",
+    "react-hook-form": "catalog:core-libs",
+    "react-resizable-panels": "catalog:ui-libs",
+    "recharts": "^2.15.4",
+    "sonner": "catalog:ui-libs",
+    "tailwind-merge": "catalog:ui-libs",
+    "tailwindcss-animate": "catalog:ui-libs",
+    "vaul": "catalog:ui-libs"
+  },
+  "exports": {
+    "./globals.css": "./src/globals.css",
+    "./postcss.config": "./postcss.config.mjs",
+    "./tailwind.config": "./tailwind.config.ts",
+    "./lib/*": "./src/lib/*.ts",
+    "./hooks/*": [
+      "./src/hooks/*.ts",
+      "./src/hooks/*.tsx"
+    ],
+    "./base/*": "./src/components/base/*.tsx",
+    "./custom/*": "./src/components/custom/*.tsx"
+  }
+}
