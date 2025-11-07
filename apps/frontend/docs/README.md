@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app).
+# 📚 Curator Platform Documentation (Docs App)
 
-## Getting Started
+## 🌟 Project Overview
 
-First, run the development server:
+This repository hosts the documentation source code for the **Curator Platform**, built using **Nextra**. The goal is to provide a single, organized source of truth for all architectural decisions, domain models, setup guides, and operational procedures for our engineering team.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Getting Started
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+To run the documentation site locally, follow these steps.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load Inter, a custom Google Font.
+### Prerequisites
 
-## Learn More
+Ensure you have the following installed on your system:
 
-To learn more about Next.js, take a look at the following resources:
+- **Node.js** (version 18 or newer recommended)
+- **pnpm** (version 9.5.0)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Local Setup
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1.  **Clone the repository:**
 
-## Deploy on Vercel
+    ```bash
+    git clone https://github.com/thiagofons/curator.git
+    cd apps/frontend/docs
+    ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2.  **Install dependencies:**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+    ```bash
+    pnpm i
+    ```
+
+3.  **Run the development server:**
+
+    ```bash
+    pnpm dev
+    ```
+
+4.  **Access the Docs:**
+    Open your browser and navigate to `http://localhost:4001`. The site will automatically reload when you make changes to the source files (`content` directory).
+
+---
+
+## 📝 Documentation Progress Tracker
+
+This table tracks the completion status of the core documentation pages. Contributors should use this as a reference when prioritizing documentation work.
+
+| Area                     | Page                    | Status (Written) | Status (Reviewed) |
+| :----------------------- | :---------------------- | :--------------- | :---------------- |
+| **Architecture**         | `/architecture`         | ✏️               | ⬜                |
+| **Developer Experience** | `/developer-experience` | ⬜               | ⬜                |
+| **Getting Started**      | `/getting-started`      | ⬜               | ⬜                |
+| **Platform and SRE**     | `/platform-and-sre`     | ⬜               | ⬜                |
+
+> **Legend:**
+>
+> - **✅:** Completed and merged.
+> - **✏️:** In progress / Draft exists.
+> - **⬜:** Not started.
+
+---
+
+## 📦 Source File Structure
+
+The main content files for the documentation are located in the `pages` directory.
+
+| Path           | Description                                                                             |
+| :------------- | :-------------------------------------------------------------------------------------- |
+| `public/`      | Contains static assets like images, fonts, and the domain model diagram (`domain.png`). |
+| `src/app/`     | Logic for rendering MDX                                                                 |
+| `src/content/` | Contains the pages' MDX content                                                         |
+
+---
+
+## 🤝 Contribution
+
+We welcome contributions to improve the quality and completeness of our documentation.
+
+1.  Create a branch for your new document or update: `git checkout -b docs/add-page-name`
+2.  Add your content inside the `content` directory.
+3.  Update the **Documentation Progress Tracker** above with the status of your contribution.
+4.  Commit your changes and open a Pull Request.

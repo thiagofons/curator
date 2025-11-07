@@ -1,0 +1,130 @@
+---
+title: Domain-Driven Design (DDD)
+description: Understand the core concepts of Domain-Driven Design and how to apply them to your software architecture.
+---
+
+# Domain-Driven Design (DDD)
+
+**Domain-Driven Design (DDD)** is a software design approach that focuses on understanding the **core business domain** and creating software that truly reflects it. Instead of starting from technology or infrastructure, DDD starts from the **problem space** — the world your software exists to model.
+
+---
+
+## 💡 The Core Idea
+
+At its heart, DDD is about aligning **software models** with **real-world business concepts**.
+
+It encourages close collaboration between **domain experts** (people who deeply understand the business) and **developers**, ensuring that the code mirrors the real-world rules, behaviors, and language of the domain.
+
+---
+
+## 🧱 Building Blocks of DDD
+
+### 1. **Domain**
+
+The **domain** is the area of knowledge or activity around which your application logic revolves.
+
+For example, in a finance app, the domain could be _banking operations_ — accounts, transactions, balances, etc.
+
+### 2. **Model**
+
+A **model** is an abstraction that describes selected aspects of the domain and can be expressed in code.
+
+Your models should reflect the **ubiquitous language** — the shared vocabulary between developers and domain experts.
+
+---
+
+## 🗣️ Ubiquitous Language
+
+The **ubiquitous language** is a common, precise language used by the entire team — both technical and non-technical — to describe the domain.
+
+It eliminates ambiguity and keeps code, documentation, and discussions in sync.
+
+> Example: Instead of saying “create user” in code, say `registerStudent()` if your domain is education. The term should reflect the _meaning_ in the business context.
+
+---
+
+## 🧩 Layered Architecture
+
+DDD applications are typically structured in layers to separate concerns:
+
+| **Layer**                                   | **Description**                                                                                          |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| **Domain Layer**                            | Contains domain models and business logic — including entities, value objects, services, and aggregates. |
+| **Application Layer**                       | Coordinates tasks and delegates work to the domain layer.                                                |
+| **Infrastructure Layer**                    | Handles persistence, messaging, and communication with external systems.                                 |
+| **Interface Layer (or Presentation Layer)** | Provides APIs, user interfaces, or other external entry points into the system.                          |
+
+---
+
+## 🧠 Strategic Design Concepts
+
+### **1. Bounded Context**
+
+A **bounded context** defines the boundary within which a specific model is valid.  
+Different contexts may have similar terms that mean different things.
+
+> Example:  
+> In a _Sales_ context, “Customer” may mean a paying client.  
+> In a _Support_ context, “Customer” may mean anyone who submits a ticket.
+
+Clear boundaries prevent models from leaking into each other and keep systems maintainable.
+
+### **2. Context Map**
+
+A **context map** shows how different bounded contexts relate and interact — through integration patterns such as **shared kernel**, **customer-supplier**, or **anti-corruption layers**.
+
+---
+
+## 🧬 Tactical Patterns
+
+### **Entity**
+
+An **entity** is an object with a unique identity that persists through time, even if its attributes change.
+
+> Example: A `User` entity may change their name, but it’s still the same user.
+
+### **Value Object**
+
+A **value object** has no identity; it’s defined only by its attributes.  
+They are immutable and replaceable.
+
+> Example: An `Address` or `Money` class.
+
+### **Aggregate**
+
+An **aggregate** is a cluster of related entities and value objects treated as a single unit for data changes.  
+Each aggregate has a **root entity** responsible for enforcing consistency rules.
+
+### **Domain Service**
+
+A **domain service** represents an operation or concept that doesn’t naturally fit inside a single entity or value object but still belongs to the domain logic.
+
+> Example: A `PaymentProcessor` that handles the logic of transferring money between accounts.
+
+---
+
+## 🧭 Why Use DDD?
+
+- Keeps the focus on **business logic** rather than infrastructure.
+- Promotes **clear communication** between developers and domain experts.
+- Encourages **modular and maintainable architecture**.
+- Helps manage **complex domains** by defining clear boundaries.
+
+---
+
+## ⚙️ When to Apply DDD
+
+DDD shines in **complex, evolving domains** where understanding and modeling the business logic is critical.  
+For simpler applications or CRUD systems, it might be overkill.
+
+---
+
+## 📚 Further Reading
+
+- _Domain-Driven Design: Tackling Complexity in the Heart of Software_ — Eric Evans
+- _Implementing Domain-Driven Design_ — Vaughn Vernon
+- [https://dddcommunity.org/](https://dddcommunity.org/)
+
+---
+
+> DDD isn’t about fancy patterns — it’s about collaboration, clarity, and code that reflects the real world.
