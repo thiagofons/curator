@@ -1,0 +1,19 @@
+{
+  "name": "@repo/tailwind-config",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "tailwindcss": "catalog:ui-libs",
+    "tailwindcss-animate": "catalog:ui-libs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "exports": {
+    ".": "./tailwind.config.ts"
+  }
+}

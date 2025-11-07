@@ -14,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "@repo/typescript-config": "workspace:",
+    "@repo/ui-web": "workspace:",
     "next": "catalog:next16",
     "nextra": "catalog:nextra4",
     "nextra-theme-docs": "catalog:nextra4",
