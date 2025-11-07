@@ -7,8 +7,7 @@
     "dev": "next --turbopack --port 4001",
     "build": "pnpx docs:generate && next build",
     "start": "next start --port 4001",
-    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind",
-    "docs:generate": "typedoc --plugin typedoc-plugin-markdown --tsconfig ../../../packages/ui-tokens/tsconfig.json --out src/content/api-reference/ui-tokens ../../../packages/ui-tokens/src/index.ts --hideBreadcrumbs true --hidePageTitle true --readme none"
+    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind"
   },
   "keywords": [],
   "author": "",
