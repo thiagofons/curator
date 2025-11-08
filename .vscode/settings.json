@@ -43,6 +43,7 @@
     "frontend/docs",
     "infrastructure",
     "packages/ui-web",
-    "frontend/blog"
+    "frontend/blog",
+    "frontend/landing-page"
   ]
 }
