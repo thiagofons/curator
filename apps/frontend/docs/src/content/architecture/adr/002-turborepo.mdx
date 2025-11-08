@@ -1,0 +1,74 @@
+---
+# Nextra frontmatter metadata (optional, for sidebar index)
+title: "002 - Adopt Turborepo with Self-Hosted Cache"
+---
+
+# 📝 Architecture Decision Record (ADR)
+
+## 002 - Adopt Turborepo with a Self-Hosted AWS S3 Remote Cache
+
+|                | Value         |
+| :------------- | :------------ |
+| **Status**     | ✅ Accepted   |
+| **Date**       | 2025-11-08    |
+| **Decider(s)** | Thiago Arruda |
+
+---
+
+## 1. Context
+
+The Curator project is architected as a **monorepo** containing multiple applications (`apps/frontend/...`, `apps/backend/...`) and shared packages (`packages/...`).
+
+While `pnpm workspaces` manages dependencies, it does not solve the problem of **task orchestration** and **build performance**. Running tasks like `build` and `lint` across the entire workspace becomes unacceptably slow, both locally and in CI/CD pipelines.
+
+We need a tool that can cache build outputs, understand the dependency graph, and run tasks in parallel. Furthermore, this solution must align with our "AWS-first" infrastructure strategy, where we aim to manage and control all critical infrastructure and data within our own AWS account.
+
+## 2. Decision
+
+We will adopt **Turborepo** as the primary build system and task orchestrator for this monorepo.
+
+However, we will **reject** the default Vercel Remote Caching solution.
+
+Instead, we will implement a **self-hosted remote cache server** (e.g., the open-source `turborepo-remote-cache`) hosted within our AWS infrastructure (e.g., on AWS Fargate or Lambda). This server will be configured to use a private **AWS S3 bucket** as its storage backend.
+
+This decision provides the performance benefits of shared caching while maintaining full data sovereignty and avoiding vendor lock-in with the Vercel platform.
+
+## 3. Consequences
+
+### ➕ Positive Consequences (Gains)
+
+- **Drastic CI/CD Speedup:** CI builds will only build packages affected by a Pull Request's changes, pulling all other artifacts from the S3 cache.
+- **Improved Local DX:** Developers get fast local builds by pulling artifacts cached by the CI pipeline.
+- **No Vendor Lock-in:** We are not tied to the Vercel platform for a critical part of our build infrastructure.
+- **Data Sovereignty & Security:** All build artifacts (which may contain sensitive information) remain within our private AWS environment and S3 bucket.
+
+### ➖ Negative Consequences (Costs/Risks)
+
+- **Increased Infrastructure Overhead:** We are now responsible for deploying, managing, securing, and monitoring the `turborepo-remote-cache` server (e.g., handling its logs, scaling, and uptime).
+- **Increased Setup Complexity:** Requires configuration of the cache server, the S3 bucket (and its lifecycle policies), and the necessary IAM roles/permissions, whereas Vercel's solution is zero-config.
+- **Cache Debugging:** Debugging cache misses may be more complex, as it involves our self-hosted server layer.
+
+---
+
+## 4. Alternatives Considered
+
+### Alternative A: Turborepo with Vercel Remote Caching
+
+- **Description:** Use the default, zero-config remote caching provided by Vercel.
+- **Reason for Rejection:** While simple to set up, this creates a hard dependency on an external vendor (Vercel) and stores proprietary build artifacts outside our core AWS infrastructure. This contradicts our goals of data sovereignty and minimizing external dependencies.
+
+### Alternative B: `pnpm workspaces` scripts (No Cache)
+
+- **Description:** Use only the built-in `pnpm --filter` commands without a caching layer.
+- **Reason for Rejection:** This approach lacks any form of intelligent caching. Every CI run would build _everything_ from scratch, which is unacceptably slow, costly (in CI minutes), and defeats the primary performance benefit of a monorepo.
+
+### Alternative C: Nx
+
+- **Description:** Use Nx, another popular monorepo management tool.
+- **Reason for Rejection:** Nx is an excellent framework but brings significant configuration overhead and opinions (e.g., `project.json`, a custom plugin ecosystem). Turborepo provides the critical caching features we need with a simpler, drop-in configuration.
+
+---
+
+## 5. Related Links
+
+- [Link to the root `turbo.json` file](https://github.com/thiagofons/curator/blob/main/turbo.json)
