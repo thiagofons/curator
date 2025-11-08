@@ -2,7 +2,7 @@
   "site": {
     "title": "Curator | Blog",
     "base_url": "https://curator.com.br",
-    "base_path": "/",
+    "base_path": "/blog",
     "trailing_slash": false,
     "favicon": "/images/favicon.png",
     "logo": "/images/logo.svg",
