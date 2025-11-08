@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/blog",
+      "destination": "https_://curator-blog.vercel.app"
+    },
+    {
+      "source": "/blog/:path*",
+      "destination": "https_://curator-blog.vercel.app/:path*"
+    }
+  ]
+}
