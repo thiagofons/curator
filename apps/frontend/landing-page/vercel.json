@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/blog",
-      "destination": "https_://curator-blog.vercel.app"
+      "destination": "https://curator-blog.vercel.app"
     },
     {
       "source": "/blog/:path*",
-      "destination": "https_://curator-blog.vercel.app/:path*"
+      "destination": "https://curator-blog.vercel.app/:path*"
     }
   ]
 }
