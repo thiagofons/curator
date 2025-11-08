@@ -42,6 +42,7 @@
   "conventionalCommits.scopes": [
     "frontend/docs",
     "infrastructure",
-    "packages/ui-web"
+    "packages/ui-web",
+    "frontend/blog"
   ]
 }
