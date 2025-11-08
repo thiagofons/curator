@@ -175,4 +175,23 @@ data "aws_iam_policy_document" "github_perms" {
     actions   = ["cloudfront:CreateInvalidation"]
     resources = [aws_cloudfront_distribution.main.arn]
   }
+  # Turbo cache
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject"
+    ]
+    resources = ["arn:aws:s3:::curator-turbo-cache/curator/*"]
+  }
+  statement {
+    effect = "Allow"
+    actions   = ["s3:ListBucket"]
+    resources = ["arn:aws:s3:::curator-turbo-cache"]
+    condition {
+      test     = "StringLike"
+      variable = "s3:prefix"
+      values   = ["curator/*"]
+    }
+  }
 }
