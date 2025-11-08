@@ -64,7 +64,7 @@ export default function SearchBar({ searchList }: Props) {
     <div className="min-h-[45vh]">
       <input
         className="form-input w-full"
-        placeholder="Search posts"
+        placeholder="Busque posts"
         type="text"
         name="search"
         value={inputVal}
@@ -78,11 +78,11 @@ export default function SearchBar({ searchList }: Props) {
         <div className="mx-auto px-0 lg:col-8">
           {inputVal.length > 1 && (
             <h2 className="mt-8 mb-4 font-normal">
-              Found {searchResults?.length}
+              Encontrado(s) {searchResults?.length}
               {searchResults?.length && searchResults?.length === 1
-                ? " result"
-                : " results"}{" "}
-              for <span className="text-primary">{inputVal}</span>
+                ? " resultado"
+                : " resultados"}{" "}
+              para <span className="text-primary">{inputVal}</span>
             </h2>
           )}
           {searchResults?.length ? (
@@ -104,7 +104,7 @@ export default function SearchBar({ searchList }: Props) {
                     {plainify(item.content)}
                   </p>
                   <p className="mt-3 text-lg">
-                    Categories:{" "}
+                    Categorias:{" "}
                     {item.data.categories?.map(
                       (category: string, index: number) => (
                         <a key={index} href="#">

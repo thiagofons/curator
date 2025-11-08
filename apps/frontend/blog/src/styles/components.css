@@ -27,7 +27,6 @@
   @apply w-full;
 }
 
-
 /* social icon style */
 .social-icons {
   @apply space-x-4;
@@ -168,5 +167,5 @@
   @apply prose-ul:list-none;
   @apply prose-ol:list-none;
   @apply prose-td:px-3 prose-td:py-4;
-  @apply prose-li:relative prose-li:text-text prose-li:before:absolute prose-li:before:-left-6 prose-li:before:top-2 prose-li:before:h-[22px] prose-li:before:w-6 prose-li:before:bg-[url('/images/pointing-right.svg')] prose-li:before:bg-[length:20px_16px] prose-li:before:bg-no-repeat prose-li:before:content-[''];
+  @apply prose-li:relative prose-li:text-text prose-li:before:absolute prose-li:before:-left-5 prose-li:before:top-2 prose-li:before:h-3 prose-li:before:w-3 prose-li:before:bg-primary prose-li:before:rounded-full prose-li:before:content-[''];
 }

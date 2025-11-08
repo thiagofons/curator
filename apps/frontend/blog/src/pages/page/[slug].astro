@@ -2,7 +2,6 @@
 import Post from "@/components/Post.astro";
 import config from "@/config/config.json";
 import Base from "@/layouts/Base.astro";
-import Cta from "@/layouts/components/Cta.astro";
 import Pagination from "@/layouts/components/Pagination.astro";
 import { getSinglePage } from "@/lib/contentParser.astro";
 import { sortByDate } from "@/lib/utils/sortFunctions";
@@ -85,5 +84,4 @@ const currentPosts = sortedPosts.slice(indexOfFirstPost, indexOfLastPost);
     </div>
   </section>
 
-  <Cta cta={call_to_action} />
 </Base>

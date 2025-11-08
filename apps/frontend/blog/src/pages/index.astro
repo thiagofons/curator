@@ -2,7 +2,6 @@
 import Post from "@/components/Post.astro";
 import { settings } from "@/config/config.json";
 import Base from "@/layouts/Base.astro";
-import Cta from "@/layouts/components/Cta.astro";
 import Pagination from "@/layouts/components/Pagination.astro";
 import { getSinglePage } from "@/lib/contentParser.astro";
 import { sortByDate } from "@/lib/utils/sortFunctions";
@@ -28,8 +27,8 @@ const totalPages = Math.ceil(posts.length / settings.pagination);
     style="background-image: url('/images/banner/banner-bg.svg')"
   >
     <div class="container">
-      <div class="row">
-        <div class="lg:col-6">
+      <div class="row text-center">
+        <div class="">
           {
             banner?.title && (
               <h1 set:html={markdownify(banner?.title)} class="h2 mb-8" />
@@ -37,18 +36,7 @@ const totalPages = Math.ceil(posts.length / settings.pagination);
           }
         </div>
       </div>
-      <div class="banner-illustration">
-        {
-          banner?.image && (
-            <Image
-              src={banner.image}
-              width={768}
-              height={385}
-              alt={banner.title}
-            />
-          )
-        }
-      </div>
+      
     </div>
   </section>
   <!-- /End Banner -->
@@ -72,5 +60,4 @@ const totalPages = Math.ceil(posts.length / settings.pagination);
   </section>
   <!-- /End Blogs -->
 
-  <Cta cta={call_to_action} />
 </Base>

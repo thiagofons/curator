@@ -1,14 +1,14 @@
 {
   "site": {
-    "title": "Northendlab | Astro Blog Theme",
-    "base_url": "https://northendlab-light-astro.vercel.app/",
+    "title": "Curator | Blog",
+    "base_url": "https://curator.com.br",
     "base_path": "/",
     "trailing_slash": false,
     "favicon": "/images/favicon.png",
     "logo": "/images/logo.svg",
-    "logo_width": "197",
-    "logo_height": "31",
-    "logo_text": "Northendlab"
+    "logo_width": "128",
+    "logo_height": "56",
+    "logo_text": "Curator"
   },
 
   "settings": {
@@ -17,17 +17,17 @@
 
   "params": {
     "contact_form_action": "#",
-    "copyright": "© 2025 [Themefisher](https://themefisher.com/) All Rights Reserved"
+    "copyright": "© 2025 [Curator](https://curator.com.br/) Todos os direitos reservados"
   },
 
   "google_tag_manager": {
     "enable": false,
-    "gtm_id": "GTM-XXXXXX"
+    "gtm_id": "GTM-5FW6ZKCV"
   },
 
   "metadata": {
-    "meta_author": "Themefisher",
+    "meta_author": "Curator",
     "meta_image": "/images/og-image.png",
-    "meta_description": "Northendlab Light Astro Blog Theme"
+    "meta_description": "Curator"
   }
 }

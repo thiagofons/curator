@@ -75,7 +75,7 @@ const { category } = Astro.params;
       <div class="row px-3">
         <div class="mx-auto px-0 lg:col-8">
           <h1 class="h2 mb-8">
-            Posts related to <span class="text-primary">{category}</span> category
+            Posts relacionados com a categoria <span class="text-primary">{category}</span>
           </h1>
           <div class="rounded px-9 py-12 shadow md:p-[60px]">
             {page.data.map((post) => <Post post={post} />)}
