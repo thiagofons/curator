@@ -1,1 +1,63 @@
-# First Steps
+---
+title: "Getting Started: Core Monorepo Commands"
+description: "Learn how to use pnpm and Turborepo to run, build, and test applications in the Curator monorepo."
+---
+
+# Getting Started: Core Monorepo Commands
+
+Welcome to the Curator monorepo! To keep our **Developer Experience (DX)** pillar strong, we've built a fast and efficient development environment.
+
+This environment is powered by two key tools:
+
+- **pnpm:** Our package manager. It's extremely fast and saves disk space by using a content-addressable store.
+- **Turborepo:** Our high-speed build system and task runner. This is the "brain" of our monorepo.
+
+Turborepo understands the dependencies between all our `apps` and `packages`. It ensures that when you run a command (like `build`), you _only_ build what has actually changed, saving you massive amounts of time.
+
+> **The Golden Rule:** All commands in this guide must be run from the **root** of the monorepo (the `curator/` folder), not from within an app's folder (like `curator/apps/frontend/docs`).
+
+---
+
+## 1. Installation: The First Command
+
+Before you can run anything, you need to install all dependencies and link the local packages together.
+
+```bash
+pnpm install
+```
+
+This single command reads the `pnpm-workspace.yaml` file, finds every project in `apps/*` and `packages/*`, and installs all their dependencies in a single, shared `node_modules` folder at the root.
+
+## 2. The Core "Big 4" Commands
+
+These are the main scripts you'll use daily. They are defined in the root `package.json` and are powered by `pnpm turbo run ...`.
+
+|----------------------|-----------------------|
+|What does it do |Command |
+|----------------------|-----------------------|
+|Running Locally (dev) |`turbo run dev` |
+|Building for Production (build) |`turbo run build` |
+|Running Tests (test) |`turbo run test` |
+|Linting and Formatting Code (lint) |`turbo run lint` |
+
+## 3. The Superpower: Filtering (`--filter`)
+
+After a while, you'll notice that `pnpm dev` starts every app, which can be slow and noisy.
+
+The `--filter` flag lets you run a task for only a specific app or package.
+
+**Example 1: Run only the `docs` app**
+
+If you are only working on documentation, use this:
+
+```bash
+pnpm dev --filter=@frontend/docs
+```
+
+**Example 2: Build only the identity-service**
+
+If you only changed the Identity service, you don't need to rebuild the docs.
+
+```bash
+pnpm build --filter=@backend/identity-api
+```

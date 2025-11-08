@@ -20,7 +20,7 @@ jobs:
     env:
       TURBO_TEAM: "curator"
       TURBO_API: "s3://curator-turbo-cache?region=us-east-1"
-      TURBO_REMOTE_ONLY: "true"
+      TURBO_CACHE: "remote:rw"
 
     steps:
       - name: "Checkout Repository"
