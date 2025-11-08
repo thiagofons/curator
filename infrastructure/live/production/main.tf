@@ -11,7 +11,7 @@ data "terraform_remote_state" "global" {
 
 # 2. Call docs_site module
 module "docs_site" {
-  source = "../../modules/static-site"
+  source = "../../modules/aws-static-site"
 
   # --- Specific values for this site ---
   domain_name           = "docs.curator.com.br"
