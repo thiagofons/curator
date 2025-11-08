@@ -1,0 +1,14 @@
+{
+  "main": [
+    {
+      "name": "Home",
+      "url": "/"
+    }
+  ],
+  "footer": [
+    {
+      "name": "Política de Privacidade",
+      "url": "/privacy-policy"
+    }
+  ]
+}
