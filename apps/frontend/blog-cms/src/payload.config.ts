@@ -9,6 +9,7 @@ import sharp from 'sharp'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Posts } from './collections/Posts'
+import { Authors } from './collections/Authors'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -20,7 +21,28 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Posts],
+  // Allow requests from website dev and production domains
+  cors: [
+    'http://localhost:4001',
+    'http://127.0.0.1:4001',
+    'http://localhost:4003',
+    'http://127.0.0.1:4003',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'https://cms.curator.com.br',
+    'https://curator.com.br',
+    'https://www.curator.com.br',
+  ],
+  csrf: [
+    'http://localhost:4001',
+    'http://127.0.0.1:4001',
+    'http://localhost:4003',
+    'http://127.0.0.1:4003',
+    'https://cms.curator.com.br',
+    'https://curator.com.br',
+    'https://www.curator.com.br',
+  ],
+  collections: [Users, Media, Authors, Posts],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

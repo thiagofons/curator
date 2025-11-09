@@ -8,13 +8,21 @@ import type { CollectionEntry } from "astro:content";
 import Share from "@/components/Share.astro";
 
 type Props = {
-  post: CollectionEntry<"posts">;
+  post: any;
+  isPayload?: boolean;
+  contentHtml?: string;
 };
 
 const allAuthors = await getSinglePage("authors");
-const { post } = Astro.props;
-const { Content } = await render(post);
-const { title, authors, categories, image, date } = post.data;
+const { post, isPayload = false, contentHtml = "" } = Astro.props as Props;
+
+let Content: any = null;
+if (!isPayload) {
+  const rendered = await render(post as CollectionEntry<"posts">);
+  Content = rendered.Content;
+}
+
+const { title, authors = [], categories = [], image, date } = post.data || {};
 ---
 
 <section class="section">
@@ -29,27 +37,36 @@ const { title, authors, categories, image, date } = post.data;
             >
               <li>
                 {
-                  allAuthors
-                    .filter((author) =>
-                      authors
-                        .map((author) => slugify(author))
-                        .includes(slugify(author.data.title))
-                    )
-                    .map((author) => (
-                      <a
-                        href={`/authors/${slugify(author.id)}`}
-                        class="flex items-center hover:text-primary hover:underline"
-                      >
-                        <span>{author.data.title}</span>
-                      </a>
-                    ))
+                  isPayload
+                    ? authors.map((name: string, i: number) => (
+                        <a
+                          href={`/blog/authors/${post.data.authorSlugs?.[i] || post.data.authorSlugs?.[0]}`}
+                          class="flex items-center hover:text-primary hover:underline"
+                        >
+                          <span>{name}</span>
+                        </a>
+                      ))
+                    : allAuthors
+                        .filter((author) =>
+                          authors
+                            .map((author: string) => slugify(author))
+                            .includes(slugify(author.data.title))
+                        )
+                        .map((author) => (
+                          <a
+                            href={`/authors/${slugify(author.id)}`}
+                            class="flex items-center hover:text-primary hover:underline"
+                          >
+                            <span>{author.data.title}</span>
+                          </a>
+                        ))
                 }
               </li>
               <li>{dateFormat(date)}</li>
               <li>
                 <ul>
                   {
-                    categories.map((category) => (
+                    categories.map((category: string) => (
                       <li class="inline-block">
                         <a
                           href={`/blog/categories/${slugify(category)}`}
@@ -69,7 +86,11 @@ const { title, authors, categories, image, date } = post.data;
               )
             }
             <div class="content mb-16 text-left">
-              <Content />
+              {isPayload ? (
+                <div set:html={contentHtml}></div>
+              ) : (
+                <Content />
+              )}
             </div>
           </article>
 

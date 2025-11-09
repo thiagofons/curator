@@ -3,25 +3,25 @@ import Post from "@/components/Post.astro";
 import { settings } from "@/config/config.json";
 import Base from "@/layouts/Base.astro";
 import Pagination from "@/layouts/components/Pagination.astro";
-import { getSinglePage } from "@/lib/contentParser.astro";
+import { getPayloadPosts } from "@/lib/payload";
 import { sortByDate } from "@/lib/utils/sortFunctions";
 import { markdownify } from "@/lib/utils/textConverter";
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import { getEntry } from "astro:content";
 
-const blog = (await getEntry(
-  "blog",
-  "-index"
-)) as CollectionEntry<"blog">;
-const { banner } = blog.data;
-const posts = await getSinglePage("posts");
+// const blog = (await getEntry(
+//   "blog",
+//   "-index"
+// )) as CollectionEntry<"blog">;
+// const { banner } = blog.data;
+const posts = await getPayloadPosts();
 const sortPostByDate = sortByDate(posts);
 const totalPages = Math.ceil(posts.length / settings.pagination);
 ---
 
 <Base>
-  <!-- Banner -->
+  <!-- Banner
   <section
     class="banner"
     style="background-image: url('/images/banner/banner-bg.svg')"
@@ -39,7 +39,7 @@ const totalPages = Math.ceil(posts.length / settings.pagination);
       
     </div>
   </section>
-  <!-- /End Banner -->
+  /End Banner -->
 
   <!-- Blogs -->
   <section class="section">

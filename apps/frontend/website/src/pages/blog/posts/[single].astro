@@ -1,21 +1,25 @@
 ---
 import Base from "@/layouts/Base.astro";
-import { getSinglePage } from "@/lib/contentParser.astro";
 import PostSingle from "@/partials/PostSingle.astro";
+import { getPayloadPosts } from "@/lib/payload";
 
 export async function getStaticPaths() {
-  const posts = await getSinglePage("posts");
+  const posts = await getPayloadPosts() as any;
 
-  const paths = posts.map((post) => ({
+  const paths = posts.map((post: any) => ({
     params: {
-      single: post.id,
+      single: post.slug,
     },
-    props: { post },
+    props: { post, isPayload: true, contentHtml: post.contentHtml },
   }));
   return paths;
 }
 
-const { post } = Astro.props;
+const { post, isPayload, contentHtml } = Astro.props as {
+  post: any;
+  isPayload?: boolean;
+  contentHtml?: string;
+};
 const { title, meta_title, description, image } = post.data;
 ---
 
@@ -25,5 +29,5 @@ const { title, meta_title, description, image } = post.data;
   description={description}
   image={image}
 >
-  <PostSingle post={post} />
+  <PostSingle post={post} isPayload={isPayload} contentHtml={contentHtml} />
 </Base>
