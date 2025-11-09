@@ -48,7 +48,7 @@
   },
   "formatter": {
     "enabled": true,
-    "formatWithErrors": false,
+    "formatWithErrors": true,
     "indentStyle": "space",
     "expand": "always",
     "bracketSpacing": true,
@@ -59,7 +59,11 @@
   "css": {
     "parser": {
       "tailwindDirectives": true
-    }
+    },
+    "formatter": null,
+    "assist": null,
+    "linter": null,
+    "globals": []
   },
   "javascript": {
     "formatter": {
@@ -95,7 +99,11 @@
         "useComponentExportOnlyModules": "off",
         "useImportType": "off"
       },
-      "suspicious": "off"
+      "suspicious": {
+        "noUnknownAtRules": {
+          "level": "off"
+        }
+      }
     }
   },
   "overrides": [
