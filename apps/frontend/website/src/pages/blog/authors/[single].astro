@@ -22,6 +22,7 @@ const { author, isPayload, contentHtml } = Astro.props as {
 };
 const { title, image } = author.data;
 const posts = await getPayloadPostsByAuthorSlug(author.slug);
+
 ---
 
 <Base title={title}>

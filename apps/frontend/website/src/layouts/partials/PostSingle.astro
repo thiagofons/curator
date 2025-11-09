@@ -6,6 +6,7 @@ import { humanize, markdownify, slugify } from "@/lib/utils/textConverter";
 import { render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import Share from "@/components/Share.astro";
+import { CMS_BASE_URL } from "@/lib/payload";
 
 type Props = {
   post: any;
@@ -23,6 +24,7 @@ if (!isPayload) {
 }
 
 const { title, authors = [], categories = [], image, date } = post.data || {};
+const imageSrc = `${CMS_BASE_URL}/${image}`;
 ---
 
 <section class="section">
@@ -82,7 +84,7 @@ const { title, authors = [], categories = [], image, date } = post.data || {};
             </ul>
             {
               image && (
-                <Image src={image} height={500} width={1000} alt={title} />
+                <Image src={imageSrc} height={500} width={1000} alt={title} />
               )
             }
             <div class="content mb-16 text-left">
