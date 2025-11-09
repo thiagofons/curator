@@ -1,5 +1,6 @@
 {
   "$schema": "https://turborepo.com/schema.json",
+  "globalEnv": ["PAYLOAD_SECRET", "DATABASE_URI"],
   "ui": "tui",
   "tasks": {
     "build": {

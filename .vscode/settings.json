@@ -18,15 +18,11 @@
   "javascript.updateImportsOnFileMove.enabled": "always",
   "typescript.updateImportsOnFileMove.enabled": "always",
   "workbench.editor.tabSizing": "shrink",
-  "editor.defaultFormatter": "biomejs.biome",
   "editor.foldingImportsByDefault": false,
   "editor.formatOnPaste": true,
   "editor.codeActionsOnSave": {
     "source.removeUnusedImports": "always",
     "source.sortImports": "never",
-    "source.organizeImports.biome": "explicit",
-    "source.biome": "always",
-    "source.fixAll.biome": "always",
     "source.fixAll.markdownlint": "always"
   },
   "files.associations": {
@@ -44,7 +40,4 @@
     "packages/ui-web",
     "packages/ui-mobile"
   ],
-  "[json]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  }
 }

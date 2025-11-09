@@ -6,9 +6,12 @@
     "dev": "astro dev --port 4003",
     "build": "astro build",
     "preview": "astro preview --port 4003",
+    "lint": "eslint .",
     "check": "astro check"
   },
   "dependencies": {
+    "@repo/eslint-config": "workspace:",
+    "@repo/typescript-config": "workspace:",
     "@astrojs/check": "^0.9.5",
     "@astrojs/mdx": "4.3.10",
     "@astrojs/react": "^4.4.2",
@@ -16,7 +19,6 @@
     "@astrojs/sitemap": "^3.6.0",
     "@digi4care/astro-google-tagmanager": "^1.6.0",
     "@justinribeiro/lite-youtube": "^1.8.2",
-    "@repo/typescript-config": "workspace:",
     "astro": "5.15.4",
     "astro-auto-import": "^0.4.5",
     "astro-font": "^1.1.0",

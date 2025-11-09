@@ -3,13 +3,15 @@
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
-		"ui": "pnpx shadcn@latest"
+		"ui": "pnpx shadcn@latest",
+		"lint": "eslint ."
 	},
 	"peerDependencies": {
 		"react": "catalog:react19",
 		"zod": "catalog:core-libs"
 	},
 	"devDependencies": {
+		"@repo/eslint-config": "workspace:*",
 		"@repo/typescript-config": "workspace:*",
 		"@types/node": "catalog:tooling",
 		"@types/react": "catalog:react19",
