@@ -45,6 +45,7 @@
     "packages/ui-web",
     "frontend/blog",
     "frontend/landing-page",
-    "frontend/website"
+    "frontend/website",
+    "monorepo"
   ]
 }
