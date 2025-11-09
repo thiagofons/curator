@@ -6,7 +6,6 @@ import { humanize, markdownify, slugify } from "@/lib/utils/textConverter";
 import { render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import Share from "@/components/Share.astro";
-import { CMS_BASE_URL } from "@/lib/payload";
 
 type Props = {
   post: any;
@@ -24,7 +23,6 @@ if (!isPayload) {
 }
 
 const { title, authors = [], categories = [], image, date } = post.data || {};
-const imageSrc = `${CMS_BASE_URL}/${image}`;
 ---
 
 <section class="section">
@@ -56,7 +54,7 @@ const imageSrc = `${CMS_BASE_URL}/${image}`;
                         )
                         .map((author) => (
                           <a
-                            href={`/authors/${slugify(author.id)}`}
+                            href={`/blog/authors/${slugify(author.id)}`}
                             class="flex items-center hover:text-primary hover:underline"
                           >
                             <span>{author.data.title}</span>
@@ -84,7 +82,11 @@ const imageSrc = `${CMS_BASE_URL}/${image}`;
             </ul>
             {
               image && (
-                <Image src={imageSrc} height={500} width={1000} alt={title} />
+                isPayload ? (
+                  <img src={image} height={500} width={1000} alt={title} />
+                ) : (
+                  <Image src={image} height={500} width={1000} alt={title} />
+                )
               )
             }
             <div class="content mb-16 text-left">

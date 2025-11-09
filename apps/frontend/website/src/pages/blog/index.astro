@@ -16,6 +16,7 @@ import { getEntry } from "astro:content";
 // )) as CollectionEntry<"blog">;
 // const { banner } = blog.data;
 const posts = await getPayloadPosts();
+
 const sortPostByDate = sortByDate(posts);
 const totalPages = Math.ceil(posts.length / settings.pagination);
 ---

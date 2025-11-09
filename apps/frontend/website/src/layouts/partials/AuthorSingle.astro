@@ -4,7 +4,6 @@ import { getSinglePage } from "@/lib/contentParser.astro";
 import { markdownify } from "@/lib/utils/textConverter";
 import { render } from "astro:content";
 import Post from "@/components/Post.astro";
-import { CMS_BASE_URL } from "@/lib/payload";
 
 type Props = {
   author: any;
@@ -17,8 +16,6 @@ const { author, posts = null, isPayload = false, contentHtml = "" } =
   Astro.props as Props;
 
 const { title, image } = author.data || {};
-
-const imageSrc = `${CMS_BASE_URL}/${image}`
 
 let Content: any = null;
 if (!isPayload) {
@@ -41,7 +38,7 @@ if (!filterByAuthor) {
             image && (
               isPayload ? (
                 <img
-                  src={imageSrc}
+                  src={image}
                   class="mx-auto mb-8 rounded-full"
                   height={300}
                   width={300}
@@ -49,7 +46,7 @@ if (!filterByAuthor) {
                 />
               ) : (
                 <Image
-                  src={imageSrc}
+                  src={image}
                   class="mx-auto mb-8"
                   height={300}
                   width={300}

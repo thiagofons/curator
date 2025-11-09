@@ -45,9 +45,13 @@ type AdaptedAuthor = {
   contentHtml?: string;
 };
 
-export const CMS_BASE_URL = import.meta.env.DEV
-  ? "http://localhost:4001"
-  : "https://cms.curator.com.br";
+// CMS base URL can be overridden via env var.
+// Falls back to localhost in dev and production hostname otherwise.
+const ENV = (import.meta as any).env || {};
+export const CMS_BASE_URL: string =
+  (ENV.PUBLIC_CMS_BASE_URL as string) ||
+  (ENV.CMS_BASE_URL as string) ||
+  (ENV.DEV ? "http://localhost:4001" : "https://cms.curator.com.br");
 
 async function fetchJSON<T>(url: string): Promise<T> {
   const res = await fetch(url, {
@@ -66,6 +70,14 @@ function lexicalNodes(input: any): any[] {
     return input.root.children;
   if (Array.isArray(input.children)) return input.children;
   return [];
+}
+
+// Resolve localized Payload fields into a single value.
+function pickLocale<T = any>(value: any, preferred: string = "pt"): T {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return value as T;
+  if (preferred in value) return value[preferred] as T;
+  const firstKey = Object.keys(value)[0];
+  return firstKey ? (value as any)[firstKey] : value;
 }
 
 function escapeHtml(str: string): string {
@@ -150,20 +162,22 @@ function lexicalToHTML(input: any): string {
 function adapt(doc: any): AdaptedPost {
   const slug = String(doc.slug ?? doc.id ?? "");
   const created = String(doc.createdAt ?? doc.updatedAt ?? "");
-  const plain = lexicalToPlainText(doc.body);
-  const html = lexicalToHTML(doc.body);
+  const body = pickLocale(doc.body);
+  const title = pickLocale<string>(doc.title);
+  const plain = lexicalToPlainText(body);
+  const html = lexicalToHTML(body);
   const authorObj =
     doc.author && typeof doc.author === "object" ? doc.author : null;
   const authorsArr: string[] =
-    authorObj && authorObj.name ? [String(authorObj.name)] : [];
+    authorObj && authorObj.name ? [String(pickLocale(authorObj.name))] : [];
   const authorSlugs: string[] | undefined =
     authorObj && authorObj.slug ? [String(authorObj.slug)] : undefined;
   return {
     id: slug,
     slug,
     data: {
-      title: String(doc.title ?? slug),
-      meta_title: String(doc.title ?? slug),
+      title: String(title ?? slug),
+      meta_title: String(title ?? slug),
       description: plain ? plain.slice(0, 200) : undefined,
       image: undefined,
       date: created,
@@ -183,12 +197,21 @@ export async function getPayloadPosts(options?: {
   const params = new URLSearchParams();
   params.set("limit", "100");
   params.set("depth", "1");
+  params.set("locale", "pt");
   if (options?.authorId) {
     params.set("where[author][equals]", options.authorId);
   }
   const url = `${CMS_BASE_URL}/api/posts?${params.toString()}`;
-  const data = await fetchJSON<ListResponse>(url);
-  const docs = Array.isArray(data.docs) ? data.docs : [];
+  let data: ListResponse | null = null;
+  try {
+    data = await fetchJSON<ListResponse>(url);
+  } catch (err: any) {
+    console.warn(
+      `[payload] Failed to fetch posts from ${url}. Building with zero posts. Error: ${err?.message || err}`,
+    );
+    return [];
+  }
+  const docs = Array.isArray((data as any).docs) ? (data as any).docs : [];
   const adapted = docs.map(adapt);
   // Sort by date desc to match previous behavior
   adapted.sort(
@@ -203,10 +226,20 @@ export async function getPayloadPostBySlug(
   slug: string,
 ): Promise<AdaptedPost | null> {
   type ListResponse = { docs: PayloadPost[] } & Record<string, unknown>;
-  const url = `${CMS_BASE_URL}/api/posts?where[slug][equals]=${encodeURIComponent(slug)}&limit=1&depth=1`;
-  const data = await fetchJSON<ListResponse>(url);
+  const url = `${CMS_BASE_URL}/api/posts?where[slug][equals]=${encodeURIComponent(slug)}&limit=1&depth=1&locale=pt`;
+  let data: ListResponse | null = null;
+  try {
+    data = await fetchJSON<ListResponse>(url);
+  } catch (err: any) {
+    console.warn(
+      `[payload] Failed to fetch post by slug from ${url}. Building without this post. Error: ${err?.message || err}`,
+    );
+    return null;
+  }
   const doc =
-    Array.isArray(data.docs) && data.docs.length ? data.docs[0] : null;
+    Array.isArray((data as any).docs) && (data as any).docs.length
+      ? (data as any).docs[0]
+      : null;
   return doc ? adapt(doc) : null;
 }
 
@@ -214,20 +247,26 @@ export async function getPayloadPostBySlug(
 function resolveMediaURL(file: any): string | undefined {
   if (!file) return undefined;
   if (typeof file === "string") return undefined;
-  if (file.url) return String(file.url);
+  if (file.url) {
+    const url = String(file.url);
+    // Ensure absolute URL
+    return url.startsWith("http") ? url : `${CMS_BASE_URL}${url.startsWith("/") ? "" : "/"}${url}`;
+  }
   if (file.filename) return `${CMS_BASE_URL}/api/media/${file.filename}`;
   return undefined;
 }
 
 function adaptAuthor(doc: any): AdaptedAuthor {
   const slug = String(doc.slug ?? doc.id ?? "");
-  const html = lexicalToHTML(doc.bio);
+  const bio = pickLocale(doc.bio);
+  const name = pickLocale<string>(doc.name);
+  const html = lexicalToHTML(bio);
   const image = resolveMediaURL(doc.avatar);
   return {
     id: slug,
     slug,
     data: {
-      title: String(doc.name ?? slug),
+      title: String(name ?? slug),
       image,
     },
     contentHtml: html,
@@ -236,9 +275,17 @@ function adaptAuthor(doc: any): AdaptedAuthor {
 
 export async function getPayloadAuthors(): Promise<AdaptedAuthor[]> {
   type ListResponse = { docs: PayloadAuthor[] } & Record<string, unknown>;
-  const url = `${CMS_BASE_URL}/api/authors?limit=100&depth=1`;
-  const data = await fetchJSON<ListResponse>(url);
-  const docs = Array.isArray(data.docs) ? data.docs : [];
+  const url = `${CMS_BASE_URL}/api/authors?limit=100&depth=1&locale=pt`;
+  let data: ListResponse | null = null;
+  try {
+    data = await fetchJSON<ListResponse>(url);
+  } catch (err: any) {
+    console.warn(
+      `[payload] Failed to fetch authors from ${url}. Building with zero authors. Error: ${err?.message || err}`,
+    );
+    return [];
+  }
+  const docs = Array.isArray((data as any).docs) ? (data as any).docs : [];
   return docs.map(adaptAuthor);
 }
 
@@ -246,10 +293,20 @@ export async function getPayloadAuthorBySlug(
   slug: string,
 ): Promise<AdaptedAuthor | null> {
   type ListResponse = { docs: PayloadAuthor[] } & Record<string, unknown>;
-  const url = `${CMS_BASE_URL}/api/authors?where[slug][equals]=${encodeURIComponent(slug)}&limit=1&depth=1`;
-  const data = await fetchJSON<ListResponse>(url);
+  const url = `${CMS_BASE_URL}/api/authors?where[slug][equals]=${encodeURIComponent(slug)}&limit=1&depth=1&locale=pt`;
+  let data: ListResponse | null = null;
+  try {
+    data = await fetchJSON<ListResponse>(url);
+  } catch (err: any) {
+    console.warn(
+      `[payload] Failed to fetch author by slug from ${url}. Building without this author. Error: ${err?.message || err}`,
+    );
+    return null;
+  }
   const doc =
-    Array.isArray(data.docs) && data.docs.length ? data.docs[0] : null;
+    Array.isArray((data as any).docs) && (data as any).docs.length
+      ? (data as any).docs[0]
+      : null;
   return doc ? adaptAuthor(doc) : null;
 }
 
@@ -257,8 +314,16 @@ export async function getPayloadPostsByAuthorSlug(
   slug: string,
 ): Promise<AdaptedPost[]> {
   type ListResponse = { docs: any[] } & Record<string, unknown>;
-  const url = `${CMS_BASE_URL}/api/posts?limit=100&depth=1`;
-  const data = await fetchJSON<ListResponse>(url);
+  const url = `${CMS_BASE_URL}/api/posts?limit=100&depth=1&locale=pt`;
+  let data: ListResponse | null = null;
+  try {
+    data = await fetchJSON<ListResponse>(url);
+  } catch (err: any) {
+    console.warn(
+      `[payload] Failed to fetch posts by author from ${url}. Building with zero posts for author '${slug}'. Error: ${err?.message || err}`,
+    );
+    return [];
+  }
   const docs = (Array.isArray(data.docs) ? data.docs : []).filter((d) => {
     const a = d && d.author && typeof d.author === "object" ? d.author : null;
     return a && a.slug === slug;

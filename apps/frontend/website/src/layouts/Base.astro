@@ -31,6 +31,10 @@ if (theme.fonts.font_family.secondary) {
 
 const { title, meta_title, description, image, noindex, canonical } =
   Astro.props;
+const ENV = (import.meta as any).env || {};
+// Enable AstroFont only when explicitly allowed; otherwise fall back to
+// client-side Google Fonts <link> to avoid build-time network fetches.
+const ENABLE_ASTRO_FONT = String(ENV.ENABLE_ASTRO_FONT || "").toLowerCase() === "true";
 ---
 
 <!doctype html>
@@ -62,28 +66,49 @@ const { title, meta_title, description, image, noindex, canonical } =
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
     <!-- google font css -->
-    <AstroFont
-      config={[
-        {
-          src: [],
-          preload: false,
-          display: "swap",
-          name: fontPrimary!,
-          fallback: "sans-serif",
-          cssVariable: "font-primary",
-          googleFontsURL: `https://fonts.googleapis.com/css2?family=${pf}&display=swap`,
-        },
-        {
-          src: [],
-          preload: false,
-          display: "swap",
-          name: fontSecondary!,
-          fallback: "sans-serif",
-          cssVariable: "font-secondary",
-          googleFontsURL: `https://fonts.googleapis.com/css2?family=${sf}&display=swap`,
-        },
-      ]}
-    />
+    {
+      ENABLE_ASTRO_FONT ? (
+        <AstroFont
+          config={[
+            {
+              src: [],
+              preload: false,
+              display: "swap",
+              name: fontPrimary!,
+              fallback: "sans-serif",
+              cssVariable: "font-primary",
+              googleFontsURL: `https://fonts.googleapis.com/css2?family=${pf}&display=swap`,
+            },
+            {
+              src: [],
+              preload: false,
+              display: "swap",
+              name: fontSecondary!,
+              fallback: "sans-serif",
+              cssVariable: "font-secondary",
+              googleFontsURL: `https://fonts.googleapis.com/css2?family=${sf}&display=swap`,
+            },
+          ]}
+        />
+      ) : (
+        <>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+          {pf && (
+            <link
+              rel="stylesheet"
+              href={`https://fonts.googleapis.com/css2?family=${pf}&display=swap`}
+            />
+          )}
+          {sf && (
+            <link
+              rel="stylesheet"
+              href={`https://fonts.googleapis.com/css2?family=${sf}&display=swap`}
+            />
+          )}
+        </>
+      )
+    }
 
     <!-- responsive meta -->
     <meta
