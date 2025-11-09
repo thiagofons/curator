@@ -9,6 +9,7 @@ import sharp from 'sharp'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Posts } from './collections/Posts'
+import { Categories } from './collections/Categories'
 import { Authors } from './collections/Authors'
 import { en } from '@payloadcms/translations/languages/en'
 import { pt } from '@payloadcms/translations/languages/pt'
@@ -44,7 +45,7 @@ export default buildConfig({
     'https://curator.com.br',
     'https://www.curator.com.br',
   ],
-  collections: [Users, Media, Authors, Posts],
+  collections: [Users, Media, Authors, Categories, Posts],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

@@ -7,14 +7,7 @@ import { getPayloadPosts } from "@/lib/payload";
 import { sortByDate } from "@/lib/utils/sortFunctions";
 import { markdownify } from "@/lib/utils/textConverter";
 import { Image } from "astro:assets";
-import type { CollectionEntry } from "astro:content";
-import { getEntry } from "astro:content";
-
-// const blog = (await getEntry(
-//   "blog",
-//   "-index"
-// )) as CollectionEntry<"blog">;
-// const { banner } = blog.data;
+// All blog content is sourced from Payload CMS
 const posts = await getPayloadPosts();
 
 const sortPostByDate = sortByDate(posts);

@@ -22,6 +22,7 @@ type AdaptedPost = {
     authors: string[];
     authorSlugs?: string[];
     categories: string[];
+    categorySlugs?: string[];
   };
   body?: string; // plain text for previews
   contentHtml?: string; // full HTML for single page rendering
@@ -172,6 +173,13 @@ function adapt(doc: any): AdaptedPost {
     authorObj && authorObj.name ? [String(pickLocale(authorObj.name))] : [];
   const authorSlugs: string[] | undefined =
     authorObj && authorObj.slug ? [String(authorObj.slug)] : undefined;
+  const catDocs: any[] = Array.isArray(doc.categories) ? doc.categories : [];
+  const categories: string[] = catDocs
+    .map((c) => (c && typeof c === "object" ? pickLocale<string>(c.title) : undefined))
+    .filter(Boolean) as string[];
+  const categorySlugs: string[] | undefined = catDocs
+    .map((c) => (c && typeof c === "object" && c.slug ? String(c.slug) : undefined))
+    .filter(Boolean) as string[];
   return {
     id: slug,
     slug,
@@ -183,7 +191,8 @@ function adapt(doc: any): AdaptedPost {
       date: created,
       authors: authorsArr,
       authorSlugs,
-      categories: [],
+      categories,
+      categorySlugs,
     },
     body: plain,
     contentHtml: html,
@@ -335,4 +344,79 @@ export async function getPayloadPostsByAuthorSlug(
       new Date(a.data.date || 0).valueOf(),
   );
   return adapted;
+}
+
+// Categories
+type PayloadCategory = {
+  id: string;
+  slug: string;
+  title: string;
+  description?: any;
+};
+
+export type AdaptedCategory = {
+  id: string;
+  slug: string;
+  data: {
+    title: string;
+  };
+  contentHtml?: string;
+};
+
+function adaptCategory(doc: any): AdaptedCategory {
+  const slug = String(doc.slug ?? doc.id ?? "");
+  const title = String(pickLocale(doc.title) ?? slug);
+  const description = pickLocale(doc.description);
+  const html = lexicalToHTML(description);
+  return {
+    id: slug,
+    slug,
+    data: { title },
+    contentHtml: html,
+  };
+}
+
+export async function getPayloadCategories(): Promise<AdaptedCategory[]> {
+  type ListResponse = { docs: PayloadCategory[] } & Record<string, unknown>;
+  const url = `${CMS_BASE_URL}/api/categories?limit=100&depth=0&locale=pt`;
+  try {
+    const data = await fetchJSON<ListResponse>(url);
+    const docs = Array.isArray((data as any).docs) ? (data as any).docs : [];
+    return docs.map(adaptCategory);
+  } catch (err: any) {
+    console.warn(`[payload] Failed to fetch categories from ${url}: ${err?.message || err}`);
+    return [];
+  }
+}
+
+export async function getPayloadCategoryBySlug(slug: string): Promise<AdaptedCategory | null> {
+  type ListResponse = { docs: PayloadCategory[] } & Record<string, unknown>;
+  const url = `${CMS_BASE_URL}/api/categories?where[slug][equals]=${encodeURIComponent(slug)}&limit=1&depth=0&locale=pt`;
+  try {
+    const data = await fetchJSON<ListResponse>(url);
+    const doc = Array.isArray((data as any).docs) && (data as any).docs.length ? (data as any).docs[0] : null;
+    return doc ? adaptCategory(doc) : null;
+  } catch (err: any) {
+    console.warn(`[payload] Failed to fetch category by slug from ${url}: ${err?.message || err}`);
+    return null;
+  }
+}
+
+export async function getPayloadPostsByCategorySlug(slug: string): Promise<AdaptedPost[]> {
+  // Simpler approach: fetch all posts and filter client-side by category slug
+  type ListResponse = { docs: any[] } & Record<string, unknown>;
+  const url = `${CMS_BASE_URL}/api/posts?limit=100&depth=1&locale=pt`;
+  try {
+    const data = await fetchJSON<ListResponse>(url);
+    const docs = Array.isArray((data as any).docs) ? (data as any).docs : [];
+    const filtered = docs.filter((d) =>
+      Array.isArray(d.categories) && d.categories.some((c: any) => c && typeof c === 'object' && c.slug === slug),
+    );
+    const adapted = filtered.map(adapt);
+    adapted.sort((a, b) => new Date(b.data.date || 0).valueOf() - new Date(a.data.date || 0).valueOf());
+    return adapted;
+  } catch (err: any) {
+    console.warn(`[payload] Failed to fetch posts by category from ${url}: ${err?.message || err}`);
+    return [];
+  }
 }

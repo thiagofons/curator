@@ -66,10 +66,10 @@ const { title, authors = [], categories = [], image, date } = post.data || {};
               <li>
                 <ul>
                   {
-                    categories.map((category: string) => (
+                    categories.map((category: string, i: number) => (
                       <li class="inline-block">
                         <a
-                          href={`/blog/categories/${slugify(category)}`}
+                          href={`/blog/categories/${post.data.categorySlugs?.[i] || slugify(category)}`}
                           class="mr-3 hover:text-primary hover:underline"
                         >
                           {humanize(category)}

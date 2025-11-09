@@ -1,29 +1,16 @@
-import { CollectionConfig } from 'payload'
+import type { CollectionConfig } from 'payload'
 
-export const Posts: CollectionConfig = {
-  slug: 'posts',
+export const Categories: CollectionConfig = {
+  slug: 'categories',
   admin: { useAsTitle: 'title' },
   access: {
-    // Allow public read access for blog posts
+    // Public read; writes require authenticated user
     read: () => true,
     create: ({ req }) => Boolean(req.user),
     update: ({ req }) => Boolean(req.user),
     delete: ({ req }) => Boolean(req.user),
   },
   fields: [
-    {
-      name: 'categories',
-      type: 'relationship',
-      relationTo: 'categories',
-      hasMany: true,
-      required: false,
-    },
-    {
-      name: 'author',
-      type: 'relationship',
-      relationTo: 'authors',
-      required: false,
-    },
     {
       name: 'title',
       type: 'text',
@@ -37,9 +24,11 @@ export const Posts: CollectionConfig = {
       unique: true,
     },
     {
-      name: 'body',
+      name: 'description',
       type: 'richText',
       localized: true,
+      required: false,
     },
   ],
 }
+
