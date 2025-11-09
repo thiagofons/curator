@@ -46,6 +46,7 @@
     "frontend/blog",
     "frontend/landing-page",
     "frontend/website",
-    "monorepo"
+    "monorepo",
+    "frontend/blog-cms"
   ]
 }
