@@ -10,6 +10,8 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Posts } from './collections/Posts'
 import { Authors } from './collections/Authors'
+import { en } from '@payloadcms/translations/languages/en'
+import { pt } from '@payloadcms/translations/languages/pt'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -57,4 +59,8 @@ export default buildConfig({
   plugins: [
     // storage-adapter-placeholder
   ],
+  i18n: {
+    fallbackLanguage: 'pt',
+    supportedLanguages: { en, pt },
+  },
 })

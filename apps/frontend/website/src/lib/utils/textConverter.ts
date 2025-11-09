@@ -50,8 +50,8 @@ const htmlEntityDecoder = (htmlWithEntities: string): string => {
   let htmlWithoutEntities: string = htmlWithEntities.replace(
     /(&amp;|&lt;|&gt;|&quot;|&#39;)/g,
     (entity: string): string => {
-      return entityList[entity];
-    }
+      return entityList[entity]!;
+    },
   );
   return htmlWithoutEntities;
 };
