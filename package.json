@@ -8,13 +8,16 @@
     "test:unit": "turbo run test:unit",
     "test:integration": "turbo run test:integration",
     "test:contract": "turbo run test:contract",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "quality:format": "biome format --write --max-diagnostics=none",
+    "quality:lint": "biome lint --write --max-diagnostics=none",
+    "quality:check": "biome check --write --max-diagnostics=none",
     "check-types": "turbo run check-types",
     "docs:api": "typedoc",
     "dev:all": "docker compose -p curator-dev -f docker-compose.development.yml --env-file=.env.development up -d --build",
     "dev:all:stop": "docker compose -p curator-dev -f docker-compose.development.yml --env-file=.env.development down"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.3.4",
     "prettier": "catalog:code-quality",
     "turbo": "catalog:tooling",
     "typescript": "catalog:tooling"

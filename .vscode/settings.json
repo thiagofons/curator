@@ -48,5 +48,8 @@
     "frontend/website",
     "monorepo",
     "frontend/blog-cms"
-  ]
+  ],
+  "[json]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  }
 }
