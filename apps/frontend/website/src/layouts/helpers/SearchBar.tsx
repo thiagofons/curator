@@ -1,21 +1,30 @@
 import { plainify } from "@/lib/utils/textConverter";
 import Fuse from "fuse.js";
 import React, { useEffect, useRef, useState } from "react";
+/**
+ * Item shape consumed by the SearchBar. Typically adapted blog posts.
+ */
 export type SearchItem = {
   slug: string;
   data: any;
   content: any;
 };
 
+/** Props for the SearchBar component. */
 interface Props {
   searchList: SearchItem[];
 }
 
+/** Result item returned by Fuse.js. */
 interface SearchResult {
   item: SearchItem;
   refIndex: number;
 }
 
+/**
+ * Client-side search bar powered by Fuse.js fuzzy search.
+ * Maintains query state in the URL via `?q=`.
+ */
 export default function SearchBar({ searchList }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [inputVal, setInputVal] = useState("");

@@ -1,4 +1,7 @@
-// similer products
+/**
+ * Returns items similar to the current one based on shared categories or tags.
+ * Excludes the item with the provided slug.
+ */
 const similerItems = (currentItem: any, allItems: any, slug: string) => {
   let categories: [] = [];
   let tags: [] = [];

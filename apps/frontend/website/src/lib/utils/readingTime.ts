@@ -1,4 +1,8 @@
-// content reading
+/**
+ * Estimates reading time for a block of HTML/text content.
+ * Heuristic accounts for words and image count.
+ * @returns e.g., "03 Mins read"
+ */
 const readingTime = (content: string) => {
   const WPS = 275 / 60;
 

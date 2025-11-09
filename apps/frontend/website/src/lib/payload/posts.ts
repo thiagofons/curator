@@ -1,6 +1,7 @@
 import { CMS_BASE_URL, fetchJSON, pickLocale } from "./client";
 import { lexicalToHTML, lexicalToPlainText } from "./richtext";
 
+/** Raw post document as returned by Payload. */
 export type PayloadPost = {
   id: string;
   slug: string;
@@ -12,6 +13,10 @@ export type PayloadPost = {
   categories?: any[];
 };
 
+/**
+ * Post shape adapted for the website components and routes.
+ * Contains normalized fields, plain text, and rendered HTML.
+ */
 export type AdaptedPost = {
   id: string;
   slug: string;
@@ -30,6 +35,9 @@ export type AdaptedPost = {
   contentHtml?: string;
 };
 
+/**
+ * Adapts a Payload post document into the site format.
+ */
 function adapt(doc: any): AdaptedPost {
   const slug = String(doc.slug ?? doc.id ?? "");
   const created = String(doc.createdAt ?? doc.updatedAt ?? "");
@@ -69,6 +77,10 @@ function adapt(doc: any): AdaptedPost {
   };
 }
 
+/**
+ * Fetches posts from Payload (paginated up to 100) and adapts them.
+ * @param options Optional filters (e.g., authorId)
+ */
 export async function getPayloadPosts(options?: { authorId?: string }): Promise<AdaptedPost[]> {
   type ListResponse = { docs: PayloadPost[] } & Record<string, unknown>;
   const params = new URLSearchParams();
@@ -91,6 +103,7 @@ export async function getPayloadPosts(options?: { authorId?: string }): Promise<
   }
 }
 
+/** Fetches a single post by slug with depth=1 and locale=pt. */
 export async function getPayloadPostBySlug(slug: string): Promise<AdaptedPost | null> {
   type ListResponse = { docs: PayloadPost[] } & Record<string, unknown>;
   const url = `${CMS_BASE_URL}/api/posts?where[slug][equals]=${encodeURIComponent(slug)}&limit=1&depth=1&locale=pt`;
@@ -104,6 +117,7 @@ export async function getPayloadPostBySlug(slug: string): Promise<AdaptedPost | 
   }
 }
 
+/** Fetches posts filtered by an author's slug (client-side filter). */
 export async function getPayloadPostsByAuthorSlug(slug: string): Promise<AdaptedPost[]> {
   type ListResponse = { docs: any[] } & Record<string, unknown>;
   const url = `${CMS_BASE_URL}/api/posts?limit=100&depth=1&locale=pt`;
@@ -122,6 +136,7 @@ export async function getPayloadPostsByAuthorSlug(slug: string): Promise<Adapted
   }
 }
 
+/** Fetches posts filtered by a category slug (client-side filter). */
 export async function getPayloadPostsByCategorySlug(slug: string): Promise<AdaptedPost[]> {
   type ListResponse = { docs: any[] } & Record<string, unknown>;
   const url = `${CMS_BASE_URL}/api/posts?limit=100&depth=1&locale=pt`;
@@ -139,4 +154,3 @@ export async function getPayloadPostsByCategorySlug(slug: string): Promise<Adapt
     return [];
   }
 }
-

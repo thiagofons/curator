@@ -1,5 +1,10 @@
 import { glob } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
+/**
+ * Astro content collection definitions for static content areas.
+ * Note: blog posts/authors/categories are sourced from Payload CMS;
+ * these collections are used for site pages and legacy content only.
+ */
 
 // Homepage Collection schema
 const homepageCollection = defineCollection({
@@ -95,7 +100,7 @@ const pagesCollection = defineCollection({
   }),
 });
 
-// Export collections
+/** Exported Astro collections used by the site build. */
 export const collections = {
   homepage: homepageCollection,
   blog: blogCollection,

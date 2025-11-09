@@ -1,5 +1,9 @@
 import React from "react";
 
+/**
+ * Simple anchor-based button used in MDX shortcodes.
+ * Supports primary/outline styles and custom rel attributes.
+ */
 const Button = ({
   label,
   link,

@@ -1,5 +1,12 @@
-// Helpers to convert Payload Lexical richtext to plain text / HTML
+/**
+ * Helpers to convert Payload Lexical richtext to plain text / HTML.
+ * These utilities are intentionally minimal and cover common nodes
+ * like headings, paragraphs, links, and lists.
+ */
 
+/**
+ * Extracts a flat array of nodes from a Lexical editor state.
+ */
 function lexicalNodes(input: any): any[] {
   if (!input) return [];
   if (Array.isArray(input)) return input;
@@ -8,6 +15,7 @@ function lexicalNodes(input: any): any[] {
   return [];
 }
 
+/** Escapes HTML entities for safe rendering. */
 function escapeHtml(str: string): string {
   return str
     .replace(/&/g, "&amp;")
@@ -17,6 +25,7 @@ function escapeHtml(str: string): string {
     .replace(/'/g, "&#39;");
 }
 
+/** Returns plain text content for a given node recursively. */
 function textFromNode(node: any): string {
   if (!node) return "";
   if (typeof node === "string") return node;
@@ -25,6 +34,10 @@ function textFromNode(node: any): string {
   return children.map(textFromNode).join("");
 }
 
+/**
+ * Converts a Lexical editor state to plain text.
+ * Suitable for summaries / descriptions.
+ */
 export function lexicalToPlainText(input: any): string {
   const nodes = lexicalNodes(input);
   const parts: string[] = [];
@@ -41,6 +54,10 @@ export function lexicalToPlainText(input: any): string {
   return text.replace(/\n{3,}/g, "\n\n").trim();
 }
 
+/**
+ * Converts a Lexical editor state to simplified HTML.
+ * Intended for server-rendered content blocks.
+ */
 export function lexicalToHTML(input: any): string {
   const nodes = lexicalNodes(input);
   const htmlParts: string[] = [];
@@ -80,4 +97,3 @@ export function lexicalToHTML(input: any): string {
   }
   return htmlParts.join("");
 }
-

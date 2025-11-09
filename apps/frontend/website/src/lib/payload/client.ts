@@ -1,13 +1,32 @@
-// Shared client utilities for talking to Payload CMS
+/**
+ * Shared client utilities for talking to Payload CMS.
+ *
+ * Centralizes environment-driven base URL resolution, JSON fetching,
+ * locale helpers, and media URL normalization.
+ */
 
 const ENV = (import.meta as any).env || {};
 
 // Public CMS base URL resolution with dev/prod defaults
+/**
+ * Base URL of the Payload CMS HTTP API.
+ *
+ * Resolution order:
+ * - `PUBLIC_CMS_BASE_URL`
+ * - `CMS_BASE_URL`
+ * - Dev default: http://localhost:4001
+ * - Prod default: https://cms.curator.com.br
+ */
 export const CMS_BASE_URL: string =
   (ENV.PUBLIC_CMS_BASE_URL as string) ||
   (ENV.CMS_BASE_URL as string) ||
   (ENV.DEV ? "http://localhost:4001" : "https://cms.curator.com.br");
 
+/**
+ * Fetches a JSON resource and throws on non-2xx responses.
+ * @param url Absolute or relative URL to fetch
+ * @returns Parsed JSON body typed as `T`
+ */
 export async function fetchJSON<T>(url: string): Promise<T> {
   const res = await fetch(url, { headers: { Accept: "application/json" } });
   if (!res.ok) {
@@ -17,6 +36,12 @@ export async function fetchJSON<T>(url: string): Promise<T> {
 }
 
 // Resolve localized Payload fields into a single value.
+/**
+ * Returns the best-matching locale for a localized Payload field.
+ * If value is not localized, it is returned as-is.
+ * @param value Localized field object or primitive
+ * @param preferred Preferred locale code (default: "pt")
+ */
 export function pickLocale<T = any>(value: any, preferred: string = "pt"): T {
   if (!value || typeof value !== "object" || Array.isArray(value)) return value as T;
   if (preferred in value) return value[preferred] as T;
@@ -25,6 +50,11 @@ export function pickLocale<T = any>(value: any, preferred: string = "pt"): T {
 }
 
 // Resolve a media file object from Payload to an absolute URL
+/**
+ * Resolves a Payload upload field to an absolute URL suitable for rendering.
+ * @param file Payload upload field value
+ * @returns Absolute URL string or undefined when not resolvable
+ */
 export function resolveMediaURL(file: any): string | undefined {
   if (!file) return undefined;
   if (typeof file === "string") return undefined;
@@ -37,4 +67,3 @@ export function resolveMediaURL(file: any): string | undefined {
   if (file.filename) return `${CMS_BASE_URL}/api/media/${file.filename}`;
   return undefined;
 }
-

@@ -1,4 +1,7 @@
-// Barrel exports for Payload accessors
+/**
+ * Barrel exports for Payload accessors and types.
+ * Import from `@/lib/payload` across the website codebase.
+ */
 export { CMS_BASE_URL } from "./client";
 export {
   getPayloadPosts,
@@ -16,4 +19,3 @@ export {
 export type { AdaptedPost } from "./posts";
 export type { AdaptedAuthor } from "./authors";
 export type { AdaptedCategory } from "./categories";
-

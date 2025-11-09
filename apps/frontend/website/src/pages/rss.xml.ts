@@ -5,7 +5,10 @@ import type { CollectionEntry } from "astro:content";
 import config from "../config/config.json";
 import { getSinglePage } from "../lib/contentParser.astro";
 import { getPayloadPosts } from "@/lib/payload";
-
+/**
+ * Generates the site's RSS feed from Payload-backed blog posts.
+ * Uses @astrojs/rss to produce XML.
+ */
 export async function GET(context: APIContext): Promise<Response> {
   const publishedPosts = await getPayloadPosts();
 

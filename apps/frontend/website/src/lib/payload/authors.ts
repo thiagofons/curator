@@ -1,6 +1,7 @@
 import { CMS_BASE_URL, fetchJSON, pickLocale, resolveMediaURL } from "./client";
 import { lexicalToHTML } from "./richtext";
 
+/** Raw author document as returned by Payload. */
 export type PayloadAuthor = {
   id: string;
   slug: string;
@@ -9,6 +10,7 @@ export type PayloadAuthor = {
   avatar?: any;
 };
 
+/** Author shape adapted for the website components and routes. */
 export type AdaptedAuthor = {
   id: string;
   slug: string;
@@ -19,6 +21,7 @@ export type AdaptedAuthor = {
   contentHtml?: string;
 };
 
+/** Adapts a Payload author document into the site format. */
 function adaptAuthor(doc: any): AdaptedAuthor {
   const slug = String(doc.slug ?? doc.id ?? "");
   const bio = pickLocale(doc.bio);
@@ -36,6 +39,7 @@ function adaptAuthor(doc: any): AdaptedAuthor {
   };
 }
 
+/** Fetches all authors with depth=1 (localized to pt). */
 export async function getPayloadAuthors(): Promise<AdaptedAuthor[]> {
   type ListResponse = { docs: PayloadAuthor[] } & Record<string, unknown>;
   const url = `${CMS_BASE_URL}/api/authors?limit=100&depth=1&locale=pt`;
@@ -49,6 +53,7 @@ export async function getPayloadAuthors(): Promise<AdaptedAuthor[]> {
   }
 }
 
+/** Fetches a single author by slug with depth=1 (localized to pt). */
 export async function getPayloadAuthorBySlug(slug: string): Promise<AdaptedAuthor | null> {
   type ListResponse = { docs: PayloadAuthor[] } & Record<string, unknown>;
   const url = `${CMS_BASE_URL}/api/authors?where[slug][equals]=${encodeURIComponent(slug)}&limit=1&depth=1&locale=pt`;
@@ -61,4 +66,3 @@ export async function getPayloadAuthorBySlug(slug: string): Promise<AdaptedAutho
     return null;
   }
 }
-
