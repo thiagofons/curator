@@ -1,27 +1,34 @@
 ---
-import Post from "@/components/Post.astro";
-import config from "@/config/config.json";
-import Base from "@/layouts/Base.astro";
-import Pagination from "@/layouts/components/Pagination.astro";
-import { markdownify } from "@/lib/utils/textConverter";
+import Post from "@/components/Post.astro"
+import config from "@/config/config.json"
+import Base from "@/layouts/Base.astro"
+import Pagination from "@/layouts/components/Pagination.astro"
 // No image from static blog content; render title from Payload category
-import { getPayloadCategories, getPayloadCategoryBySlug, getPayloadPostsByCategorySlug } from "@/lib/payload";
-const { pagination } = config.settings;
+import {
+  getPayloadCategories,
+  getPayloadCategoryBySlug,
+  getPayloadPostsByCategorySlug,
+} from "@/lib/payload"
+import { markdownify } from "@/lib/utils/textConverter"
+
+const { pagination } = config.settings
 
 export async function getStaticPaths() {
-  const categories = await getPayloadCategories();
+  const categories = await getPayloadCategories()
 
   return categories.map((category) => {
     return {
-      params: { category: category.slug },
-    };
-  });
+      params: {
+        category: category.slug,
+      },
+    }
+  })
 }
 
-const { category } = Astro.params;
-const posts = await getPayloadPostsByCategorySlug(category!);
-const categoryObj = await getPayloadCategoryBySlug(category!);
-const totalPages = Math.ceil(posts.length / pagination);
+const { category } = Astro.params
+const posts = await getPayloadPostsByCategorySlug(category!)
+const categoryObj = await getPayloadCategoryBySlug(category!)
+const totalPages = Math.ceil(posts.length / pagination)
 ---
 
 <Base title={categoryObj?.data.title || category}>

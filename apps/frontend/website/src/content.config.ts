@@ -1,5 +1,6 @@
-import { glob } from "astro/loaders";
-import { defineCollection, z } from "astro:content";
+import { defineCollection, z } from "astro:content"
+import { glob } from "astro/loaders"
+
 /**
  * Astro content collection definitions for static content areas.
  * Note: blog posts/authors/categories are sourced from Payload CMS;
@@ -25,7 +26,7 @@ const homepageCollection = defineCollection({
       })
       .optional(),
   }),
-});
+})
 
 // Homepage Collection schema
 const blogCollection = defineCollection({
@@ -46,49 +47,67 @@ const blogCollection = defineCollection({
       })
       .optional(),
   }),
-});
+})
 
 // Post collection schema
 const postsCollection = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "src/content/posts" }),
+  loader: glob({
+    pattern: "**/*.{md,mdx}",
+    base: "src/content/posts",
+  }),
   schema: z.object({
     title: z.string(),
     meta_title: z.string().optional(),
     description: z.string().optional(),
     date: z.date(),
     image: z.string().optional(),
-    authors: z.array(z.string()).default(["admin"]),
-    categories: z.array(z.string()).default(["others"]),
-    tags: z.array(z.string()).default(["others"]),
+    authors: z.array(z.string()).default([
+      "admin",
+    ]),
+    categories: z.array(z.string()).default([
+      "others",
+    ]),
+    tags: z.array(z.string()).default([
+      "others",
+    ]),
     draft: z.boolean().optional(),
   }),
-});
+})
 
 // contact collection schema
 const contactCollection = defineCollection({
-  loader: glob({ pattern: "**/-*.{md,mdx}", base: "src/content/contact" }),
+  loader: glob({
+    pattern: "**/-*.{md,mdx}",
+    base: "src/content/contact",
+  }),
   schema: z.object({
     title: z.string(),
     content: z.string(),
     image: z.string().optional(),
     draft: z.boolean().optional(),
   }),
-});
+})
 
 // Author collection schema
 const authorsCollection = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "src/content/authors" }),
+  loader: glob({
+    pattern: "**/*.{md,mdx}",
+    base: "src/content/authors",
+  }),
   schema: z.object({
     title: z.string(),
     image: z.string().optional(),
     description: z.string().optional(),
     meta_title: z.string().optional(),
   }),
-});
+})
 
 // Pages collection schema
 const pagesCollection = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "src/content/pages" }),
+  loader: glob({
+    pattern: "**/*.{md,mdx}",
+    base: "src/content/pages",
+  }),
   schema: z.object({
     id: z.string().optional(),
     title: z.string(),
@@ -98,7 +117,7 @@ const pagesCollection = defineCollection({
     layout: z.string().optional(),
     draft: z.boolean().optional(),
   }),
-});
+})
 
 /** Exported Astro collections used by the site build. */
 export const collections = {
@@ -108,4 +127,4 @@ export const collections = {
   pages: pagesCollection,
   authors: authorsCollection,
   contact: contactCollection,
-};
+}

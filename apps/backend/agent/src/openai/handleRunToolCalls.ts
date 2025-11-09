@@ -1,7 +1,7 @@
-import OpenAI from "openai";
-import { Run } from "openai/resources/beta/threads/runs/runs.mjs";
-import { Thread } from "openai/resources/beta/threads/threads.mjs";
-import { tools } from "~/tools/allTools";
+import { tools } from "~/tools/allTools"
+import type OpenAi from "openai"
+import type { Run } from "openai/resources/beta/threads/runs/runs.mjs"
+import type { Thread } from "openai/resources/beta/threads/threads.mjs"
 
 /**
  * Handles the execution of tool calls required by a given run and submits the outputs.
@@ -18,45 +18,45 @@ import { tools } from "~/tools/allTools";
  */
 export async function handleRunToolCalls(
   run: Run,
-  client: OpenAI,
-  thread: Thread
+  client: OpenAi,
+  thread: Thread,
 ): Promise<Run> {
-  const toolCalls = run.required_action?.submit_tool_outputs?.tool_calls;
-  if (!toolCalls) return run;
+  const toolCalls = run.required_action?.submit_tool_outputs?.tool_calls
+  if (!toolCalls) return run
 
   const toolsOutputs = await Promise.all(
     toolCalls.map(async (tool) => {
-      const toolConfig = tools[tool.function.name];
+      const toolConfig = tools[tool.function.name]
       if (!toolConfig) {
-        console.error(`Tool ${tool.function.name} not found`);
+        console.error(`Tool ${tool.function.name} not found`)
       }
 
       try {
-        const args = JSON.parse(tool.function.arguments);
-        const output = await toolConfig.handler(args);
+        const args = JSON.parse(tool.function.arguments)
+        const output = await toolConfig.handler(args)
 
         return {
           tool_call_id: tool.id,
           output: String(output),
-        };
+        }
       } catch (error) {
         const errorMessage =
-          error instanceof Error ? error.message : String(error);
+          error instanceof Error ? error.message : String(error)
 
         return {
           tool_call_id: tool.id,
           output: `Error: ${errorMessage}`,
-        };
+        }
       }
-    })
-  );
+    }),
+  )
 
   const validOutputs = toolsOutputs.filter(
-    Boolean
-  ) as OpenAI.Beta.Threads.Runs.RunSubmitToolOutputsParams.ToolOutput[];
-  if (validOutputs.length === 0) return run;
+    Boolean,
+  ) as OpenAi.Beta.Threads.Runs.RunSubmitToolOutputsParams.ToolOutput[]
+  if (validOutputs.length === 0) return run
 
   return client.beta.threads.runs.submitToolOutputsAndPoll(thread.id, run.id, {
     tool_outputs: validOutputs,
-  });
+  })
 }

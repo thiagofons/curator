@@ -1,17 +1,16 @@
 ---
-import Post from "@/components/Post.astro";
-import { settings } from "@/config/config.json";
-import Base from "@/layouts/Base.astro";
-import Pagination from "@/layouts/components/Pagination.astro";
-import { getPayloadPosts } from "@/lib/payload";
-import { sortByDate } from "@/lib/utils/sortFunctions";
-import { markdownify } from "@/lib/utils/textConverter";
-import { Image } from "astro:assets";
-// All blog content is sourced from Payload CMS
-const posts = await getPayloadPosts();
+import Post from "@/components/Post.astro"
+import { settings } from "@/config/config.json"
+import Base from "@/layouts/Base.astro"
+import Pagination from "@/layouts/components/Pagination.astro"
+import { getPayloadPosts } from "@/lib/payload"
+import { sortByDate } from "@/lib/utils/sortFunctions"
 
-const sortPostByDate = sortByDate(posts);
-const totalPages = Math.ceil(posts.length / settings.pagination);
+// All blog content is sourced from Payload CMS
+const posts = await getPayloadPosts()
+
+const sortPostByDate = sortByDate(posts)
+const totalPages = Math.ceil(posts.length / settings.pagination)
 ---
 
 <Base>

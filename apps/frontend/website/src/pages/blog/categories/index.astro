@@ -1,9 +1,9 @@
 ---
-import Base from "@/layouts/Base.astro";
-import { humanize } from "@/lib/utils/textConverter";
-import { getPayloadCategories } from "@/lib/payload";
+import Base from "@/layouts/Base.astro"
+import { getPayloadCategories } from "@/lib/payload"
+import { humanize } from "@/lib/utils/textConverter"
 
-const categories = await getPayloadCategories();
+const categories = await getPayloadCategories()
 ---
 
 <Base title={"categories"}>

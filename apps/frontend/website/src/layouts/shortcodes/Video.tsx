@@ -1,4 +1,5 @@
-import React from "react";
+import React from "react"
+
 function Video({
   title,
   width = 500,
@@ -6,18 +7,18 @@ function Video({
   src,
   ...rest
 }: {
-  title: string;
-  width: number;
-  height: number | "auto";
-  src: string;
-  [key: string]: any;
+  title: string
+  width: number
+  height: number | "auto"
+  src: string
+  [key: string]: any
 }) {
   return (
     <video
       className="overflow-hidden"
-      width={width}
+      controls={true}
       height={height}
-      controls
+      width={width}
       {...rest}
     >
       <source
@@ -26,7 +27,7 @@ function Video({
       />
       {title}
     </video>
-  );
+  )
 }
 
-export default Video;
+export default Video

@@ -1,9 +1,13 @@
-import sharedConfig from "@repo/ui-web/tailwind.config";
-import type { Config } from "tailwindcss";
+import sharedConfig from "@repo/ui-web/tailwind.config"
+import type { Config } from "tailwindcss"
 
 const config = {
-  presets: [sharedConfig],
-  content: ["./src/**/*.{ts,tsx}"],
-} satisfies Config;
+  presets: [
+    sharedConfig,
+  ],
+  content: [
+    "./src/**/*.{ts,tsx}",
+  ],
+} satisfies Config
 
-export default config;
+export default config

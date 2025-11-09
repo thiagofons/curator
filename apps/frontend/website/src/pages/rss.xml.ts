@@ -1,18 +1,18 @@
-import type { RSSFeedItem } from "@astrojs/rss";
-import rss from "@astrojs/rss";
-import type { APIContext } from "astro";
-import type { CollectionEntry } from "astro:content";
-import config from "../config/config.json";
-import { getSinglePage } from "../lib/contentParser.astro";
-import { getPayloadPosts } from "@/lib/payload";
+import rss from "@astrojs/rss"
+import { getPayloadPosts } from "@/lib/payload"
+import config from "../config/config.json"
+import { getSinglePage } from "../lib/contentParser.astro"
+import type { CollectionEntry } from "astro:content"
+import type { RSSFeedItem } from "@astrojs/rss"
+import type { APIContext } from "astro"
 /**
  * Generates the site's RSS feed from Payload-backed blog posts.
  * Uses @astrojs/rss to produce XML.
  */
 export async function GET(context: APIContext): Promise<Response> {
-  const publishedPosts = await getPayloadPosts();
+  const publishedPosts = await getPayloadPosts()
 
-  const site = context.site || new URL(config.site.base_url);
+  const site = context.site || new URL(config.site.base_url)
 
   return rss({
     title: config.site.title,
@@ -36,6 +36,6 @@ export async function GET(context: APIContext): Promise<Response> {
             : "",
         }) as RSSFeedItem,
     ),
-    customData: `<language>pt-br</language>`,
-  });
+    customData: "<language>pt-br</language>",
+  })
 }

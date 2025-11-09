@@ -11,7 +11,7 @@ export interface ToolConfig<T = any> {
     /**
      * The type of the definition, which is always "function".
      */
-    type: "function";
+    type: "function"
     /**
      * The function details of the tool.
      */
@@ -19,11 +19,11 @@ export interface ToolConfig<T = any> {
       /**
        * The name of the function.
        */
-      name: string;
+      name: string
       /**
        * The description of the function.
        */
-      description: string;
+      description: string
       /**
        * The parameters of the function.
        */
@@ -31,25 +31,25 @@ export interface ToolConfig<T = any> {
         /**
          * The type of the parameters, which is always "object".
          */
-        type: "object";
+        type: "object"
         /**
          * The properties of the parameters.
          */
-        properties: Record<string, unknown>;
+        properties: Record<string, unknown>
         /**
          * The list of required parameter names.
          */
-        required: string[];
-      };
-    };
-  };
+        required: string[]
+      }
+    }
+  }
   /**
    * The handler function that will be executed with the provided arguments.
    *
    * @param args - The arguments to be passed to the handler function.
    * @returns A promise that resolves to any value.
    */
-  handler: (args: T) => Promise<any>;
+  handler: (args: T) => Promise<any>
 }
 
 /**
@@ -57,4 +57,4 @@ export interface ToolConfig<T = any> {
  *
  * You can create your own tool in the tools folder and import it here.
  */
-export const tools: Record<string, ToolConfig> = {};
+export const tools: Record<string, ToolConfig> = {}

@@ -1,24 +1,25 @@
-import { plainify } from "@/lib/utils/textConverter";
-import Fuse from "fuse.js";
-import React, { useEffect, useRef, useState } from "react";
+import Fuse from "fuse.js"
+import { useEffect, useRef, useState } from "react"
+import { plainify } from "@/lib/utils/textConverter"
+import type React from "react"
 /**
  * Item shape consumed by the SearchBar. Typically adapted blog posts.
  */
 export type SearchItem = {
-  slug: string;
-  data: any;
-  content: any;
-};
+  slug: string
+  data: any
+  content: any
+}
 
 /** Props for the SearchBar component. */
 interface Props {
-  searchList: SearchItem[];
+  searchList: SearchItem[]
 }
 
 /** Result item returned by Fuse.js. */
 interface SearchResult {
-  item: SearchItem;
-  refIndex: number;
+  item: SearchItem
+  refIndex: number
 }
 
 /**
@@ -26,61 +27,67 @@ interface SearchResult {
  * Maintains query state in the URL via `?q=`.
  */
 export default function SearchBar({ searchList }: Props) {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [inputVal, setInputVal] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null)
+  const [inputVal, setInputVal] = useState("")
   const [searchResults, setSearchResults] = useState<SearchResult[] | null>(
     null,
-  );
+  )
 
   const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
-    setInputVal(e.currentTarget.value);
-  };
+    setInputVal(e.currentTarget.value)
+  }
 
   const fuse = new Fuse(searchList, {
-    keys: ["data.title", "data.categories", "data.tags"],
+    keys: [
+      "data.title",
+      "data.categories",
+      "data.tags",
+    ],
     includeMatches: true,
     minMatchCharLength: 2,
     threshold: 0.5,
-  });
+  })
 
   useEffect(() => {
-    const searchUrl = new URLSearchParams(window.location.search);
-    const searchStr = searchUrl.get("q");
-    if (searchStr) setInputVal(searchStr);
+    const searchUrl = new URLSearchParams(window.location.search)
+    const searchStr = searchUrl.get("q")
+    if (searchStr) setInputVal(searchStr)
 
-    setTimeout(function () {
+    setTimeout(() => {
       inputRef.current!.selectionStart = inputRef.current!.selectionEnd =
-        searchStr?.length || 0;
-    }, 50);
-  }, []);
+        searchStr?.length || 0
+    }, 50)
+  }, [])
 
   useEffect(() => {
-    let inputResult = inputVal.length > 2 ? fuse.search(inputVal) : [];
-    setSearchResults(inputResult);
+    const inputResult = inputVal.length > 2 ? fuse.search(inputVal) : []
+    setSearchResults(inputResult)
 
     if (inputVal.length > 0) {
-      const searchParams = new URLSearchParams(window.location.search);
-      searchParams.set("q", inputVal);
-      const newRelativePathQuery =
-        window.location.pathname + "?" + searchParams.toString();
-      history.pushState(null, "", newRelativePathQuery);
+      const searchParams = new URLSearchParams(window.location.search)
+      searchParams.set("q", inputVal)
+      const newRelativePathQuery = `${window.location.pathname}?${searchParams.toString()}`
+      history.pushState(null, "", newRelativePathQuery)
     } else {
-      history.pushState(null, "", window.location.pathname);
+      history.pushState(null, "", window.location.pathname)
     }
-  }, [inputVal]);
+  }, [
+    inputVal,
+    fuse.search,
+  ])
 
   return (
     <div className="min-h-[45vh]">
       <input
-        className="form-input w-full"
-        placeholder="Busque posts"
-        type="text"
-        name="search"
-        value={inputVal}
-        onChange={handleChange}
         autoComplete="off"
-        autoFocus
+        autoFocus={true}
+        className="form-input w-full"
+        name="search"
+        onChange={handleChange}
+        placeholder="Busque posts"
         ref={inputRef}
+        type="text"
+        value={inputVal}
       />
 
       <div className="row">
@@ -103,8 +110,8 @@ export default function SearchBar({ searchList }: Props) {
                 >
                   <h3 className="h4">
                     <a
-                      href={`/blog/posts/${item.slug}`}
                       className="block font-normal text-primary hover:underline"
+                      href={`/blog/posts/${item.slug}`}
                     >
                       {item.data.title}
                     </a>
@@ -116,7 +123,10 @@ export default function SearchBar({ searchList }: Props) {
                     Categorias:{" "}
                     {item.data.categories?.map(
                       (category: string, index: number) => (
-                        <a key={index} href="#">
+                        <a
+                          href="#"
+                          key={index}
+                        >
                           {category}
                         </a>
                       ),
@@ -129,5 +139,5 @@ export default function SearchBar({ searchList }: Props) {
         </div>
       </div>
     </div>
-  );
+  )
 }

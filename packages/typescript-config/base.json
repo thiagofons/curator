@@ -6,7 +6,9 @@
     "skipLibCheck": true,
     "allowJs": true,
     "target": "ES2022",
-    "lib": ["ESNext"],
+    "lib": [
+      "ESNext"
+    ],
     "resolveJsonModule": true,
     "moduleDetection": "force",
     "isolatedModules": true,

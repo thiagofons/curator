@@ -1,28 +1,28 @@
 ---
-import { Image } from "astro:assets";
-import { getSinglePage } from "@/lib/contentParser.astro";
-import dateFormat from "@/lib/utils/dateFormat";
-import { humanize, markdownify, slugify } from "@/lib/utils/textConverter";
-import { render } from "astro:content";
-import type { CollectionEntry } from "astro:content";
-import Share from "@/components/Share.astro";
+import { Image } from "astro:assets"
+import { render } from "astro:content"
+import Share from "@/components/Share.astro"
+import { getSinglePage } from "@/lib/contentParser.astro"
+import dateFormat from "@/lib/utils/dateFormat"
+import { humanize, markdownify, slugify } from "@/lib/utils/textConverter"
+import type { CollectionEntry } from "astro:content"
 
 type Props = {
-  post: any;
-  isPayload?: boolean;
-  contentHtml?: string;
-};
-
-const allAuthors = await getSinglePage("authors");
-const { post, isPayload = false, contentHtml = "" } = Astro.props as Props;
-
-let Content: any = null;
-if (!isPayload) {
-  const rendered = await render(post as CollectionEntry<"posts">);
-  Content = rendered.Content;
+  post: any
+  isPayload?: boolean
+  contentHtml?: string
 }
 
-const { title, authors = [], categories = [], image, date } = post.data || {};
+const allAuthors = await getSinglePage("authors")
+const { post, isPayload = false, contentHtml = "" } = Astro.props as Props
+
+let Content: any = null
+if (!isPayload) {
+  const rendered = await render(post as CollectionEntry<"posts">)
+  Content = rendered.Content
+}
+
+const { title, authors = [], categories = [], image, date } = post.data || {}
 ---
 
 <section class="section">

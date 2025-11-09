@@ -1,8 +1,10 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig } from "payload"
 
 export const Categories: CollectionConfig = {
-  slug: 'categories',
-  admin: { useAsTitle: 'title' },
+  slug: "categories",
+  admin: {
+    useAsTitle: "title",
+  },
   access: {
     // Public read; writes require authenticated user
     read: () => true,
@@ -12,23 +14,22 @@ export const Categories: CollectionConfig = {
   },
   fields: [
     {
-      name: 'title',
-      type: 'text',
+      name: "title",
+      type: "text",
       required: true,
       localized: true,
     },
     {
-      name: 'slug',
-      type: 'text',
+      name: "slug",
+      type: "text",
       required: true,
       unique: true,
     },
     {
-      name: 'description',
-      type: 'richText',
+      name: "description",
+      type: "richText",
       localized: true,
       required: false,
     },
   ],
 }
-

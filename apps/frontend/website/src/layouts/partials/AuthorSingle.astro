@@ -1,31 +1,35 @@
 ---
-import { Image } from "astro:assets";
-import { getSinglePage } from "@/lib/contentParser.astro";
-import { markdownify } from "@/lib/utils/textConverter";
-import { render } from "astro:content";
-import Post from "@/components/Post.astro";
+import { Image } from "astro:assets"
+import { render } from "astro:content"
+import Post from "@/components/Post.astro"
+import { getSinglePage } from "@/lib/contentParser.astro"
+import { markdownify } from "@/lib/utils/textConverter"
 
 type Props = {
-  author: any;
-  posts?: any[];
-  isPayload?: boolean;
-  contentHtml?: string;
-};
-
-const { author, posts = null, isPayload = false, contentHtml = "" } =
-  Astro.props as Props;
-
-const { title, image } = author.data || {};
-
-let Content: any = null;
-if (!isPayload) {
-  const rendered = await render(author);
-  Content = rendered.Content;
+  author: any
+  posts?: any[]
+  isPayload?: boolean
+  contentHtml?: string
 }
-let filterByAuthor = posts;
+
+const {
+  author,
+  posts = null,
+  isPayload = false,
+  contentHtml = "",
+} = Astro.props as Props
+
+const { title, image } = author.data || {}
+
+let Content: any = null
+if (!isPayload) {
+  const rendered = await render(author)
+  Content = rendered.Content
+}
+let filterByAuthor = posts
 if (!filterByAuthor) {
-  const allPosts = await getSinglePage("posts");
-  filterByAuthor = allPosts.filter((post) => post.data.authors.includes(title));
+  const allPosts = await getSinglePage("posts")
+  filterByAuthor = allPosts.filter((post) => post.data.authors.includes(title))
 }
 ---
 

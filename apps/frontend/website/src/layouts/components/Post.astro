@@ -1,16 +1,17 @@
 ---
-import { getSinglePage } from "@/lib/contentParser.astro";
-import dateFormat from "@/lib/utils/dateFormat";
-import { humanize, plainify, slugify } from "@/lib/utils/textConverter";
-import { Image } from "astro:assets";
+import { Image } from "astro:assets"
+import { getSinglePage } from "@/lib/contentParser.astro"
+import dateFormat from "@/lib/utils/dateFormat"
+import { humanize, plainify, slugify } from "@/lib/utils/textConverter"
+
 // (no explicit CollectionEntry typing to allow remote CMS data)
 
 type Props = {
-  post: any;
-};
+  post: any
+}
 
-const authors = await getSinglePage("authors");
-const { post } = Astro.props;
+const authors = await getSinglePage("authors")
+const { post } = Astro.props
 ---
 
 <div class="card mb-12 border-b border-border pb-8">

@@ -4,10 +4,21 @@
   "assist": {
     "actions": {
       "source": {
-        "organizeImports": "on",
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "groups": [
+              {
+                "type": false
+              }
+            ],
+            "identifierOrder": "lexicographic"
+          }
+        },
         "useSortedAttributes": "on",
         "useSortedKeys": "off",
-        "useSortedProperties": "on"
+        "useSortedProperties": "on",
+        "recommended": true
       }
     },
     "enabled": true
@@ -24,6 +35,11 @@
     "attributePosition": "multiline",
     "indentWidth": 2,
     "lineWidth": 80
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
   },
   "javascript": {
     "formatter": {
@@ -48,15 +64,39 @@
     },
     "rules": {
       "correctness": {
-        "useImportExtensions": "off"
+        "useImportExtensions": "off",
+        "noUnusedVariables": "off"
       },
-      "performance": "on",
+      "performance": {
+        "noNamespaceImport": "off"
+      },
       "recommended": true,
-      "style": "on",
+      "style": {
+        "useComponentExportOnlyModules": "off",
+        "useImportType": "on"
+      },
       "suspicious": "off"
     }
   },
   "overrides": [
+    {
+      "linter": {},
+      "includes": [
+        "packages/**/*.tsx"
+      ]
+    },
+    {
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedImports": "off"
+          }
+        }
+      },
+      "includes": [
+        "**/*.astro"
+      ]
+    },
     {
       "formatter": {
         "lineWidth": 100

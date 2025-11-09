@@ -1,18 +1,18 @@
 // storage-adapter-import-placeholder
-import { postgresAdapter } from '@payloadcms/db-postgres'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import path from 'path'
-import { buildConfig } from 'payload'
-import { fileURLToPath } from 'url'
-import sharp from 'sharp'
 
-import { Users } from './collections/Users'
-import { Media } from './collections/Media'
-import { Posts } from './collections/Posts'
-import { Categories } from './collections/Categories'
-import { Authors } from './collections/Authors'
-import { en } from '@payloadcms/translations/languages/en'
-import { pt } from '@payloadcms/translations/languages/pt'
+import path from "node:path"
+import { fileURLToPath } from "node:url"
+import { postgresAdapter } from "@payloadcms/db-postgres"
+import { lexicalEditor } from "@payloadcms/richtext-lexical"
+import { en } from "@payloadcms/translations/languages/en"
+import { pt } from "@payloadcms/translations/languages/pt"
+import { buildConfig } from "payload"
+import sharp from "sharp"
+import { Authors } from "./collections/Authors"
+import { Categories } from "./collections/Categories"
+import { Media } from "./collections/Media"
+import { Posts } from "./collections/Posts"
+import { Users } from "./collections/Users"
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -26,34 +26,40 @@ export default buildConfig({
   },
   // Allow requests from website dev and production domains
   cors: [
-    'http://localhost:4001',
-    'http://127.0.0.1:4001',
-    'http://localhost:4003',
-    'http://127.0.0.1:4003',
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-    'https://cms.curator.com.br',
-    'https://curator.com.br',
-    'https://www.curator.com.br',
+    "http://localhost:4001",
+    "http://127.0.0.1:4001",
+    "http://localhost:4003",
+    "http://127.0.0.1:4003",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://cms.curator.com.br",
+    "https://curator.com.br",
+    "https://www.curator.com.br",
   ],
   csrf: [
-    'http://localhost:4001',
-    'http://127.0.0.1:4001',
-    'http://localhost:4003',
-    'http://127.0.0.1:4003',
-    'https://cms.curator.com.br',
-    'https://curator.com.br',
-    'https://www.curator.com.br',
+    "http://localhost:4001",
+    "http://127.0.0.1:4001",
+    "http://localhost:4003",
+    "http://127.0.0.1:4003",
+    "https://cms.curator.com.br",
+    "https://curator.com.br",
+    "https://www.curator.com.br",
   ],
-  collections: [Users, Media, Authors, Categories, Posts],
+  collections: [
+    Users,
+    Media,
+    Authors,
+    Categories,
+    Posts,
+  ],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
-    outputFile: path.resolve(dirname, 'payload-types.ts'),
+    outputFile: path.resolve(dirname, "payload-types.ts"),
   },
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URI || '',
+      connectionString: process.env.DATABASE_URI || "",
     },
   }),
   sharp,
@@ -61,7 +67,10 @@ export default buildConfig({
     // storage-adapter-placeholder
   ],
   i18n: {
-    fallbackLanguage: 'pt',
-    supportedLanguages: { en, pt },
+    fallbackLanguage: "pt",
+    supportedLanguages: {
+      en,
+      pt,
+    },
   },
 })

@@ -1,31 +1,37 @@
 ---
-import Post from "@/components/Post.astro";
-import config from "@/config/config.json";
-import Base from "@/layouts/Base.astro";
-import Pagination from "@/layouts/components/Pagination.astro";
-import { markdownify } from "@/lib/utils/textConverter";
-import type { GetStaticPathsOptions } from "astro";
-// Remove static blog content usage; only render Payload category title
-import { getPayloadCategories, getPayloadCategoryBySlug, getPayloadPostsByCategorySlug } from "@/lib/payload";
+import Post from "@/components/Post.astro"
+import config from "@/config/config.json"
+import Base from "@/layouts/Base.astro"
+import Pagination from "@/layouts/components/Pagination.astro"
+import {
+  getPayloadCategories,
+  getPayloadCategoryBySlug,
+  getPayloadPostsByCategorySlug,
+} from "@/lib/payload"
+import { markdownify } from "@/lib/utils/textConverter"
+import type { GetStaticPathsOptions } from "astro"
+
+const { page } = Astro.props
+const { category } = Astro.params
+
+const categoryObj = await getPayloadCategoryBySlug(category)
 
 export const getStaticPaths = async ({ paginate }: GetStaticPathsOptions) => {
-  const { pagination } = config.settings;
-  const categories = await getPayloadCategories();
-  const allPaths: any[] = [];
+  const { pagination } = config.settings
+  const categories = await getPayloadCategories()
+  const allPaths: any[] = []
   for (const c of categories) {
-    const posts = await getPayloadPostsByCategorySlug(c.slug);
+    const posts = await getPayloadPostsByCategorySlug(c.slug)
     const pages = paginate(posts, {
-      params: { category: c.slug },
+      params: {
+        category: c.slug,
+      },
       pageSize: pagination,
-    });
-    allPaths.push(...pages);
+    })
+    allPaths.push(...pages)
   }
-  return allPaths;
-};
-
-const { page } = Astro.props;
-const { category } = Astro.params;
-const categoryObj = await getPayloadCategoryBySlug(category!);
+  return allPaths
+}
 ---
 
 <Base title={categoryObj?.data.title || category}>
@@ -52,7 +58,7 @@ const categoryObj = await getPayloadCategoryBySlug(category!);
             Posts relacionados com a categoria <span class="text-primary">{category}</span>
           </h1>
           <div class="rounded px-9 py-12 shadow md:p-[60px]">
-            {page.data.map((post) => <Post post={post} />)}
+            {page.data.map((post: any) => <Post post={post} />)}
             <Pagination
               section={`categories/${category}`}
               currentPage={page.currentPage}
