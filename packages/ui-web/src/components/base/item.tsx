@@ -4,12 +4,11 @@ import { cn } from "@repo/ui-web/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
 
-function ItemGroup({ className, ...props }: React.ComponentProps<"div">) {
+function ItemGroup({ className, ...props }: React.ComponentProps<"ul">) {
 	return (
-		<div
+		<ul
 			className={cn("group/item-group flex flex-col", className)}
 			data-slot="item-group"
-			role="list"
 			{...props}
 		/>
 	);
@@ -193,13 +192,13 @@ function ItemFooter({ className, ...props }: React.ComponentProps<"div">) {
 
 export {
 	Item,
-	ItemMedia,
-	ItemContent,
 	ItemActions,
+	ItemContent,
+	ItemDescription,
+	ItemFooter,
 	ItemGroup,
+	ItemHeader,
+	ItemMedia,
 	ItemSeparator,
 	ItemTitle,
-	ItemDescription,
-	ItemHeader,
-	ItemFooter,
 };

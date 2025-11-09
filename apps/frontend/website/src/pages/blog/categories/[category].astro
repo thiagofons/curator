@@ -26,8 +26,8 @@ export async function getStaticPaths() {
 }
 
 const { category } = Astro.params
-const posts = await getPayloadPostsByCategorySlug(category!)
-const categoryObj = await getPayloadCategoryBySlug(category!)
+const posts = await getPayloadPostsByCategorySlug(category as string)
+const categoryObj = await getPayloadCategoryBySlug(category as string)
 const totalPages = Math.ceil(posts.length / pagination)
 ---
 

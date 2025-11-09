@@ -1,8 +1,6 @@
 import rss from "@astrojs/rss"
 import { getPayloadPosts } from "@/lib/payload"
 import config from "../config/config.json"
-import { getSinglePage } from "../lib/contentParser.astro"
-import type { CollectionEntry } from "astro:content"
 import type { RSSFeedItem } from "@astrojs/rss"
 import type { APIContext } from "astro"
 /**

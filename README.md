@@ -125,7 +125,7 @@ This section outlines the core technologies used across the Curator Platform, ca
 
 | Status | Technology              | Purpose                     |
 | :----- | :---------------------- | :-------------------------- |
-| ⌛     | BiomeJS                 | Static code analysis.       |
+| ✅     | BiomeJS                 | Static code analysis.       |
 | ⌛     | Vitest                  | Unit tests.                 |
 | ⌛     | Prisma Test Environment | Integration tests.          |
 | ⌛     | Playwright              | E2E tests.                  |

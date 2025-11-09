@@ -48,18 +48,16 @@ function adapt(doc: any): AdaptedPost {
 
   const authorObj =
     doc.author && typeof doc.author === "object" ? doc.author : null
-  const authorsArr: string[] =
-    authorObj && authorObj.name
-      ? [
-          String(pickLocale(authorObj.name)),
-        ]
-      : []
-  const authorSlugs: string[] | undefined =
-    authorObj && authorObj.slug
-      ? [
-          String(authorObj.slug),
-        ]
-      : undefined
+  const authorsArr: string[] = authorObj?.name
+    ? [
+        String(pickLocale(authorObj.name)),
+      ]
+    : []
+  const authorSlugs: string[] | undefined = authorObj?.slug
+    ? [
+        String(authorObj.slug),
+      ]
+    : undefined
 
   const catDocs: any[] = Array.isArray(doc.categories) ? doc.categories : []
   const categories: string[] = catDocs
@@ -115,7 +113,7 @@ export async function getPayloadPosts(options?: {
     const docs = Array.isArray((data as any).docs) ? (data as any).docs : []
     const adapted = docs.map(adapt)
     adapted.sort(
-      (a, b) =>
+      (a: any, b: any) =>
         new Date(b.data.date || 0).valueOf() -
         new Date(a.data.date || 0).valueOf(),
     )
@@ -163,13 +161,13 @@ export async function getPayloadPostsByAuthorSlug(
     const data = await fetchJSON<ListResponse>(url)
     const docs = (
       Array.isArray((data as any).docs) ? (data as any).docs : []
-    ).filter((d) => {
-      const a = d && d.author && typeof d.author === "object" ? d.author : null
+    ).filter((d: any) => {
+      const a = d?.author && typeof d.author === "object" ? d.author : null
       return a && a.slug === slug
     })
     const adapted = docs.map(adapt)
     adapted.sort(
-      (a, b) =>
+      (a: any, b: any) =>
         new Date(b.data.date || 0).valueOf() -
         new Date(a.data.date || 0).valueOf(),
     )
@@ -194,7 +192,7 @@ export async function getPayloadPostsByCategorySlug(
     const data = await fetchJSON<ListResponse>(url)
     const docs = Array.isArray((data as any).docs) ? (data as any).docs : []
     const filtered = docs.filter(
-      (d) =>
+      (d: any) =>
         Array.isArray(d.categories) &&
         d.categories.some(
           (c: any) => c && typeof c === "object" && c.slug === slug,
@@ -202,7 +200,7 @@ export async function getPayloadPostsByCategorySlug(
     )
     const adapted = filtered.map(adapt)
     adapted.sort(
-      (a, b) =>
+      (a: any, b: any) =>
         new Date(b.data.date || 0).valueOf() -
         new Date(a.data.date || 0).valueOf(),
     )

@@ -1,6 +1,5 @@
 import { marked } from "marked"
-import { useEffect, useRef, useState } from "react"
-import type React from "react"
+import React, { useEffect, useRef, useState } from "react"
 
 const Tabs = ({ children }: { children: React.ReactElement }) => {
   const [active, setActive] = useState<number>(0)
@@ -15,6 +14,7 @@ const Tabs = ({ children }: { children: React.ReactElement }) => {
       setDefaultFocus(true)
     }
   }, [
+    defaultFocus,
     active,
   ])
 
@@ -51,14 +51,14 @@ const Tabs = ({ children }: { children: React.ReactElement }) => {
         {tabLinks.map(
           (
             item: {
-              name: string
+              name: string | undefined
               children: string
             },
             index: number,
           ) => (
             <button
               aria-selected={index === active}
-              className={"tab-nav-item" + (index === active ? " active" : "")}
+              className={`tab-nav-item ${index === active ? " active" : ""}`}
               key={index}
               onClick={() => setActive(index)}
               onKeyDown={(event) => handleKeyDown(event, index)}
@@ -77,19 +77,21 @@ const Tabs = ({ children }: { children: React.ReactElement }) => {
       {tabLinks.map(
         (
           item: {
-            name: string
+            name: string | undefined
             children: string
           },
           i: number,
-        ) => (
-          <div
-            className={active === i ? "tab-content block px-5" : "hidden"}
-            dangerouslySetInnerHTML={{
-              __html: marked.parse(item.children),
-            }}
-            key={i}
-          />
-        ),
+        ) =>
+          (
+            <div
+              className={active === i ? "tab-content block px-5" : "hidden"}
+              // biome-ignore lint/security/noDangerouslySetInnerHtml: Tabs content
+              dangerouslySetInnerHTML={{
+                __html: marked.parse(item.children),
+              }}
+              key={i}
+            />
+          ) as React.ReactElement<any>,
       )}
     </div>
   )

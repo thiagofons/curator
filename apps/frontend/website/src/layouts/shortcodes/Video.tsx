@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/correctness/noUnusedImports: It needs the import React to work properly */
 import React from "react"
 
 function Video({

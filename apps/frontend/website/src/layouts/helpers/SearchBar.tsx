@@ -1,7 +1,6 @@
 import Fuse from "fuse.js"
-import { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { plainify } from "@/lib/utils/textConverter"
-import type React from "react"
 /**
  * Item shape consumed by the SearchBar. Typically adapted blog posts.
  */
@@ -54,8 +53,12 @@ export default function SearchBar({ searchList }: Props) {
     if (searchStr) setInputVal(searchStr)
 
     setTimeout(() => {
-      inputRef.current!.selectionStart = inputRef.current!.selectionEnd =
-        searchStr?.length || 0
+      const inputEl = inputRef.current
+      if (inputEl) {
+        const pos = searchStr?.length || 0
+        inputEl.selectionStart = pos
+        inputEl.selectionEnd = pos
+      }
     }, 50)
   }, [])
 
@@ -80,6 +83,7 @@ export default function SearchBar({ searchList }: Props) {
     <div className="min-h-[45vh]">
       <input
         autoComplete="off"
+        // biome-ignore lint/a11y/noAutofocus: Auto focus on load is intended here
         autoFocus={true}
         className="form-input w-full"
         name="search"
@@ -124,6 +128,7 @@ export default function SearchBar({ searchList }: Props) {
                     {item.data.categories?.map(
                       (category: string, index: number) => (
                         <a
+                          // biome-ignore lint/a11y/useValidAnchor: Categories are supposed to be clicable links
                           href="#"
                           key={index}
                         >

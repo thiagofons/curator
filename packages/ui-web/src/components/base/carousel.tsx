@@ -133,6 +133,7 @@ const Carousel = React.forwardRef<
 					canScrollNext,
 				}}
 			>
+				{/** biome-ignore lint/a11y/useSemanticElements: ShadCN uses region for Carousel */}
 				<div
 					aria-roledescription="carousel"
 					className={cn("relative", className)}
@@ -178,6 +179,7 @@ const CarouselItem = React.forwardRef<
 	const { orientation } = useCarousel();
 
 	return (
+		// biome-ignore lint/a11y/useSemanticElements: ShadCN UI uses div for Carousel items
 		<div
 			aria-roledescription="slide"
 			className={cn(

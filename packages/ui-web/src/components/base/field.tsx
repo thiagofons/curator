@@ -2,7 +2,6 @@
 
 import { Label } from "@repo/ui-web/components/base/label";
 import { Separator } from "@repo/ui-web/components/base/separator";
-
 import { cn } from "@repo/ui-web/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import { useMemo } from "react";
@@ -86,6 +85,7 @@ function Field({
 	...props
 }: React.ComponentProps<"div"> & VariantProps<typeof fieldVariants>) {
 	return (
+		// biome-ignore lint/a11y/useSemanticElements: ShadCN UI uses div for Field wrapper
 		<div
 			className={cn(
 				fieldVariants({
@@ -244,13 +244,13 @@ function FieldError({
 
 export {
 	Field,
-	FieldLabel,
+	FieldContent,
 	FieldDescription,
 	FieldError,
 	FieldGroup,
+	FieldLabel,
 	FieldLegend,
 	FieldSeparator,
 	FieldSet,
-	FieldContent,
 	FieldTitle,
 };

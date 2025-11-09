@@ -77,7 +77,7 @@ export interface Config {
     "payload-preferences": PayloadPreference
     "payload-migrations": PayloadMigration
   }
-  collectionsJoins: Record<string, never>
+  collectionsJoins: object
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>
     media: MediaSelect<false> | MediaSelect<true>
@@ -98,8 +98,8 @@ export interface Config {
   db: {
     defaultIDType: number
   }
-  globals: Record<string, never>
-  globalsSelect: Record<string, never>
+  globals: object
+  globalsSelect: object
   locale: null
   user: User & {
     collection: "users"

@@ -63,10 +63,17 @@ const InputOTPSeparator = React.forwardRef<
 	React.ElementRef<"div">,
 	React.ComponentPropsWithoutRef<"div">
 >(({ ...props }, ref) => (
-	<div ref={ref} role="separator" {...props}>
+	// biome-ignore lint/a11y/useFocusableInteractive: ShadCN
+	// biome-ignore lint/a11y/useSemanticElements: ShadCN
+	<div
+		aria-valuenow={props["aria-valuenow"]}
+		ref={ref}
+		role="separator"
+		{...props}
+	>
 		<Dot />
 	</div>
 ));
 InputOTPSeparator.displayName = "InputOTPSeparator";
 
-export { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator };
+export { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot };

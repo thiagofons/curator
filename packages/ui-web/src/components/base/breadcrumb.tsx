@@ -60,12 +60,14 @@ const BreadcrumbPage = React.forwardRef<
 	HTMLSpanElement,
 	React.ComponentPropsWithoutRef<"span">
 >(({ className, ...props }, ref) => (
+	// biome-ignore lint/a11y/useSemanticElements: ShadCN UI uses span for current page in breadcrumb
 	<span
 		aria-current="page"
 		aria-disabled="true"
 		className={cn("font-normal text-foreground", className)}
 		ref={ref}
 		role="link"
+		tabIndex={0}
 		{...props}
 	/>
 ));

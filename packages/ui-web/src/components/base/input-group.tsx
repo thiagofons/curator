@@ -9,6 +9,7 @@ import type * as React from "react";
 
 function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
 	return (
+		// biome-ignore lint/a11y/useSemanticElements: ShadCN UI uses div for InputGroup
 		<div
 			className={cn(
 				"group/input-group border-input dark:bg-input/30 shadow-xs relative flex w-full items-center rounded-md border outline-none transition-[color,box-shadow]",
@@ -62,6 +63,8 @@ function InputGroupAddon({
 	...props
 }: React.ComponentProps<"div"> & VariantProps<typeof inputGroupAddonVariants>) {
 	return (
+		// biome-ignore lint/a11y/useKeyWithClickEvents: ShadCN UI uses div for InputGroupAddon
+		// biome-ignore lint/a11y/useSemanticElements: ShadCN UI uses div for InputGroupAddon
 		<div
 			className={cn(
 				inputGroupAddonVariants({
@@ -173,7 +176,7 @@ export {
 	InputGroup,
 	InputGroupAddon,
 	InputGroupButton,
-	InputGroupText,
 	InputGroupInput,
+	InputGroupText,
 	InputGroupTextarea,
 };
