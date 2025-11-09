@@ -44,6 +44,7 @@
     "infrastructure",
     "packages/ui-web",
     "frontend/blog",
-    "frontend/landing-page"
+    "frontend/landing-page",
+    "frontend/website"
   ]
 }
