@@ -4,22 +4,24 @@ import type { APIContext } from "astro";
 import type { CollectionEntry } from "astro:content";
 import config from "../config/config.json";
 import { getSinglePage } from "../lib/contentParser.astro";
+import { getPayloadPosts } from "@/lib/payload";
 
 export async function GET(context: APIContext): Promise<Response> {
-  const publishedPosts = await getSinglePage("posts");
+  const publishedPosts = await getPayloadPosts();
 
   const site = context.site || new URL(config.site.base_url);
 
   return rss({
-    title: config.site.title || "Bigspring Light Astro",
-    description: "Bigspring is a clean and modern blog theme.",
+    title: config.site.title,
+    description:
+      "A digital platform for Lifelong Learners, delivering curated roadmaps for deep, contextual learning.",
     site,
     xmlns: {
       media: "http://search.yahoo.com/mrss/",
       atom: "http://www.w3.org/2005/Atom",
     },
     items: publishedPosts.map(
-      (post: CollectionEntry<"posts">) =>
+      (post) =>
         ({
           title: post.data.title,
           pubDate: post.data.date || new Date(),
@@ -31,6 +33,6 @@ export async function GET(context: APIContext): Promise<Response> {
             : "",
         }) as RSSFeedItem,
     ),
-    customData: `<language>en-us</language>`,
+    customData: `<language>pt-br</language>`,
   });
 }
