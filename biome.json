@@ -28,7 +28,22 @@
     "ignoreUnknown": true,
     "includes": [
       "**",
-      "!**/*.css"
+      "!!**/dist",
+      "!!**/node_modules",
+      "!!**/build",
+      "!!**/.turbo",
+      "!!**/.biome",
+      "!!**/.git",
+      "!!**/.next",
+      "!!**/.vercel",
+      "!!**/out",
+      "!!**/.astro",
+      "!!**/public",
+      "!!**/.cache",
+      "!!**/coverage",
+      "!!**/.husky",
+      "!!**/.pnpm-store",
+      "!!**/.css"
     ]
   },
   "formatter": {
