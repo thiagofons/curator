@@ -1,6 +1,6 @@
+import { plainify } from "@/lib/utils/textConverter"
 import Fuse from "fuse.js"
 import React, { useEffect, useRef, useState } from "react"
-import { plainify } from "@/lib/utils/textConverter"
 /**
  * Item shape consumed by the SearchBar. Typically adapted blog posts.
  */

@@ -16,9 +16,24 @@
         "!.next/cache/**"
       ]
     },
-    "lint": {
+    "quality:lint:check": {
       "dependsOn": [
-        "^lint"
+        "^quality:lint:check"
+      ]
+    },
+    "quality:lint:fix": {
+      "dependsOn": [
+        "^quality:lint:fix"
+      ]
+    },
+    "quality:format:check": {
+      "dependsOn": [
+        "^quality:format:check"
+      ]
+    },
+    "quality:format:fix": {
+      "dependsOn": [
+        "^quality:format:fix"
       ]
     },
     "check-types": {

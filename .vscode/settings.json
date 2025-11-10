@@ -1,7 +1,8 @@
 {
   "editor.tabSize": 2,
-  "editor.formatOnSave": false,
+  "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
     "*.ts": "$(capture).js, $(capture).*.ts, $(capture).*.js",
@@ -11,7 +12,8 @@
     ".env": "*.env",
     "package.json": "pnpm-lock.yaml, .nvmrc, pnpm-workspace.yaml, .npmrc",
     ".eslintrc.*": ".eslintignore, .eslintcache",
-    ".prettierrc": ".prettierignore",
+    "prettier.config.js": ".prettierignore",
+    "prettier.config.cjs": ".prettierignore",
     ".gitignore": ".gitattributes"
   },
   "explorer.compactFolders": true,
@@ -21,6 +23,7 @@
   "editor.foldingImportsByDefault": false,
   "editor.formatOnPaste": true,
   "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
     "source.removeUnusedImports": "always",
     "source.sortImports": "never",
     "source.fixAll.markdownlint": "always"
@@ -40,4 +43,10 @@
     "packages/ui-web",
     "packages/ui-mobile"
   ],
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+  }
 }

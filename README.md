@@ -90,9 +90,9 @@ This section outlines the core technologies used across the Curator Platform, ca
 
 | Status | Technology      | Purpose                                      |
 | :----- | :-------------- | :------------------------------------------- |
-| ⌛     | PostgreSQL      | Serves as the primary relational database.   |
+| ✅     | PostgreSQL      | Serves as the primary relational database.   |
 | ⌛     | ScyllaDB        | Large-scale noSQL.                           |
-| ⌛     | Redis           | Real-time and cache.                         |
+| ✅     | Redis           | Real-time and cache.                         |
 | ⌛     | Clickhouse      | Analytics.                                   |
 | ⌛     | Prisma (ORM)    | Provides a typesafe database client and ORM. |
 | ⌛     | Data Build Tool | Data orchstration and analytics              |
@@ -102,7 +102,7 @@ This section outlines the core technologies used across the Curator Platform, ca
 | Status | Technology                   | Purpose                                           |
 | :----- | :--------------------------- | :------------------------------------------------ |
 | ✅     | AWS (Cloud Provider)         | The primary cloud provider for all services.      |
-| ⌛     | Docker                       | Containerizes applications for deployment.        |
+| ✅     | Docker                       | Containerizes applications for deployment.        |
 | ⌛     | Kubernetes (EKS)             | Orchestrates production backend containers.       |
 | ⌛     | Linkerd                      | Smart network layer on top of Kubernetes.         |
 | ⌛     | Terraform (IaC)              | Defines and manages infrastructure as code.       |
@@ -118,15 +118,15 @@ This section outlines the core technologies used across the Curator Platform, ca
 | ⌛     | Trivy                     | Container image analysis.                              |
 | ⌛     | AWS Secrets Manager       | Securely stores and injects secrets.                   |
 | ⌛     | AWS WAF                   | Web Application Firewall                               |
-| ⌛     | AWS IAM (Permissions)     | Manages granular permissions for AWS services.         |
+| ✅     | AWS IAM (Permissions)     | Manages granular permissions for AWS services.         |
 | ⌛     | Auth0 (Identity Provider) | Manages user authentication and identity.              |
 
 ### 8. Quality & Testing
 
 | Status | Technology              | Purpose                     |
 | :----- | :---------------------- | :-------------------------- |
-| ✅     | BiomeJS                 | Static code analysis.       |
-| ⌛     | Vitest                  | Unit tests.                 |
+| ✅     | Prettier + ESLint       | Static code analysis.       |
+| ✅     | Vitest                  | Unit tests.                 |
 | ⌛     | Prisma Test Environment | Integration tests.          |
 | ⌛     | Playwright              | E2E tests.                  |
 | ⌛     | Stryker                 | Quality tests.              |
@@ -137,7 +137,7 @@ This section outlines the core technologies used across the Curator Platform, ca
 
 | Status | Technology        | Purpose                                 |
 | :----- | :---------------- | :-------------------------------------- |
-| ⌛     | Turborepo         | Orchestrates and caches monorepo tasks. |
+| ✅     | Turborepo         | Orchestrates and caches monorepo tasks. |
 | ⌛     | GitHub Codespaces | Remote development environment.         |
 | ⌛     | Husky             | Commit pipeline.                        |
 | ⌛     | FlagSmith         | Feature flags.                          |
