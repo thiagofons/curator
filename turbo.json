@@ -4,42 +4,24 @@
   "ui": "tui",
   "tasks": {
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        ".env*"
-      ],
-      "outputs": [
-        ".next/**",
-        "!.next/cache/**"
-      ]
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".next/**", "!.next/cache/**"]
     },
     "quality:lint:check": {
-      "dependsOn": [
-        "^quality:lint:check"
-      ]
+      "dependsOn": ["^quality:lint:check"]
     },
     "quality:lint:fix": {
-      "dependsOn": [
-        "^quality:lint:fix"
-      ]
+      "dependsOn": ["^quality:lint:fix"]
     },
     "quality:format:check": {
-      "dependsOn": [
-        "^quality:format:check"
-      ]
+      "dependsOn": ["^quality:format:check"]
     },
     "quality:format:fix": {
-      "dependsOn": [
-        "^quality:format:fix"
-      ]
+      "dependsOn": ["^quality:format:fix"]
     },
     "check-types": {
-      "dependsOn": [
-        "^check-types"
-      ]
+      "dependsOn": ["^check-types"]
     },
     "test:unit": {
       "dependsOn": ["^test:unit", "@repo/vitest-config#build"]

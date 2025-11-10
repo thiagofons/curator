@@ -1,7 +1,7 @@
-import { handleRunToolCalls } from "./handleRunToolCalls"
-import type OpenAi from "openai"
-import type { Run } from "openai/resources/beta/threads/runs/runs.mjs"
-import type { Thread } from "openai/resources/beta/threads/threads.mjs"
+import { handleRunToolCalls } from "./handleRunToolCalls";
+import type OpenAi from "openai";
+import type { Run } from "openai/resources/beta/threads/runs/runs.mjs";
+import type { Thread } from "openai/resources/beta/threads/threads.mjs";
 
 /**
  * Performs a run operation for the given OpenAI client and thread.
@@ -18,19 +18,19 @@ import type { Thread } from "openai/resources/beta/threads/threads.mjs"
  */
 export async function performRun(run: Run, client: OpenAi, thread: Thread) {
   while (run.status === "requires_action") {
-    run = await handleRunToolCalls(run, client, thread)
+    run = await handleRunToolCalls(run, client, thread);
   }
 
   if (run.status === "failed") {
     const errorMessage = `I encountered an error: ${
       run.last_error?.message || "Unknown error"
-    }`
-    console.error(errorMessage)
+    }`;
+    console.error(errorMessage);
 
     await client.beta.threads.messages.create(thread.id, {
       role: "assistant",
       content: errorMessage,
-    })
+    });
 
     return {
       type: "text",
@@ -38,13 +38,13 @@ export async function performRun(run: Run, client: OpenAi, thread: Thread) {
         value: errorMessage,
         annotations: [],
       },
-    }
+    };
   }
 
-  const messages = await client.beta.threads.messages.list(thread.id)
+  const messages = await client.beta.threads.messages.list(thread.id);
   const assistantMessage = messages.data.find(
     (message) => message.role === "assistant",
-  )
+  );
 
   return (
     assistantMessage?.content[0] || {
@@ -54,5 +54,5 @@ export async function performRun(run: Run, client: OpenAi, thread: Thread) {
         annotations: [],
       },
     }
-  )
+  );
 }

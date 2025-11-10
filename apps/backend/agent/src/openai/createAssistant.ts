@@ -1,5 +1,5 @@
-import type OpenAi from "openai"
-import type { Assistant } from "openai/resources/beta/assistants"
+import type OpenAi from "openai";
+import type { Assistant } from "openai/resources/beta/assistants";
 
 const instructions = `
 # 1. PERSONA:
@@ -103,7 +103,7 @@ O objeto JSON deve seguir rigorosamente esta estrutura:
 ### Conclusão: Seus Próximos Passos
 *(Sugestões breves de onde ir a seguir, agora que o usuário completou o roadmap básico.)*
 
-`
+`;
 
 /**
  * Creates an OppenAI assistant to handle all interactions
@@ -119,5 +119,5 @@ export async function createAssistant(client: OpenAi): Promise<Assistant> {
     name: "Curator",
     instructions,
     tools: [],
-  })
+  });
 }

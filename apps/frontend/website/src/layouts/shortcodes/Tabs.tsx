@@ -1,22 +1,19 @@
-import { marked } from "marked"
-import React, { useEffect, useRef, useState } from "react"
+import { marked } from "marked";
+import React, { useEffect, useRef, useState } from "react";
 
 const Tabs = ({ children }: { children: React.ReactElement }) => {
-  const [active, setActive] = useState<number>(0)
-  const [defaultFocus, setDefaultFocus] = useState<boolean>(false)
+  const [active, setActive] = useState<number>(0);
+  const [defaultFocus, setDefaultFocus] = useState<boolean>(false);
 
-  const tabRefs = useRef<Array<HTMLButtonElement | null>>([])
+  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   useEffect(() => {
     if (defaultFocus) {
       //@ts-ignore
-      tabRefs.current[active]?.focus()
+      tabRefs.current[active]?.focus();
     } else {
-      setDefaultFocus(true)
+      setDefaultFocus(true);
     }
-  }, [
-    defaultFocus,
-    active,
-  ])
+  }, [defaultFocus, active]);
 
   const tabLinks = Array.from(
     (children.props as any).value.matchAll(
@@ -26,33 +23,29 @@ const Tabs = ({ children }: { children: React.ReactElement }) => {
       name: match[1],
       children: match[0],
     }),
-  )
+  );
 
   const handleKeyDown = (
     event: React.KeyboardEvent<EventTarget>,
     index: number,
   ) => {
     if (event.key === "Enter" || event.key === " ") {
-      setActive(index)
+      setActive(index);
     } else if (event.key === "ArrowRight") {
-      setActive((active + 1) % tabLinks.length)
+      setActive((active + 1) % tabLinks.length);
     } else if (event.key === "ArrowLeft") {
-      setActive((active - 1 + tabLinks.length) % tabLinks.length)
+      setActive((active - 1 + tabLinks.length) % tabLinks.length);
     }
-  }
+  };
 
   return (
     <div className="tab">
-      <div
-        aria-label="Tabs"
-        className="tab-nav"
-        role="tablist"
-      >
+      <div aria-label="Tabs" className="tab-nav" role="tablist">
         {tabLinks.map(
           (
             item: {
-              name: string | undefined
-              children: string
+              name: string | undefined;
+              children: string;
             },
             index: number,
           ) => (
@@ -63,7 +56,7 @@ const Tabs = ({ children }: { children: React.ReactElement }) => {
               onClick={() => setActive(index)}
               onKeyDown={(event) => handleKeyDown(event, index)}
               ref={(ref) => {
-                tabRefs.current[index] = ref
+                tabRefs.current[index] = ref;
               }}
               role="tab"
               tabIndex={index === active ? 0 : -1}
@@ -77,8 +70,8 @@ const Tabs = ({ children }: { children: React.ReactElement }) => {
       {tabLinks.map(
         (
           item: {
-            name: string | undefined
-            children: string
+            name: string | undefined;
+            children: string;
           },
           i: number,
         ) =>
@@ -94,7 +87,7 @@ const Tabs = ({ children }: { children: React.ReactElement }) => {
           ) as React.ReactElement<any>,
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Tabs
+export default Tabs;

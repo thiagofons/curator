@@ -41,7 +41,7 @@ npm run start
 
 ## Usage
 
-Customize the prompt in the `index.ts` file to suit your needs. 
+Customize the prompt in the `index.ts` file to suit your needs.
 
 You can also build your own tools in the `tools` folder. You just need to import it in `tools` record that is being exported in `allTools.ts` file.
 

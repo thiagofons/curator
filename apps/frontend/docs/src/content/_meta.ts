@@ -1,4 +1,4 @@
-import type { MetaRecord } from "nextra"
+import type { MetaRecord } from "nextra";
 
 const meta: MetaRecord = {
   "separator-start-here": {
@@ -28,6 +28,6 @@ const meta: MetaRecord = {
   "ci-cd": "CI/CD",
 
   "api-reference": "API Reference",
-}
+};
 
-export default meta
+export default meta;

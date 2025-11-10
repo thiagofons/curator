@@ -8,10 +8,10 @@ const Button = ({
   style,
   rel,
 }: {
-  label: string
-  link: string
-  style?: string
-  rel?: string
+  label: string;
+  link: string;
+  style?: string;
+  rel?: string;
 }) => {
   return (
     <a
@@ -26,7 +26,7 @@ const Button = ({
     >
       {label}
     </a>
-  )
-}
+  );
+};
 
-export default Button
+export default Button;

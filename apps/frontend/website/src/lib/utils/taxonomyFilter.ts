@@ -1,4 +1,4 @@
-import { slugify } from "@/lib/utils/textConverter"
+import { slugify } from "@/lib/utils/textConverter";
 
 /**
  * Filters posts by a taxonomy collection (e.g., categories or tags).
@@ -9,6 +9,6 @@ import { slugify } from "@/lib/utils/textConverter"
 const taxonomyFilter = (posts: any[], name: string, key: any) =>
   posts.filter((post) =>
     post.data[name].map((name: string) => slugify(name)).includes(key),
-  )
+  );
 
-export default taxonomyFilter
+export default taxonomyFilter;

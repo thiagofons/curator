@@ -19,12 +19,12 @@ import {
   UnderlineFeatureClient as UnderlineFeatureClientE70f5e05f09f93e00b997edb1ef0c864,
   UnorderedListFeatureClient as UnorderedListFeatureClientE70f5e05f09f93e00b997edb1ef0c864,
   UploadFeatureClient as UploadFeatureClientE70f5e05f09f93e00b997edb1ef0c864,
-} from "@payloadcms/richtext-lexical/client"
+} from "@payloadcms/richtext-lexical/client";
 import {
   LexicalDiffComponent as LexicalDiffComponent44fe37237e0ebf4470c9990d8cb7b07e,
   RscEntryLexicalCell as RscEntryLexicalCell44fe37237e0ebf4470c9990d8cb7b07e,
   RscEntryLexicalField as RscEntryLexicalField44fe37237e0ebf4470c9990d8cb7b07e,
-} from "@payloadcms/richtext-lexical/rsc"
+} from "@payloadcms/richtext-lexical/rsc";
 
 export const importMap = {
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell":
@@ -73,4 +73,4 @@ export const importMap = {
     BoldFeatureClientE70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient":
     ItalicFeatureClientE70f5e05f09f93e00b997edb1ef0c864,
-}
+};
