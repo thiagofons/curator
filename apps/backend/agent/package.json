@@ -11,6 +11,13 @@
   "keywords": [],
   "author": "",
   "packageManager": "pnpm@9.0.0",
+  "dependencies": {
+    "@repo/vitest-config": "workspace:*",
+    "amqplib": "catalog:rabbitmq",
+    "chalk": "catalog:tooling",
+    "dotenv": "catalog:tooling",
+    "vitest": "latest"
+  },
   "devDependencies": {
     "openai": "catalog:ai",
     "@types/amqplib": "catalog:rabbitmq",
@@ -18,10 +25,5 @@
     "readline": "catalog:tooling",
     "typescript": "catalog:tooling",
     "viem": "catalog:tooling"
-  },
-  "dependencies": {
-    "amqplib": "catalog:rabbitmq",
-    "chalk": "catalog:tooling",
-    "dotenv": "catalog:tooling"
   }
 }

@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "turbo run dev --parallel",
     "build": "turbo run build",
-    "test:unit": "turbo run test:unit",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest --watch",
     "test:integration": "turbo run test:integration",
     "test:contract": "turbo run test:contract",
     "quality:lint": "turbo run lint",
@@ -12,6 +13,10 @@
     "docs:api": "typedoc",
     "dev:all": "docker compose -p curator-dev -f docker-compose.development.yml --env-file=.env.development up -d --build",
     "dev:all:stop": "docker compose -p curator-dev -f docker-compose.development.yml --env-file=.env.development down"
+  },
+  "dependencies": {
+    "@repo/vitest-config": "workspace:*",
+    "vitest": "latest"
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.4",

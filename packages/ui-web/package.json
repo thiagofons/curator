@@ -4,24 +4,12 @@
 	"private": true,
 	"scripts": {
 		"ui": "pnpx shadcn@latest",
-		"lint": "eslint ."
-	},
-	"peerDependencies": {
-		"react": "catalog:react19",
-		"zod": "catalog:core-libs"
-	},
-	"devDependencies": {
-		"@repo/eslint-config": "workspace:*",
-		"@repo/typescript-config": "workspace:*",
-		"@types/node": "catalog:tooling",
-		"@types/react": "catalog:react19",
-		"autoprefixer": "catalog:ui-libs",
-		"postcss": "catalog:ui-libs",
-		"postcss-load-config": "catalog:ui-libs",
-		"tailwindcss": "catalog:ui-libs",
-		"typescript": "catalog:tooling"
+		"lint": "eslint .",
+		"test:unit": "vitest run",
+    "test:watch": "vitest --watch"
 	},
 	"dependencies": {
+		"@repo/vitest-config": "workspace:*",
 		"@hookform/resolvers": "catalog:core-libs",
 		"@radix-ui/react-accordion": "catalog:radix",
 		"@radix-ui/react-alert-dialog": "catalog:radix",
@@ -65,8 +53,25 @@
 		"sonner": "catalog:ui-libs",
 		"tailwind-merge": "catalog:ui-libs",
 		"tailwindcss-animate": "catalog:ui-libs",
-		"vaul": "catalog:ui-libs"
+		"vaul": "catalog:ui-libs",
+		"vitest": "latest"
 	},
+	"peerDependencies": {
+		"react": "catalog:react19",
+		"zod": "catalog:core-libs"
+	},
+	"devDependencies": {
+		"@repo/eslint-config": "workspace:*",
+		"@repo/typescript-config": "workspace:*",
+		"@types/node": "catalog:tooling",
+		"@types/react": "catalog:react19",
+		"autoprefixer": "catalog:ui-libs",
+		"postcss": "catalog:ui-libs",
+		"postcss-load-config": "catalog:ui-libs",
+		"tailwindcss": "catalog:ui-libs",
+		"typescript": "catalog:tooling"
+	},
+	
 	"exports": {
 		"./globals.css": "./src/globals.css",
 		"./postcss.config": "./postcss.config.mjs",
