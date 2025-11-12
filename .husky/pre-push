@@ -3,12 +3,12 @@
 
 set -e
 
-echo "🧪 Running unit tests on changed packages (vs. origin/main) before push..."
+echo "🧪 Running unit tests before push..."
 echo "⏳ Running tests..."
-pnpm turbo run test:unit --since=origin/main
+pnpm turbo run test:unit
 
-echo "🧱 Building changed packages (vs. origin/main) before push..."
+echo "🧱 Building packages before push..."
 echo "⏳ Building packages..."
-pnpm turbo run build --since=origin/main
+pnpm turbo run build 
 
 echo "🎉 All checks passed! Pushing."
