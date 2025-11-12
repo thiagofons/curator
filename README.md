@@ -1,9 +1,32 @@
-# 🏛️ Curator
+# Curator
 
-[![Deploy Documentation](https://github.com/thiagofons/curator/actions/workflow/deploy-docs.yml/badge.svg)](https://github.com/thiagofons/curator/actions/workflow/deploy-docs.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+<p align="center">
+  <img src="./.github/assets/banner.png" alt="Banner do Curator" width="900"/> 
+</p>
 
-Welcome to the Curator platform monorepo. This repository contains all applications, services, and infrastructure code for the Curator project.
+<p align="center">
+  <a href="https://opensource.org/license/apache-2-0">
+    <img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" alt="License: Apache 2.0">
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://curator.com.br">
+    <img src="https://img.shields.io/badge/Website-Live-gree.svg" alt="Website">
+  </a>
+  &nbsp;
+  <a href="https://docs.curator.com.br"> 
+    <img src="https://img.shields.io/badge/Docs-Live-gree.svg" alt="Docs">
+  </a>
+</p>
+
+---
+
+## 🎯 About the Project
+
+(Seu conteúdo começa aqui...)
+
+Welcome to the **Curator** platform monorepo. This repository contains all applications, services, and infrastructure code for the Curator project.
 
 Our mission is to combat shallow, low-context content by providing "Lifelong Learners" with curated, in-depth learning journeys. We act as a "sommelier of culture," guiding users through the best books, films, albums, and articles on any given topic in a logical, meaningful sequence.
 
@@ -128,7 +151,7 @@ This section outlines the core technologies used across the Curator Platform, ca
 | ✅     | Prettier + ESLint       | Static code analysis.       |
 | ✅     | Vitest                  | Unit tests.                 |
 | ⌛     | Prisma Test Environment | Integration tests.          |
-| ⌛     | Playwright              | E2E tests.                  |
+| ✅     | Playwright              | E2E tests.                  |
 | ⌛     | Stryker                 | Quality tests.              |
 | ⌛     | Pact                    | Contract tests.             |
 | ⌛     | k6                      | Load and performance tests. |
