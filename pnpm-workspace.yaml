@@ -1,6 +1,7 @@
 packages:
   - apps/backend/*
   - apps/frontend/*
+  - apps/frontend/storybook/*
   - apps/e2e
   - packages/*
   - templates/*

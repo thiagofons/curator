@@ -7,7 +7,7 @@ const config: Config = {
 
   // A propriedade 'content' é específica para esta aplicação.
   // Ela diz ao Tailwind quais arquivos devem ser escaneados em busca de classes.
-  content: ["./.storybook/**/*.{js,ts,jsx,tsx}", "../../../packages/ui-web/src/**/*.{ts,tsx}"],
+  content: ["./.storybook/**/*.{js,ts,jsx,tsx}", "../../../../packages/ui-web/src/**/*.{ts,tsx}"],
 };
 
 export default config;

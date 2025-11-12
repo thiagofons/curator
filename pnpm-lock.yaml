@@ -508,11 +508,11 @@ importers:
         specifier: catalog:docs
         version: 4.9.0(typedoc@0.28.14(typescript@5.9.3))
 
-  apps/frontend/storybook-web:
+  apps/frontend/storybook/web:
     dependencies:
       '@repo/ui-web':
         specifier: workspace:*
-        version: link:../../../packages/ui-web
+        version: link:../../../../packages/ui-web
       react:
         specifier: catalog:react19
         version: 19.2.0

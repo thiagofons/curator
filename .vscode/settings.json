@@ -44,7 +44,8 @@
     "packages/ui-web",
     "packages/ui-mobile",
     "e2e",
-    "frontend/storybook"
+    "frontend/storybook",
+    "frontend/storybook-web"
   ],
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
