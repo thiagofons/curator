@@ -1,18 +1,17 @@
 // storage-adapter-import-placeholder
 
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { en } from "@payloadcms/translations/languages/en";
 import { pt } from "@payloadcms/translations/languages/pt";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { buildConfig } from "payload";
-import sharp from "sharp";
-import { Authors } from "./collections/Authors";
-import { Categories } from "./collections/Categories";
-import { Media } from "./collections/Media";
-import { Posts } from "./collections/Posts";
-import { Users } from "./collections/Users";
+import { Authors } from "./collections/authors";
+import { Categories } from "./collections/categories";
+import { Media } from "./collections/media";
+import { Posts } from "./collections/posts";
+import { Users } from "./collections/users";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -56,7 +55,6 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI || "",
     },
   }),
-  sharp,
   plugins: [
     // storage-adapter-placeholder
   ],

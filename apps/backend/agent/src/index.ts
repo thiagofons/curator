@@ -3,10 +3,10 @@ import chalk from "chalk"; // 1. Importa o CHALK
 import "dotenv/config";
 import OpenAi from "openai";
 // Suas importações originais
-import { createAssistant } from "./openai/createAssistant";
-import { createRun } from "./openai/createRun";
-import { createThread } from "./openai/createThread";
-import { performRun } from "./openai/performRun";
+import { createAssistant } from "./openai/create-assistant";
+import { createRun } from "./openai/create-run";
+import { createThread } from "./openai/create-thread";
+import { performRun } from "./openai/perform-run";
 
 // --- Definições de Configuração ---
 const RABBITMQ_URL =

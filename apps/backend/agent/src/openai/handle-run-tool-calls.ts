@@ -1,7 +1,7 @@
-import { tools } from "../tools/allTools";
 import type OpenAi from "openai";
 import type { Run } from "openai/resources/beta/threads/runs/runs.mjs";
 import type { Thread } from "openai/resources/beta/threads/threads.mjs";
+import { tools } from "../tools/all-tools";
 
 /**
  * Handles the execution of tool calls required by a given run and submits the outputs.
