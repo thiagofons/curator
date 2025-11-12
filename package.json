@@ -29,6 +29,7 @@
     "@typescript-eslint/parser": "^8.46.3",
     "eslint": "^9.16.0",
     "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
     "prettier": "catalog:code-quality",
     "turbo": "catalog:tooling",
     "typescript": "catalog:tooling"
