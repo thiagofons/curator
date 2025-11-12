@@ -7,7 +7,6 @@ import { pt } from "@payloadcms/translations/languages/pt";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildConfig } from "payload";
-import sharp from "sharp";
 import { Authors } from "./collections/authors";
 import { Categories } from "./collections/categories";
 import { Media } from "./collections/media";
@@ -56,7 +55,6 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI || "",
     },
   }),
-  sharp,
   plugins: [
     // storage-adapter-placeholder
   ],
