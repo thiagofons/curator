@@ -1,7 +1,7 @@
-import { handleRunToolCalls } from "./handleRunToolCalls";
 import type OpenAi from "openai";
 import type { Run } from "openai/resources/beta/threads/runs/runs.mjs";
 import type { Thread } from "openai/resources/beta/threads/threads.mjs";
+import { handleRunToolCalls } from "./handle-run-tool-calls";
 
 /**
  * Performs a run operation for the given OpenAI client and thread.
