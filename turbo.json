@@ -23,6 +23,8 @@
     "check-types": {
       "dependsOn": ["^check-types"]
     },
+    "storybook:dev": {},
+    "storybook:build": {},
     "test:unit": {
       "dependsOn": ["^test:unit", "@repo/vitest-config#build"]
     },
