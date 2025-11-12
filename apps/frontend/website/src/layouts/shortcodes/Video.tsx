@@ -1,5 +1,5 @@
 /** biome-ignore-all lint/correctness/noUnusedImports: It needs the import React to work properly */
-import React from "react"
+import React from "react";
 
 function Video({
   title,
@@ -8,11 +8,11 @@ function Video({
   src,
   ...rest
 }: {
-  title: string
-  width: number
-  height: number | "auto"
-  src: string
-  [key: string]: any
+  title: string;
+  width: number;
+  height: number | "auto";
+  src: string;
+  [key: string]: any;
 }) {
   return (
     <video
@@ -28,7 +28,7 @@ function Video({
       />
       {title}
     </video>
-  )
+  );
 }
 
-export default Video
+export default Video;

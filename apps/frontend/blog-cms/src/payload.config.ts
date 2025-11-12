@@ -1,21 +1,21 @@
 // storage-adapter-import-placeholder
 
-import path from "node:path"
-import { fileURLToPath } from "node:url"
-import { postgresAdapter } from "@payloadcms/db-postgres"
-import { lexicalEditor } from "@payloadcms/richtext-lexical"
-import { en } from "@payloadcms/translations/languages/en"
-import { pt } from "@payloadcms/translations/languages/pt"
-import { buildConfig } from "payload"
-import sharp from "sharp"
-import { Authors } from "./collections/Authors"
-import { Categories } from "./collections/Categories"
-import { Media } from "./collections/Media"
-import { Posts } from "./collections/Posts"
-import { Users } from "./collections/Users"
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { postgresAdapter } from "@payloadcms/db-postgres";
+import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import { en } from "@payloadcms/translations/languages/en";
+import { pt } from "@payloadcms/translations/languages/pt";
+import { buildConfig } from "payload";
+import sharp from "sharp";
+import { Authors } from "./collections/Authors";
+import { Categories } from "./collections/Categories";
+import { Media } from "./collections/Media";
+import { Posts } from "./collections/Posts";
+import { Users } from "./collections/Users";
 
-const filename = fileURLToPath(import.meta.url)
-const dirname = path.dirname(filename)
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
 
 export default buildConfig({
   admin: {
@@ -45,13 +45,7 @@ export default buildConfig({
     "https://curator.com.br",
     "https://www.curator.com.br",
   ],
-  collections: [
-    Users,
-    Media,
-    Authors,
-    Categories,
-    Posts,
-  ],
+  collections: [Users, Media, Authors, Categories, Posts],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
@@ -73,4 +67,4 @@ export default buildConfig({
       pt,
     },
   },
-})
+});

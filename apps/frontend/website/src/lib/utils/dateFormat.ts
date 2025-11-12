@@ -1,4 +1,4 @@
-import { format } from "date-fns"
+import { format } from "date-fns";
 
 /**
  * Formats a date (string or Date) using date-fns pattern.
@@ -6,9 +6,9 @@ import { format } from "date-fns"
  * @param pattern date-fns format pattern (default: dd MMM, yyyy)
  */
 const dateFormat = (date: Date | string, pattern = "dd MMM, yyyy"): string => {
-  const dateObj = new Date(date)
-  const output = format(dateObj, pattern)
-  return output
-}
+  const dateObj = new Date(date);
+  const output = format(dateObj, pattern);
+  return output;
+};
 
-export default dateFormat
+export default dateFormat;

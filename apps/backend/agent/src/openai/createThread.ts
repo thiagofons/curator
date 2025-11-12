@@ -1,5 +1,5 @@
-import type OpenAi from "openai"
-import type { Thread } from "openai/resources/beta/threads/threads.mjs"
+import type OpenAi from "openai";
+import type { Thread } from "openai/resources/beta/threads/threads.mjs";
 
 /**
  * Creates a new thread and sends a message to it using the OpenAI client.
@@ -12,12 +12,12 @@ export async function createThread(
   client: OpenAi,
   message: string,
 ): Promise<Thread> {
-  const thread = await client.beta.threads.create()
+  const thread = await client.beta.threads.create();
 
   await client.beta.threads.messages.create(thread.id, {
     role: "user",
     content: message,
-  })
+  });
 
-  return thread
+  return thread;
 }

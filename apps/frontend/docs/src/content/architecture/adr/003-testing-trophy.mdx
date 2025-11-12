@@ -24,16 +24,16 @@ Driving forces:
 - Fast feedback during edit/commit (strong DX productivity).
 - High confidence in domain behavior and real database integration.
 - Lean and reliable E2E for critical user journeys.
-- Tooling standardized with our stack (TypeScript, Vite/Vitest, Prisma, Playwright).
+- Tooling standardized with our stack (TypeScript, ESLint, Prettier, Prisma, Playwright).
 
 ## 2. Decision
 
 We will adopt the Testing Trophy strategy, emphasizing integration value and fast feedback at the base. The layers and tools are:
 
-#### 1. Static Analysis (The Base): TypeScript & BiomeJS
+#### 1. Static Analysis (The Base): TypeScript, ESLint & Prettier
 
 - Goal: Catch all type errors, formatting issues, and linting violations at edit/compile time — our first and fastest feedback loop.
-- Tools: `tsc` (TypeScript compiler) and `BiomeJS` (for linting/formatting).
+- Tools: `tsc` (TypeScript compiler), `ESLint` (for linting), and `Prettier` (for formatting).
 
 #### 2. Unit Tests (The Smallest Value): Vitest
 
@@ -61,7 +61,7 @@ We will adopt the Testing Trophy strategy, emphasizing integration value and fas
 ```mermaid
 flowchart TB
   %% Direction: bottom -> top (SA is the base)
-  SA["<b>Static Analysis</b><br/>TypeScript + BiomeJS"]
+  SA["<b>Static Analysis</b><br/>TypeScript + ESLint + Prettier"]
   UT["<b>Unit Tests</b><br/>Vitest"]
   IT["<b>Integration Tests</b><br/>Vitest + supertest + Prisma test DB"]
   E2E["<b>End-to-End (E2E)</b><br/>Playwright"]
@@ -84,11 +84,11 @@ flowchart TB
 
 ### ➕ Positive Consequences (Gains)
 
-- Very fast feedback via TypeScript + Biome (catches trivial issues before running tests).
+- Very fast feedback via TypeScript + ESLint (catches trivial issues before running tests).
 - Higher confidence in service behavior by prioritizing Integration tests with a real database.
 - Fast and cheap Unit tests for pure logic (isolation and clarity).
 - More stable and cheaper-to-maintain E2E by focusing only on what is critical.
-- Stack coherence with our ecosystem (Vite/Vitest, Prisma, Playwright) and strong DX.
+- Stack coherence with our ecosystem (ESLint, Prettier, Prisma, Playwright) and strong DX.
 
 ### ➖ Negative Consequences (Costs/Risks)
 
@@ -96,6 +96,7 @@ flowchart TB
 - Additional execution time for Integration versus Unit; requires parallelization/caching.
 - Ongoing maintenance of consistent fixtures/test data for Integration/E2E.
 - Flakiness risk in E2E if the like-production environment is not deterministic.
+- Configuration complexity: Managing separate configs for ESLint and Prettier (and their conflicts) across a monorepo.
 
 ---
 
@@ -113,8 +114,8 @@ flowchart TB
 
 ### Alternative C: ESLint + Prettier instead of Biome
 
-- Description: Traditional lint/format stack (ESLint/Prettier).
-- Reason for Rejection: Biome provides integrated lint/format and superior performance, simplifying maintenance and standardization.
+- Description: Use the all-in-one, high-performance tool BiomeJS for linting and formatting.
+- Reason for Rejection: While Biome is extremely fast and simplifies configuration, the ecosystem for ESLint + Prettier is significantly more mature. Our stack (e.g., specific plugins for tRPC, Next.js, or monorepo pathing) is better supported by the vast ESLint plugin ecosystem. We prioritize maturity and ecosystem support over raw performance for this project.
 
 ### Alternative D: Jest instead of Vitest
 

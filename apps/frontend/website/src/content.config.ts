@@ -1,5 +1,5 @@
-import { defineCollection, z } from "astro:content"
-import { glob } from "astro/loaders"
+import { glob } from "astro/loaders";
+import { defineCollection, z } from "astro:content";
 
 /**
  * Astro content collection definitions for static content areas.
@@ -26,7 +26,7 @@ const homepageCollection = defineCollection({
       })
       .optional(),
   }),
-})
+});
 
 // Homepage Collection schema
 const blogCollection = defineCollection({
@@ -47,7 +47,7 @@ const blogCollection = defineCollection({
       })
       .optional(),
   }),
-})
+});
 
 // Post collection schema
 const postsCollection = defineCollection({
@@ -61,18 +61,12 @@ const postsCollection = defineCollection({
     description: z.string().optional(),
     date: z.date(),
     image: z.string().optional(),
-    authors: z.array(z.string()).default([
-      "admin",
-    ]),
-    categories: z.array(z.string()).default([
-      "others",
-    ]),
-    tags: z.array(z.string()).default([
-      "others",
-    ]),
+    authors: z.array(z.string()).default(["admin"]),
+    categories: z.array(z.string()).default(["others"]),
+    tags: z.array(z.string()).default(["others"]),
     draft: z.boolean().optional(),
   }),
-})
+});
 
 // contact collection schema
 const contactCollection = defineCollection({
@@ -86,7 +80,7 @@ const contactCollection = defineCollection({
     image: z.string().optional(),
     draft: z.boolean().optional(),
   }),
-})
+});
 
 // Author collection schema
 const authorsCollection = defineCollection({
@@ -100,7 +94,7 @@ const authorsCollection = defineCollection({
     description: z.string().optional(),
     meta_title: z.string().optional(),
   }),
-})
+});
 
 // Pages collection schema
 const pagesCollection = defineCollection({
@@ -117,7 +111,7 @@ const pagesCollection = defineCollection({
     layout: z.string().optional(),
     draft: z.boolean().optional(),
   }),
-})
+});
 
 /** Exported Astro collections used by the site build. */
 export const collections = {
@@ -127,4 +121,4 @@ export const collections = {
   pages: pagesCollection,
   authors: authorsCollection,
   contact: contactCollection,
-}
+};

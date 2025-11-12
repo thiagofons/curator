@@ -1,25 +1,25 @@
-import { Head } from "nextra/components"
-import { getPageMap } from "nextra/page-map"
-import { Footer, Layout, Navbar } from "nextra-theme-docs"
-import "nextra-theme-docs/style-prefixed.css"
-import type { ReactNode } from "react"
+import { Head } from "nextra/components";
+import { getPageMap } from "nextra/page-map";
+import { Footer, Layout, Navbar } from "nextra-theme-docs";
+import "nextra-theme-docs/style-prefixed.css";
+import type { ReactNode } from "react";
 
 export const metadata = {
   // Define your metadata here
   // For more information on metadata API, see: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
-}
+};
 const navbar = (
   <Navbar
     logo={<b>Curator</b>}
     // ... Your additional navbar options
   />
-)
-const footer = <Footer>{new Date().getFullYear()} © Curator.</Footer>
+);
+const footer = <Footer>{new Date().getFullYear()} © Curator.</Footer>;
 
 export default async function RootLayout({
   children,
 }: {
-  children: ReactNode
+  children: ReactNode;
 }) {
   return (
     <html
@@ -47,5 +47,5 @@ export default async function RootLayout({
         </Layout>
       </body>
     </html>
-  )
+  );
 }

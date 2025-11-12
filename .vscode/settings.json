@@ -1,7 +1,8 @@
 {
   "editor.tabSize": 2,
-  "editor.formatOnSave": false,
+  "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
     "*.ts": "$(capture).js, $(capture).*.ts, $(capture).*.js",
@@ -11,22 +12,20 @@
     ".env": "*.env",
     "package.json": "pnpm-lock.yaml, .nvmrc, pnpm-workspace.yaml, .npmrc",
     ".eslintrc.*": ".eslintignore, .eslintcache",
-    ".prettierrc": ".prettierignore",
+    "prettier.config.js": ".prettierignore",
+    "prettier.config.cjs": ".prettierignore",
     ".gitignore": ".gitattributes"
   },
   "explorer.compactFolders": true,
   "javascript.updateImportsOnFileMove.enabled": "always",
   "typescript.updateImportsOnFileMove.enabled": "always",
   "workbench.editor.tabSizing": "shrink",
-  "editor.defaultFormatter": "biomejs.biome",
   "editor.foldingImportsByDefault": false,
   "editor.formatOnPaste": true,
   "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
     "source.removeUnusedImports": "always",
     "source.sortImports": "never",
-    "source.organizeImports.biome": "explicit",
-    "source.biome": "always",
-    "source.fixAll.biome": "always",
     "source.fixAll.markdownlint": "always"
   },
   "files.associations": {
@@ -42,9 +41,13 @@
     "frontend/docs",
     "frontend/website",
     "packages/ui-web",
-    "packages/ui-mobile"
+    "packages/ui-mobile",
+    "e2e"
   ],
-  "[json]": {
-    "editor.defaultFormatter": "biomejs.biome"
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
   }
 }
