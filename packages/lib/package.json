@@ -7,6 +7,6 @@
     "test:unit": "vitest run --exclude **/*.it.spec.ts"
   },
   "dependencies": {
-    "vitest": "latest"
+    "vitest": "catalog:testing"
   }
 }

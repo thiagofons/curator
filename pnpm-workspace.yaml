@@ -1,6 +1,7 @@
 packages:
   - apps/backend/*
   - apps/frontend/*
+  - apps/e2e
   - packages/*
   - templates/*
 
@@ -98,6 +99,7 @@ catalogs:
     react-medium-image-zoom: ^5.4.0
 
   testing:
+    "@playwright/test": 1.56.1
     supertest: 7.1.4
     vitest: 4.0.8
 

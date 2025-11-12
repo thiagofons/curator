@@ -41,7 +41,8 @@
     "frontend/docs",
     "frontend/website",
     "packages/ui-web",
-    "packages/ui-mobile"
+    "packages/ui-mobile",
+    "e2e"
   ],
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

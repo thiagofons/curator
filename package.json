@@ -8,6 +8,7 @@
     "test:unit:watch": "vitest --watch",
     "test:integration": "turbo run test:integration",
     "test:contract": "turbo run test:contract",
+    "test:e2e": "turbo run test:e2e",
     "quality:lint:check": "turbo run lint",
     "quality:lint:fix": "turbo run lint -- --fix",
     "quality:format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,md,mdx,json,yaml}\"",
