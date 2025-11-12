@@ -1,6 +1,7 @@
 {
   "name": "curator",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "turbo run build",
     "check-types": "turbo run check-types",
@@ -22,6 +23,7 @@
     "test:e2e": "turbo run test:e2e"
   },
   "dependencies": {
+    "@repo/eslint-config": "workspace:*",
     "@repo/vitest-config": "workspace:*",
     "vitest": "latest"
   },
@@ -38,10 +40,10 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx,md,mdx,json,yaml}": [
-      "pnpm quality:format:check"
+      "prettier --write"
     ],
     "*.{ts,tsx,js,jsx}": [
-      "pnpm quality:lint:check"
+      "eslint --fix"
     ]
   },
   "packageManager": "pnpm@9.5.0",
