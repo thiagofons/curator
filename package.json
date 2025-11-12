@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "turbo run dev --parallel",
     "build": "turbo run build",
-    "test:unit": "vitest run",
+    "test:unit": "turbo run test:unit",
     "test:unit:watch": "vitest --watch",
     "test:integration": "turbo run test:integration",
     "test:contract": "turbo run test:contract",

@@ -49,7 +49,7 @@ This section outlines the core technologies used across the Curator Platform, ca
 | ⌛     | OpenAPI                    | Provides a formal standard for describing HTTP APIs.    |
 | ⌛     | Swagger UI                 | Visualization and interaction with the API’s resources. |
 | ✅     | Nextra (Next.js)           | Powers the static documentation portal.                 |
-| ⌛     | Mermaid.js (Diagrams)      | Renders text-based architecture diagrams.               |
+| ✅     | Mermaid.js (Diagrams)      | Renders text-based architecture diagrams.               |
 | ⌛     | TypeDoc (TSDoc Generation) | Generates API reference from code comments.             |
 | ✅     | Astro                      | Blogging framework.                                     |
 | ⌛     | Sandpack (Live Sandboxes)  | Embeds live, editable code examples.                    |
