@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 
 import { Button } from "./button";
 
-
 const meta: Meta<typeof Button> = {
   title: "Components/Button",
   component: Button,
@@ -13,7 +12,14 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: { type: "select" },
-      options: ["default", "destructive", "outline", "secondary", "ghost", "link"],
+      options: [
+        "default",
+        "destructive",
+        "outline",
+        "secondary",
+        "ghost",
+        "link",
+      ],
       description: "The visual style of the button.",
     },
     size: {
@@ -23,7 +29,8 @@ const meta: Meta<typeof Button> = {
     },
     asChild: {
       control: "boolean",
-      description: "Renders the button as a child of another component, typically a slot.",
+      description:
+        "Renders the button as a child of another component, typically a slot.",
     },
     className: {
       control: "text",
@@ -121,7 +128,11 @@ export const Icon: Story = {
         className="size-4"
       >
         <title>Plus</title>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M12 4.5v15m7.5-7.5h-15"
+        />
       </svg>
     ),
   },
@@ -147,7 +158,11 @@ export const WithIcon: Story = {
           className="size-4"
         >
           <title>Plus</title>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 4.5v15m7.5-7.5h-15"
+          />
         </svg>
         Add Item
       </>

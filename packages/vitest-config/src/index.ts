@@ -4,5 +4,6 @@ export const sharedConfig = {
     environment: "jsdom",
     // setupFiles: ['./src/test/setup.ts'],
     // Other shared configuration
+    passWithNoTests: true,
   },
 };

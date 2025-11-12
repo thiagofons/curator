@@ -1,26 +1,29 @@
 {
   "name": "curator",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "turbo run dev --parallel",
     "build": "turbo run build",
-    "test:unit": "turbo run test:unit",
-    "test:unit:watch": "vitest --watch",
-    "test:integration": "turbo run test:integration",
-    "test:contract": "turbo run test:contract",
-    "test:e2e": "turbo run test:e2e",
+    "check-types": "turbo run check-types",
+    "prepare": "husky",
+    "dev": "turbo run dev --parallel",
+    "dev:all": "docker compose -p curator-dev -f .docker/docker-compose.development.yml --env-file=.env.development up -d --build",
+    "dev:all:stop": "docker compose -p curator-dev -f .docker/docker-compose.development.yml --env-file=.env.development down",
+    "docs:api": "typedoc",
     "quality:lint:check": "turbo run lint",
     "quality:lint:fix": "turbo run lint -- --fix",
     "quality:format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,md,mdx,json,yaml}\"",
     "quality:format:fix": "prettier --write \"**/*.{ts,tsx,js,jsx,md,mdx,json,yaml}\"",
-    "check-types": "turbo run check-types",
     "storybook-web:dev": "turbo run storybook-web:dev",
     "storybook-web:build": "turbo run storybook-web:build",
-    "docs:api": "typedoc",
-    "dev:all": "docker compose -p curator-dev -f docker-compose.development.yml --env-file=.env.development up -d --build",
-    "dev:all:stop": "docker compose -p curator-dev -f docker-compose.development.yml --env-file=.env.development down"
+    "test:unit": "turbo run test:unit",
+    "test:unit:watch": "vitest --watch",
+    "test:integration": "turbo run test:integration",
+    "test:contract": "turbo run test:contract",
+    "test:e2e": "turbo run test:e2e"
   },
   "dependencies": {
+    "@repo/eslint-config": "workspace:*",
     "@repo/vitest-config": "workspace:*",
     "vitest": "latest"
   },
@@ -29,9 +32,19 @@
     "@typescript-eslint/parser": "^8.46.3",
     "eslint": "^9.16.0",
     "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.6",
     "prettier": "catalog:code-quality",
     "turbo": "catalog:tooling",
     "typescript": "catalog:tooling"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,md,mdx,json,yaml}": [
+      "prettier --write"
+    ],
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix"
+    ]
   },
   "packageManager": "pnpm@9.5.0",
   "engines": {
