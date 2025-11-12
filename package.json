@@ -31,9 +31,18 @@
     "eslint": "^9.16.0",
     "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
+    "lint-staged": "^16.2.6",
     "prettier": "catalog:code-quality",
     "turbo": "catalog:tooling",
     "typescript": "catalog:tooling"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,md,mdx,json,yaml}": [
+      "pnpm quality:format:check"
+    ],
+    "*.{ts,tsx,js,jsx}": [
+      "pnpm quality:lint:check"
+    ]
   },
   "packageManager": "pnpm@9.5.0",
   "engines": {

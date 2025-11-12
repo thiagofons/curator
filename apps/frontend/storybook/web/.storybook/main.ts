@@ -5,7 +5,10 @@ import { dirname, join } from "node:path";
 const require = createRequire(import.meta.url);
 
 const config: StorybookConfig = {
-  stories: ["../../../../../packages/ui-web/src/**/*.mdx", "../../../../../packages/ui-web/src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+  stories: [
+    "../../../../../packages/ui-web/src/**/*.mdx",
+    "../../../../../packages/ui-web/src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+  ],
   addons: [
     getAbsolutePath("@storybook/addon-links"),
     getAbsolutePath("@storybook/addon-onboarding"),

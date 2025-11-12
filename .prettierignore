@@ -9,6 +9,8 @@ build/
 .output/
 coverage/
 .cache/
+.pnpm-store/
+.terraform/
 
 # Package managers & logs
 pnpm-lock.yaml
@@ -23,4 +25,4 @@ package-lock.json
 # Misc
 .DS_Store
 .env*
-
+storybook-static/
