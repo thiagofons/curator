@@ -38,14 +38,14 @@
     "infrastructure",
     "monorepo",
     "backend/agent",
+    "e2e",
     "frontend/blog-cms",
     "frontend/docs",
     "frontend/website",
+    "frontend/storybook-web",
+    "frontend/storybook-mobile",
     "packages/ui-web",
-    "packages/ui-mobile",
-    "e2e",
-    "frontend/storybook",
-    "frontend/storybook-web"
+    "packages/ui-mobile"
   ],
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
