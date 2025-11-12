@@ -14,6 +14,8 @@
     "quality:format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,md,mdx,json,yaml}\"",
     "quality:format:fix": "prettier --write \"**/*.{ts,tsx,js,jsx,md,mdx,json,yaml}\"",
     "check-types": "turbo run check-types",
+    "storybook-web:dev": "turbo run storybook-web:dev",
+    "storybook-web:build": "turbo run storybook-web:build",
     "docs:api": "typedoc",
     "dev:all": "docker compose -p curator-dev -f docker-compose.development.yml --env-file=.env.development up -d --build",
     "dev:all:stop": "docker compose -p curator-dev -f docker-compose.development.yml --env-file=.env.development down"
