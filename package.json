@@ -8,6 +8,7 @@
     "compose:core": "docker compose -f docker-compose.yaml --env-file=.env.development  --profile core --profile observability up -d",
     "compose:observability": "docker compose -f docker-compose.yaml --env-file=.env.development --profile observability up -d",
     "compose:down": "docker compose -f docker-compose.yaml --env-file=.env.development down",
+    "curator:new": "hygen service new",
     "dev": "turbo run dev --parallel",
     "docs:api": "typedoc",
     "prepare": "husky",
@@ -26,6 +27,7 @@
   "dependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/vitest-config": "workspace:*",
+    "hygen": "^6.2.11",
     "vitest": "latest"
   },
   "devDependencies": {

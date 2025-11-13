@@ -1,5 +1,8 @@
+---
+to: apps/backend/<%= name %>/package.json
+---
 {
-  "name": "@templates/nestjs-service",
+  "name": "@backend/<%= name %>",
   "version": "1.0.0",
   "private": true,
   "scripts": {
