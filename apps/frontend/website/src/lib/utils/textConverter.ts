@@ -1,45 +1,56 @@
 import { slug } from "github-slugger";
 import { marked } from "marked";
 
-// slugify
+/**
+ * Converts arbitrary text to a URL-friendly slug using github-slugger.
+ * @param content Input text
+ * @returns kebab-case slug or null when empty
+ */
 export const slugify = (content: string) => {
   if (!content) return null;
 
   return slug(content);
 };
 
-// markdownify
+/**
+ * Renders a markdown inline string to HTML using marked.
+ * Note: for full blocks, use markdown pipelines in Astro.
+ */
 export const markdownify = (content: string) => {
   if (!content) return null;
 
   return marked.parseInline(content);
 };
 
-// humanize
+/**
+ * Humanizes a slug/string to Title Case-ish with spaces.
+ */
 export const humanize = (content: string) => {
   if (!content) return null;
 
   return content
     .replace(/^[\s_]+|[\s_]+$/g, "")
     .replace(/[_\s]+/g, " ")
-    .replace(/^[a-z]/, function (m) {
-      return m.toUpperCase();
-    });
+    .replace(/^[a-z]/, (m) => m.toUpperCase());
 };
 
-// plainify
+/**
+ * Removes HTML tags and collapses whitespace, returning plain text.
+ */
 export const plainify = (content: string) => {
   if (!content) return null;
 
   const filterBrackets = content.replace(/<\/?[^>]+(>|$)/gm, "");
   const filterSpaces = filterBrackets.replace(/[\r\n]\s*[\r\n]/gm, "");
-  const stripHTML = htmlEntityDecoder(filterSpaces);
-  return stripHTML;
+  const stripHtml = htmlEntityDecoder(filterSpaces);
+  return stripHtml;
 };
 
-// strip entities for plainify
+/** Decodes common HTML entities to their literal characters. */
 const htmlEntityDecoder = (htmlWithEntities: string): string => {
-  let entityList: { [key: string]: string } = {
+  const entityList: {
+    [key: string]: string;
+  } = {
     "&nbsp;": " ",
     "&lt;": "<",
     "&gt;": ">",
@@ -47,11 +58,11 @@ const htmlEntityDecoder = (htmlWithEntities: string): string => {
     "&quot;": '"',
     "&#39;": "'",
   };
-  let htmlWithoutEntities: string = htmlWithEntities.replace(
+  const htmlWithoutEntities: string = htmlWithEntities.replace(
     /(&amp;|&lt;|&gt;|&quot;|&#39;)/g,
     (entity: string): string => {
-      return entityList[entity];
-    }
+      return entityList[entity] as string;
+    },
   );
   return htmlWithoutEntities;
 };

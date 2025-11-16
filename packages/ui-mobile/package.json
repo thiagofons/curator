@@ -3,8 +3,21 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "test:unit": "vitest run",
+    "test:watch": "vitest --watch"
+  },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@repo/typescript-config": "workspace:",
+    "@repo/eslint-config": "workspace:",
+    "@repo/vitest-config": "workspace:"
+  },
+  "devDependencies": {
+    "vitest": "latest"
+  }
 }

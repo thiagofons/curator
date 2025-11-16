@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Builds and caches
+dist/
+build/
+.turbo/
+.next/
+.output/
+coverage/
+.cache/
+.pnpm-store/
+.terraform/
+
+# Package managers & logs
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+*.log
+
+# Generated code
+**/*.d.ts
+**/*.d.ts.map
+
+# Misc
+.DS_Store
+.env*
+storybook-static/

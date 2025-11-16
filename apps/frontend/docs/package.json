@@ -4,23 +4,29 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next --turbopack --port 4001",
+    "dev": "next --turbopack --port 4002",
     "build": "next build",
-    "start": "next start --port 4001",
+    "start": "next start --port 4002",
+    "lint": "eslint .",
+    "test:unit": "vitest run",
+    "test:watch": "vitest --watch",
     "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@repo/eslint-config": "workspace:",
     "@repo/typescript-config": "workspace:",
+    "@repo/vitest-config": "workspace:",
     "@repo/ui-web": "workspace:",
     "next": "catalog:next16",
     "nextra": "catalog:nextra4",
     "nextra-theme-docs": "catalog:nextra4",
     "react": "catalog:react19",
     "react-dom": "catalog:react19",
-    "react-medium-image-zoom": "catalog:styling"
+    "react-medium-image-zoom": "catalog:styling",
+    "vitest": "latest"
   },
   "devDependencies": {
     "typedoc": "catalog:docs",

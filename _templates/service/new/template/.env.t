@@ -1,0 +1,4 @@
+---
+to: apps/backend/<%= name %>/.env
+---
+DATABASE_URL="postgresql://SEU_USER:SEU_PASS@localhost:5432/{{DB_NAME_TEST}}"
