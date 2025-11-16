@@ -4,7 +4,7 @@
   "type": "module",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "turbo run build",
+    "build": "turbo run build --parallel",
     "check-types": "turbo run check-types",
     "compose:core": "docker compose -f docker-compose.yaml --env-file=.env.development  --profile core --profile observability up -d",
     "compose:observability": "docker compose -f docker-compose.yaml --env-file=.env.development --profile observability up -d",
