@@ -1,0 +1,13 @@
+{
+  "extends": "@repo/typescript-config/base",
+  "compilerOptions": {
+    "resolveJsonModule": false,
+    "moduleResolution": "nodenext",
+    "verbatimModuleSyntax": false,
+    "module": "nodenext",
+    "outDir": "./dist",
+    "rootDir": "./src"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

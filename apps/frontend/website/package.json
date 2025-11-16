@@ -48,7 +48,7 @@
     "prettier-plugin-astro": "catalog:code-quality",
     "prettier-plugin-tailwindcss": "catalog:code-quality",
     "sharp": "catalog:ui-libs",
-    "tailwindcss": "catalog:ui-libs",
+    "tailwindcss": "^4.1.17",
     "typescript": "catalog:tooling"
   }
 }

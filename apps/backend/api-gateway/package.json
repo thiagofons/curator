@@ -4,6 +4,7 @@
   "description": "",
   "author": "",
   "private": true,
+  "type": "module",
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
@@ -20,11 +21,14 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@repo/rabbitmq": "workspace:*",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/microservices": "catalog:nestjs11",
     "@nestjs/platform-express": "^11.0.1",
     "@trpc/server": "catalog:trpc11",
+    "amqp-connection-manager": "catalog:rabbitmq",
     "nestjs-trpc": "catalog:nestjs11",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",

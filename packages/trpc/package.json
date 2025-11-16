@@ -2,9 +2,10 @@
   "name": "@repo/trpc",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/client.js",
+  "types": "./dist/client.d.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc -p tsconfig.json"
   },
   "keywords": [],
   "author": "",
