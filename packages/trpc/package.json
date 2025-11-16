@@ -1,0 +1,22 @@
+{
+  "name": "@repo/trpc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@trpc/client": "catalog:trpc11"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "catalog:tooling"
+  },
+  "exports": {
+    ".": "./src/client.ts"
+  }
+}

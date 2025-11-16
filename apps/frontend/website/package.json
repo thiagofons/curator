@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@repo/eslint-config": "workspace:*",
+    "@repo/trpc": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@repo/ui-web": "workspace:*",
     "@repo/vitest-config": "workspace:*",

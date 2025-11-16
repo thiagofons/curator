@@ -1,0 +1,12 @@
+{
+  "extends": "@repo/typescript-config/base",
+  "compilerOptions": {
+    "outDir": "dist",
+    "paths": {
+      "@repo/trpc/*": ["./src/*"],
+      "@/*": ["./src/*"],
+      "@api-gateway/*": ["../../apps/backend/api-gateway/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist"]
+}
