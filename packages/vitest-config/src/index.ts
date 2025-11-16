@@ -5,5 +5,6 @@ export const sharedConfig = {
     // setupFiles: ['./src/test/setup.ts'],
     // Other shared configuration
     passWithNoTests: true,
+    decoratorMetadata: true,
   },
 };
