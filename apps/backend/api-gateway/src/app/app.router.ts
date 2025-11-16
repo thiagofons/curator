@@ -4,12 +4,12 @@ import { z } from "zod";
 @Router({ alias: "app" })
 export class AppRouter {
   @Query({
-    input: z.object({ name: z.string() }),
+    input: z.object({ name: z.string(), number: z.number() }),
     output: z.object({ message: z.string() }),
   })
-  greeting(@Input("name") name: string) {
+  greeting(@Input("name") name: string, @Input("number") number: number) {
     return {
-      message: `Hello ${name}!`,
+      message: `Hello ${name}! This is your number: ${number}`,
     };
   }
 }
