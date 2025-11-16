@@ -1,0 +1,44 @@
+# Git 
+.git
+.gitignore
+.gitattributes
+
+# Dependencies
+**/node_modules
+.pnpm-store
+
+# Monorepo Cache
+.turbo
+
+# Build Artefacts
+**/dist
+**/build
+**/.next
+**/coverage
+
+# Logs & System Files
+**/*.log
+**/npm-debug.log*
+**/pnpm-debug.log*
+.DS_Store
+Thumbs.db
+
+# Secrets
+**/.env
+**/.env.*
+!.env.example
+
+# Local Tools
+.husky/
+.vscode/
+.idea/
+
+# Templates
+_templates/
+
+# Local Infrastructure
+observability/
+docker-compose.yml
+
+# Docs
+README.md
