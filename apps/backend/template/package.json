@@ -20,11 +20,11 @@
     "test:integration:watch": "dotenv -e .env.test -- vitest -c vitest.config.it.ts"
   },
   "dependencies": {
-    "@repo/typescript-config": "workspace:*",
-    "@repo/eslint-config": "workspace:*",
     "@nestjs/common": "catalog:nestjs11",
     "@nestjs/core": "catalog:nestjs11",
     "@nestjs/platform-express": "catalog:nestjs11",
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "reflect-metadata": "catalog:nestjs11",
     "rxjs": "catalog:nestjs11"
   },
@@ -49,6 +49,7 @@
     "ts-node": "catalog:tooling",
     "tsconfig-paths": "catalog:tooling",
     "typescript": "catalog:tooling",
-    "typescript-eslint": "catalog:code-quality"
+    "typescript-eslint": "catalog:code-quality",
+    "vite-tsconfig-paths": "^5.1.4"
   }
 }
