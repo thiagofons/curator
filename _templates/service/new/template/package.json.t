@@ -10,11 +10,11 @@ to: apps/backend/<%= name %>/package.json
     "build": "nest build",
     "start": "node dist/main",
     "lint": "eslint . --max-warnings 0",
-    "test": "npm run test:unit && npm run test:it",
+    "test": "npm run test:unit && npm run test:integration",
     "test:unit": "vitest run -c vitest.config.unit.ts",
     "test:unit:watch": "vitest -c vitest.config.unit.ts",
-    "test:it": "dotenv -e .env.test -- vitest run -c vitest.config.it.ts",
-    "test:it:watch": "dotenv -e .env.test -- vitest -c vitest.config.it.ts"
+    "test:integration": "dotenv -e .env.test -- vitest run -c vitest.config.it.ts",
+    "test:integration:watch": "dotenv -e .env.test -- vitest -c vitest.config.it.ts"
   },
   "dependencies": {
     "@nestjs/common": "catalog:nestjs10",

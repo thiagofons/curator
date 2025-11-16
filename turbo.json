@@ -25,8 +25,8 @@
     "test:unit": {
       "dependsOn": ["^test:unit", "@repo/vitest-config#build"]
     },
-    "test:it": {
-      "dependsOn": ["^test:it", "@repo/vitest-config#build"]
+    "test:integration": {
+      "dependsOn": ["^test:integration", "@repo/vitest-config#build"]
     },
     "test:e2e": {
       "cache": false,
