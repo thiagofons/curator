@@ -10,7 +10,7 @@ to: apps/backend/<%= name %>/package.json
     "build": "nest build",
     "start": "node dist/main",
     "lint": "eslint . --max-warnings 0",
-    "test": "npm run test:unit && npm run test:integration",
+    "test": "pnpm test:unit && pnpm test:integration",
     "test:unit": "vitest run -c vitest.config.unit.ts",
     "test:unit:coverage": "vitest run --coverage -c vitest.config.unit.ts",
     "test:unit:watch": "vitest -c vitest.config.unit.ts",
