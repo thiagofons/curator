@@ -6,5 +6,5 @@ scrape_configs:
     static_configs:
       - targets: ["localhost:9090"]
 
-  # TODO: Adicionar aqui os 'targets' dos seus microsserviços NestJS
-  # ex: - targets: ['host.docker.internal:8080'] # Para seu 'identity-api'
+  # TODO: Adicionar aqui os 'targets' dos microsserviços NestJS
+  # ex: - targets: ['host.docker.internal:8080'] # Para 'identity-api'
