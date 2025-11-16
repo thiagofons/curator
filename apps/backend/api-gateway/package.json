@@ -1,8 +1,5 @@
----
-to: apps/backend/<%= name %>/package.json
----
 {
-  "name": "@backend/<%= name %>",
+  "name": "@backend/api-gateway",
   "version": "1.0.0",
   "private": true,
   "scripts": {

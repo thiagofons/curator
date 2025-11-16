@@ -1,6 +1,3 @@
----
-to: apps/backend/<%= name %>/vitest.config.unit.ts
----
 import { sharedConfig } from "@repo/vitest-config";
 import { defineConfig } from "vitest/config";
 
@@ -12,19 +9,14 @@ export default defineConfig({
     exclude: ["src/**/*.it.spec.ts"], // Exclui testes de integração
 
     coverage: {
-      provider: 'v8', 
-      reporter: ['text', 'json', 'html'], 
-      
-      include: ['src/**/*.ts'],
-      
+      provider: "v8",
+      reporter: ["text", "json", "html"],
+
+      include: ["src/**/*.ts"],
+
       // Exclui arquivos que não precisam de cobertura
-      exclude: [
-        'src/main.ts',
-        'src/app.module.ts',
-        'src/test/',
-        '**/*.d.ts',
-      ],
-      
+      exclude: ["src/main.ts", "src/app.module.ts", "src/test/", "**/*.d.ts"],
+
       // Define o "mínimo aceitável" de cobertura (opcional, mas bom para CI)
       thresholds: {
         lines: 80,
@@ -32,6 +24,6 @@ export default defineConfig({
         branches: 80,
         statements: 80,
       },
-    },  
-  },  
+    },
+  },
 });

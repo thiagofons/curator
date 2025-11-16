@@ -70,8 +70,8 @@ jobs:
       - name: "[⚙️ Setup] Install Dependencies"
         run: pnpm install --frozen-lockfile
 
-      - name: "[🧪 Tests] Run Unit Tests"
-        run: pnpm test:unit
+      - name: "[🧪 Tests] Run Unit Tests (>80% coverage)"
+        run: pnpm test:unit:coverage
 
   # -----------------------------------------------------------------
   # JOB 3: Integration Tests (Slow, WITH database)

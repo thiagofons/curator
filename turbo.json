@@ -25,6 +25,9 @@
     "test:unit": {
       "dependsOn": ["^test:unit", "@repo/vitest-config#build"]
     },
+    "test:unit:coverage": {
+      "dependsOn": ["^test:unit:coverage", "@repo/vitest-config#build"]
+    },
     "test:integration": {
       "dependsOn": ["^test:integration", "@repo/vitest-config#build"]
     },
