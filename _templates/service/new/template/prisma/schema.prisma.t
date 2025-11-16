@@ -1,0 +1,11 @@
+---
+to: apps/backend/<%= name %>/prisma/schema.prisma
+---
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}

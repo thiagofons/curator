@@ -5,11 +5,15 @@
   "scripts": {
     "build": "turbo run build",
     "check-types": "turbo run check-types",
-    "prepare": "husky",
+    "compose:core": "docker compose -f docker-compose.yaml --env-file=.env.development  --profile core --profile observability up -d",
+    "compose:observability": "docker compose -f docker-compose.yaml --env-file=.env.development --profile observability up -d",
+    "compose:observability:down": "docker compose -f docker-compose.yaml --env-file=.env.development --profile observability down",
+    "compose:down": "docker compose -f docker-compose.yaml --env-file=.env.development down --remove-orphans",
     "dev": "turbo run dev --parallel",
-    "dev:all": "docker compose -p curator-dev -f .docker/docker-compose.development.yml --env-file=.env.development up -d --build",
-    "dev:all:stop": "docker compose -p curator-dev -f .docker/docker-compose.development.yml --env-file=.env.development down",
     "docs:api": "typedoc",
+    "new:service": "hygen service new",
+    "new:package": "hygen package new",
+    "prepare": "husky",
     "quality:lint:check": "turbo run lint",
     "quality:lint:fix": "turbo run lint -- --fix",
     "quality:format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,md,mdx,json,yaml}\"",
@@ -25,6 +29,7 @@
   "dependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/vitest-config": "workspace:*",
+    "hygen": "^6.2.11",
     "vitest": "latest"
   },
   "devDependencies": {

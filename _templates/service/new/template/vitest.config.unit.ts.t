@@ -1,3 +1,6 @@
+---
+to: apps/backend/<%= name %>/vitest.config.unit.ts
+---
 import { sharedConfig } from "@repo/vitest-config";
 import { defineConfig } from "vitest/config";
 
