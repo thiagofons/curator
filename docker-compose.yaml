@@ -8,10 +8,13 @@ services:
       - "--storage.tsdb.path=/prometheus"
       - "--web.console.libraries=/usr/share/prometheus/console_libraries"
       - "--web.console.templates=/usr/share/prometheus/consoles"
+      - "--web.enable-remote-write-receiver"
     volumes:
-      - ./infrastructure/observability/prometheus.yaml:/etc/prometheus/prometheus.yaml
+      - ./observability/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml
     ports:
       - "9090:9090" # Prometheus
+    networks:
+      - curator-net
     profiles: ["observability"]
 
   loki:
@@ -20,19 +23,23 @@ services:
     command: -config.file=/etc/loki/local-config.yaml
     ports:
       - "3100:3100" # Loki
+    networks:
+      - curator-net
     profiles: ["observability"]
 
   grafana:
     image: grafana/grafana:10.0.3
     container_name: grafana
     volumes:
-      - ./infrastructure/observability/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+      - ./observability/grafana/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
     ports:
       - "3000:3000" # Grafana
     depends_on:
       - prometheus
       - loki
       - tempo
+    networks:
+      - curator-net
     profiles: ["observability"]
 
   tempo:
@@ -40,10 +47,28 @@ services:
     container_name: tempo
     command: -config.file=/etc/tempo.yaml
     volumes:
-      - ./infrastructure/observability/tempo-config.yaml:/etc/tempo.yaml
+      - ./observability/tempo/tempo-config.yaml:/etc/tempo.yaml
     ports:
       - "3200:3200" # Tempo
-      - "4317:4317" # OTLP gRPC (OpenTelemetry)
+    networks:
+      - curator-net
+    profiles: ["observability"]
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.88.0
+    container_name: otel-collector
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./observability/otel/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "4317:4317" # OTLP gRPC
+      - "4318:4318" # OTLP HTTP
+    depends_on:
+      - loki
+      - tempo
+      - prometheus
+    networks:
+      - curator-net
     profiles: ["observability"]
 
   # >>> Blog CMS (Payload + Next.js) <<<
