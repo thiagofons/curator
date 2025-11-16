@@ -46,7 +46,8 @@
     "frontend/storybook-mobile",
     "packages/ui-web",
     "packages/ui-mobile",
-    "observability"
+    "observability",
+    "backend/api-gateway"
   ],
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

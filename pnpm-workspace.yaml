@@ -165,6 +165,7 @@ catalogs:
   tooling:
     "@swc/cli": ^0.7.8
     "@swc/core": ^1.13.5
+    "@total-typescript/ts-reset": ^0.6.1
     "@types/node": 24.5.2
     chalk: "4"
     cross-env: ^7.0.3
@@ -184,7 +185,6 @@ catalogs:
   trpc11:
     "@trpc/client": ^11.7.1
     "@trpc/server": ^11.7.1
-    nestjs-trpc: ^1.6.1
 
   ui-libs:
     "@phosphor-icons/react": ^2.1.10
