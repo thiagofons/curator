@@ -1,6 +1,6 @@
 {
   "name": "@repo/vitest-config",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -8,18 +8,18 @@
     "build": "tsc",
     "dev": "tsc --watch"
   },
-  "dependencies": {
-    "vitest": "latest"
-  },
-  "devDependencies": {
-    "@repo/typescript-config": "workspace:*",
-    "typescript": "latest"
-  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     }
+  },
+  "dependencies": {
+    "vitest": "catalog:testing"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "typescript": "catalog:tooling"
   }
 }

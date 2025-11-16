@@ -9,6 +9,7 @@
     "lib": ["ESNext"],
     "resolveJsonModule": true,
     "moduleDetection": "force",
+    "moduleResolution": "bundler",
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
 

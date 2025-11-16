@@ -6,5 +6,6 @@ module.exports = {
   // trailingComma: 'all',
   // semi: true,
   // tabWidth: 2,
+  trailingComma: "all",
   plugins: [require.resolve("prettier-plugin-tailwindcss")],
-}
+};

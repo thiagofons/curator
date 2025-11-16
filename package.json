@@ -2,8 +2,9 @@
   "name": "curator",
   "private": true,
   "type": "module",
+  "license": "Apache-2.0",
   "scripts": {
-    "build": "turbo run build",
+    "build": "turbo run build --parallel",
     "check-types": "turbo run check-types",
     "compose:core": "docker compose -f docker-compose.yaml --env-file=.env.development  --profile core --profile observability up -d",
     "compose:observability": "docker compose -f docker-compose.yaml --env-file=.env.development --profile observability up -d",
@@ -22,7 +23,6 @@
     "storybook-web:build": "turbo run storybook-web:build",
     "test:unit": "turbo run test:unit",
     "test:unit:coverage": "turbo run test:unit:coverage",
-    "test:unit:watch": "vitest --watch",
     "test:integration": "turbo run test:integration",
     "test:contract": "turbo run test:contract",
     "test:e2e": "turbo run test:e2e"
@@ -30,17 +30,17 @@
   "dependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/vitest-config": "workspace:*",
-    "hygen": "^6.2.11",
-    "vitest": "latest"
+    "hygen": "catalog:automation",
+    "vitest": "catalog:testing"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^8.46.3",
-    "@typescript-eslint/parser": "^8.46.3",
-    "@vitest/coverage-v8": "^4.0.9",
-    "eslint": "^9.16.0",
-    "eslint-config-prettier": "^10.1.8",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.2.6",
+    "@typescript-eslint/eslint-plugin": "catalog:code-quality",
+    "@typescript-eslint/parser": "catalog:code-quality",
+    "@vitest/coverage-v8": "catalog:testing",
+    "eslint": "catalog:code-quality",
+    "eslint-config-prettier": "catalog:code-quality",
+    "husky": "catalog:automation",
+    "lint-staged": "catalog:automation",
     "prettier": "catalog:code-quality",
     "turbo": "catalog:tooling",
     "typescript": "catalog:tooling"

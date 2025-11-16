@@ -21,6 +21,7 @@ package-lock.json
 # Generated code
 **/*.d.ts
 **/*.d.ts.map
+@generated/
 
 # Misc
 .DS_Store
