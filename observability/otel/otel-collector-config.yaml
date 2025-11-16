@@ -2,33 +2,39 @@ receivers:
   otlp:
     protocols:
       grpc:
-        endpoint: 0.0.0.0:4317 # Porta para OTLP/gRPC (de backends)
+        endpoint: 0.0.0.0:4317
       http:
-        endpoint: 0.0.0.0:4318 # Porta para OTLP/HTTP (de frontends)
+        endpoint: 0.0.0.0:4318
 
 processors:
   batch:
     send_batch_size: 1024
     timeout: 1s
 
+  # Este processador adiciona traceId e spanId aos atributos.
+  attributes/logs:
+    actions:
+      - key: traceId
+        from_context: trace_id
+        action: insert
+      - key: spanId
+        from_context: span_id
+        action: insert
+
 exporters:
-  # (Opcional) Exporta para o console para debug
   logging:
     loglevel: info
 
-  # ✅ Objetivo 1: Logs para Loki
+  # --- ✅ CORREÇÃO AQUI ---
   loki:
     endpoint: "http://loki:3100/loki/api/v1/push"
 
-  # ✅ Objetivo 2: Traces para Tempo
   otlp/tempo:
-    endpoint: "http://tempo:4317" # O Tempo já escuta OTLP gRPC na 4317
+    endpoint: "http://tempo:4317"
     tls:
       insecure: true
 
-  # ✅ Objetivo 3: Métricas para Prometheus
   prometheusremotewrite:
-    # O endpoint do Prometheus para remote_write é /api/v1/write
     endpoint: "http://prometheus:9090/api/v1/write"
     tls:
       insecure: true
@@ -47,5 +53,5 @@ service:
 
     logs:
       receivers: [otlp]
-      processors: [batch]
+      processors: [batch, attributes/logs]
       exporters: [logging, loki]
