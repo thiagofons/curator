@@ -1,28 +1,20 @@
 ---
-import { Image } from "astro:assets"
-import { render } from "astro:content"
-import Share from "@/components/Share.astro"
-import { getSinglePage } from "@/lib/contentParser.astro"
-import dateFormat from "@/lib/utils/dateFormat"
-import { humanize, markdownify, slugify } from "@/lib/utils/textConverter"
-import type { CollectionEntry } from "astro:content"
+import { Image } from "astro:assets";
+import { getSinglePage } from "@/lib/contentParser.astro";
+import dateFormat from "@/lib/utils/dateFormat";
+import { humanize, markdownify, slugify } from "@/lib/utils/textConverter";
+import { render } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import Share from "@/components/Share.astro";
 
 type Props = {
-  post: any
-  isPayload?: boolean
-  contentHtml?: string
-}
+  post: CollectionEntry<"posts">;
+};
 
-const allAuthors = await getSinglePage("authors")
-const { post, isPayload = false, contentHtml = "" } = Astro.props as Props
-
-let Content: any = null
-if (!isPayload) {
-  const rendered = await render(post as CollectionEntry<"posts">)
-  Content = rendered.Content
-}
-
-const { title, authors = [], categories = [], image, date } = post.data || {}
+const allAuthors = await getSinglePage("authors");
+const { post } = Astro.props;
+const { Content } = await render(post);
+const { title, authors, categories, image, date } = post.data;
 ---
 
 <section class="section">
@@ -37,39 +29,30 @@ const { title, authors = [], categories = [], image, date } = post.data || {}
             >
               <li>
                 {
-                  isPayload
-                    ? authors.map((name: string, i: number) => (
-                        <a
-                          href={`/blog/authors/${post.data.authorSlugs?.[i] || post.data.authorSlugs?.[0]}`}
-                          class="flex items-center hover:text-primary hover:underline"
-                        >
-                          <span>{name}</span>
-                        </a>
-                      ))
-                    : allAuthors
-                        .filter((author) =>
-                          authors
-                            .map((author: string) => slugify(author))
-                            .includes(slugify(author.data.title))
-                        )
-                        .map((author) => (
-                          <a
-                            href={`/blog/authors/${slugify(author.id)}`}
-                            class="flex items-center hover:text-primary hover:underline"
-                          >
-                            <span>{author.data.title}</span>
-                          </a>
-                        ))
+                  allAuthors
+                    .filter((author) =>
+                      authors
+                        .map((author) => slugify(author))
+                        .includes(slugify(author.data.title))
+                    )
+                    .map((author) => (
+                      <a
+                        href={`/authors/${slugify(author.id)}`}
+                        class="flex items-center hover:text-primary hover:underline"
+                      >
+                        <span>{author.data.title}</span>
+                      </a>
+                    ))
                 }
               </li>
               <li>{dateFormat(date)}</li>
               <li>
                 <ul>
                   {
-                    categories.map((category: string, i: number) => (
+                    categories.map((category) => (
                       <li class="inline-block">
                         <a
-                          href={`/blog/categories/${post.data.categorySlugs?.[i] || slugify(category)}`}
+                          href={`/blog/categories/${slugify(category)}`}
                           class="mr-3 hover:text-primary hover:underline"
                         >
                           {humanize(category)}
@@ -82,19 +65,11 @@ const { title, authors = [], categories = [], image, date } = post.data || {}
             </ul>
             {
               image && (
-                isPayload ? (
-                  <img src={image} height={500} width={1000} alt={title} />
-                ) : (
-                  <Image src={image} height={500} width={1000} alt={title} />
-                )
+                <Image src={image} height={500} width={1000} alt={title} />
               )
             }
             <div class="content mb-16 text-left">
-              {isPayload ? (
-                <div set:html={contentHtml}></div>
-              ) : (
-                <Content />
-              )}
+              <Content />
             </div>
           </article>
 

@@ -1,22 +1,18 @@
-/**
- * Estimates reading time for a block of HTML/text content.
- * Heuristic accounts for words and image count.
- * @returns e.g., "03 Mins read"
- */
+// content reading
 const readingTime = (content: string) => {
-  const Wps = 275 / 60;
+  const WPS = 275 / 60;
 
   let images = 0;
   const regex = /\w/;
 
-  const words = content.split(" ").filter((word) => {
+  let words = content.split(" ").filter((word) => {
     if (word.includes("<img")) {
       images += 1;
     }
     return regex.test(word);
   }).length;
 
-  const imageAdjust = images * 4;
+  let imageAdjust = images * 4;
   let imageSecs = 0;
   let imageFactor = 12;
 
@@ -28,15 +24,17 @@ const readingTime = (content: string) => {
     images -= 1;
   }
 
-  const minutes = Math.ceil(((words - imageAdjust) / Wps + imageSecs) / 60);
+  const minutes = Math.ceil(((words - imageAdjust) / WPS + imageSecs) / 60);
 
   if (minutes < 10) {
     if (minutes < 2) {
-      return `"0${minutes} Min read`;
+      return "0" + minutes + ` Min read`;
+    } else {
+      return "0" + minutes + ` Mins read`;
     }
-    return `0${minutes} Mins read`;
+  } else {
+    return minutes + ` Mins read`;
   }
-  return `${minutes} Mins read`;
 };
 
 export default readingTime;

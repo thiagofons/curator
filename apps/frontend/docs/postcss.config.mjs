@@ -1,1 +1,1 @@
-export { default } from "@repo/ui-web/postcss.config"
+export { default } from "@repo/ui-web/postcss.config";

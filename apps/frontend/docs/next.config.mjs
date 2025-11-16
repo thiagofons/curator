@@ -1,11 +1,9 @@
-import nextra from "nextra"
+import nextra from "nextra";
 
 // Set up Nextra with its configuration
 const withNextra = nextra({
-  search: {
-    codeblocks: false,
-  },
-})
+  search: { codeblocks: false },
+});
 
 // Export the final Next.js config with Nextra included
 export default withNextra({
@@ -13,4 +11,4 @@ export default withNextra({
   images: {
     unoptimized: true,
   },
-})
+});

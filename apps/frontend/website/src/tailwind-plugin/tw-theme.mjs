@@ -1,149 +1,115 @@
-import plugin from "tailwindcss/plugin"
-import themeConfig from "../config/theme.json"
+import plugin from "tailwindcss/plugin";
+import themeConfig from "../config/theme.json";
 
 // Helper to extract a clean font name.
-const findFont = (fontStr) => fontStr.replace(/\+/g, " ").replace(/:[^:]+/g, "")
+const findFont = (fontStr) =>
+  fontStr.replace(/\+/g, " ").replace(/:[^:]+/g, "");
 
 // Set font families dynamically, filtering out 'type' keys
 const fontFamilies = Object.entries(themeConfig.fonts.font_family)
   .filter(([key]) => !key.includes("type"))
   .reduce((acc, [key, font]) => {
     acc[key] =
-      `${findFont(font)}, ${themeConfig.fonts.font_family[`${key}_type`] || "sans-serif"}`
-    return acc
-  }, {})
+      `${findFont(font)}, ${themeConfig.fonts.font_family[`${key}_type`] || "sans-serif"}`;
+    return acc;
+  }, {});
 
 const defaultColorGroups = [
-  {
-    colors: themeConfig.colors.default.theme_color,
-    prefix: "",
-  },
-  {
-    colors: themeConfig.colors.default.text_color,
-    prefix: "",
-  },
-]
-const darkColorGroups = []
+  { colors: themeConfig.colors.default.theme_color, prefix: "" },
+  { colors: themeConfig.colors.default.text_color, prefix: "" },
+];
+const darkColorGroups = [];
 if (themeConfig.colors.darkmode?.theme_color) {
   darkColorGroups.push({
     colors: themeConfig.colors.darkmode.theme_color,
     prefix: "darkmode-",
-  })
+  });
 }
 if (themeConfig.colors.darkmode?.text_color) {
   darkColorGroups.push({
     colors: themeConfig.colors.darkmode.text_color,
     prefix: "darkmode-",
-  })
+  });
 }
 
 const getVars = (groups) => {
-  const vars = {}
+  const vars = {};
   groups.forEach(({ colors, prefix }) => {
     Object.entries(colors).forEach(([k, v]) => {
-      const cssKey = k.replace(/_/g, "-")
-      vars[`--color-${prefix}${cssKey}`] = v
-    })
-  })
-  return vars
-}
+      const cssKey = k.replace(/_/g, "-");
+      vars[`--color-${prefix}${cssKey}`] = v;
+    });
+  });
+  return vars;
+};
 
-const defaultVars = getVars(defaultColorGroups)
-const darkVars = getVars(darkColorGroups)
+const defaultVars = getVars(defaultColorGroups);
+const darkVars = getVars(darkColorGroups);
 
-const baseSize = Number(themeConfig.fonts.font_size.base)
-const scale = Number(themeConfig.fonts.font_size.scale)
+const baseSize = Number(themeConfig.fonts.font_size.base);
+const scale = Number(themeConfig.fonts.font_size.scale);
 const calculateFontSizes = (base, scale) => {
-  const sizes = {}
-  let currentSize = scale
+  const sizes = {};
+  let currentSize = scale;
   for (let i = 6; i >= 1; i--) {
-    sizes[`h${i}`] = `${currentSize}rem`
-    sizes[`h${i}-sm`] = `${currentSize * 0.8}rem`
-    sizes[`h${i}-xs`] = `${currentSize * 0.7}rem`
-    currentSize *= scale
+    sizes[`h${i}`] = `${currentSize}rem`;
+    sizes[`h${i}-sm`] = `${currentSize * 0.8}rem`;
+    sizes[`h${i}-xs`] = `${currentSize * 0.7}rem`;
+    currentSize *= scale;
   }
-  sizes.base = `${base}px`
-  return sizes
-}
-const fontSizes = calculateFontSizes(baseSize, scale)
+  sizes.base = `${base}px`;
+  return sizes;
+};
+const fontSizes = calculateFontSizes(baseSize, scale);
 
-const fontVars = {}
+const fontVars = {};
 Object.entries(fontSizes).forEach(([key, value]) => {
-  fontVars[`--text-${key}`] = value
-})
+  fontVars[`--text-${key}`] = value;
+});
 Object.entries(fontFamilies).forEach(([key, font]) => {
-  fontVars[`--font-${key}`] = font
-})
+  fontVars[`--font-${key}`] = font;
+});
 
-const baseVars = {
-  ...fontVars,
-  ...defaultVars,
-}
+const baseVars = { ...fontVars, ...defaultVars };
 
 // Build a colorsMap including both sets
-const colorsMap = {}
-;[
-  ...defaultColorGroups,
-  ...darkColorGroups,
-].forEach(({ colors, prefix }) => {
+const colorsMap = {};
+[...defaultColorGroups, ...darkColorGroups].forEach(({ colors, prefix }) => {
   Object.entries(colors).forEach(([key]) => {
-    const cssKey = key.replace(/_/g, "-")
-    colorsMap[prefix + cssKey] = `var(--color-${prefix}${cssKey})`
-  })
-})
+    const cssKey = key.replace(/_/g, "-");
+    colorsMap[prefix + cssKey] = `var(--color-${prefix}${cssKey})`;
+  });
+});
 
 module.exports = plugin.withOptions(() => {
-  return ({ addBase, addUtilities, matchUtilities }) => {
+  return function ({ addBase, addUtilities, matchUtilities }) {
     // Default vars on :root; dark vars on .dark
     addBase({
       ":root": baseVars,
       ".dark": darkVars,
-    })
+    });
 
-    const fontUtils = {}
+    const fontUtils = {};
     Object.keys(fontFamilies).forEach((key) => {
-      fontUtils[`.font-${key}`] = {
-        fontFamily: `var(--font-${key})`,
-      }
-    })
+      fontUtils[`.font-${key}`] = { fontFamily: `var(--font-${key})` };
+    });
     Object.keys(fontSizes).forEach((key) => {
-      fontUtils[`.text-${key}`] = {
-        fontSize: `var(--text-${key})`,
-      }
-    })
+      fontUtils[`.text-${key}`] = { fontSize: `var(--text-${key})` };
+    });
     addUtilities(fontUtils, {
-      variants: [
-        "responsive",
-        "hover",
-        "focus",
-        "active",
-        "disabled",
-      ],
-    })
+      variants: ["responsive", "hover", "focus", "active", "disabled"],
+    });
 
     matchUtilities(
       {
-        bg: (value) => ({
-          backgroundColor: value,
-        }),
-        text: (value) => ({
-          color: value,
-        }),
-        border: (value) => ({
-          borderColor: value,
-        }),
-        fill: (value) => ({
-          fill: value,
-        }),
-        stroke: (value) => ({
-          stroke: value,
-        }),
+        bg: (value) => ({ backgroundColor: value }),
+        text: (value) => ({ color: value }),
+        border: (value) => ({ borderColor: value }),
+        fill: (value) => ({ fill: value }),
+        stroke: (value) => ({ stroke: value }),
       },
-      {
-        values: colorsMap,
-        type: "color",
-      },
-    )
+      { values: colorsMap, type: "color" },
+    );
 
     matchUtilities(
       {
@@ -167,10 +133,7 @@ module.exports = plugin.withOptions(() => {
             "var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position)",
         }),
       },
-      {
-        values: colorsMap,
-        type: "color",
-      },
-    )
-  }
-})
+      { values: colorsMap, type: "color" },
+    );
+  };
+});

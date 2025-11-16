@@ -1,37 +1,39 @@
 ---
-import Post from "@/components/Post.astro"
-import config from "@/config/config.json"
-import Base from "@/layouts/Base.astro"
-import Pagination from "@/layouts/components/Pagination.astro"
-// No image from static blog content; render title from Payload category
-import {
-  getPayloadCategories,
-  getPayloadCategoryBySlug,
-  getPayloadPostsByCategorySlug,
-} from "@/lib/payload"
-import { markdownify } from "@/lib/utils/textConverter"
-
-const { pagination } = config.settings
+import Post from "@/components/Post.astro";
+import config from "@/config/config.json";
+import Base from "@/layouts/Base.astro";
+import Pagination from "@/layouts/components/Pagination.astro";
+import { getSinglePage } from "@/lib/contentParser.astro";
+import { getTaxonomy } from "@/lib/taxonomyParser.astro";
+import taxonomyFilter from "@/lib/utils/taxonomyFilter";
+import { markdownify } from "@/lib/utils/textConverter";
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { getEntry } from "astro:content";
+const { pagination } = config.settings;
 
 export async function getStaticPaths() {
-  const categories = await getPayloadCategories()
+  const categories = await getTaxonomy("posts", "categories");
 
   return categories.map((category) => {
     return {
-      params: {
-        category: category.slug,
-      },
-    }
-  })
+      params: { category },
+    };
+  });
 }
 
-const { category } = Astro.params
-const posts = await getPayloadPostsByCategorySlug(category as string)
-const categoryObj = await getPayloadCategoryBySlug(category as string)
-const totalPages = Math.ceil(posts.length / pagination)
+const { category } = Astro.params;
+const blog = (await getEntry(
+  "blog",
+  "-index"
+)) as CollectionEntry<"blog">;
+const { banner } = blog.data;
+const posts = await getSinglePage("posts");
+const filterByTags = taxonomyFilter(posts, "categories", category);
+const totalPages = Math.ceil(filterByTags.length / pagination);
 ---
 
-<Base title={categoryObj?.data.title || category}>
+<Base title={category}>
   <!-- Banner -->
   <section
     class="banner"
@@ -40,8 +42,19 @@ const totalPages = Math.ceil(posts.length / pagination)
     <div class="container">
       <div class="row">
         <div class="lg:col-6">
-          <h1 set:html={markdownify(categoryObj?.data.title || category)} class="h2 mb-8" />
+          {
+            banner?.title && (
+              <h1 set:html={markdownify(banner?.title)} class="h2 mb-8" />
+            )
+          }
         </div>
+      </div>
+      <div class="banner-illustration">
+        {
+          banner?.image && (
+            <Image src={banner?.image} width={768} height={385} alt="" />
+          )
+        }
       </div>
     </div>
   </section>
@@ -52,11 +65,11 @@ const totalPages = Math.ceil(posts.length / pagination)
       <div class="row px-3">
         <div class="mx-auto px-0 lg:col-8">
           <h1 class="h2 mb-8">
-            Posts relacionados com a categoria <span class="text-primary">{categoryObj?.data.title || category}</span>
+            Posts relacionados com a categoria <span class="text-primary">{category}</span>
           </h1>
           <div class="rounded px-9 py-12 shadow md:p-[60px]">
             {
-              posts
+              filterByTags
                 .slice(0, pagination)
                 .map((post) => <Post post={post} />)
             }

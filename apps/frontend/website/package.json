@@ -3,18 +3,12 @@
   "version": "3.2.0",
   "type": "module",
   "scripts": {
-    "dev": "astro dev --port 4003",
+    "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview --port 4003",
-    "lint": "eslint .",
-    "test:unit": "vitest run",
-    "test:watch": "vitest --watch",
+    "preview": "astro preview",
     "check": "astro check"
   },
   "dependencies": {
-    "@repo/eslint-config": "workspace:",
-    "@repo/typescript-config": "workspace:",
-    "@repo/vitest-config": "workspace:",
     "@astrojs/check": "^0.9.5",
     "@astrojs/mdx": "4.3.10",
     "@astrojs/react": "^4.4.2",
@@ -22,6 +16,7 @@
     "@astrojs/sitemap": "^3.6.0",
     "@digi4care/astro-google-tagmanager": "^1.6.0",
     "@justinribeiro/lite-youtube": "^1.8.2",
+    "@repo/typescript-config": "workspace:",
     "astro": "5.15.4",
     "astro-auto-import": "^0.4.5",
     "astro-font": "^1.1.0",
@@ -34,8 +29,7 @@
     "react-icons": "^5.5.0",
     "remark-collapse": "^0.1.2",
     "remark-toc": "^9.0.0",
-    "vite": "^7.1.9",
-    "vitest": "latest"
+    "vite": "^7.1.9"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.10",

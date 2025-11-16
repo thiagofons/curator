@@ -1,6 +1,5 @@
 {
   "$schema": "https://turborepo.com/schema.json",
-  "globalEnv": ["PAYLOAD_SECRET", "DATABASE_URI"],
   "ui": "tui",
   "tasks": {
     "build": {
@@ -11,30 +10,8 @@
     "lint": {
       "dependsOn": ["^lint"]
     },
-    "quality:format:check": {
-      "dependsOn": ["^quality:format:check"]
-    },
-    "quality:format:fix": {
-      "dependsOn": ["^quality:format:fix"]
-    },
     "check-types": {
       "dependsOn": ["^check-types"]
-    },
-    "storybook-web:dev": {},
-    "storybook-web:build": {},
-    "test:unit": {
-      "dependsOn": ["^test:unit", "@repo/vitest-config#build"]
-    },
-    "test:it": {
-      "dependsOn": ["^test:it", "@repo/vitest-config#build"]
-    },
-    "test:e2e": {
-      "cache": false,
-      "dependsOn": ["^build"]
-    },
-    "test:watch": {
-      "cache": false,
-      "persistent": true
     },
     "dev": {
       "cache": false,

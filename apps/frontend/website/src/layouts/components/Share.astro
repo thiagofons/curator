@@ -1,28 +1,20 @@
 ---
+import config from "@/config/config.json";
 import {
   IoLogoFacebook,
   IoLogoLinkedin,
   IoLogoPinterest,
   IoLogoTwitter,
-} from "react-icons/io5"
-import config from "@/config/config.json"
+} from "react-icons/io5";
 
-const {
-  base_url,
-}: {
-  base_url: string
-} = config.site
+const { base_url }: { base_url: string } = config.site;
 const {
   title,
   description,
   slug,
   className,
-}: {
-  title?: string
-  description?: string
-  slug?: string
-  className?: string
-} = Astro.props
+}: { title?: string; description?: string; slug?: string; className?: string } =
+  Astro.props;
 ---
 
 <ul class={`${className}`}>

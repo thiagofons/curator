@@ -1,8 +1,9 @@
-import { Head } from "nextra/components";
-import { getPageMap } from "nextra/page-map";
 import { Footer, Layout, Navbar } from "nextra-theme-docs";
+import { Banner, Head } from "nextra/components";
+import { getPageMap } from "nextra/page-map";
 import "nextra-theme-docs/style-prefixed.css";
 import type { ReactNode } from "react";
+import { Button } from "@repo/ui-web/base/button";
 
 export const metadata = {
   // Define your metadata here
@@ -11,7 +12,7 @@ export const metadata = {
 const navbar = (
   <Navbar
     logo={<b>Curator</b>}
-    // ... Your additional navbar options
+  // ... Your additional navbar options
   />
 );
 const footer = <Footer>{new Date().getFullYear()} © Curator.</Footer>;
@@ -24,11 +25,11 @@ export default async function RootLayout({
   return (
     <html
       // Not required, but good for SEO
-      dir="ltr"
-      // Required to be set
       lang="en"
+      // Required to be set
+      dir="ltr"
       // Suggested by `next-themes` package https://github.com/pacocoursey/next-themes#with-app
-      suppressHydrationWarning={true}
+      suppressHydrationWarning
     >
       <Head
       // ... Your additional head options
@@ -37,11 +38,11 @@ export default async function RootLayout({
       </Head>
       <body>
         <Layout
-          docsRepositoryBase="https://github.com/shuding/nextra/tree/main/docs"
-          footer={footer}
           navbar={navbar}
           pageMap={await getPageMap()}
-          // ... Your additional layout options
+          docsRepositoryBase="https://github.com/shuding/nextra/tree/main/docs"
+          footer={footer}
+        // ... Your additional layout options
         >
           {children}
         </Layout>

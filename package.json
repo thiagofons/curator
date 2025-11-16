@@ -1,55 +1,22 @@
 {
   "name": "curator",
   "private": true,
-  "type": "module",
   "scripts": {
     "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
-    "compose:core": "docker compose -f docker-compose.yaml --env-file=.env.development  --profile core --profile observability up -d",
-    "compose:observability": "docker compose -f docker-compose.yaml --env-file=.env.development --profile observability up -d",
-    "compose:observability:down": "docker compose -f docker-compose.yaml --env-file=.env.development --profile observability down",
-    "compose:down": "docker compose -f docker-compose.yaml --env-file=.env.development down --remove-orphans",
-    "dev": "turbo run dev --parallel",
+    "docs:dev": "turbo run dev --filter=\"@frontend/docs\"",
+    "docs:build": "turbo run build --filter=\"@frontend/docs\"",
     "docs:api": "typedoc",
-    "new:service": "hygen service new",
-    "new:package": "hygen package new",
-    "prepare": "husky",
-    "quality:lint:check": "turbo run lint",
-    "quality:lint:fix": "turbo run lint -- --fix",
-    "quality:format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,md,mdx,json,yaml}\"",
-    "quality:format:fix": "prettier --write \"**/*.{ts,tsx,js,jsx,md,mdx,json,yaml}\"",
-    "storybook-web:dev": "turbo run storybook-web:dev",
-    "storybook-web:build": "turbo run storybook-web:build",
-    "test:unit": "turbo run test:unit",
-    "test:unit:watch": "vitest --watch",
-    "test:integration": "turbo run test:integration",
-    "test:contract": "turbo run test:contract",
-    "test:e2e": "turbo run test:e2e"
-  },
-  "dependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/vitest-config": "workspace:*",
-    "hygen": "^6.2.11",
-    "vitest": "latest"
+    "dev:all": "docker compose -p curator-dev -f docker-compose.development.yml --env-file=.env.development up -d --build",
+    "dev:all:stop": "docker compose -p curator-dev -f docker-compose.development.yml --env-file=.env.development down"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^8.46.3",
-    "@typescript-eslint/parser": "^8.46.3",
-    "eslint": "^9.16.0",
-    "eslint-config-prettier": "^10.1.8",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.2.6",
     "prettier": "catalog:code-quality",
     "turbo": "catalog:tooling",
     "typescript": "catalog:tooling"
-  },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx,md,mdx,json,yaml}": [
-      "prettier --write"
-    ],
-    "*.{ts,tsx,js,jsx}": [
-      "eslint --fix"
-    ]
   },
   "packageManager": "pnpm@9.5.0",
   "engines": {

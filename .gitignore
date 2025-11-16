@@ -8,11 +8,10 @@ node_modules
 # Local env files
 .env
 .env.local
-.env.test.local
-.env.development
 .env.development.local
-.env.production
+.env.test.local
 .env.production.local
+.env.development
 
 # Testing
 coverage

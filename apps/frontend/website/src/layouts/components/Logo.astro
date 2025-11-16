@@ -1,7 +1,6 @@
 ---
-import config from "@/config/config.json"
-
-const { src } = Astro.props
+import config from "@/config/config.json";
+const { src } = Astro.props;
 const {
   logo,
   logo_width,
@@ -9,12 +8,12 @@ const {
   logo_text,
   title,
 }: {
-  logo: string
-  logo_width: any
-  logo_height: any
-  logo_text: string
-  title: string
-} = config.site
+  logo: string;
+  logo_width: any;
+  logo_height: any;
+  logo_text: string;
+  title: string;
+} = config.site;
 ---
 
 <a href="/" class="navbar-brand inline-block">

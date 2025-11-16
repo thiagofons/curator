@@ -13,16 +13,13 @@ const Tabs = ({ children }: { children: React.ReactElement }) => {
     } else {
       setDefaultFocus(true);
     }
-  }, [defaultFocus, active]);
+  }, [active]);
 
   const tabLinks = Array.from(
     (children.props as any).value.matchAll(
       /<div\s+data-name="([^"]+)"[^>]*>((?:.|\n)*?)<\/div>/g,
     ),
-    (match: RegExpMatchArray) => ({
-      name: match[1],
-      children: match[0],
-    }),
+    (match: RegExpMatchArray) => ({ name: match[1], children: match[0] }),
   );
 
   const handleKeyDown = (
@@ -40,52 +37,36 @@ const Tabs = ({ children }: { children: React.ReactElement }) => {
 
   return (
     <div className="tab">
-      <div aria-label="Tabs" className="tab-nav" role="tablist">
+      <div className="tab-nav" role="tablist" aria-label="Tabs">
         {tabLinks.map(
-          (
-            item: {
-              name: string | undefined;
-              children: string;
-            },
-            index: number,
-          ) => (
+          (item: { name: string; children: string }, index: number) => (
             <button
-              aria-selected={index === active}
-              className={`tab-nav-item ${index === active ? " active" : ""}`}
               key={index}
-              onClick={() => setActive(index)}
+              type="button"
+              className={"tab-nav-item" + (index === active ? " active" : "")}
+              role="tab"
+              aria-selected={index === active}
+              tabIndex={index === active ? 0 : -1}
               onKeyDown={(event) => handleKeyDown(event, index)}
+              onClick={() => setActive(index)}
               ref={(ref) => {
                 tabRefs.current[index] = ref;
               }}
-              role="tab"
-              tabIndex={index === active ? 0 : -1}
-              type="button"
             >
               {item.name}
             </button>
           ),
         )}
       </div>
-      {tabLinks.map(
-        (
-          item: {
-            name: string | undefined;
-            children: string;
-          },
-          i: number,
-        ) =>
-          (
-            <div
-              className={active === i ? "tab-content block px-5" : "hidden"}
-              // biome-ignore lint/security/noDangerouslySetInnerHtml: Tabs content
-              dangerouslySetInnerHTML={{
-                __html: marked.parse(item.children),
-              }}
-              key={i}
-            />
-          ) as React.ReactElement<any>,
-      )}
+      {tabLinks.map((item: { name: string; children: string }, i: number) => (
+        <div
+          className={active === i ? "tab-content block px-5" : "hidden"}
+          key={i}
+          dangerouslySetInnerHTML={{
+            __html: marked.parse(item.children),
+          }}
+        />
+      ))}
     </div>
   );
 };
