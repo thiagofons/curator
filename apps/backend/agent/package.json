@@ -10,7 +10,6 @@
   },
   "keywords": [],
   "author": "",
-  "packageManager": "pnpm@9.0.0",
   "dependencies": {
     "@repo/vitest-config": "workspace:*",
     "amqplib": "catalog:rabbitmq",

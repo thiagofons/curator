@@ -1,7 +1,7 @@
 {
   "name": "@frontend/storybook-web",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "storybook:dev": "storybook dev -p 6006",
@@ -20,7 +20,7 @@
     "@storybook/react-vite": "catalog:storybook9",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
-    "@vitejs/plugin-react": "catalog:react19",
+    "@vitejs/plugin-react": "catalog:vite7",
     "autoprefixer": "catalog:ui-libs",
     "globals": "catalog:code-quality",
     "postcss": "catalog:ui-libs",

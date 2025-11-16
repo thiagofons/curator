@@ -1,12 +1,24 @@
 {
   "name": "@repo/ui-web",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "ui": "pnpx shadcn@latest",
     "lint": "eslint .",
     "test:unit": "vitest run",
     "test:watch": "vitest --watch"
+  },
+  "exports": {
+    "./globals.css": "./src/globals.css",
+    "./postcss.config": "./postcss.config.mjs",
+    "./tailwind.config": "./tailwind.config.ts",
+    "./lib/*": "./src/lib/*.ts",
+    "./hooks/*": [
+      "./src/hooks/*.ts",
+      "./src/hooks/*.tsx"
+    ],
+    "./base/*": "./src/components/base/*.tsx",
+    "./custom/*": "./src/components/custom/*.tsx"
   },
   "dependencies": {
     "@repo/vitest-config": "workspace:*",
@@ -45,16 +57,16 @@
     "embla-carousel-react": "catalog:ui-libs",
     "input-otp": "catalog:ui-libs",
     "lucide-react": "catalog:ui-libs",
-    "next-themes": "^0.4.6",
-    "react-day-picker": "^9.11.1",
+    "next-themes": "catalog:ui-libs",
+    "react-day-picker": "catalog:ui-libs",
     "react-hook-form": "catalog:core-libs",
     "react-resizable-panels": "catalog:ui-libs",
-    "recharts": "^2.15.4",
+    "recharts": "catalog:ui-libs",
     "sonner": "catalog:ui-libs",
     "tailwind-merge": "catalog:ui-libs",
     "tailwindcss-animate": "catalog:ui-libs",
     "vaul": "catalog:ui-libs",
-    "vitest": "latest"
+    "vitest": "catalog:testing"
   },
   "peerDependencies": {
     "react": "catalog:react19",
@@ -70,17 +82,5 @@
     "postcss-load-config": "catalog:ui-libs",
     "tailwindcss": "catalog:ui-libs",
     "typescript": "catalog:tooling"
-  },
-  "exports": {
-    "./globals.css": "./src/globals.css",
-    "./postcss.config": "./postcss.config.mjs",
-    "./tailwind.config": "./tailwind.config.ts",
-    "./lib/*": "./src/lib/*.ts",
-    "./hooks/*": [
-      "./src/hooks/*.ts",
-      "./src/hooks/*.tsx"
-    ],
-    "./base/*": "./src/components/base/*.tsx",
-    "./custom/*": "./src/components/custom/*.tsx"
   }
 }
