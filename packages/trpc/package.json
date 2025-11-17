@@ -11,7 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@trpc/client": "catalog:trpc11"
+    "@trpc/client": "catalog:trpc11",
+    "class-validator": "^0.14.2"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",

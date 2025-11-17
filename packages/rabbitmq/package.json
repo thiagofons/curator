@@ -8,8 +8,7 @@
     "dist"
   ],
   "scripts": {
-    "clean": "rm -rf dist",
-    "build": "bun run clean && tsc",
+    "build": "tsc",
     "dev": "tsc -w"
   },
   "keywords": [],
@@ -18,7 +17,8 @@
   "dependencies": {
     "@nestjs/common": "catalog:nestjs11",
     "@nestjs/config": "catalog:nestjs11",
-    "@nestjs/microservices": "catalog:nestjs11"
+    "@nestjs/microservices": "catalog:nestjs11",
+    "class-validator": "^0.14.2"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",

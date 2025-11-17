@@ -6,7 +6,27 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+    },
+    "check-types": {
+      "dependsOn": ["^check-types"]
+    },
+    "dev": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
+    },
+    "db:generate": {
+      "dependsOn": ["^db:generate"]
+    },
+    "db:migrate:dev": {
+      "dependsOn": ["^db:migrate:dev"]
+    },
+    "db:migrate:deploy": {
+      "dependsOn": ["^db:migrate:deploy"]
+    },
+    "db:studio": {
+      "dependsOn": ["^db:studio"]
     },
     "lint": {
       "dependsOn": ["^lint"]
@@ -16,9 +36,6 @@
     },
     "quality:format:fix": {
       "dependsOn": ["^quality:format:fix"]
-    },
-    "check-types": {
-      "dependsOn": ["^check-types"]
     },
     "storybook-web:dev": {},
     "storybook-web:build": {},
@@ -36,10 +53,6 @@
       "dependsOn": ["^build"]
     },
     "test:watch": {
-      "cache": false,
-      "persistent": true
-    },
-    "dev": {
       "cache": false,
       "persistent": true
     }

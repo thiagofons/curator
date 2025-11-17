@@ -1,64 +1,85 @@
-# --- Estágio 1: 'base' ---
-# Uma base comum para evitar repetição. Usa a imagem slim oficial do Bun.
-FROM oven/bun:1-slim AS base
-SHELL ["/bin/bash", "-c"]
+# >> STAGE 1: base <<
+FROM node:22-alpine AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN apk add --no-cache libc6-compat openssl && \
+    corepack enable && \
+    pnpm install turbo --global
+
+# >> STAGE 2: builder (O "Cortador") <<
+FROM base AS builder
+WORKDIR /usr/src/app
+COPY . .
+# O prune cria uma versão "fatiada" do seu monorepo apenas com o necessário para o api-gateway
+RUN turbo prune --scope=@backend/api-gateway --docker
+
+# >> STAGE 3: installer (Compilação para Prod) <<
+FROM base AS installer
 WORKDIR /usr/src/app
 
+# Copia apenas os arquivos de definição (package.json's) filtrados pelo prune
+COPY --from=builder /usr/src/app/out/json/ .
+COPY --from=builder /usr/src/app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 
-# --- Estágio 2: 'deps' ---
-# Este estágio foca em instalar TODAS as dependências. Ele só será re-executado
-# se os arquivos de manifesto (package.json, bun.lock) mudarem, otimizando o cache.
-FROM base AS deps
-COPY package.json bun.lock* ./
-# O * em bun.lock* garante que funcione mesmo que o arquivo não exista na primeira vez.
-# Instala todas as dependências (dev e prod) de forma otimizada a partir do lockfile.
-RUN bun install --frozen-lockfile
+# Instala dependências (Isso cria uma camada grande, mas cacheada)
+RUN pnpm install --frozen-lockfile
 
+# Copia o código fonte filtrado pelo prune
+COPY --from=builder /usr/src/app/out/full/ .
 
-# --- Estágio 3: 'development' ---
-# O alvo para o ambiente de desenvolvimento local (usado pelo Docker Compose).
-# Ele contém o código-fonte e todas as dependências para permitir hot-reloading.
-FROM deps AS development
-# Copia o código-fonte por cima da instalação das dependências.
+# Builda o projeto
+RUN turbo run build --filter=@backend/api-gateway...
+
+# >> STAGE 4: development (Otimizado para DX) <<
+FROM base AS development
+WORKDIR /usr/src/app
+
+# Setup de permissões (Agrupado para criar menos camadas)
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nodejs
+
+# [OTIMIZAÇÃO MÁXIMA]
+# Em vez de copiar package.json um por um manualmente, usamos o output do builder.
+# O turbo prune já selecionou APENAS os packages/libs que o gateway usa.
+COPY --from=builder /usr/src/app/out/json/ .
+COPY --from=builder /usr/src/app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+
+# Instala dependências
+RUN pnpm install
+
+# Copia o código fonte local
 COPY . .
-# O comando de início virá do seu docker-compose.yml para permitir hot-reloading,
-# mas podemos definir um padrão, como por exemplo:
-# CMD ["bun", "run", "dev"]
 
+# Build das dependências internas (libs)
+RUN turbo run build --filter=@backend/api-gateway^...
 
-# --- Estágio 4: 'builder' ---
-# Este estágio é responsável por gerar os artefatos de produção.
-# Ele inclui o código-fonte completo e as dependências de desenvolvimento.
-FROM deps AS builder
-COPY . .
-# Gera o cliente Prisma. Este é um passo de build.
-RUN bun run db:generate
-# Executa o build da aplicação (ex: compilar TypeScript para JavaScript).
-# Assumindo que você tem um script "build" no seu package.json.
-RUN bun run build
+# 1. Cria a pasta onde o arquivo será gerado para garantir que ela exista
+RUN mkdir -p apps/backend/api-gateway/@generated
 
+# 2. Dá permissão para o usuário 'nodejs' escrever no node_modules e na pasta gerada
+RUN chown -R nodejs:nodejs /usr/src/app/node_modules
+RUN chown -R nodejs:nodejs /usr/src/app/apps/backend/api-gateway/@generated
 
-# --- Estágio 5: 'production' ---
-# Este é o estágio final e o alvo padrão. Gera a imagem mais enxuta possível.
-FROM base AS production
-ENV NODE_ENV=production
-# Instala pacotes de sistema operacional essenciais para produção.
-# 'procps' pode não ser necessário, avalie seu caso de uso. 'openssl' é geralmente seguro ter.
-RUN apt-get update -y && apt-get install -y openssl --no-install-recommends && rm -rf /var/lib/apt/lists/*
+# 3. Se o api-gateway precisar escrever em outras pastas (ex: dist, logs), garanta também:
+RUN chown -R nodejs:nodejs /usr/src/app/apps/backend/api-gateway
 
-# Instala SOMENTE as dependências de produção.
-COPY package.json bun.lock* ./
-RUN bun install --production --frozen-lockfile
+ENV NODE_ENV=development
+EXPOSE 3000
 
-# Copia os artefatos de produção do estágio 'builder'.
-# Isso garante que nenhum código-fonte ou dependência de dev seja incluída.
-COPY --from=builder /usr/src/app/dist ./dist
-# O Prisma Client gerado também é um artefato de build.
-COPY --from=builder /usr/src/app/node_modules/.prisma ./node_modules/.prisma
+USER nodejs
+WORKDIR /usr/src/app/apps/backend/api-gateway
+CMD ["pnpm", "dev"]
 
-# Expõe a porta que sua aplicação usa em produção.
-EXPOSE 3300
+# >> STAGE 5: runner (Produção Leve) <<
+FROM base AS runner
+WORKDIR /usr/src/app
 
-# O comando para iniciar a aplicação em produção.
-# Assumindo que o ponto de entrada é 'dist/main.js'. Ajuste conforme necessário.
-CMD ["bun", "dist/main.js"]
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nodejs
+
+# Copia apenas o necessário do estágio installer para rodar
+COPY --from=installer --chown=nodejs:nodejs /usr/src/app/ .
+
+USER nodejs
+WORKDIR /usr/src/app/apps/backend/api-gateway
+CMD ["node", "dist/main.js"]

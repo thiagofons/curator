@@ -1,4 +1,4 @@
-import { EnvModule, envSchema } from "@/config/env";
+import { EnvModule, envSchema } from "@/infrastructure/config/env";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { TRPCModule } from "nestjs-trpc";

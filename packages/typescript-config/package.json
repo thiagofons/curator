@@ -11,5 +11,15 @@
     "./nestjs": "./nestjs.json",
     "./nextjs": "./nextjs.json",
     "./react-library": "./react-library.json"
+  },
+  "dependencies": {
+    "class-validator": "^0.14.2",
+    "@nestjs/common": "catalog:nestjs11",
+    "@nestjs/config": "catalog:nestjs11",
+    "@nestjs/core": "catalog:nestjs11",
+    "@nestjs/microservices": "catalog:nestjs11",
+    "nestjs-trpc": "catalog:nestjs11",
+    "@trpc/server": "catalog:trpc11",
+    "zod": "catalog:core-libs"
   }
 }

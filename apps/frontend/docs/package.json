@@ -18,8 +18,9 @@
   "dependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@repo/vitest-config": "workspace:*",
     "@repo/ui-web": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
+    "class-validator": "^0.14.2",
     "next": "catalog:next16",
     "nextra": "catalog:nextra4",
     "nextra-theme-docs": "catalog:nextra4",
@@ -29,11 +30,11 @@
     "vitest": "catalog:testing"
   },
   "devDependencies": {
-    "typedoc": "catalog:docs",
-    "typedoc-plugin-markdown": "catalog:docs",
-    "pagefind": "catalog:nextra4",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
-    "tailwindcss": "catalog:ui-libs"
+    "pagefind": "catalog:nextra4",
+    "tailwindcss": "catalog:ui-libs",
+    "typedoc": "catalog:docs",
+    "typedoc-plugin-markdown": "catalog:docs"
   }
 }

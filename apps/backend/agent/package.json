@@ -14,13 +14,14 @@
     "@repo/vitest-config": "workspace:*",
     "amqplib": "catalog:rabbitmq",
     "chalk": "catalog:tooling",
+    "class-validator": "^0.14.2",
     "dotenv": "catalog:tooling",
     "vitest": "latest"
   },
   "devDependencies": {
-    "openai": "catalog:ai",
     "@types/amqplib": "catalog:rabbitmq",
     "@types/node": "catalog:tooling",
+    "openai": "catalog:ai",
     "readline": "catalog:tooling",
     "typescript": "catalog:tooling",
     "viem": "catalog:tooling"

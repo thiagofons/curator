@@ -15,7 +15,11 @@
     ".eslintrc.*": ".eslintignore, .eslintcache",
     "prettier.config.js": ".prettierignore",
     "prettier.config.cjs": ".prettierignore",
-    ".gitignore": ".gitattributes"
+    ".gitignore": ".gitattributes",
+    ".env.development": ".env.production",
+    "*.module.ts": "${capture}.controller.ts, ${capture}.service.ts, ${capture}.resolver.ts, ${capture}.guard.ts, ${capture}.providers.ts, ${capture}.spec.ts",
+    "page.tsx": "layout.tsx, error.tsx, loading.tsx, template.tsx",
+    "layout.tsx": "page.tsx, error.tsx, loading.tsx, template.tsx"
   },
   "explorer.compactFolders": true,
   "javascript.updateImportsOnFileMove.enabled": "always",
@@ -48,7 +52,8 @@
     "packages/ui-mobile",
     "observability",
     "backend/api-gateway",
-    "packages/trpc"
+    "packages/trpc",
+    "packages/vitest"
   ],
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

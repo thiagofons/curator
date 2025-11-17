@@ -16,6 +16,7 @@
     }
   },
   "dependencies": {
+    "class-validator": "^0.14.2",
     "vitest": "catalog:testing"
   },
   "devDependencies": {

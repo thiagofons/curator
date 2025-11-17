@@ -20,5 +20,8 @@
     "globals": "catalog:code-quality",
     "typescript": "catalog:tooling",
     "typescript-eslint": "catalog:code-quality"
+  },
+  "dependencies": {
+    "class-validator": "^0.14.2"
   }
 }

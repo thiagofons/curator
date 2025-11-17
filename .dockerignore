@@ -1,44 +1,75 @@
-# Git 
+# ------------------------------------------------------
+# MASTER DOCKER EXCLUSION FILE (MONOREPO)
+# Goal: Reduce build context size and ensure security
+# ------------------------------------------------------
+
+# >> Git & Version Control Configs
 .git
 .gitignore
 .gitattributes
+.editorconfig
 
-# Dependencies
+# >> Package Managers & Logs (Heavy and useless in the Container)
 **/node_modules
 .pnpm-store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-# Monorepo Cache
+# >> Build Artifacts & Monorepo Cache (Generates Junk Layers)
 .turbo
-
-# Build Artefacts
 **/dist
 **/build
 **/.next
 **/coverage
+**/test-results
+**/junit.xml
+**/.cache
 
-# Logs & System Files
-**/*.log
-**/npm-debug.log*
-**/pnpm-debug.log*
-.DS_Store
-Thumbs.db
+# >> Infrastructure & Terraform (Security and Weight)
+# The application container must NOT have access to infra state
+infrastructure/
+terraform/
+.terraform/
+k8s/
+helm/
+docker-compose.yml
+docker-compose.*.yml
+Dockerfile*
+Makefile
 
-# Secrets
+# >> Documentation & Design Assets (Unnecessary weight)
+specs/
+design/
+
+# >> Images & Media (If not used by the app at runtime)
+# If your apps serve static files, comment out these lines
+**/*.png
+**/*.jpg
+**/*.jpeg
+**/*.svg
+**/*.mp4
+**/*.mov
+
+# >> E2E Tests & Reports (Failed test videos are huge)
+cypress/
+playwright/
+**/*.webm
+
+# >> Secrets & Environment (CRITICAL SECURITY)
 **/.env
 **/.env.*
 !.env.example
 
-# Local Tools
-.husky/
-.vscode/
+# >> System Files & IDEs
+.DS_Store
+Thumbs.db
 .idea/
+.vscode/
+*.swp
 
-# Templates
+# >> Local Scripts & Tools
 _templates/
-
-# Local Infrastructure
+scripts/
 observability/
-docker-compose.yml
-
-# Docs
-README.md

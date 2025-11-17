@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@repo/ui-web": "workspace:*",
+    "class-validator": "^0.14.2",
     "react": "catalog:react19",
     "react-dom": "catalog:react19"
   },

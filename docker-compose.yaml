@@ -1,4 +1,26 @@
 services:
+  # >>> Microservices <<<
+  api-gateway:
+    build:
+      context: .
+      dockerfile: ./apps/backend/api-gateway/Dockerfile
+      target: development
+    restart: unless-stopped
+    container_name: api-gateway
+    env_file:
+      - ./apps/backend/api-gateway/.env
+    ports:
+      - "3300:3300"
+    volumes:
+      - ./apps/backend/api-gateway/src:/usr/src/app/apps/backend/api-gateway/src
+      - ./packages:/usr/src/app/packages
+      - /usr/src/app/node_modules
+      - /usr/src/app/apps/backend/api-gateway/node_modules
+    networks:
+      - curator-net
+    command: ["pnpm", "dev", "--filter=@backend/api-gateway"]
+    profiles: ["core"]
+
   # >>> Observability <<<
   prometheus:
     image: prom/prometheus:v2.45.0
@@ -116,25 +138,6 @@ services:
     networks:
       - curator-net
 
-  # >>> Redis Cache <<<
-  redis:
-    image: redis:7-alpine
-    container_name: redis
-    env_file:
-      - .env.development
-    ports:
-      - "6379:6379" # Redis
-    volumes:
-      - redis_data:/data
-    networks:
-      - curator-net
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    restart: unless-stopped
-
   # >>> RabbitMQ Message Broker <<<
   rabbitmq:
     image: rabbitmq:3.12-management-alpine
@@ -156,6 +159,25 @@ services:
       test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
       interval: 30s
       timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  # >>> Redis Cache <<<
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    env_file:
+      - .env.development
+    ports:
+      - "6379:6379" # Redis
+    volumes:
+      - redis_data:/data
+    networks:
+      - curator-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
       retries: 5
     restart: unless-stopped
 

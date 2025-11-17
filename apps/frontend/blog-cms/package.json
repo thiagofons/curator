@@ -17,13 +17,14 @@
     "test:watch": "vitest --watch"
   },
   "dependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/vitest-config": "workspace:*",
     "@payloadcms/db-postgres": "catalog:payload",
     "@payloadcms/next": "catalog:payload",
     "@payloadcms/richtext-lexical": "catalog:payload",
     "@payloadcms/translations": "catalog:payload",
     "@payloadcms/ui": "catalog:payload",
+    "@repo/eslint-config": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
+    "class-validator": "^0.14.2",
     "cross-env": "catalog:tooling",
     "dotenv": "catalog:tooling",
     "graphql": "catalog:api",

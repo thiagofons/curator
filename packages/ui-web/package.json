@@ -21,7 +21,6 @@
     "./custom/*": "./src/components/custom/*.tsx"
   },
   "dependencies": {
-    "@repo/vitest-config": "workspace:*",
     "@hookform/resolvers": "catalog:core-libs",
     "@radix-ui/react-accordion": "catalog:radix",
     "@radix-ui/react-alert-dialog": "catalog:radix",
@@ -49,7 +48,9 @@
     "@radix-ui/react-toggle": "catalog:radix",
     "@radix-ui/react-toggle-group": "catalog:radix",
     "@radix-ui/react-tooltip": "catalog:radix",
+    "@repo/vitest-config": "workspace:*",
     "@storybook/react": "catalog:storybook9",
+    "class-validator": "^0.14.2",
     "class-variance-authority": "catalog:ui-libs",
     "clsx": "catalog:ui-libs",
     "cmdk": "catalog:ui-libs",

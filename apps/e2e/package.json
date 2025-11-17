@@ -10,5 +10,8 @@
   "devDependencies": {
     "@playwright/test": "catalog:testing",
     "@types/node": "catalog:tooling"
+  },
+  "dependencies": {
+    "class-validator": "^0.14.2"
   }
 }

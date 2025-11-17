@@ -1,0 +1,29 @@
+// 1. Definição do Gerador (Prisma Client)
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+// 2. Definição da Fonte de Dados (PostgreSQL)
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ==========================================
+// Bounded Context: Identity
+// Responsabilidade: QUEM são os usuários
+// Agregado Raiz: User
+// ==========================================
+
+// O Agregado Raiz 'User'
+model User {
+  // Usamos 'uuid' como padrão em microserviços.
+  id    String @id @default(uuid())
+  email String @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Mapeia o modelo 'User' para a tabela 'users' (convenção Postgres)
+  @@map("users")
+}
