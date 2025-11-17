@@ -1,12 +1,12 @@
 services:
   # >>> Microservices <<<
   api-gateway:
+    container_name: core-api-gateway
     build:
       context: .
       dockerfile: ./apps/backend/api-gateway/Dockerfile
       target: development
     restart: unless-stopped
-    container_name: api-gateway
     env_file:
       - ./apps/backend/api-gateway/.env
     ports:
@@ -23,8 +23,8 @@ services:
 
   # >>> Observability <<<
   prometheus:
+    container_name: obs-prometheus
     image: prom/prometheus:v2.45.0
-    container_name: prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yaml"
       - "--storage.tsdb.path=/prometheus"
@@ -40,8 +40,8 @@ services:
     profiles: ["observability"]
 
   loki:
+    container_name: obs-loki
     image: grafana/loki:2.8.0
-    container_name: loki
     command: -config.file=/etc/loki/local-config.yaml
     ports:
       - "3100:3100" # Loki
@@ -50,8 +50,8 @@ services:
     profiles: ["observability"]
 
   grafana:
+    container_name: obs-grafana
     image: grafana/grafana:10.0.3
-    container_name: grafana
     volumes:
       - ./observability/grafana/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
     ports:
@@ -65,8 +65,8 @@ services:
     profiles: ["observability"]
 
   tempo:
+    container_name: obs-tempo
     image: grafana/tempo:2.1.1
-    container_name: tempo
     command: -config.file=/etc/tempo.yaml
     volumes:
       - ./observability/tempo/tempo-config.yaml:/etc/tempo.yaml
@@ -77,8 +77,8 @@ services:
     profiles: ["observability"]
 
   otel-collector:
+    container_name: obs-otel-collector
     image: otel/opentelemetry-collector-contrib:0.88.0
-    container_name: otel-collector
     command: ["--config=/etc/otel-collector-config.yaml"]
     volumes:
       - ./observability/otel/otel-collector-config.yaml:/etc/otel-collector-config.yaml
@@ -95,8 +95,8 @@ services:
 
   # >>> Blog CMS (Payload + Next.js) <<<
   blog-cms:
+    container_name: front-blog-cms
     image: node:18-alpine
-    container_name: blog-cms
     working_dir: /home/node/app
     command: sh -c "corepack enable && corepack prepare pnpm@latest --activate && pnpm install && pnpm dev"
     volumes:
@@ -118,8 +118,8 @@ services:
 
   # >>> PostgreSQL Database <<<
   postgres:
+    container_name: infra-postgres
     image: postgres:15-alpine
-    container_name: postgres
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -140,8 +140,8 @@ services:
 
   # >>> RabbitMQ Message Broker <<<
   rabbitmq:
+    container_name: infra-rabbitmq
     image: rabbitmq:3.12-management-alpine
-    container_name: rabbitmq
     environment:
       # Credentials for the broker
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
@@ -164,8 +164,8 @@ services:
 
   # >>> Redis Cache <<<
   redis:
+    container_name: infra-redis
     image: redis:7-alpine
-    container_name: redis
     env_file:
       - .env.development
     ports:
