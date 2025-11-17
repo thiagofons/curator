@@ -53,7 +53,8 @@
     "observability",
     "backend/api-gateway",
     "packages/trpc",
-    "packages/vitest"
+    "packages/vitest",
+    "cli"
   ],
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
