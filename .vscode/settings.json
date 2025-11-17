@@ -10,13 +10,13 @@
     "*.js": "$(capture).js.map, $(capture).*.ts, $(capture).*.js",
     "tsconfig.json": "tsconfig.*.json",
     "Dockerfile": "docker-compose.yml, .dockerignore",
-    ".env": "*.env",
+    ".env": "*.env, .env.development, .env.production, .env.example",
     "package.json": "pnpm-lock.yaml, .nvmrc, pnpm-workspace.yaml, .npmrc",
     ".eslintrc.*": ".eslintignore, .eslintcache",
     "prettier.config.js": ".prettierignore",
     "prettier.config.cjs": ".prettierignore",
     ".gitignore": ".gitattributes",
-    ".env.development": ".env.production",
+
     "*.module.ts": "${capture}.controller.ts, ${capture}.service.ts, ${capture}.resolver.ts, ${capture}.guard.ts, ${capture}.providers.ts, ${capture}.spec.ts",
     "page.tsx": "layout.tsx, error.tsx, loading.tsx, template.tsx",
     "layout.tsx": "page.tsx, error.tsx, loading.tsx, template.tsx"

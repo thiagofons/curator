@@ -1,3 +1,6 @@
+---
+to: apps/backend/<%=name%>-service/Dockerfile
+---
 # >> STAGE 1: Base
 FROM node:22-alpine AS base
 ENV PNPM_HOME="/pnpm"
@@ -10,8 +13,8 @@ RUN apk add --no-cache libc6-compat openssl && \
 FROM base AS builder
 WORKDIR /usr/src/app
 COPY . .
-# Prune monorepo to keep only api-gateway and its dependencies
-RUN turbo prune --scope=@backend/api-gateway --docker
+# Prune monorepo to keep only <%=name%>-service and its dependencies
+RUN turbo prune --scope=@backend/<%=name%>-service --docker
 
 # >> STAGE 3: Installer (Production Build)
 FROM base AS installer
@@ -26,7 +29,7 @@ RUN pnpm install --frozen-lockfile
 
 # Copy pruned source code and build
 COPY --from=builder /usr/src/app/out/full/ .
-RUN turbo run build --filter=@backend/api-gateway...
+RUN turbo run build --filter=@backend/<%=name%>-service...
 
 # >> STAGE 4: Development (DX Optimized)
 FROM base AS development
@@ -47,18 +50,18 @@ RUN pnpm install
 COPY . .
 
 # Build internal libs only (skip gateway build to allow watch mode)
-RUN turbo run build --filter=@backend/api-gateway^...
+RUN turbo run build --filter=@backend/<%=name%>-service^...
 
 # Fix permissions for runtime generation (tRPC/Prisma)
 RUN mkdir -p apps/backend/api-gateway/@generated && \
     chown -R nodejs:nodejs /usr/src/app/node_modules && \
-    chown -R nodejs:nodejs /usr/src/app/apps/backend/api-gateway
+    chown -R nodejs:nodejs /usr/src/app/apps/backend/<%=name%>-service
 
 ENV NODE_ENV=development
 EXPOSE 3000
 
 USER nodejs
-WORKDIR /usr/src/app/apps/backend/api-gateway
+WORKDIR /usr/src/app/apps/backend/<%=name%>-service
 CMD ["pnpm", "dev"]
 
 # >> STAGE 5: Runner (Production Image)
@@ -72,5 +75,5 @@ RUN addgroup --system --gid 1001 nodejs && \
 COPY --from=installer --chown=nodejs:nodejs /usr/src/app/ .
 
 USER nodejs
-WORKDIR /usr/src/app/apps/backend/api-gateway
+WORKDIR /usr/src/app/apps/backend/<%=name%>-service
 CMD ["node", "dist/main.js"]

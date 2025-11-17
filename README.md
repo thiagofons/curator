@@ -68,7 +68,7 @@ This section outlines the core technologies used across the Curator Platform, ca
 
 | Status | Technology                 | Purpose                                                 |
 | :----- | :------------------------- | :------------------------------------------------------ |
-| ⌛     | Storybook                  | UI components documentation.                            |
+| ✅     | Storybook                  | UI components documentation.                            |
 | ⌛     | OpenAPI                    | Provides a formal standard for describing HTTP APIs.    |
 | ⌛     | Swagger UI                 | Visualization and interaction with the API’s resources. |
 | ✅     | Nextra (Next.js)           | Powers the static documentation portal.                 |
@@ -81,10 +81,10 @@ This section outlines the core technologies used across the Curator Platform, ca
 
 | Status | Technology              | Purpose                                       |
 | :----- | :---------------------- | :-------------------------------------------- |
-| ⌛     | OpenTelemetry (Tracing) | Provides distributed tracing for requests.    |
-| ⌛     | Grafana (Dashboards)    | Visualizes metrics and logs in dashboards.    |
-| ⌛     | Prometheus (Metrics)    | Collects time-series metrics from services.   |
-| ⌛     | Loki (Logs)             | Aggregates log streams from all applications. |
+| ✅     | OpenTelemetry (Tracing) | Provides distributed tracing for requests.    |
+| ✅     | Grafana (Dashboards)    | Visualizes metrics and logs in dashboards.    |
+| ✅     | Prometheus (Metrics)    | Collects time-series metrics from services.   |
+| ✅     | Loki (Logs)             | Aggregates log streams from all applications. |
 
 ### 3. Architecture
 
@@ -93,9 +93,9 @@ This section outlines the core technologies used across the Curator Platform, ca
 | ✅     | Domain-Driven Design (DDD)      | Models the software to match business domains. |
 | ⌛     | Microservices                   | Decouples services by business capability.     |
 | ⌛     | Event-Driven Architecture (EDA) | Models the communication between the services. |
-| ⌛     | RabbitMQ                        | Asynchrounous Message Broker.                  |
+| ✅     | RabbitMQ                        | Asynchrounous Message Broker.                  |
 | ⌛     | GraphQL                         | Query language for APIs.                       |
-| ⌛     | tRPC (Typesafe API)             | Enables end-to-end typesafe APIs.              |
+| ✅     | tRPC (Typesafe API)             | Enables end-to-end typesafe APIs.              |
 
 ### 4. Front-End & UX
 
@@ -117,7 +117,7 @@ This section outlines the core technologies used across the Curator Platform, ca
 | ⌛     | ScyllaDB        | Large-scale noSQL.                           |
 | ✅     | Redis           | Real-time and cache.                         |
 | ⌛     | Clickhouse      | Analytics.                                   |
-| ⌛     | Prisma (ORM)    | Provides a typesafe database client and ORM. |
+| ✅     | Prisma (ORM)    | Provides a typesafe database client and ORM. |
 | ⌛     | Data Build Tool | Data orchstration and analytics              |
 
 ### 6. Infrastructure, DevOps & SRE
@@ -128,7 +128,7 @@ This section outlines the core technologies used across the Curator Platform, ca
 | ✅     | Docker                       | Containerizes applications for deployment.        |
 | ⌛     | Kubernetes (EKS)             | Orchestrates production backend containers.       |
 | ⌛     | Linkerd                      | Smart network layer on top of Kubernetes.         |
-| ⌛     | Terraform (IaC)              | Defines and manages infrastructure as code.       |
+| ✅     | Terraform (IaC)              | Defines and manages infrastructure as code.       |
 | ⌛     | Terragrunt (IaC)             | Apply an orchestration layer to keep IaC DRY.     |
 | ✅     | Vercel (Static Site Hosting) | Provides managed hosting for the static frontend. |
 
@@ -139,7 +139,7 @@ This section outlines the core technologies used across the Curator Platform, ca
 | ⌛     | SonarQube                 | Searches bugs, vulnerabilities and "code smells" in CI |
 | ✅     | GitHub Dependabot         | Continually scans our dependencies.                    |
 | ⌛     | Trivy                     | Container image analysis.                              |
-| ⌛     | AWS Secrets Manager       | Securely stores and injects secrets.                   |
+| ✅     | AWS Secrets Manager       | Securely stores and injects secrets.                   |
 | ⌛     | AWS WAF                   | Web Application Firewall                               |
 | ✅     | AWS IAM (Permissions)     | Manages granular permissions for AWS services.         |
 | ⌛     | Auth0 (Identity Provider) | Manages user authentication and identity.              |
@@ -162,7 +162,7 @@ This section outlines the core technologies used across the Curator Platform, ca
 | :----- | :---------------- | :-------------------------------------- |
 | ✅     | Turborepo         | Orchestrates and caches monorepo tasks. |
 | ⌛     | GitHub Codespaces | Remote development environment.         |
-| ⌛     | Husky             | Commit pipeline.                        |
+| ✅     | Husky             | Commit pipeline.                        |
 | ⌛     | FlagSmith         | Feature flags.                          |
 
 ### 10. CI/CD

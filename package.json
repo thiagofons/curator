@@ -18,6 +18,7 @@
     "db:pull": "prisma pull",
     "dev": "turbo run dev --parallel",
     "docs:api": "typedoc",
+    "curator": "./scripts/cli/main.sh",
     "new:service": "hygen service new && pnpm install",
     "new:package": "hygen package new && pnpm install",
     "prepare": "husky",
