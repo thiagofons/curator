@@ -10,6 +10,6 @@ export class UsersRouter {
 
   @Query({})
   async findAll() {
-    return this.usersService.findAll();
+    // return this.usersService.findAll();
   }
 }
