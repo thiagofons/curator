@@ -1,9 +1,9 @@
-import { AppModule } from "@/application/app.module";
+import { ApiGatewayModule } from "@/api-gateway.module";
 import { NestFactory } from "@nestjs/core";
 import { EnvService } from "./infrastructure/config/env";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create(ApiGatewayModule, {
     cors: true,
   });
 

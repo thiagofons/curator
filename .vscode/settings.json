@@ -54,7 +54,8 @@
     "backend/api-gateway",
     "packages/trpc",
     "packages/vitest",
-    "cli"
+    "cli",
+    "backend/authentication-service"
   ],
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

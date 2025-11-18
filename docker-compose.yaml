@@ -21,6 +21,27 @@ services:
     command: ["pnpm", "dev", "--filter=@backend/api-gateway"]
     profiles: ["core"]
 
+  authentication-service:
+    container_name: core-authentication-service
+    build:
+      context: .
+      dockerfile: ./apps/backend/authentication-service/Dockerfile
+      target: development
+    restart: unless-stopped
+    env_file:
+      - ./apps/backend/authentication-service/.env
+    ports:
+      - "3301:3301"
+    volumes:
+      - ./apps/backend/authentication-service/src:/usr/src/app/apps/backend/authentication-service/src
+      - ./packages:/usr/src/app/packages
+      - /usr/src/app/node_modules
+      - /usr/src/app/apps/backend/authentication-service/node_modules
+    networks:
+      - curator-net
+    command: ["pnpm", "dev", "--filter=@backend/authentication-service"]
+    profiles: ["core"]
+
   # >>> Observability <<<
   prometheus:
     container_name: obs-prometheus
