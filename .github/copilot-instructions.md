@@ -2,6 +2,80 @@
 
 This guide helps AI agents understand the Curator codebase architecture, conventions, and workflows.
 
+## 🌍 Domain Map & Bounded Contexts (Strict Boundaries)
+
+We follow a strict **Domain-Driven Design (DDD)** approach. Each Bounded Context is a separate microservice.
+
+### 1. Identity Context (`identity-service`)
+
+- **Responsibility:** Manages user profiles, roles (User, CuratorUser, Admin), and biographical data.
+- **Root Aggregate:** `User`.
+- **Data Strategy:** Relational (PostgreSQL).
+- **Constraints:** DOES NOT handle authentication (passwords/tokens).
+
+### 2. Authentication Context (`authentication-service`)
+
+- **Responsibility:** Verifies identity (Who is this?). Handles Login, Registration, Password Reset, and JWT issuance.
+- **Key Concepts:** Credentials, Sessions, Tokens.
+- **Communication:** Emits `UserRegistered` events consumed by Identity Service.
+
+### 3. Roadmap Context (`roadmap-service`) - **CORE DOMAIN**
+
+- **Responsibility:** The heart of the product. Manages the curation paths ("Trilhas").
+- **Root Aggregate:** `Roadmap`.
+- **Entities:** `Step`, `MediaStep` (Video/Audio ref), `InfoStep` (Text), `AIGeneratedRoadmap`.
+- **Data Strategy:** Document-oriented (MongoDB) allows flexible roadmap structures.
+
+### 4. Interaction Context (`interaction-service`)
+
+- **Responsibility:** Social engagement metrics.
+- **Entities:** `Favorite`, `Comment`.
+- **Constraints:** Links `userId` and `roadmapId` loosely. High write throughput expected.
+
+## 🛡️ Architectural "Gold Rules" (Non-Negotiable)
+
+### 1. Hexagonal Architecture (Ports & Adapters)
+
+Every microservice must strictly follow this folder structure to isolate domain logic:
+
+- **Domain Layer:** Pure TS. No frameworks, no ORMs, no libraries. Only Business Rules.
+- **Ports (Interfaces):** Defines _how_ the domain talks to the world (e.g., `IUserRepository`).
+- **Adapters (Infrastructure):** Implementation of ports (e.g., `PrismaUserRepository`, `RabbitMQPublisher`).
+- **Application Layer:** Orchestrates Use Cases (Command Handlers).
+
+### 2. Data Sovereignty (Polyglot Persistence)
+
+- **Rule:** A microservice **NEVER** accesses another service's database directly.
+- **Pattern:** If Service A needs data from Service B, it must:
+  1. Call Service B's API (Synchronous - sparely used).
+  2. Listen to Domain Events from Service B and replicate data locally (Asynchronous/Eventual Consistency - Preferred).
+
+### 3. Communication Patterns
+
+- **Synchronous (User → System):** REST or GraphQL/tRPC for client-facing operations.
+- **Asynchronous (System → System):** RabbitMQ for side effects (e.g., "User Created" → "Send Welcome Email").
+- **Resilience:** Always wrap external calls with **Circuit Breakers** and define **Timeouts**.
+
+### 4. Observability (OpenTelemetry Standard)
+
+- **Tracing:** All async flows must propagate `traceparent` headers (OTel).
+- **Metrics:** Define Business Metrics (e.g., `roadmap_creation_count`) not just technical metrics (CPU/RAM).
+- **Logs:** Structured JSON logs with `correlation_id`.
+
+## 🔒 Security & Quality Gates
+
+### DevSecOps
+
+- **Secrets:** Never hardcode secrets. Use `ConfigService` to load from environment.
+- **Least Privilege:** IAM roles for services should only allow necessary actions (e.g., S3 Read-Only).
+- **Sanitization:** All inputs must be validated using Zod/Class-Validator DTOs to prevent Injection.
+
+### Advanced Testing Strategy
+
+- **Mutation Testing (Stryker):** Run periodically to ensure tests actually catch bugs (kill mutants).
+- **Contract Testing (Pact):** Mandatory for communication between Microservices to prevent breaking API changes.
+- **Load Testing (k6):** Critical paths (e.g., "View Roadmap") must be benchmarked.
+
 ## 🏗️ Architecture Overview
 
 **Curator** is a monorepo using **Turborepo** + **pnpm workspaces** with a **Domain-Driven Design (DDD)** + **Microservices** approach.
