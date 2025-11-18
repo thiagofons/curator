@@ -1,6 +1,12 @@
 import { glob } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
 
+/**
+ * Astro content collection definitions for static content areas.
+ * Note: blog posts/authors/categories are sourced from Payload CMS;
+ * these collections are used for site pages and legacy content only.
+ */
+
 // Homepage Collection schema
 const homepageCollection = defineCollection({
   schema: z.object({
@@ -45,7 +51,10 @@ const blogCollection = defineCollection({
 
 // Post collection schema
 const postsCollection = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "src/content/posts" }),
+  loader: glob({
+    pattern: "**/*.{md,mdx}",
+    base: "src/content/posts",
+  }),
   schema: z.object({
     title: z.string(),
     meta_title: z.string().optional(),
@@ -61,7 +70,10 @@ const postsCollection = defineCollection({
 
 // contact collection schema
 const contactCollection = defineCollection({
-  loader: glob({ pattern: "**/-*.{md,mdx}", base: "src/content/contact" }),
+  loader: glob({
+    pattern: "**/-*.{md,mdx}",
+    base: "src/content/contact",
+  }),
   schema: z.object({
     title: z.string(),
     content: z.string(),
@@ -72,7 +84,10 @@ const contactCollection = defineCollection({
 
 // Author collection schema
 const authorsCollection = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "src/content/authors" }),
+  loader: glob({
+    pattern: "**/*.{md,mdx}",
+    base: "src/content/authors",
+  }),
   schema: z.object({
     title: z.string(),
     image: z.string().optional(),
@@ -83,7 +98,10 @@ const authorsCollection = defineCollection({
 
 // Pages collection schema
 const pagesCollection = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "src/content/pages" }),
+  loader: glob({
+    pattern: "**/*.{md,mdx}",
+    base: "src/content/pages",
+  }),
   schema: z.object({
     id: z.string().optional(),
     title: z.string(),
@@ -95,7 +113,7 @@ const pagesCollection = defineCollection({
   }),
 });
 
-// Export collections
+/** Exported Astro collections used by the site build. */
 export const collections = {
   homepage: homepageCollection,
   blog: blogCollection,

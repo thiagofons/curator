@@ -1,4 +1,7 @@
-// similer products
+/**
+ * Returns items similar to the current one based on shared categories or tags.
+ * Excludes the item with the provided slug.
+ */
 const similerItems = (currentItem: any, allItems: any, slug: string) => {
   let categories: [] = [];
   let tags: [] = [];
@@ -15,13 +18,21 @@ const similerItems = (currentItem: any, allItems: any, slug: string) => {
 
   // filter by categories
   const filterByCategories = allItems.filter(
-    (item: { data: { categories: string } }) =>
-      categories.find((category) => item.data.categories.includes(category))
+    (item: {
+      data: {
+        categories: string;
+      };
+    }) =>
+      categories.find((category) => item.data.categories.includes(category)),
   );
 
   // filter by tags
-  const filterByTags = allItems.filter((item: { data: { tags: string } }) =>
-    tags.find((tag) => item.data.tags.includes(tag))
+  const filterByTags = allItems.filter(
+    (item: {
+      data: {
+        tags: string;
+      };
+    }) => tags.find((tag) => item.data.tags.includes(tag)),
   );
 
   // merged after filter

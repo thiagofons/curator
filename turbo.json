@@ -1,19 +1,58 @@
 {
   "$schema": "https://turborepo.com/schema.json",
+  "globalEnv": ["PAYLOAD_SECRET", "DATABASE_URI"],
   "ui": "tui",
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
-    },
-    "lint": {
-      "dependsOn": ["^lint"]
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
     "check-types": {
       "dependsOn": ["^check-types"]
     },
     "dev": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
+    },
+    "db:generate": {
+      "dependsOn": ["^db:generate"]
+    },
+    "db:migrate:dev": {
+      "dependsOn": ["^db:migrate:dev"]
+    },
+    "db:migrate:deploy": {
+      "dependsOn": ["^db:migrate:deploy"]
+    },
+    "db:studio": {
+      "dependsOn": ["^db:studio"]
+    },
+    "lint": {
+      "dependsOn": ["^lint"]
+    },
+    "quality:format:check": {
+      "dependsOn": ["^quality:format:check"]
+    },
+    "quality:format:fix": {
+      "dependsOn": ["^quality:format:fix"]
+    },
+    "storybook-web:dev": {},
+    "storybook-web:build": {},
+    "test:unit": {
+      "dependsOn": ["^test:unit", "@repo/vitest-config#build"]
+    },
+    "test:unit:coverage": {
+      "dependsOn": ["^test:unit:coverage", "@repo/vitest-config#build"]
+    },
+    "test:integration": {
+      "dependsOn": ["^test:integration", "@repo/vitest-config#build"]
+    },
+    "test:e2e": {
+      "cache": false,
+      "dependsOn": ["^build"]
+    },
+    "test:watch": {
       "cache": false,
       "persistent": true
     }

@@ -1,0 +1,10 @@
+{
+  "extends": "@repo/typescript-config/base",
+  "compilerOptions": {
+    "moduleResolution": "bundler",
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src"],
+  "exclude": ["dist", "node_modules"]
+}

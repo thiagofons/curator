@@ -1,0 +1,17 @@
+{
+  "name": "e2e",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
+  },
+  "devDependencies": {
+    "@playwright/test": "catalog:testing",
+    "@types/node": "catalog:tooling"
+  },
+  "dependencies": {
+    "class-validator": "^0.14.2"
+  }
+}

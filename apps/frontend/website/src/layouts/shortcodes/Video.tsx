@@ -1,4 +1,6 @@
+/** biome-ignore-all lint/correctness/noUnusedImports: It needs the import React to work properly */
 import React from "react";
+
 function Video({
   title,
   width = 500,
@@ -15,9 +17,9 @@ function Video({
   return (
     <video
       className="overflow-hidden"
-      width={width}
+      controls={true}
       height={height}
-      controls
+      width={width}
       {...rest}
     >
       <source

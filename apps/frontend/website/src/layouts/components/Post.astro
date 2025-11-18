@@ -1,16 +1,17 @@
 ---
-import { getSinglePage } from "@/lib/contentParser.astro";
-import dateFormat from "@/lib/utils/dateFormat";
-import { humanize, plainify, slugify } from "@/lib/utils/textConverter";
-import { Image } from "astro:assets";
-import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets"
+import { getSinglePage } from "@/lib/contentParser.astro"
+import dateFormat from "@/lib/utils/dateFormat"
+import { humanize, plainify, slugify } from "@/lib/utils/textConverter"
+
+// (no explicit CollectionEntry typing to allow remote CMS data)
 
 type Props = {
-  post: CollectionEntry<"posts">;
-};
+  post: any
+}
 
-const authors = await getSinglePage("authors");
-const { post } = Astro.props;
+const authors = await getSinglePage("authors")
+const { post } = Astro.props
 ---
 
 <div class="card mb-12 border-b border-border pb-8">
@@ -38,30 +39,39 @@ const { post } = Astro.props;
   <ul class="mb-4 mt-1.5 flex flex-wrap items-center space-x-3 text-text-light">
     <li>
       {
-        authors
-          .filter((author) =>
-            post.data.authors
-              .map((author) => slugify(author))
-              .includes(slugify(author.data.title))
-          )
-          .map((author) => (
-            <a
-              href={`/authors/${slugify(author.data.title)}`}
-              class="flex items-center hover:text-primary hover:underline"
-            >
-              <span>{author.data.title}</span>
-            </a>
-          ))
+        post.data.authorSlugs && post.data.authorSlugs.length > 0
+          ? post.data.authors.map((name: string, i: number) => (
+              <a
+                href={`/blog/authors/${post.data.authorSlugs![i] || post.data.authorSlugs![0]}`}
+                class="flex items-center hover:text-primary hover:underline"
+              >
+                <span>{name}</span>
+              </a>
+            ))
+          : authors
+              .filter((author) =>
+                post.data.authors
+                  .map((author: string) => slugify(author))
+                  .includes(slugify(author.data.title))
+              )
+              .map((author) => (
+                <a
+                  href={`/blog/authors/${slugify(author.data.title)}`}
+                  class="flex items-center hover:text-primary hover:underline"
+                >
+                  <span>{author.data.title}</span>
+                </a>
+              ))
       }
     </li>
     <li>{dateFormat(post.data.date!)}</li>
     <li>
       <ul>
         {
-          post.data.categories.map((category) => (
+          post.data.categories.map((category: string, i: number) => (
             <li class="inline-block">
               <a
-                href={`/blog/categories/${slugify(category)}`}
+                href={`/blog/categories/${post.data.categorySlugs?.[i] || slugify(category)}`}
                 class="mr-3 hover:text-primary hover:underline"
               >
                 {humanize(category)}

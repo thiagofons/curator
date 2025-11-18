@@ -5,7 +5,6 @@ const meta: MetaRecord = {
     title: "ADR Template",
     display: "hidden",
   },
-  "001-ddd": "001 - Domain Driven Design",
 };
 
 export default meta;

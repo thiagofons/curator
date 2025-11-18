@@ -1,49 +1,40 @@
 ---
-import Post from "@/components/Post.astro";
-import config from "@/config/config.json";
-import Base from "@/layouts/Base.astro";
-import Pagination from "@/layouts/components/Pagination.astro";
-import { getSinglePage } from "@/lib/contentParser.astro";
-import { getTaxonomy } from "@/lib/taxonomyParser.astro";
-import { sortByDate } from "@/lib/utils/sortFunctions";
-import taxonomyFilter from "@/lib/utils/taxonomyFilter";
-import { markdownify } from "@/lib/utils/textConverter";
-import type { GetStaticPathsOptions } from "astro";
-import { Image } from "astro:assets";
-import type { CollectionEntry } from "astro:content";
-import { getEntry } from "astro:content";
+import Post from "@/components/Post.astro"
+import config from "@/config/config.json"
+import Base from "@/layouts/Base.astro"
+import Pagination from "@/layouts/components/Pagination.astro"
+import {
+  getPayloadCategories,
+  getPayloadCategoryBySlug,
+  getPayloadPostsByCategorySlug,
+} from "@/lib/payload"
+import { markdownify } from "@/lib/utils/textConverter"
+import type { GetStaticPathsOptions } from "astro"
+
+const { page } = Astro.props
+const { category } = Astro.params
+
+const categoryObj = await getPayloadCategoryBySlug(category)
 
 export const getStaticPaths = async ({ paginate }: GetStaticPathsOptions) => {
-  const { pagination } = config.settings;
-  const allPosts = await getSinglePage("posts");
-  const sortByDatePosts = sortByDate(allPosts);
-
-  const categories = await getTaxonomy("posts", "categories");
-  return categories
-    .map((category) => {
-      const filterByTags = taxonomyFilter(
-        sortByDatePosts,
-        "categories",
-        category
-      );
-      return paginate(filterByTags, {
-        params: { category: category || "" },
-        pageSize: pagination,
-      });
+  const { pagination } = config.settings
+  const categories = await getPayloadCategories()
+  const allPaths: any[] = []
+  for (const c of categories) {
+    const posts = await getPayloadPostsByCategorySlug(c.slug)
+    const pages = paginate(posts, {
+      params: {
+        category: c.slug,
+      },
+      pageSize: pagination,
     })
-    .flat();
-};
-
-const blog = (await getEntry(
-  "blog",
-  "-index"
-)) as CollectionEntry<"blog">;
-const { banner } = blog.data;
-const { page } = Astro.props;
-const { category } = Astro.params;
+    allPaths.push(...pages)
+  }
+  return allPaths
+}
 ---
 
-<Base title={category}>
+<Base title={categoryObj?.data.title || category}>
   <!-- Banner -->
   <section
     class="banner"
@@ -52,19 +43,8 @@ const { category } = Astro.params;
     <div class="container">
       <div class="row">
         <div class="lg:col-6">
-          {
-            banner?.title && (
-              <h1 set:html={markdownify(banner?.title)} class="h2 mb-8" />
-            )
-          }
+          <h1 set:html={markdownify(categoryObj?.data.title || category)} class="h2 mb-8" />
         </div>
-      </div>
-      <div class="banner-illustration">
-        {
-          banner?.image && (
-            <Image src={banner?.image} width={768} height={385} alt="" />
-          )
-        }
       </div>
     </div>
   </section>
@@ -78,7 +58,7 @@ const { category } = Astro.params;
             Posts relacionados com a categoria <span class="text-primary">{category}</span>
           </h1>
           <div class="rounded px-9 py-12 shadow md:p-[60px]">
-            {page.data.map((post) => <Post post={post} />)}
+            {page.data.map((post: any) => <Post post={post} />)}
             <Pagination
               section={`categories/${category}`}
               currentPage={page.currentPage}

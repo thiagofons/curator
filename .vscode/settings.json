@@ -1,51 +1,67 @@
 {
   "editor.tabSize": 2,
   "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
     "*.ts": "$(capture).js, $(capture).*.ts, $(capture).*.js",
+    "*.tsx": "$(capture).stories.tsx, $(capture).spec.ts",
     "*.js": "$(capture).js.map, $(capture).*.ts, $(capture).*.js",
     "tsconfig.json": "tsconfig.*.json",
     "Dockerfile": "docker-compose.yml, .dockerignore",
-    ".env": "*.env",
+    ".env": "*.env, .env.development, .env.production, .env.example",
     "package.json": "pnpm-lock.yaml, .nvmrc, pnpm-workspace.yaml, .npmrc",
     ".eslintrc.*": ".eslintignore, .eslintcache",
-    ".prettierrc": ".prettierignore",
-    ".gitignore": ".gitattributes"
+    "prettier.config.js": ".prettierignore",
+    "prettier.config.cjs": ".prettierignore",
+    ".gitignore": ".gitattributes",
+
+    "*.module.ts": "${capture}.controller.ts, ${capture}.service.ts, ${capture}.resolver.ts, ${capture}.guard.ts, ${capture}.providers.ts, ${capture}.spec.ts",
+    "page.tsx": "layout.tsx, error.tsx, loading.tsx, template.tsx",
+    "layout.tsx": "page.tsx, error.tsx, loading.tsx, template.tsx"
   },
+  "explorer.compactFolders": true,
   "javascript.updateImportsOnFileMove.enabled": "always",
   "typescript.updateImportsOnFileMove.enabled": "always",
   "workbench.editor.tabSizing": "shrink",
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.foldingImportsByDefault": false,
+  "editor.formatOnPaste": true,
   "editor.codeActionsOnSave": {
-    "source.organizeImports": "never",
     "source.fixAll.eslint": "explicit",
-    "source.fixAll.prettier": "explicit",
-    "source.fixAll.markdownlint": "explicit"
+    "source.removeUnusedImports": "always",
+    "source.sortImports": "never",
+    "source.fixAll.markdownlint": "always"
   },
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ],
-  "eslint.workingDirectories": [
-    {
-      "mode": "auto"
-    }
-  ],
   "files.associations": {
     "*.css": "tailwindcss"
   },
   "material-icon-theme.activeIconPack": "nest",
   "files.eol": "\n",
   "conventionalCommits.scopes": [
-    "frontend/docs",
     "infrastructure",
-    "packages/ui-web",
-    "frontend/blog",
-    "frontend/landing-page",
+    "monorepo",
+    "backend/agent",
+    "e2e",
+    "frontend/blog-cms",
+    "frontend/docs",
     "frontend/website",
-    "monorepo"
-  ]
+    "frontend/storybook-web",
+    "frontend/storybook-mobile",
+    "packages/ui-web",
+    "packages/ui-mobile",
+    "observability",
+    "backend/api-gateway",
+    "packages/trpc",
+    "packages/vitest",
+    "cli",
+    "backend/authentication-service",
+    "backend/identity-service"
+  ],
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

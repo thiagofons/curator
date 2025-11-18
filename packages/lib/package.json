@@ -1,0 +1,13 @@
+{
+  "name": "@repo/lib",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test:unit": "vitest run --exclude **/*.it.spec.ts"
+  },
+  "dependencies": {
+    "class-validator": "^0.14.2",
+    "vitest": "catalog:testing"
+  }
+}

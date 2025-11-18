@@ -3,8 +3,22 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "test:unit": "vitest run",
+    "test:watch": "vitest --watch"
+  },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
+    "class-validator": "^0.14.2"
+  },
+  "devDependencies": {
+    "vitest": "catalog:testing"
+  }
 }
