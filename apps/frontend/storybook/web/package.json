@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "storybook:dev": "storybook dev -p 6006",
-    "storybook:build": "storybook build"
+    "storybook-web:dev": "storybook dev -p 6006",
+    "storybook-web:build": "storybook build"
   },
   "dependencies": {
     "@repo/ui-web": "workspace:*",

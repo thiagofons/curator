@@ -17,6 +17,7 @@
       "./src/hooks/*.ts",
       "./src/hooks/*.tsx"
     ],
+    "./components/*": "./src/components/*",
     "./base/*": "./src/components/base/*.tsx",
     "./custom/*": "./src/components/custom/*.tsx"
   },

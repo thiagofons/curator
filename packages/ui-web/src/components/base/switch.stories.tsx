@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { Button } from "./button";
+import { Switch } from "./switch";
 
-const meta: Meta<typeof Button> = {
-  title: "Components/Base/Button",
-  component: Button,
+const meta: Meta<typeof Switch> = {
+  title: "Components/Base/Switch",
+  component: Switch,
   parameters: {
     layout: "centered",
   },
@@ -12,10 +12,10 @@ const meta: Meta<typeof Button> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Button>;
+type Story = StoryObj<typeof Switch>;
 
 export const Default: Story = {
   args: {
-    children: "Button",
+    checked: true,
   },
 };
