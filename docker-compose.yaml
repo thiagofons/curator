@@ -55,7 +55,7 @@ services:
     volumes:
       - ./observability/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml
     ports:
-      - "9090:9090" # Prometheus
+      - "19090:9090" # Prometheus
     networks:
       - curator-net
     profiles: ["observability"]
