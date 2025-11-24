@@ -13,7 +13,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /usr/src/app
 COPY . .
 # Gera uma versão "fatiada" do monorepo apenas para este app
-RUN turbo prune --scope=@backend/api-gateway --docker
+RUN turbo prune --scope=@backend/identity-service --docker
 
 # >> STAGE 3: Installer (Build & Dev Deps)
 FROM base AS installer
@@ -32,7 +32,7 @@ RUN pnpm install --frozen-lockfile
 COPY --from=builder /usr/src/app/out/full/ .
 
 # Builda o projeto
-RUN turbo run build --filter=@backend/api-gateway...
+RUN turbo run build --filter=@backend/identity-service...
 
 # Remove dev dependencies and clean up node_modules
 RUN pnpm prune --prod
@@ -56,15 +56,15 @@ COPY --from=builder /usr/src/app/out/full/ .
 RUN pnpm install
 
 # Build internal libs only (skip gateway build to allow watch mode)
-RUN turbo run build --filter=@backend/api-gateway^...
+RUN turbo run build --filter=@backend/identity-service^...
 
-RUN mkdir -p apps/backend/api-gateway/@generated && \
+RUN mkdir -p apps/backend/identity-service/@generated && \
     chown -R nodejs:nodejs /usr/src/app
 
 ENV NODE_ENV=development
 EXPOSE 3000
 USER nodejs
-WORKDIR /usr/src/app/apps/backend/api-gateway
+WORKDIR /usr/src/app/apps/backend/identity-service
 CMD ["pnpm", "dev"]
 
 # >> STAGE 5: Runner (Production Image - Optimized)
@@ -80,13 +80,13 @@ RUN apk add --no-cache openssl && \
 COPY --from=installer --chown=nodejs:nodejs /usr/src/app/node_modules ./node_modules
 
 # Copy only the built application
-COPY --from=installer --chown=nodejs:nodejs /usr/src/app/apps/backend/api-gateway/dist ./dist
+COPY --from=installer --chown=nodejs:nodejs /usr/src/app/apps/backend/identity-service/dist ./dist
 
 # Copy package.json for runtime metadata
-COPY --from=installer --chown=nodejs:nodejs /usr/src/app/apps/backend/api-gateway/package.json ./package.json
+COPY --from=installer --chown=nodejs:nodejs /usr/src/app/apps/backend/identity-service/package.json ./package.json
 
 ENV NODE_ENV=production
-EXPOSE 3300
+EXPOSE 3302
 
 USER nodejs
 # O NestJS compilado geralmente roda direto do main.js na raiz ou dist
