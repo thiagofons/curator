@@ -4,7 +4,7 @@ const API_GATEWAY_PORT = 3300;
 const baseURL = `http://localhost:${API_GATEWAY_PORT}`;
 
 export default defineConfig({
-  testDir: "./tests",
+  testDir: "./src/tests",
   fullyParallel: false, // Run tests in sequence for backend tests
   retries: process.env.CI ? 2 : 0,
   workers: 1, // Use single worker for backend tests

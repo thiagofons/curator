@@ -4,7 +4,6 @@
   "description": "",
   "author": "",
   "private": true,
-  "type": "module",
   "license": "Apache-2.0",
   "scripts": {
     "build": "nest build",

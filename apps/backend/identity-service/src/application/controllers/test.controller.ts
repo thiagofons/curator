@@ -1,14 +1,19 @@
 import { PrismaService } from "@/infrastructure/persistence/prisma/prisma.service";
-import { Controller, Logger } from "@nestjs/common";
+import { Controller, Get, Logger } from "@nestjs/common";
 import { MessagePattern, Payload } from "@nestjs/microservices";
 
-@Controller()
+@Controller("/")
 export class TestController {
   private readonly logger = new Logger(TestController.name);
 
   constructor(private readonly prisma: PrismaService) {}
 
-  @MessagePattern("authentication.test.health_check")
+  @Get()
+  async get(): Promise<string> {
+    return "OK";
+  }
+
+  @MessagePattern("identity.test.health_check")
   handleHealthCheck(@Payload() data: { message: string }) {
     this.logger.log(
       `Received health check via RabbitMQ: ${JSON.stringify(data)}`,
@@ -16,29 +21,29 @@ export class TestController {
 
     return {
       success: true,
-      message: "Authentication service is healthy",
+      message: "Identity service is healthy",
       receivedData: data,
       timestamp: new Date().toISOString(),
-      service: "authentication-service",
+      service: "identity-service",
     };
   }
 
-  @MessagePattern("authentication.test.db_check")
+  @MessagePattern("identity.test.db_check")
   async handleDbCheck() {
     try {
       await this.prisma.$queryRaw`SELECT 1`;
       return {
         success: true,
-        message: "Authentication service DB is healthy",
-        service: "authentication-service",
+        message: "Identity service DB is healthy",
+        service: "identity-service",
         timestamp: new Date().toISOString(),
       };
     } catch (error) {
       this.logger.error("Database check failed", error);
       return {
         success: false,
-        message: "Authentication service DB check failed",
-        service: "authentication-service",
+        message: "Identity service DB check failed",
+        service: "identity-service",
         timestamp: new Date().toISOString(),
       };
     }

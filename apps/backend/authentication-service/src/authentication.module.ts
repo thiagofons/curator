@@ -27,8 +27,6 @@ import { EnvService } from "./infrastructure/configuration/env/env.service";
             transport: Transport.RMQ,
             options: {
               urls: [envService.get("RABBITMQ_URI")],
-              // Nota: Se este é o Publisher, a 'queue' aqui define a fila DEFAULT de destino.
-              // Garanta que 'identity_queue' é realmente para onde você quer mandar eventos de auth.
               queue: "authentication_queue",
               queueOptions: {
                 durable: true,

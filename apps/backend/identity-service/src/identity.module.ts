@@ -1,5 +1,4 @@
-import { AuthEventsConsumer } from "@/application/consumers/auth.events.consumer";
-import { IdentityController } from "@/application/controllers/identity.controller";
+import { TestController } from "@/application/controllers/test.controller";
 import { ConfigurationModule } from "@/infrastructure/configuration/configuration.module";
 import { PrismaService } from "@/infrastructure/persistence/prisma/prisma.service";
 import { Module } from "@nestjs/common";
@@ -35,7 +34,7 @@ import { EnvService } from "./infrastructure/configuration/env/env.service";
       },
     ]),
   ],
-  controllers: [IdentityController, AuthEventsConsumer],
+  controllers: [TestController],
   providers: [PrismaService],
 })
 export class IdentityModule {}

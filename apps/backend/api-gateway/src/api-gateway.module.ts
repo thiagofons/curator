@@ -1,17 +1,13 @@
-import { EnvModule, envSchema, EnvService } from "@/infrastructure/config/env";
+import { EnvModule, envSchema } from "@/infrastructure/config/env";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import {
-  ClientProvider,
-  ClientsModule,
-  Transport,
-} from "@nestjs/microservices";
 import { TRPCModule } from "nestjs-trpc";
-import { ApiGatewayRouter } from "./application/api-gateway.router";
-import { UsersModule } from "./application/users";
+import { AuthenticationModule } from "./application/authentication";
+import { IdentityModule } from "./application/identity";
 
 @Module({
   imports: [
+    /** Config */
     ConfigModule.forRoot({
       isGlobal: true,
       validate: (env) => envSchema.parse(env),
@@ -20,51 +16,11 @@ import { UsersModule } from "./application/users";
     TRPCModule.forRoot({
       autoSchemaFile: "./@generated",
     }),
-    ClientsModule.registerAsync([
-      {
-        name: "AUTHENTICATION_SERVICE_CLIENT",
-        imports: [EnvModule],
-        inject: [EnvService],
-        useFactory: (envService: EnvService) =>
-          ({
-            transport: Transport.RMQ,
-            options: {
-              urls: [envService.get("RABBITMQ_URI") as string],
-              queue: "authentication_queue",
-              queueOptions: {
-                durable: true,
-              },
-              socketOptions: {
-                heartbeatIntervalInSeconds: 60,
-                reconnectTimeInSeconds: 5,
-              },
-            },
-          }) as ClientProvider,
-      },
-      {
-        name: "IDENTITY_SERVICE_CLIENT",
-        imports: [EnvModule],
-        inject: [EnvService],
-        useFactory: (envService: EnvService) =>
-          ({
-            transport: Transport.RMQ,
-            options: {
-              urls: [envService.get("RABBITMQ_URI") as string],
-              queue: "identity_queue",
-              queueOptions: {
-                durable: true,
-              },
-              socketOptions: {
-                heartbeatIntervalInSeconds: 60,
-                reconnectTimeInSeconds: 5,
-              },
-            },
-          }) as ClientProvider,
-      },
-    ]),
-    UsersModule,
+    /** Modules */
+    AuthenticationModule,
+    IdentityModule,
   ],
   controllers: [],
-  providers: [ApiGatewayRouter],
+  providers: [],
 })
 export class ApiGatewayModule {}
