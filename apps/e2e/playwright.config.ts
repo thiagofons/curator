@@ -1,35 +1,27 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const PORT = process.env.PORT || 3000;
-const baseURL = `http://localhost:${PORT}`;
+const API_GATEWAY_PORT = 3300;
+const baseURL = `http://localhost:${API_GATEWAY_PORT}`;
 
 export default defineConfig({
-  testDir: "./tests",
-  fullyParallel: true,
-  retries: process.env.CI ? 2 : 0, // 2 retentativas em CI
-  workers: process.env.CI ? 1 : undefined, // Roda em série em CI
+  testDir: "./src/tests",
+  fullyParallel: false, // Run tests in sequence for backend tests
+  retries: process.env.CI ? 2 : 0,
+  workers: 1, // Use single worker for backend tests
 
-  // ⬇️ A PARTE MAIS IMPORTANTE ⬇️
-  // Inicia o servidor web (apps/web) automaticamente
-  webServer: {
-    // Comando para iniciar o servidor web (apps/web)
-    // Usamos pnpm --filter para rodar o script 'dev' apenas do app 'web'
-    command: "pnpm run dev --filter web",
+  // Timeout for each test (RabbitMQ communication might take a few seconds)
+  timeout: 30000,
 
-    // A URL que o Playwright deve esperar estar pronta
-    url: baseURL,
+  // No webServer needed - services should be started via docker-compose
+  // before running tests. Run: pnpm compose:core
 
-    // Reutiliza o servidor se já estiver rodando (ótimo para DX local)
-    reuseExistingServer: !process.env.CI,
-  },
-
-  // URL base para todos os testes (ex: page.goto('/login'))
+  // URL base for all tests
   use: {
     baseURL: baseURL,
     trace: "on-first-retry",
   },
 
-  // Configuração de projetos (ex: rodar em Chrome e Firefox)
+  // Configuration for projects
   projects: [
     {
       name: "chromium",

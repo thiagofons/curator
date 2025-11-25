@@ -7,8 +7,10 @@
     "// --- Build ---": "",
     "build": "turbo run build --parallel",
     "// --- Docker ---": "",
-    "compose:core": "docker compose -f docker-compose.yaml --env-file=.env.development  --profile core --profile observability up -d",
-    "compose:core:down": "docker compose -f docker-compose.yaml --env-file=.env.development  --profile core --profile observability down",
+    "compose:all": "docker compose -f docker-compose.yaml --profile all --env-file=.env.development up -d",
+    "compose:all:down": "docker compose -f docker-compose.yaml --profile all --env-file=.env.development down --remove-orphans",
+    "compose:core": "docker compose -f docker-compose.yaml --env-file=.env.development  --profile core up -d",
+    "compose:core:down": "docker compose -f docker-compose.yaml --env-file=.env.development  --profile core down",
     "compose:observability": "docker compose -f docker-compose.yaml --env-file=.env.development --profile observability up -d",
     "compose:observability:down": "docker compose -f docker-compose.yaml --env-file=.env.development --profile observability down",
     "compose:down": "docker compose -f docker-compose.yaml --env-file=.env.development down --remove-orphans",
@@ -41,7 +43,8 @@
     "test:unit:coverage": "turbo run test:unit:coverage",
     "test:integration": "turbo run test:integration",
     "test:contract": "turbo run test:contract",
-    "test:e2e": "turbo run test:e2e"
+    "test:e2e": "turbo run test:e2e",
+    "test:e2e:ui": "turbo run test:e2e:ui"
   },
   "dependencies": {
     "@repo/eslint-config": "workspace:*",

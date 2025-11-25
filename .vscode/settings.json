@@ -17,7 +17,7 @@
     "prettier.config.cjs": ".prettierignore",
     ".gitignore": ".gitattributes",
 
-    "*.module.ts": "${capture}.controller.ts, ${capture}.service.ts, ${capture}.resolver.ts, ${capture}.guard.ts, ${capture}.providers.ts, ${capture}.spec.ts",
+    "*.module.ts": "${capture}.controller.ts, ${capture}.service.ts, ${capture}.router.ts, ${capture}.resolver.ts, ${capture}.guard.ts, ${capture}.providers.ts, ${capture}.spec.ts",
     "page.tsx": "layout.tsx, error.tsx, loading.tsx, template.tsx",
     "layout.tsx": "page.tsx, error.tsx, loading.tsx, template.tsx"
   },
@@ -62,6 +62,6 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "vscode.typescript-language-features"
   }
 }

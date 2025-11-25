@@ -1,5 +1,6 @@
 services:
   # >>> Microservices <<<
+  # API Gateway
   api-gateway:
     container_name: core-api-gateway
     build:
@@ -19,8 +20,9 @@ services:
     networks:
       - curator-net
     command: ["pnpm", "dev", "--filter=@backend/api-gateway"]
-    profiles: ["core"]
+    profiles: ["all", "core"]
 
+  # Authentication Service
   authentication-service:
     container_name: core-authentication-service
     build:
@@ -30,6 +32,8 @@ services:
     restart: unless-stopped
     env_file:
       - ./apps/backend/authentication-service/.env
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@authentication-db:5432/${AUTHENTICATION_DB}
     ports:
       - "3301:3301"
     volumes:
@@ -39,8 +43,97 @@ services:
       - /usr/src/app/apps/backend/authentication-service/node_modules
     networks:
       - curator-net
-    command: ["pnpm", "dev", "--filter=@backend/authentication-service"]
-    profiles: ["core"]
+    command:
+      [
+        "/bin/sh",
+        "-c",
+        "pnpm db:generate && pnpm dev --filter=@backend/authentication-service",
+      ]
+    profiles: ["all", "core", "authentication"]
+    depends_on:
+      authentication-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  authentication-db:
+    container_name: core-authentication-db
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${AUTHENTICATION_DB}
+    env_file:
+      - .env.development
+    ports:
+      - "5433:5432" # Authentication Service Postgres
+    volumes:
+      - authentication_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${AUTHENTICATION_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - curator-net
+    profiles: ["all", "core", "authentication"]
+
+  # Identity Service
+  identity-service:
+    container_name: core-identity-service
+    build:
+      context: .
+      dockerfile: ./apps/backend/identity-service/Dockerfile
+      target: development
+    restart: unless-stopped
+    env_file:
+      - ./apps/backend/identity-service/.env
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@identity-db:5432/${IDENTITY_DB}
+    ports:
+      - "3302:3302"
+    volumes:
+      - ./apps/backend/identity-service/src:/usr/src/app/apps/backend/identity-service/src
+      - ./packages:/usr/src/app/packages
+      - /usr/src/app/node_modules
+      - /usr/src/app/apps/backend/identity-service/node_modules
+    networks:
+      - curator-net
+    command:
+      [
+        "/bin/sh",
+        "-c",
+        "pnpm db:generate && pnpm dev --filter=@backend/identity-service",
+      ]
+    profiles: ["all", "core", "identity"]
+    depends_on:
+      identity-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  identity-db:
+    container_name: core-identity-db
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${IDENTITY_DB}
+    env_file:
+      - .env.development
+    ports:
+      - "5434:5432" # Identity Service Postgres
+    volumes:
+      - identity_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${IDENTITY_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - curator-net
+    profiles: ["all", "core", "identity"]
 
   # >>> Observability <<<
   prometheus:
@@ -55,10 +148,10 @@ services:
     volumes:
       - ./observability/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yaml
     ports:
-      - "9090:9090" # Prometheus
+      - "19090:9090" # Prometheus
     networks:
       - curator-net
-    profiles: ["observability"]
+    profiles: ["all", "observability"]
 
   loki:
     container_name: obs-loki
@@ -68,7 +161,7 @@ services:
       - "3100:3100" # Loki
     networks:
       - curator-net
-    profiles: ["observability"]
+    profiles: ["all", "observability"]
 
   grafana:
     container_name: obs-grafana
@@ -83,7 +176,7 @@ services:
       - tempo
     networks:
       - curator-net
-    profiles: ["observability"]
+    profiles: ["all", "observability"]
 
   tempo:
     container_name: obs-tempo
@@ -95,7 +188,7 @@ services:
       - "3200:3200" # Tempo
     networks:
       - curator-net
-    profiles: ["observability"]
+    profiles: ["all", "observability"]
 
   otel-collector:
     container_name: obs-otel-collector
@@ -112,7 +205,7 @@ services:
       - prometheus
     networks:
       - curator-net
-    profiles: ["observability"]
+    profiles: ["all", "observability"]
 
   # >>> Blog CMS (Payload + Next.js) <<<
   blog-cms:
@@ -126,40 +219,40 @@ services:
     env_file:
       - .env.development
     environment:
-      DATABASE_URI: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      DATABASE_URI: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@blogcms-postgres:5432/${BLOGCMS_DB}
       PAYLOAD_SECRET: ${PAYLOAD_SECRET}
     ports:
       - "4001:4001" # BlogCMS
     depends_on:
-      postgres:
+      blogcms-postgres:
         condition: service_healthy
     networks:
       - curator-net
-    profiles: ["blog"]
+    profiles: ["all", "blog"]
 
-  # >>> PostgreSQL Database <<<
-  postgres:
-    container_name: infra-postgres
+  blogcms-postgres:
+    container_name: infra-blogcms-postgres
     image: postgres:15-alpine
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_DB: ${BLOGCMS_DB}
     env_file:
       - .env.development
     ports:
-      - "5432:5432" # Postgres
+      - "5432:5432" # BlogCMS Postgres
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - blogcms_postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${BLOGCMS_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
       - curator-net
+    profiles: ["all", "blog"]
 
-  # >>> RabbitMQ Message Broker <<<
+  # >>> Helpers <<<
   rabbitmq:
     container_name: infra-rabbitmq
     image: rabbitmq:3.12-management-alpine
@@ -182,8 +275,8 @@ services:
       timeout: 10s
       retries: 5
     restart: unless-stopped
+    profiles: ["all", "core", "infrastructure"]
 
-  # >>> Redis Cache <<<
   redis:
     container_name: infra-redis
     image: redis:7-alpine
@@ -201,15 +294,19 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
+    profiles: ["all", "core", "infrastructure"]
 
 # >>> Named Volumes <<<
-# Ensures data persistence across container lifecycles.
 volumes:
   # Blog CMS (node_modules cache)
   blogcms_node_modules:
     driver: local
   # PostgreSQL
-  postgres_data:
+  blogcms_postgres_data:
+    driver: local
+  authentication_postgres_data:
+    driver: local
+  identity_postgres_data:
     driver: local
   # Redis
   redis_data:
@@ -219,7 +316,6 @@ volumes:
     driver: local
 
 # >>> Custom Network <<<
-# Isolates the project's containers and enables DNS resolution by service name.
 networks:
   curator-net:
     driver: bridge

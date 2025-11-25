@@ -2,38 +2,47 @@
 FROM node:22-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-# Adiciona openssl, necessário para o binário do Prisma no Alpine
 RUN apk add --no-cache libc6-compat openssl && \
     corepack enable && \
     pnpm install turbo --global
 
 # >> STAGE 2: Builder (Pruner)
 FROM base AS builder
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
 WORKDIR /usr/src/app
 COPY . .
+# Gera uma versão "fatiada" do monorepo apenas para este app
 RUN turbo prune --scope=@backend/authentication-service --docker
 
-# >> STAGE 3: Installer (Production Build)
+# >> STAGE 3: Installer (Build & Dev Deps)
 FROM base AS installer
+# Install curl and bash for node-prune optimization
+# RUN apk add --no-cache curl bash
 WORKDIR /usr/src/app
 
-# Copy pruned package definitions
+# Copia apenas os package.json e lockfiles (camada leve)
 COPY --from=builder /usr/src/app/out/json/ .
 COPY --from=builder /usr/src/app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 
-# Install dependencies (cached layer)
+# Instala TODAS as dependências (necessário para o Build)
 RUN pnpm install --frozen-lockfile
 
-# Copy pruned source code
+# Copia o código fonte "prunado" (apenas o que importa para este app)
 COPY --from=builder /usr/src/app/out/full/ .
 
-# ✅ AQUI ESTÁ A MUDANÇA
-# Gera o Prisma Client ANTES do build.
-# O typescript precisa dos tipos gerados em node_modules/.prisma para compilar.
-RUN pnpm turbo run db:generate --filter=@backend/authentication-service
+# Generate Prisma client
+RUN pnpm db:generate
 
-# Build the project
+# Builda o projeto
 RUN turbo run build --filter=@backend/authentication-service...
+
+# Remove dev dependencies and clean up node_modules
+RUN pnpm prune --prod
+
+# Use node-prune to remove unnecessary files from node_modules (tests, docs, etc.)
+# RUN curl -sfL https://gobinaries.com/tj/node-prune | bash -s -- -b /usr/local/bin && \
+#    node-prune
 
 # >> STAGE 4: Development (DX Optimized)
 FROM base AS development
@@ -42,56 +51,52 @@ WORKDIR /usr/src/app
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nodejs
 
-COPY --from=builder /usr/src/app/out/json/ .
-COPY --from=builder /usr/src/app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+# 🔥 FIX 1: Não use COPY . . aqui!
+# Usamos o output do 'prune' para pegar apenas o código deste serviço e suas libs internas.
+COPY --from=builder /usr/src/app/out/full/ .
 
+# Instala dependências (incluindo devDeps para rodar nest start:debug)
 RUN pnpm install
 
-# Copy full source code
-COPY . .
+# Generate Prisma client
+RUN pnpm db:generate
 
-# ✅ AQUI ESTÁ A MUDANÇA PARA DEV
-# Garante que o cliente prisma exista para o ambiente de desenvolvimento
-RUN pnpm turbo run db:generate --filter=@backend/authentication-service
-
-# Build internal libs
+# Build internal libs only (skip gateway build to allow watch mode)
 RUN turbo run build --filter=@backend/authentication-service^...
 
-# Fix permissions
-# Nota: Ajustei o caminho do chown para garantir que inclua a pasta gerada
 RUN mkdir -p apps/backend/authentication-service/@generated && \
-    chown -R nodejs:nodejs /usr/src/app/node_modules && \
-    chown -R nodejs:nodejs /usr/src/app/apps/backend/authentication-service
+    chown -R nodejs:nodejs /usr/src/app
 
 ENV NODE_ENV=development
-EXPOSE 3001
-
+EXPOSE 3000
 USER nodejs
 WORKDIR /usr/src/app/apps/backend/authentication-service
 CMD ["pnpm", "dev"]
 
-# >> STAGE 5: Runner (Production Image)
-FROM base AS runner
+# >> STAGE 5: Runner (Production Image - Optimized)
+FROM node:22-alpine AS runner
 WORKDIR /usr/src/app
 
-RUN addgroup --system --gid 1001 nodejs && \
+# Only install runtime dependencies (no build tools)
+RUN apk add --no-cache openssl && \
+    addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nodejs
 
-USER nodejs
-
-# ✅ CORREÇÃO IMPORTANTE NO RUNNER
-# Você precisa copiar os artefatos do estágio 'installer' para cá.
-# 1. Copia o node_modules (que contém o Prisma Client gerado e dependências de prod)
+# Copy only the pruned node_modules (already cleaned with node-prune)
 COPY --from=installer --chown=nodejs:nodejs /usr/src/app/node_modules ./node_modules
-COPY --from=installer --chown=nodejs:nodejs /usr/src/app/apps/backend/authentication-service/node_modules ./apps/backend/authentication-service/node_modules
 
-# 2. Copia o código buildado (dist)
-COPY --from=installer --chown=nodejs:nodejs /usr/src/app/apps/backend/authentication-service/dist ./apps/backend/authentication-service/dist
-COPY --from=installer --chown=nodejs:nodejs /usr/src/app/apps/backend/authentication-service/package.json ./apps/backend/authentication-service/package.json
+# Copy only the built application
+COPY --from=installer --chown=nodejs:nodejs /usr/src/app/apps/backend/authentication-service/dist ./dist
 
-WORKDIR /usr/src/app/apps/backend/authentication-service
+# Copy package.json for runtime metadata
+COPY --from=installer --chown=nodejs:nodejs /usr/src/app/apps/backend/authentication-service/package.json ./package.json
 
-# Define NODE_ENV production para performance
+# Copy schema.prisma for runtime generation
+COPY --from=installer --chown=nodejs:nodejs /usr/src/app/apps/backend/authentication-service/src/infrastructure/persistence/prisma/schema.prisma ./schema.prisma
+
 ENV NODE_ENV=production
+EXPOSE 3301
 
-CMD ["node", "dist/main.js"]
+USER nodejs
+# O NestJS compilado geralmente roda direto do main.js na raiz ou dist
+CMD ["/bin/sh", "-c", "npx prisma generate --schema=./schema.prisma && node dist/main.js"]

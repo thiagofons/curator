@@ -1,3 +1,4 @@
+import { TestController } from "@/application/controllers/test.controller";
 import { AuthEventPublisherPort } from "@/domain/ports/auth.event-publisher.port";
 import { AuthRepositoryPort } from "@/domain/ports/auth.repository.port";
 import { ConfigurationModule } from "@/infrastructure/configuration/configuration.module";
@@ -26,8 +27,6 @@ import { EnvService } from "./infrastructure/configuration/env/env.service";
             transport: Transport.RMQ,
             options: {
               urls: [envService.get("RABBITMQ_URI")],
-              // Nota: Se este é o Publisher, a 'queue' aqui define a fila DEFAULT de destino.
-              // Garanta que 'identity_queue' é realmente para onde você quer mandar eventos de auth.
               queue: "authentication_queue",
               queueOptions: {
                 durable: true,
@@ -37,7 +36,7 @@ import { EnvService } from "./infrastructure/configuration/env/env.service";
       },
     ]),
   ],
-  controllers: [],
+  controllers: [TestController],
   providers: [
     // Casos de Uso
 

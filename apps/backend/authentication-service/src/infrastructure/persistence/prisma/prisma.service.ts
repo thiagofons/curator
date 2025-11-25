@@ -25,8 +25,12 @@ export class PrismaService
       await this.$connect();
       this.logger.log("Conexão com o banco de dados estabelecida.");
     } catch (error) {
-      this.logger.error("Falha ao conectar com o banco de dados.", error.stack);
-      process.exit(1); // Falha rápida se não puder conectar
+      this.logger.warn(
+        "Falha ao conectar com o banco de dados, mas continuando... (útil para testes de microserviços)",
+        error.stack,
+      );
+      // Don't exit - allow app to continue for RabbitMQ testing
+      // In production, you may want to make this stricter
     }
   }
 

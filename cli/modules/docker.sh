@@ -74,9 +74,10 @@ function menu_docker {
         echo -e "Select the container group you want to manage:\n"
 
         OPTIONS=(
-            "1. 🧱 Core Infrastructure (DBs, Brokers, Apps)"
-            "2. 🔭 Observability Stack (Grafana, Prometheus)"
-            "3. 🧨 Global Operations (Clean Up)"
+            "1. 🌐  All Infrastructure (DBs, Brokers, Apps, Observability)"
+            "2. 🧱 Core Infrastructure (DBs, Brokers, Apps)"
+            "3. 🔭 Observability Stack (Grafana, Prometheus)"
+            "4. 🧨 Global Operations (Clean Up)"
             "🔙  Back to Main Menu"
         )
 
@@ -85,14 +86,18 @@ function menu_docker {
 
         case $CHOICE in
             0)
+                # Maps to scripts: compose:all / compose:all:down
+                menu_docker_action "All Infrastructure" "compose:all"
+                ;;
+            1)
                 # Maps to scripts: compose:core / compose:core:down
                 menu_docker_action "Core Infrastructure" "compose:core"
                 ;;
-            1)
+            2)
                 # Maps to scripts: compose:observability / compose:observability:down
                 menu_docker_action "Observability Stack" "compose:observability"
                 ;;
-            2)
+            3)
                 # Special menu for Global Actions
                 echo -e "\n${BOLD}Global Operations${RESET}\n"
                 GLOBAL_OPS=(
@@ -106,7 +111,7 @@ function menu_docker {
                     run_docker_task "Nuke Environment" "compose:down"
                 fi
                 ;;
-            3)
+            4)
                 return 0 # Exit to Main Menu
                 ;;
         esac

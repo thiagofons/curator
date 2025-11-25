@@ -995,6 +995,9 @@ importers:
       '@playwright/test':
         specifier: catalog:testing
         version: 1.56.1
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
       '@types/node':
         specifier: catalog:tooling
         version: 24.5.2
