@@ -1,3 +1,4 @@
+import { TestController } from "@/application/controllers/test.controller";
 import { AuthEventPublisherPort } from "@/domain/ports/auth.event-publisher.port";
 import { AuthRepositoryPort } from "@/domain/ports/auth.repository.port";
 import { ConfigurationModule } from "@/infrastructure/configuration/configuration.module";
@@ -37,7 +38,7 @@ import { EnvService } from "./infrastructure/configuration/env/env.service";
       },
     ]),
   ],
-  controllers: [],
+  controllers: [TestController],
   providers: [
     // Casos de Uso
 

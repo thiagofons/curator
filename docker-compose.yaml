@@ -33,7 +33,7 @@ services:
     env_file:
       - ./apps/backend/authentication-service/.env
     environment:
-      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@authentication-postgres:5432/${AUTHENTICATION_DB}
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@authentication-db:5432/${AUTHENTICATION_DB}
     ports:
       - "3301:3301"
     volumes:
@@ -43,10 +43,17 @@ services:
       - /usr/src/app/apps/backend/authentication-service/node_modules
     networks:
       - curator-net
-    command: ["pnpm", "dev", "--filter=@backend/authentication-service"]
+    command:
+      [
+        "/bin/sh",
+        "-c",
+        "pnpm db:generate && pnpm dev --filter=@backend/authentication-service",
+      ]
     profiles: ["all", "core", "authentication"]
     depends_on:
       authentication-db:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
 
   authentication-db:
@@ -83,7 +90,7 @@ services:
     env_file:
       - ./apps/backend/identity-service/.env
     environment:
-      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@identity-postgres:5432/${IDENTITY_DB}
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@identity-db:5432/${IDENTITY_DB}
     ports:
       - "3302:3302"
     volumes:
@@ -93,10 +100,17 @@ services:
       - /usr/src/app/apps/backend/identity-service/node_modules
     networks:
       - curator-net
-    command: ["pnpm", "dev", "--filter=@backend/identity-service"]
+    command:
+      [
+        "/bin/sh",
+        "-c",
+        "pnpm db:generate && pnpm dev --filter=@backend/identity-service",
+      ]
     profiles: ["all", "core", "identity"]
     depends_on:
       identity-db:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
 
   identity-db:

@@ -34,6 +34,30 @@ import { UsersModule } from "./application/users";
               queueOptions: {
                 durable: true,
               },
+              socketOptions: {
+                heartbeatIntervalInSeconds: 60,
+                reconnectTimeInSeconds: 5,
+              },
+            },
+          }) as ClientProvider,
+      },
+      {
+        name: "IDENTITY_SERVICE_CLIENT",
+        imports: [EnvModule],
+        inject: [EnvService],
+        useFactory: (envService: EnvService) =>
+          ({
+            transport: Transport.RMQ,
+            options: {
+              urls: [envService.get("RABBITMQ_URI") as string],
+              queue: "identity_queue",
+              queueOptions: {
+                durable: true,
+              },
+              socketOptions: {
+                heartbeatIntervalInSeconds: 60,
+                reconnectTimeInSeconds: 5,
+              },
             },
           }) as ClientProvider,
       },

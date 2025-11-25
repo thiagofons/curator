@@ -18,7 +18,7 @@ RUN turbo prune --scope=@backend/identity-service --docker
 # >> STAGE 3: Installer (Build & Dev Deps)
 FROM base AS installer
 # Install curl and bash for node-prune optimization
-RUN apk add --no-cache curl bash
+# RUN apk add --no-cache curl bash
 WORKDIR /usr/src/app
 
 # Copia apenas os package.json e lockfiles (camada leve)
@@ -31,6 +31,9 @@ RUN pnpm install --frozen-lockfile
 # Copia o código fonte "prunado" (apenas o que importa para este app)
 COPY --from=builder /usr/src/app/out/full/ .
 
+# Generate Prisma client
+RUN pnpm db:generate
+
 # Builda o projeto
 RUN turbo run build --filter=@backend/identity-service...
 
@@ -38,8 +41,8 @@ RUN turbo run build --filter=@backend/identity-service...
 RUN pnpm prune --prod
 
 # Use node-prune to remove unnecessary files from node_modules (tests, docs, etc.)
-RUN curl -sfL https://gobinaries.com/tj/node-prune | bash -s -- -b /usr/local/bin && \
-    node-prune
+# RUN curl -sfL https://gobinaries.com/tj/node-prune | bash -s -- -b /usr/local/bin && \
+#    node-prune
 
 # >> STAGE 4: Development (DX Optimized)
 FROM base AS development
@@ -54,6 +57,9 @@ COPY --from=builder /usr/src/app/out/full/ .
 
 # Instala dependências (incluindo devDeps para rodar nest start:debug)
 RUN pnpm install
+
+# Generate Prisma client
+RUN pnpm db:generate
 
 # Build internal libs only (skip gateway build to allow watch mode)
 RUN turbo run build --filter=@backend/identity-service^...
@@ -85,9 +91,12 @@ COPY --from=installer --chown=nodejs:nodejs /usr/src/app/apps/backend/identity-s
 # Copy package.json for runtime metadata
 COPY --from=installer --chown=nodejs:nodejs /usr/src/app/apps/backend/identity-service/package.json ./package.json
 
+# Copy schema.prisma for runtime generation
+COPY --from=installer --chown=nodejs:nodejs /usr/src/app/apps/backend/identity-service/src/infrastructure/persistence/prisma/schema.prisma ./schema.prisma
+
 ENV NODE_ENV=production
 EXPOSE 3302
 
 USER nodejs
 # O NestJS compilado geralmente roda direto do main.js na raiz ou dist
-CMD ["node", "dist/main.js"]
+CMD ["/bin/sh", "-c", "npx prisma generate --schema=./schema.prisma && node dist/main.js"]
