@@ -11,6 +11,7 @@ function menu_scaffold {
     OPTIONS=(
         "Microservice (Bounded Context)"
         "Shared Library (Package)"
+        "Web App"
         "🔙  Back to Main Menu"
     )
 
@@ -21,15 +22,20 @@ function menu_scaffold {
         0)
             echo -e "\n${YELLOW}🛠  Starting Microservice generator...${RESET}"
             echo -e "${DIM}Remember: High cohesion, low coupling.${RESET}\n"
-            npm run new:service
+            pnpm new:service
             check_status
             ;;
         1)
             echo -e "\n${YELLOW}📦  Starting Package generator...${RESET}"
-            npm run new:package
+            pnpm new:package
             check_status
             ;;
         2)
+            echo -e "\n${YELLOW}🌐  Starting Web App generator...${RESET}"
+            pnpm new:web-app
+            check_status
+            ;;
+        3)
             return 0 # Return to main loop
             ;;
     esac

@@ -27,6 +27,7 @@
     "// --- CLI ---": "",
     "curator": "./cli/main.sh",
     "new:service": "hygen service new && pnpm install",
+    "new:web-app": "hygen web-app new && pnpm install",
     "new:package": "hygen package new && pnpm install",
     "// --- Quality ---": "",
     "prepare": "husky",

@@ -1,0 +1,30 @@
+---
+title: 002 - RSC by default, use client by exception
+description: Why we chose React Server Components as the default rendering strategy
+---
+
+# RSC by default, use client by exception
+
+We have decided to adopt a "Server Components by default" strategy using Next.js (and potentially Astro in specific contexts). This marks a shift away from traditional Single Page Applications (SPAs) where client-side rendering was the norm.
+
+## Why Server Components?
+
+React Server Components (RSC) allow us to render components on the server and send only the necessary HTML and minimal JavaScript to the client. This approach offers several key benefits:
+
+1.  **Performance**: By doing the heavy lifting on the server, we reduce the bundle size sent to the browser. Users download less JavaScript, leading to faster First Contentful Paint (FCP) and Time to Interactive (TTI).
+2.  **Data Fetching**: Server components can access backend resources (databases, file systems) directly. This eliminates the need for complex client-side data fetching libraries and reduces the "waterfall" effect of network requests.
+3.  **SEO**: Since the content is rendered on the server, search engines can easily crawl and index our pages without needing to execute JavaScript.
+
+## When to use Client Components
+
+While RSC is our default, there are specific scenarios where Client Components (`"use client"`) are necessary. We treat these as exceptions rather than the rule. Use Client Components when:
+
+- **Interactivity is required**: You need `onClick`, `onChange`, or other event listeners.
+- **State and Effects**: You need to use React hooks like `useState`, `useEffect`, or `useReducer`.
+- **Browser-only APIs**: You need access to `window`, `localStorage`, or other browser-specific APIs.
+
+## The Hybrid Approach
+
+Our architecture leverages the best of both worlds. We build the skeleton and static parts of our application using Server Components for speed and SEO. We then sprinkle in Client Components only where rich interactivity is required ("islands of interactivity").
+
+This philosophy aligns with our goal of delivering a high-performance, accessible, and maintainable frontend application.

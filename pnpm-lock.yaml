@@ -437,6 +437,9 @@ catalogs:
     '@tailwindcss/forms':
       specifier: ^0.5.10
       version: 0.5.10
+    '@tailwindcss/postcss':
+      specifier: ^4
+      version: 4.1.17
     '@tailwindcss/typography':
       specifier: ^0.5.19
       version: 0.5.19
@@ -1156,6 +1159,61 @@ importers:
       typedoc-plugin-markdown:
         specifier: catalog:docs
         version: 4.9.0(typedoc@0.28.14(typescript@5.9.3))
+
+  apps/frontend/my-web-app:
+    dependencies:
+      '@repo/trpc':
+        specifier: workspace:*
+        version: link:../../../packages/trpc
+      '@repo/ui-web':
+        specifier: workspace:*
+        version: link:../../../packages/ui-web
+      '@repo/vitest-config':
+        specifier: workspace:*
+        version: link:../../../packages/vitest-config
+      next:
+        specifier: catalog:next16
+        version: 16.0.1(@playwright/test@1.56.1)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(sass@1.77.4)
+      react:
+        specifier: catalog:react19
+        version: 19.2.0
+      react-dom:
+        specifier: catalog:react19
+        version: 19.2.0(react@19.2.0)
+      vitest:
+        specifier: catalog:testing
+        version: 4.0.8(@types/debug@4.1.12)(@types/node@24.5.2)(jiti@2.6.1)(jsdom@26.1.0)(lightningcss@1.30.2)(sass@1.77.4)(terser@5.44.1)(tsx@4.20.6)(yaml@2.8.1)
+    devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../../packages/eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../../../packages/typescript-config
+      '@tailwindcss/postcss':
+        specifier: catalog:ui-libs
+        version: 4.1.17
+      '@types/node':
+        specifier: catalog:tooling
+        version: 24.5.2
+      '@types/react':
+        specifier: catalog:react19
+        version: 19.2.2
+      '@types/react-dom':
+        specifier: catalog:react19
+        version: 19.2.2(@types/react@19.2.2)
+      eslint:
+        specifier: catalog:code-quality
+        version: 9.39.1(jiti@2.6.1)
+      eslint-config-next:
+        specifier: catalog:code-quality
+        version: 15.4.7(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.2)
+      tailwindcss:
+        specifier: catalog:ui-libs
+        version: 3.4.18(tsx@4.20.6)(yaml@2.8.1)
+      typescript:
+        specifier: catalog:tooling
+        version: 5.9.2
 
   apps/frontend/storybook/web:
     dependencies:
@@ -4588,6 +4646,9 @@ packages:
   '@tailwindcss/oxide@4.1.17':
     resolution: {integrity: sha512-F0F7d01fmkQhsTjXezGBLdrl1KresJTcI3DB8EkScCldyKp3Msz4hub4uyYaVnk88BAS1g5DQjjF6F5qczheLA==}
     engines: {node: '>= 10'}
+
+  '@tailwindcss/postcss@4.1.17':
+    resolution: {integrity: sha512-+nKl9N9mN5uJ+M7dBOOCzINw94MPstNR/GtIhz1fpZysxL/4a+No64jCBD6CPN+bIHWFx3KWuu8XJRrj/572Dw==}
 
   '@tailwindcss/typography@0.5.19':
     resolution: {integrity: sha512-w31dd8HOx3k9vPtcQh5QHP9GwKcgbMp87j58qi6xgiBnFFtKEAgCWnDw4qUT8aHwkCp8bKvb/KGKWWHedP0AAg==}
@@ -14688,6 +14749,14 @@ snapshots:
       '@tailwindcss/oxide-wasm32-wasi': 4.1.17
       '@tailwindcss/oxide-win32-arm64-msvc': 4.1.17
       '@tailwindcss/oxide-win32-x64-msvc': 4.1.17
+
+  '@tailwindcss/postcss@4.1.17':
+    dependencies:
+      '@alloc/quick-lru': 5.2.0
+      '@tailwindcss/node': 4.1.17
+      '@tailwindcss/oxide': 4.1.17
+      postcss: 8.5.6
+      tailwindcss: 4.1.17
 
   '@tailwindcss/typography@0.5.19(tailwindcss@4.1.17)':
     dependencies:
