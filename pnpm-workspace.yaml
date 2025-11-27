@@ -57,6 +57,7 @@ catalogs:
     class-validator: ^0.14.2
     react-hook-form: ^7.62.0
     zod: "^3.23.8"
+    zustand: ^5.0.8
 
   docs:
     typedoc: ^0.28.14

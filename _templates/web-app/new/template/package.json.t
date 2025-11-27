@@ -20,7 +20,8 @@ to: apps/frontend/<%=name%>/package.json
     "next": "catalog:next16",
     "react": "catalog:react19",
     "react-dom": "catalog:react19",
-    "vitest": "catalog:testing"
+    "vitest": "catalog:testing",
+    "zustand": "catalog:core-libs"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
