@@ -2,6 +2,7 @@ import { EnvModule, envSchema } from "@/infrastructure/config/env";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { TRPCModule } from "nestjs-trpc";
+import { AppModule } from "./application/app/app.module";
 import { AuthenticationModule } from "./application/authentication";
 import { IdentityModule } from "./application/identity";
 
@@ -19,6 +20,7 @@ import { IdentityModule } from "./application/identity";
     /** Modules */
     AuthenticationModule,
     IdentityModule,
+    AppModule,
   ],
   controllers: [],
   providers: [],

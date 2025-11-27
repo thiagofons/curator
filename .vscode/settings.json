@@ -56,7 +56,8 @@
     "packages/vitest",
     "cli",
     "backend/authentication-service",
-    "backend/identity-service"
+    "backend/identity-service",
+    "_templates"
   ],
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

@@ -9,9 +9,10 @@
     "test:watch": "vitest --watch"
   },
   "exports": {
-    "./globals.css": "./src/globals.css",
     "./postcss.config": "./postcss.config.mjs",
     "./tailwind.config": "./tailwind.config.ts",
+    "./next.config": "./next.config.mjs",
+    "./globals.css": "./src/globals.css",
     "./lib/*": "./src/lib/*.ts",
     "./hooks/*": [
       "./src/hooks/*.ts",
