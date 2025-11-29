@@ -1,6 +1,6 @@
 {
   "$schema": "https://turborepo.com/schema.json",
-  "globalEnv": ["PAYLOAD_SECRET", "DATABASE_URI"],
+  "globalEnv": ["PAYLOAD_SECRET", "DATABASE_URL"],
   "ui": "tui",
   "tasks": {
     "build": {
@@ -17,13 +17,16 @@
       "persistent": true
     },
     "db:generate": {
-      "dependsOn": ["^db:generate"]
+      "dependsOn": ["^db:generate"],
+      "env": ["DATABASE_URL"]
     },
     "db:migrate:dev": {
-      "dependsOn": ["^db:migrate:dev"]
+      "dependsOn": ["^db:migrate:dev"],
+      "env": ["DATABASE_URL"]
     },
     "db:migrate:deploy": {
-      "dependsOn": ["^db:migrate:deploy"]
+      "dependsOn": ["^db:migrate:deploy"],
+      "env": ["DATABASE_URL"]
     },
     "db:studio": {
       "dependsOn": ["^db:studio"]

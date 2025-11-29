@@ -11,36 +11,23 @@ export class PrismaService
   extends PrismaClient
   implements OnModuleInit, OnModuleDestroy
 {
-  // Usamos nosso Logger padrão para Observabilidade
   private readonly logger = new Logger(PrismaService.name);
 
-  /**
-   * Pilar: Qualidade e Resiliência
-   * O NestJS chamará este método automaticamente
-   * assim que o módulo for inicializado.
-   */
   async onModuleInit() {
-    this.logger.log("Iniciando conexão com o banco de dados...");
+    this.logger.log("Starting database connection...");
     try {
       await this.$connect();
-      this.logger.log("Conexão com o banco de dados estabelecida.");
+      this.logger.log("Database connection established.");
     } catch (error) {
       this.logger.warn(
-        "Falha ao conectar com o banco de dados, mas continuando... (útil para testes de microserviços)",
+        "Failed to connect to the database, but continuing... (useful for microservice testing)",
         error.stack,
       );
-      // Don't exit - allow app to continue for RabbitMQ testing
-      // In production, you may want to make this stricter
     }
   }
 
-  /**
-   * Pilar: Resiliência
-   * O NestJS chamará este método automaticamente
-   * quando a aplicação for desligada (shutdown).
-   */
   async onModuleDestroy() {
-    this.logger.log("Fechando conexão com o banco de dados...");
+    this.logger.log("Closing database connection...");
     await this.$disconnect();
   }
 }

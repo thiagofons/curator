@@ -31,13 +31,13 @@ to: apps/backend/<%=name%>-service/package.json
     "@nestjs/core": "catalog:nestjs11",
     "@nestjs/microservices": "catalog:nestjs11",
     "@nestjs/platform-express": "catalog:nestjs11",
-    "@prisma/client": "catalog:prisma6",
+    "@prisma/client": "catalog:prisma7",
     "@trpc/server": "catalog:trpc11",
     "amqp-connection-manager": "catalog:rabbitmq",
     "class-validator": "catalog:core-libs",
     "nestjs-pino": "catalog:logging",
     "pino": "catalog:logging",
-    "prisma": "catalog:prisma6",
+    "prisma": "catalog:prisma7",
     "reflect-metadata": "catalog:nestjs11",
     "rxjs": "catalog:nestjs11",
     "zod": "catalog:core-libs"
@@ -67,9 +67,5 @@ to: apps/backend/<%=name%>-service/package.json
     "ts-node": "catalog:tooling",
     "tsconfig-paths": "catalog:tooling",
     "typescript": "catalog:tooling",
-    "typescript-eslint": "catalog:code-quality"
-  },
-  "prisma": {
-    "schema": "./src/infrastructure/persistence/prisma/schema.prisma"
   }
 }
