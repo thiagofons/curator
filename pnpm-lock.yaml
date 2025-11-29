@@ -35,6 +35,9 @@ catalogs:
     '@justinribeiro/lite-youtube':
       specifier: ^1.8.2
       version: 1.9.0
+    astro:
+      specifier: ^5.15.9
+      version: 5.16.2
     astro-auto-import:
       specifier: ^0.4.5
       version: 0.4.5
@@ -534,7 +537,6 @@ overrides:
   esbuild: ^0.25.0
   dompurify: ^3.2.4
   body-parser: ^2.2.1
-  astro: ^5.15.9
   js-yaml: ^4.1.1
 
 importers:
@@ -1265,7 +1267,7 @@ importers:
         specifier: workspace:*
         version: link:../../../packages/vitest-config
       astro:
-        specifier: ^5.15.9
+        specifier: catalog:astro
         version: 5.16.2(@types/node@24.5.2)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.53.1)(sass@1.77.4)(terser@5.44.1)(tsx@4.20.6)(typescript@5.9.2)(yaml@2.8.1)
       astro-auto-import:
         specifier: catalog:astro
@@ -1764,7 +1766,7 @@ packages:
     resolution: {integrity: sha512-2T5+XIr7PMqMeXhRofXY5NlY4lA0Km+wkfsqmr9lq5KXUHpGlKPQ9dlDZJP9E/CtljJyEBNS17zq66LrIJ1tiQ==}
     engines: {node: 18.20.8 || ^20.3.0 || >=22.0.0}
     peerDependencies:
-      astro: ^5.15.9
+      astro: ^5.0.0
 
   '@astrojs/prism@3.3.0':
     resolution: {integrity: sha512-q8VwfU/fDZNoDOf+r7jUnMC2//H2l0TuQ6FkGJL8vD8nw/q5KiL3DS1KKBI3QhI9UQhpJ5dc7AtqfbXWuOgLCQ==}
@@ -1965,7 +1967,7 @@ packages:
   '@digi4care/astro-google-tagmanager@1.6.0':
     resolution: {integrity: sha512-xBEYnswcLPNDu62zRGh8W8hbRW97nK02O+SyellcopT4/NMkevygrvxv49xl0ZQeBd6dfJpwbktlBYDJDaRvWg==}
     peerDependencies:
-      astro: ^5.15.9
+      astro: ^1.2.1 || ^2.0.0 || ^3.0.0-beta.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
 
   '@dnd-kit/accessibility@3.1.1':
     resolution: {integrity: sha512-2P+YgaXF+gRsIihwwY1gCsQSYnu9Zyj2py8kY5fFvUM1qm2WA2u639R6YNVfU4GWr+ZM5mqEsfHZZLoRONbemw==}
@@ -5547,7 +5549,7 @@ packages:
     resolution: {integrity: sha512-KU1qFJ97Qks2aT+qSxjrOY6tcwzzLVhY/8w1eM8vwqpP+MDpHKAlbr8Otg9T8g/Mfl/FOdG3nO9lydv1zbtyQA==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      astro: ^5.15.9
+      astro: ^2.0.0 || ^3.0.0-beta || ^4.0.0-beta || ^5.0.0-beta
 
   astro-font@1.1.0:
     resolution: {integrity: sha512-hj1A0MkaJTeaArBpf1m9s4Nxu1Bn9h0QiEPeR9Dfjle25pT4CH4higzuadWzCRSvhGO2SzbM11YwZEF+cmLDxg==}
