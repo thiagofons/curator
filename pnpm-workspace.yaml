@@ -56,7 +56,7 @@ catalogs:
     "@hookform/resolvers": ^5.2.1
     class-validator: ^0.14.2
     react-hook-form: ^7.62.0
-    zod: "^3.23.8"
+    zod: ^3.23.8
 
   docs:
     typedoc: ^0.28.14
@@ -103,9 +103,9 @@ catalogs:
     "@payloadcms/ui": 3.63.0
     payload: 3.63.0
 
-  prisma6:
-    "@prisma/client": ^6.19.0
-    prisma: ^6.19.0
+  prisma7:
+    "@prisma/client": ^7.0.0
+    prisma: ^7.0.0
 
   rabbitmq:
     "@types/amqplib": 0.10.7
@@ -198,7 +198,7 @@ catalogs:
     "@tailwindcss/forms": ^0.5.10
     "@tailwindcss/typography": ^0.5.19
     "@tailwindcss/vite": ^4.1.14
-    "@tailwindcss/postcss": "^4"
+    "@tailwindcss/postcss": ^4
     autoprefixer: ^10.4.21
     class-variance-authority: ^0.7.0
     clsx: ^2.1.1
