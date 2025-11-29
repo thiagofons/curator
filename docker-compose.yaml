@@ -68,7 +68,7 @@ services:
     ports:
       - "5433:5432" # Authentication Service Postgres
     volumes:
-      - authentication_postgres_data:/var/lib/postgresql/data
+      - authentication_data:/var/lib/postgresql/data
     healthcheck:
       test:
         ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${AUTHENTICATION_DB}"]
@@ -125,7 +125,7 @@ services:
     ports:
       - "5434:5432" # Identity Service Postgres
     volumes:
-      - identity_postgres_data:/var/lib/postgresql/data
+      - identity_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${IDENTITY_DB}"]
       interval: 10s
@@ -210,12 +210,12 @@ services:
   # >>> Static Analysis <<<
   sonarqube:
     image: sonarqube:community
-    container_name: curator_sonarqube
+    container_name: sonarqube
     restart: unless-stopped
     ports:
       - "9000:9000" # Porta padrão de acesso Web
     environment:
-      - SONAR_JDBC_URL=jdbc:postgresql://sonar-db:5432/sonar
+      - SONAR_JDBC_URL=jdbc:postgresql://sonarqube-db:5432/sonar
       - SONAR_JDBC_USERNAME=sonar
       - SONAR_JDBC_PASSWORD=sonar
       # Desabilita telemetria para economizar um pouco de recurso
@@ -225,7 +225,7 @@ services:
       - sonar_extensions:/opt/sonarqube/extensions
       - sonar_logs:/opt/sonarqube/logs
     depends_on:
-      - sonar-db
+      - sonarqube-db
     networks:
       - curator-net
     # Limite de recursos recomendado para não travar sua máquina (ajuste conforme necessário)
@@ -236,9 +236,9 @@ services:
     profiles: ["all", "static-analysis"]
 
   # Banco de Dados dedicado para o SonarQube (não misturar com o do Identity!)
-  sonar-db:
+  sonarqube-db:
     image: postgres:15
-    container_name: curator_sonar_db
+    container_name: sonarqube-db
     restart: unless-stopped
     environment:
       - POSTGRES_USER=sonar
@@ -285,7 +285,7 @@ services:
     ports:
       - "5432:5432" # BlogCMS Postgres
     volumes:
-      - blogcms_postgres_data:/var/lib/postgresql/data
+      - blogcms_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${BLOGCMS_DB}"]
       interval: 10s
@@ -346,22 +346,35 @@ volumes:
     driver: local
   # PostgreSQL
   blogcms_postgres_data:
+    name: blogcms_data
     driver: local
   authentication_postgres_data:
+    name: authentication_data
     driver: local
   identity_postgres_data:
+    name: identity_data
     driver: local
   # Redis
   redis_data:
+    name: redis_data
     driver: local
   # RabbitMQ
   rabbitmq_data:
+    name: rabbitmq_data
     driver: local
   # SonarQube
   sonar_data:
+    name: sonar_data
+    driver: local
   sonar_extensions:
+    name: sonar_extensions
+    driver: local
   sonar_logs:
+    name: sonar_logs
+    driver: local
   sonar_db_data:
+    name: sonar_db_data
+    driver: local
 
 # >>> Custom Network <<<
 networks:

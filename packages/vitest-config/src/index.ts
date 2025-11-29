@@ -30,6 +30,7 @@ export const sharedConfig = {
         statements: 80,
       },
     },
+    all: true,
     include: ["**/*.spec.ts", "**/*.it.spec.ts"],
     exclude: ["**/node_modules/**", "**/.git/**"],
   },

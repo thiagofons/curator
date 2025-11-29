@@ -5,7 +5,7 @@ export default mergeConfig(
   sharedConfig,
   defineConfig({
     test: {
-      // Sobrescreva apenas o necessário, mas garanta que o outputFile esteja aqui
+      root: "./",
       environment: "node",
       reporters: ["default", "junit"],
       outputFile: {
