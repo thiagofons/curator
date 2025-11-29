@@ -49,6 +49,7 @@ catalogs:
     prettier: ^3.3.3
     prettier-plugin-astro: ^0.14.1
     prettier-plugin-tailwindcss: ^0.6.14
+    sonarqube-scanner: ^1.1.0
     source-map-support: ^0.5.21
     typescript-eslint: ^8.46.3
 

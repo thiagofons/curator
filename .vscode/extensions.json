@@ -1,0 +1,36 @@
+{
+  "recommendations": [
+    // -- STANDARDIZATION --
+    "vivaxy.vscode-conventional-commits",
+
+    // --- FOUNDATION & QUALITY ---
+    "dbaeumer.vscode-eslint", // Mandatory Linting (TS/JS). Prevents "code smells".
+    "esbenp.prettier-vscode", // Automatic formatting. Maintains visual consistency.
+    "editorconfig.editorconfig", // Ensures line break/indentation consistency across OSs.
+    "eamodio.gitlens", // Advanced Git visualization (blame, history navigation).
+
+    // --- BACKEND & DATA ---
+    "prisma.prisma", // Syntax highlighting and formatting for schema.prisma files.
+    "trilon.vscode-nestjs-snippets", // Snippets to generate NestJS Modules, Services, and Controllers.
+    "cweijan.vscode-database-client2", // Lightweight Database Manager (Postgres/Mongo) within VS Code.
+
+    // --- CI/CD ---
+    "github.vscode-github-actions",
+
+    // --- INFRASTRUCTURE & DEVOPS ---
+    "hashicorp.terraform", // Syntax highlighting and validation for .tf files.
+    "ms-azuretools.vscode-docker", // Docker container and image management.
+    "ms-kubernetes-tools.vscode-kubernetes-tools", // Visualization and management of EKS/K8s clusters.
+    "redhat.vscode-yaml", // Essential for accurate indentation in Kubernetes manifests.
+
+    // --- TESTING & API ---
+    "humao.rest-client", // Allows testing APIs (HTTP) directly from .http files (lightweight Postman alternative).
+    "firsttris.vscode-jest-runner", // Run specific unit tests with a single click.
+    "sonarsource.sonarlint-vscode", // Static code analysis for TypeScript/JavaScript.
+    "ms-playwright.playwright", // Playwright for end-to-end testing.
+
+    // --- FRONTEND ---
+    "bradlc.vscode-tailwindcss", // Autocomplete for Tailwind CSS (Frontend standard).
+    "astro-build.astro-vscode"
+  ]
+}

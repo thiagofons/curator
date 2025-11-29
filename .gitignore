@@ -16,6 +16,8 @@ node_modules
 
 # Testing
 coverage
+.scannerwork
+test-report.xml
 
 # Turbo
 **/.turbo

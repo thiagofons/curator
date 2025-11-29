@@ -13,6 +13,8 @@
     "compose:core:down": "docker compose -f docker-compose.yaml --env-file=.env.development  --profile core down",
     "compose:observability": "docker compose -f docker-compose.yaml --env-file=.env.development --profile observability up -d",
     "compose:observability:down": "docker compose -f docker-compose.yaml --env-file=.env.development --profile observability down",
+    "compose:static-analysis": "docker compose -f docker-compose.yaml --env-file=.env.development --profile static-analysis up -d",
+    "compose:static-analysis:down": "docker compose -f docker-compose.yaml --env-file=.env.development --profile static-analysis down",
     "compose:down": "docker compose -f docker-compose.yaml --env-file=.env.development down --remove-orphans",
     "// --- Database ---": "",
     "db:generate": "turbo run db:generate",
@@ -47,7 +49,9 @@
     "test:integration:coverage": "turbo run test:integration:coverage",
     "test:integration:watch": "turbo run test:integration:watch",
     "test:e2e": "turbo run test:e2e",
-    "test:e2e:ui": "turbo run test:e2e:ui"
+    "test:e2e:ui": "turbo run test:e2e:ui",
+    "// --- Static Analysis ---": "",
+    "sonar": "turbo run sonar"
   },
   "dependencies": {
     "@repo/eslint-config": "workspace:*",
