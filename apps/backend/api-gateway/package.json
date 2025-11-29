@@ -11,11 +11,12 @@
     "start": "nest start",
     "dev": "nest start --watch",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:unit": "vitest run",
+    "test:unit:coverage": "vitest run --coverage",
+    "test:unit:watch": "vitest run --watch",
+    "test:integration": "vitest run --exclude **/*.it.spec.ts",
+    "test:integration:coverage": "vitest run --exclude **/*.it.spec.ts --coverage",
+    "test:integration:watch": "vitest run --exclude **/*.it.spec.ts --watch"
   },
   "dependencies": {
     "@repo/rabbitmq": "workspace:*",

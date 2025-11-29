@@ -19,7 +19,6 @@ export const Default: Story = {
     <ScrollArea className="h-48 w-[260px] rounded border p-4">
       <div className="space-y-2 text-sm">
         {Array.from({ length: 20 }).map((_, index) => (
-           
           <p key={index}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           </p>
