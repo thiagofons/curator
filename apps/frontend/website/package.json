@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev --port 4003",
     "preview": "astro preview --port 4003",
+    "build": "astro build",
     "lint": "eslint .",
     "test:unit": "vitest run",
     "test:unit:coverage": "vitest run --coverage",
