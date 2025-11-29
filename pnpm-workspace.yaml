@@ -21,7 +21,7 @@ catalogs:
     "@astrojs/sitemap": ^3.6.0
     "@digi4care/astro-google-tagmanager": ^1.6.0
     "@justinribeiro/lite-youtube": ^1.8.2
-    astro: 5.15.4
+    astro: ^5.15.9
     astro-auto-import: ^0.4.5
     astro-font: ^1.1.0
     github-slugger: ^2.0.0

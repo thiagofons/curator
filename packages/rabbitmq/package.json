@@ -9,7 +9,13 @@
   ],
   "scripts": {
     "build": "tsc",
-    "dev": "tsc -w"
+    "dev": "tsc -w",
+    "test:unit": "vitest run",
+    "test:unit:coverage": "vitest run --coverage",
+    "test:unit:watch": "vitest run --watch",
+    "test:integration": "vitest run --exclude **/*.it.spec.ts",
+    "test:integration:coverage": "vitest run --exclude **/*.it.spec.ts --coverage",
+    "test:integration:watch": "vitest run --exclude **/*.it.spec.ts --watch"
   },
   "keywords": [],
   "author": "",

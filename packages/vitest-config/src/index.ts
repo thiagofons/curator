@@ -2,9 +2,9 @@ export const sharedConfig = {
   test: {
     globals: true,
     environment: "jsdom",
-    // setupFiles: ['./src/test/setup.ts'],
-    // Other shared configuration
     passWithNoTests: true,
     decoratorMetadata: true,
+    include: ["**/*.spec.ts", "**/*.it.spec.ts"],
+    exclude: ["**/node_modules/**", "**/.git/**"],
   },
 };
