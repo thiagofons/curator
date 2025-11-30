@@ -40,6 +40,17 @@ jobs:
             dockerfile: ./apps/backend/identity-service/Dockerfile
             image_name: curator-identity-service
 
+          # --- FRONTEND APPS ---
+          - app: blog-cms
+            context: .
+            dockerfile: ./apps/frontend/blog-cms/Dockerfile
+            image_name: curator-blog-cms
+
+          - app: docs
+            context: .
+            dockerfile: ./apps/frontend/docs/Dockerfile
+            image_name: curator-docs
+
     steps:
       - name: ⬇️ Checkout Repo
         uses: actions/checkout@v4
