@@ -310,23 +310,29 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: "📁 Create Placeholder"
+        run: touch /tmp/images/.placeholder
+
       - name: "📤 Upload Image Artifacts"
         uses: actions/upload-artifact@v4
         with:
           name: built-images
-          path: /tmp/images/*.tar
+          path: |
+            /tmp/images/*.tar
+            /tmp/images/.placeholder
           retention-days: 1
-          if-no-files-found: ignore
+          if-no-files-found: error
 
   # -----------------------------------------------------------------
   # 7. SCAN DOCKER IMAGES (Trivy)
+  #    Analisa os arquivos .tar gerados procurando vulnerabilidades
   # -----------------------------------------------------------------
   scan-images:
     name: 🛡️ Scan Images (Trivy)
     needs: [build-docker-images]
     runs-on: ubuntu-latest
     permissions:
-      security-events: write
+      security-events: write # Necessário se quiser upload pro GitHub Security (opcional)
 
     steps:
       - name: "⬇️ Checkout Repo"
@@ -337,19 +343,20 @@ jobs:
         with:
           name: built-images
           path: /tmp/images
-        continue-on-error: true
 
+      # 1. API GATEWAY
       - name: "🔍 Scan API Gateway"
         if: hashFiles('/tmp/images/api-gateway.tar') != ''
         uses: aquasecurity/trivy-action@master
         with:
           input: /tmp/images/api-gateway.tar
-          format: "table"
-          exit-code: "1" # Falha o pipeline se achar vulnerabilidade
-          ignore-unfixed: true
-          vuln-type: "os,library"
+          format: "table" # Mostra tabela bonita no log
+          exit-code: "1" # Quebra o build se achar falhas
+          ignore-unfixed: true # Ignora CVEs que não têm correção (Reduz ruído)
+          vuln-type: "os,library" # Analisa OS (Alpine) e Libs (Node_modules)
           severity: "CRITICAL,HIGH"
 
+      # 2. IDENTITY SERVICE
       - name: "🔍 Scan Identity Service"
         if: hashFiles('/tmp/images/identity-service.tar') != ''
         uses: aquasecurity/trivy-action@master
@@ -361,6 +368,7 @@ jobs:
           vuln-type: "os,library"
           severity: "CRITICAL,HIGH"
 
+      # 3. AUTHENTICATION SERVICE
       - name: "🔍 Scan Auth Service"
         if: hashFiles('/tmp/images/authentication-service.tar') != ''
         uses: aquasecurity/trivy-action@master
@@ -372,6 +380,7 @@ jobs:
           vuln-type: "os,library"
           severity: "CRITICAL,HIGH"
 
+      # 4. BLOG CMS
       - name: "🔍 Scan Blog CMS"
         if: hashFiles('/tmp/images/blog-cms.tar') != ''
         uses: aquasecurity/trivy-action@master
