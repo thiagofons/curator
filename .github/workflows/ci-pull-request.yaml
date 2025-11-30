@@ -190,3 +190,119 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_GLOBAL }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+  # -----------------------------------------------------------------
+  # 5. SNYK DEPENDENCY SCAN
+  # -----------------------------------------------------------------
+  snyk-scan:
+    name: 🕵️ Snyk Vulnerability Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⬇️ Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9.5.0
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: 📥 Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: 🛡️ Run Snyk (Dependencies)
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: test
+          args: --all-projects --severity-threshold=high
+
+  # -----------------------------------------------------------------
+  # 6. BUILD DOCKER IMAGES
+  # -----------------------------------------------------------------
+  build-docker-images:
+    name: 🐳 Build Images (Local)
+    needs: [snyk-scan]
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: "⬇️ Checkout Repo"
+        uses: actions/checkout@v4
+
+      - name: "🕵️ Detect Changes"
+        id: filter
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            api_gateway:
+              - 'apps/backend/api-gateway/**'
+              - 'packages/**'
+              - 'docker-compose.yml'
+            auth_service:
+              - 'apps/backend/authentication-service/**'
+              - 'packages/**'
+            identity_service:
+              - 'apps/backend/identity-service/**'
+              - 'packages/**'
+            blog_cms:
+              - 'apps/frontend/blog-cms/**'
+              - 'packages/**'
+
+      - name: "🐳 Set up Docker Buildx"
+        uses: docker/setup-buildx-action@v3
+
+      - name: "🏗️ Build API Gateway"
+        if: steps.filter.outputs.api_gateway == 'true'
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./apps/backend/api-gateway/Dockerfile
+          push: false
+          tags: curator/api-gateway:pr-${{ github.sha }}
+          outputs: type=docker,dest=/tmp/api-gateway.tar
+
+      - name: "🏗️ Build Identity Service"
+        if: steps.filter.outputs.identity_service == 'true'
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./apps/backend/identity-service/Dockerfile
+          push: false
+          tags: curator/identity-service:pr-${{ github.sha }}
+          outputs: type=docker,dest=/tmp/identity-service.tar
+
+      - name: "🏗️ Build Authentication Service"
+        if: steps.filter.outputs.auth_service == 'true'
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./apps/backend/authentication-service/Dockerfile
+          push: false
+          tags: curator/authentication-service:pr-${{ github.sha }}
+          outputs: type=docker,dest=/tmp/authentication-service.tar
+
+      - name: "🏗️ Build Blog CMS"
+        if: steps.filter.outputs.blog_cms == 'true'
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./apps/frontend/blog-cms/Dockerfile
+          push: false
+          tags: curator/blog-cms:pr-${{ github.sha }}
+          outputs: type=docker,dest=/tmp/blog-cms.tar
+
+      - name: "📤 Upload Docker Artifacts"
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-images-tar
+          path: /tmp/*.tar
+          retention-days: 1
