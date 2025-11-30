@@ -128,7 +128,7 @@ jobs:
   # ------------------------------------------------------------------
   sonar-analysis:
     name: 🔍 Sonar (${{ matrix.service }})
-    needs: [unit-tests] # Waits for coverage artifacts
+    needs: [unit-tests, integration-tests] # Waits for coverage artifacts
     runs-on: ubuntu-latest
 
     strategy:
@@ -228,7 +228,8 @@ jobs:
   # -----------------------------------------------------------------
   build-docker-images:
     name: 🐳 Build Images (Local)
-    needs: [unit-tests, integration-tests, sonar-analysis, snyk-scan]
+    needs:
+      [static-checks, unit-tests, integration-tests, sonar-analysis, snyk-scan]
     runs-on: ubuntu-latest
 
     permissions:
