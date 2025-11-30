@@ -135,15 +135,44 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # --- SERVICE LIST ---
-          - service: identity-service
+          # --- BACKEND SERVICES ---
+          - service: backend/api-gateway
+            path: apps/backend/api-gateway
+
+          - service: backend/authentication-service
+            path: apps/backend/authentication-service
+
+          - service: backend/identity-service
             path: apps/backend/identity-service
 
-          - service: roadmap-service
+          - service: backend/roadmap-service
             path: apps/backend/roadmap-service
 
-          - service: api-gateway
-            path: apps/backend/api-gateway
+          # --- FRONTEND SERVICES ---
+          - service: frontend/blog-cms
+            path: apps/frontend/blog-cms
+
+          - service: frontend/docs
+            path: apps/frontend/docs
+
+          - service: frontend/website
+            path: apps/frontend/website
+
+          # --- PACKAGES ---
+          - service: packages/lib
+            path: packages/lib
+
+          - service: packages/rabbitmq
+            path: packages/rabbitmq
+
+          - service: packages/trpc
+            path: packages/trpc
+
+          - service: packages/ui-mobile
+            path: packages/ui-mobile
+
+          - service: packages/ui-web
+            path: packages/ui-web
 
     steps:
       - name: ⬇️ Checkout Repo
