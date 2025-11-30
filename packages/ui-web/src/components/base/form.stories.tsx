@@ -44,7 +44,6 @@ const FormExample = () => {
   });
 
   const onSubmit = form.handleSubmit((values) => {
-     
     console.log(values);
   });
 

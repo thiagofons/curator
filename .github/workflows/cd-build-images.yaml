@@ -1,0 +1,82 @@
+name: 🐳 CD - Build Docker Images
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/**"
+      - "packages/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "docker-compose.yaml"
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-and-push:
+    name: 🐳 Build ${{ matrix.app }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # --- BACKEND APPS ---
+          - app: api-gateway
+            context: .
+            dockerfile: ./apps/backend/api-gateway/Dockerfile
+            image_name: curator-api-gateway
+
+          - app: authentication-service
+            context: .
+            dockerfile: ./apps/backend/authentication-service/Dockerfile
+            image_name: curator-authentication-service
+
+          - app: identity-service
+            context: .
+            dockerfile: ./apps/backend/identity-service/Dockerfile
+            image_name: curator-identity-service
+
+          # --- FRONTEND APPS ---
+          - app: blog-cms
+            context: .
+            dockerfile: ./apps/frontend/blog-cms/Dockerfile
+            image_name: curator-blog-cms
+
+    steps:
+      - name: ⬇️ Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: 🐳 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 🔑 Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🏷️ Extract Metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/${{ matrix.image_name }}
+          tags: |
+            type=raw,value=latest
+            type=sha,prefix=sha-,format=long
+            type=ref,event=branch
+
+      - name: 🏗️ Build and Push
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

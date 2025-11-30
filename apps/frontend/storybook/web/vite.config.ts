@@ -1,7 +1,10 @@
+import { sharedConfig } from "@repo/vitest-config";
 import react from "@vitejs/plugin-react";
-import { defineConfig } from "vite";
+import { mergeConfig } from "vitest/config";
 
-// https://vite.dev/config/
-export default defineConfig({
+export default mergeConfig(sharedConfig, {
   plugins: [react()],
+  test: {
+    environment: "jsdom",
+  },
 });

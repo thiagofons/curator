@@ -5,10 +5,16 @@
   "scripts": {
     "dev": "astro dev --port 4003",
     "preview": "astro preview --port 4003",
+    "build": "astro build",
     "lint": "eslint .",
     "test:unit": "vitest run",
-    "test:watch": "vitest --watch",
-    "check": "astro check"
+    "test:unit:coverage": "vitest run --coverage",
+    "test:unit:watch": "vitest run --watch",
+    "test:integration": "vitest run --exclude **/*.it.spec.ts",
+    "test:integration:coverage": "vitest run --exclude **/*.it.spec.ts --coverage",
+    "test:integration:watch": "vitest run --exclude **/*.it.spec.ts --watch",
+    "check": "astro check",
+    "sonar": "pnpx sonar-scanner"
   },
   "dependencies": {
     "@astrojs/check": "catalog:astro",
@@ -40,6 +46,9 @@
     "vitest": "catalog:testing"
   },
   "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
     "@tailwindcss/forms": "catalog:ui-libs",
     "@tailwindcss/typography": "catalog:ui-libs",
     "@tailwindcss/vite": "catalog:ui-libs",

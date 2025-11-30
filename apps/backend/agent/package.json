@@ -6,19 +6,27 @@
   "scripts": {
     "build": "tsc",
     "start": "tsc && node dist/index.js",
-    "dev": "tsc && node dist/index.js"
+    "dev": "tsc && node dist/index.js",
+    "test:unit": "vitest run",
+    "test:unit:coverage": "vitest run --coverage",
+    "test:unit:watch": "vitest run --watch",
+    "test:integration": "vitest run --exclude **/*.it.spec.ts",
+    "test:integration:coverage": "vitest run --exclude **/*.it.spec.ts --coverage",
+    "test:integration:watch": "vitest run --exclude **/*.it.spec.ts --watch"
   },
   "keywords": [],
   "author": "",
   "dependencies": {
-    "@repo/vitest-config": "workspace:*",
     "amqplib": "catalog:rabbitmq",
     "chalk": "catalog:tooling",
-    "class-validator": "^0.14.2",
+    "class-validator": "catalog:core-libs",
     "dotenv": "catalog:tooling",
     "vitest": "latest"
   },
   "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
     "@types/amqplib": "catalog:rabbitmq",
     "@types/node": "catalog:tooling",
     "openai": "catalog:ai",

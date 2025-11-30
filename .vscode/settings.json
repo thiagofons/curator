@@ -5,6 +5,7 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
+    "vitest.config.ts": "vitest.*.ts",
     "*.ts": "$(capture).js, $(capture).*.ts, $(capture).*.js",
     "*.tsx": "$(capture).stories.tsx, $(capture).spec.ts",
     "*.js": "$(capture).js.map, $(capture).*.ts, $(capture).*.js",
@@ -64,5 +65,11 @@
   },
   "[typescript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "trunk.io"
+  },
+  "[github-actions-workflow]": {
+    "editor.defaultFormatter": "trunk.io"
   }
 }

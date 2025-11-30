@@ -5,7 +5,14 @@
   "main": "./dist/client.js",
   "types": "./dist/client.d.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test:unit": "vitest run",
+    "test:unit:coverage": "vitest run --coverage",
+    "test:unit:watch": "vitest run --watch",
+    "test:integration": "vitest run --exclude **/*.it.spec.ts",
+    "test:integration:coverage": "vitest run --exclude **/*.it.spec.ts --coverage",
+    "test:integration:watch": "vitest run --exclude **/*.it.spec.ts --watch",
+    "sonar": "pnpx sonar-scanner"
   },
   "keywords": [],
   "author": "",
@@ -15,7 +22,9 @@
     "class-validator": "^0.14.2"
   },
   "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
     "@types/node": "catalog:tooling"
   },
   "exports": {
