@@ -16,6 +16,11 @@ node_modules
 
 # Testing
 coverage
+.scannerwork
+test-report.xml
+
+# SonarQube
+.sonarlint
 
 # Turbo
 **/.turbo

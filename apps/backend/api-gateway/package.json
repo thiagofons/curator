@@ -16,7 +16,8 @@
     "test:unit:watch": "vitest run --watch",
     "test:integration": "vitest run --exclude **/*.it.spec.ts",
     "test:integration:coverage": "vitest run --exclude **/*.it.spec.ts --coverage",
-    "test:integration:watch": "vitest run --exclude **/*.it.spec.ts --watch"
+    "test:integration:watch": "vitest run --exclude **/*.it.spec.ts --watch",
+    "sonar": "pnpx sonar-scanner"
   },
   "dependencies": {
     "@repo/rabbitmq": "workspace:*",
@@ -27,15 +28,17 @@
     "@nestjs/platform-express": "catalog:nestjs11",
     "@trpc/server": "catalog:trpc11",
     "amqp-connection-manager": "catalog:rabbitmq",
-    "class-validator": "^0.14.2",
+    "class-validator": "catalog:core-libs",
+    "junit": "catalog:code-quality",
     "nestjs-trpc": "catalog:nestjs11",
-    "reflect-metadata": "^0.2.2",
+    "reflect-metadata": "catalog:nestjs11",
     "rxjs": "catalog:nestjs11",
     "zod": "catalog:core-libs"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
     "@eslint/js": "catalog:code-quality",
     "@nestjs/cli": "catalog:nestjs11",
     "@nestjs/schematics": "catalog:nestjs11",
@@ -51,6 +54,7 @@
     "eslint-plugin-prettier": "catalog:code-quality",
     "globals": "catalog:code-quality",
     "prettier": "catalog:code-quality",
+    "sonarqube-scanner": "catalog:code-quality",
     "source-map-support": "catalog:code-quality",
     "supertest": "catalog:testing",
     "ts-loader": "catalog:tooling",

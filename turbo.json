@@ -40,6 +40,9 @@
     "quality:format:fix": {
       "dependsOn": ["^quality:format:fix"]
     },
+    "sonar": {
+      "dependsOn": ["^sonar"]
+    },
     "storybook-web:dev": {},
     "storybook-web:build": {},
     "test:unit": {

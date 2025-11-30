@@ -17,14 +17,16 @@
   "keywords": [],
   "author": "",
   "dependencies": {
-    "@repo/vitest-config": "workspace:*",
     "amqplib": "catalog:rabbitmq",
     "chalk": "catalog:tooling",
-    "class-validator": "^0.14.2",
+    "class-validator": "catalog:core-libs",
     "dotenv": "catalog:tooling",
     "vitest": "latest"
   },
   "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
     "@types/amqplib": "catalog:rabbitmq",
     "@types/node": "catalog:tooling",
     "openai": "catalog:ai",

@@ -14,14 +14,13 @@
     "test:integration": "vitest run --exclude **/*.it.spec.ts",
     "test:integration:coverage": "vitest run --exclude **/*.it.spec.ts --coverage",
     "test:integration:watch": "vitest run --exclude **/*.it.spec.ts --watch",
-    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind"
+    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind",
+    "sonar": "pnpx sonar-scanner"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
     "@repo/ui-web": "workspace:*",
     "@repo/vitest-config": "workspace:*",
     "class-validator": "^0.14.2",
@@ -34,6 +33,9 @@
     "vitest": "catalog:testing"
   },
   "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
     "pagefind": "catalog:nextra4",

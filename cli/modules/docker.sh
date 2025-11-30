@@ -77,7 +77,8 @@ function menu_docker {
             "1. 🌐  All Infrastructure (DBs, Brokers, Apps, Observability)"
             "2. 🧱 Core Infrastructure (DBs, Brokers, Apps)"
             "3. 🔭 Observability Stack (Grafana, Prometheus)"
-            "4. 🧨 Global Operations (Clean Up)"
+            "4. 📊 Static Analysis (SonarQube)"
+            "5. 🧨 Global Operations (Clean Up)"
             "🔙  Back to Main Menu"
         )
 
@@ -98,6 +99,10 @@ function menu_docker {
                 menu_docker_action "Observability Stack" "compose:observability"
                 ;;
             3)
+                # Maps to scripts: compose:static-analysis / compose:static-analysis:down
+                menu_docker_action "Static Analysis Stack" "compose:static-analysis"
+                ;;
+            4)
                 # Special menu for Global Actions
                 echo -e "\n${BOLD}Global Operations${RESET}\n"
                 GLOBAL_OPS=(
