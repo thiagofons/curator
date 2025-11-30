@@ -84,9 +84,6 @@ catalogs:
     nestjs-trpc: ^1.4.0
     rxjs: ^7.8.1
 
-  next15:
-    next: 15.4.7
-
   next16:
     next: ^16.0.1
 
