@@ -6,7 +6,7 @@
   "private": true,
   "license": "Apache-2.0",
   "scripts": {
-    "build": "db:generate && nest build",
+    "build": "nest build",
     "db:generate": "prisma generate",
     "db:migrate:dev": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
