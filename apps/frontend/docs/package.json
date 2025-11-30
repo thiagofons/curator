@@ -21,8 +21,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
     "@repo/ui-web": "workspace:*",
     "@repo/vitest-config": "workspace:*",
     "class-validator": "^0.14.2",
@@ -35,6 +33,9 @@
     "vitest": "catalog:testing"
   },
   "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
     "pagefind": "catalog:nextra4",

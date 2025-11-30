@@ -46,6 +46,9 @@
     "vitest": "catalog:testing"
   },
   "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
     "@tailwindcss/forms": "catalog:ui-libs",
     "@tailwindcss/typography": "catalog:ui-libs",
     "@tailwindcss/vite": "catalog:ui-libs",

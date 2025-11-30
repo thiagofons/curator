@@ -28,7 +28,9 @@
     "class-validator": "^0.14.2"
   },
   "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
     "typescript": "catalog:tooling"
   },
   "exports": {

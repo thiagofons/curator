@@ -14,6 +14,9 @@
     "react-dom": "catalog:react19"
   },
   "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
     "@storybook/addon-a11y": "catalog:storybook9",
     "@storybook/addon-docs": "catalog:storybook9",
     "@storybook/addon-links": "catalog:storybook9",
