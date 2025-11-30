@@ -8,6 +8,8 @@ on:
 permissions:
   id-token: write
   contents: read
+  packages: write
+  security-events: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
@@ -49,7 +51,7 @@ jobs:
   # ------------------------------------------------------------------
   unit-tests:
     name: 🧪 Unit Tests
-    needs: [static-checks] # Dependency: Fail Fast
+    needs: [static-checks]
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout Repo
@@ -72,7 +74,6 @@ jobs:
       - name: 🧪 Run Unit Tests (with Coverage)
         run: pnpm test:unit:coverage
 
-      # Upload artifacts for the Sonar Job
       - name: 📤 Upload Test Artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -89,7 +90,7 @@ jobs:
   # ------------------------------------------------------------------
   integration-tests:
     name: ⚙️ Integration Tests
-    needs: [static-checks] # Dependency: Fail Fast
+    needs: [static-checks]
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -130,7 +131,7 @@ jobs:
   # ------------------------------------------------------------------
   snyk-scan:
     name: 🕵️ Snyk Vulnerability Scan
-    needs: [static-checks] # Dependency: Fail Fast
+    needs: [static-checks]
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout Repo
@@ -160,11 +161,11 @@ jobs:
           args: --all-projects --severity-threshold=high
 
   # ------------------------------------------------------------------
-  # 5. SONARQUBE ANALYSIS (Parallel / Dependent on Artifacts)
+  # 5. SONARQUBE ANALYSIS (Matrix Strategy)
   # ------------------------------------------------------------------
   sonar-analysis:
     name: 🔍 Sonar (${{ matrix.service }})
-    needs: [unit-tests] # Needs coverage artifacts from Unit Tests
+    needs: [unit-tests]
     runs-on: ubuntu-latest
 
     strategy:
@@ -219,19 +220,14 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_GLOBAL }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-  # ------------------------------------------------------------------
-  # 6. BUILD DOCKER IMAGES (Final Stage)
-  #    Ensures code works (tests pass) before building.
-  #    Runs in parallel with Sonar/Snyk.
-  # ------------------------------------------------------------------
+  # -----------------------------------------------------------------
+  # 6. BUILD DOCKER IMAGES (Export to .tar)
+  # -----------------------------------------------------------------
   build-docker-images:
-    name: 🐳 Build Images (Local)
-    # Optimized: Only waits for logic verification (tests), not quality audit (sonar/snyk)
+    name: 🐳 Build Images
+    # Otimização: Espera apenas testes passarem, não precisa esperar Sonar/Snyk
     needs: [unit-tests, integration-tests]
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
 
     steps:
       - name: "⬇️ Checkout Repo"
@@ -262,7 +258,12 @@ jobs:
       - name: "🐳 Set up Docker Buildx"
         uses: docker/setup-buildx-action@v3
 
-      # --- Builds ---
+      # Cria pasta para armazenar os arquivos .tar
+      - name: "📁 Make Temp Dir"
+        run: mkdir -p /tmp/images
+
+      # --- BUILDS (Output = Docker Tarball) ---
+
       - name: "🏗️ Build API Gateway"
         if: steps.filter.outputs.api_gateway == 'true'
         uses: docker/build-push-action@v5
@@ -270,8 +271,9 @@ jobs:
           context: .
           file: ./apps/backend/api-gateway/Dockerfile
           push: false
-          tags: curator/api-gateway:pr-${{ github.sha }}
-          outputs: type=cacheonly
+          tags: curator/api-gateway:${{ github.sha }}
+          # EXPORTA PARA ARQUIVO TAR
+          outputs: type=docker,dest=/tmp/images/api-gateway.tar
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -282,8 +284,8 @@ jobs:
           context: .
           file: ./apps/backend/identity-service/Dockerfile
           push: false
-          tags: curator/identity-service:pr-${{ github.sha }}
-          outputs: type=cacheonly
+          tags: curator/identity-service:${{ github.sha }}
+          outputs: type=docker,dest=/tmp/images/identity-service.tar
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -294,8 +296,8 @@ jobs:
           context: .
           file: ./apps/backend/authentication-service/Dockerfile
           push: false
-          tags: curator/authentication-service:pr-${{ github.sha }}
-          outputs: type=cacheonly
+          tags: curator/authentication-service:${{ github.sha }}
+          outputs: type=docker,dest=/tmp/images/authentication-service.tar
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -306,7 +308,85 @@ jobs:
           context: .
           file: ./apps/frontend/blog-cms/Dockerfile
           push: false
-          tags: curator/blog-cms:pr-${{ github.sha }}
-          outputs: type=cacheonly
+          tags: curator/blog-cms:${{ github.sha }}
+          outputs: type=docker,dest=/tmp/images/blog-cms.tar
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      # --- CRIAÇÃO DE PLACEHOLDER (Para evitar erro de artefato não encontrado) ---
+      - name: "📁 Create Placeholder"
+        run: touch /tmp/images/placeholder.txt
+
+      - name: "📤 Upload Image Artifacts"
+        uses: actions/upload-artifact@v4
+        with:
+          name: built-images
+          path: |
+            /tmp/images/*.tar
+            /tmp/images/placeholder.txt
+          retention-days: 1
+          if-no-files-found: error
+
+  # -----------------------------------------------------------------
+  # 7. SCAN DOCKER IMAGES (Trivy)
+  # -----------------------------------------------------------------
+  scan-images:
+    name: 🛡️ Scan Images (Trivy)
+    needs: [build-docker-images]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "⬇️ Checkout Repo"
+        uses: actions/checkout@v4
+
+      - name: "📥 Download Images"
+        uses: actions/download-artifact@v4
+        with:
+          name: built-images
+          path: /tmp/images
+
+      # --- SCANS (Só rodam se o .tar existir) ---
+
+      - name: "🔍 Scan API Gateway"
+        if: hashFiles('/tmp/images/api-gateway.tar') != ''
+        uses: aquasecurity/trivy-action@master
+        with:
+          input: /tmp/images/api-gateway.tar
+          format: "table"
+          exit-code: "1" # Falha se achar CRITICAL/HIGH
+          ignore-unfixed: true
+          vuln-type: "os,library"
+          severity: "CRITICAL,HIGH"
+
+      - name: "🔍 Scan Identity Service"
+        if: hashFiles('/tmp/images/identity-service.tar') != ''
+        uses: aquasecurity/trivy-action@master
+        with:
+          input: /tmp/images/identity-service.tar
+          format: "table"
+          exit-code: "1"
+          ignore-unfixed: true
+          vuln-type: "os,library"
+          severity: "CRITICAL,HIGH"
+
+      - name: "🔍 Scan Auth Service"
+        if: hashFiles('/tmp/images/authentication-service.tar') != ''
+        uses: aquasecurity/trivy-action@master
+        with:
+          input: /tmp/images/authentication-service.tar
+          format: "table"
+          exit-code: "1"
+          ignore-unfixed: true
+          vuln-type: "os,library"
+          severity: "CRITICAL,HIGH"
+
+      - name: "🔍 Scan Blog CMS"
+        if: hashFiles('/tmp/images/blog-cms.tar') != ''
+        uses: aquasecurity/trivy-action@master
+        with:
+          input: /tmp/images/blog-cms.tar
+          format: "table"
+          exit-code: "1"
+          ignore-unfixed: true
+          vuln-type: "os,library"
+          severity: "CRITICAL,HIGH"
