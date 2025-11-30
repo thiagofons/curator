@@ -9,7 +9,7 @@ on:
       - "packages/**"
       - "package.json"
       - "pnpm-lock.yaml"
-      - "docker-compose.yml"
+      - "docker-compose.yaml"
 
 permissions:
   contents: read
@@ -45,11 +45,6 @@ jobs:
             context: .
             dockerfile: ./apps/frontend/blog-cms/Dockerfile
             image_name: curator-blog-cms
-
-          - app: docs
-            context: .
-            dockerfile: ./apps/frontend/docs/Dockerfile
-            image_name: curator-docs
 
     steps:
       - name: ⬇️ Checkout Repo

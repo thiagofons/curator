@@ -219,7 +219,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: 🛡️ Run Snyk (Dependencies)
-        uses: snyk/actions/node@master
+        continue-on-error: true
+        uses: snyk/actions/node@0.4.0
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
@@ -250,16 +251,19 @@ jobs:
             api_gateway:
               - 'apps/backend/api-gateway/**'
               - 'packages/**'
-              - 'docker-compose.yml'
+              - 'docker-compose.yaml'
             auth_service:
               - 'apps/backend/authentication-service/**'
               - 'packages/**'
+              - 'docker-compose.yaml'
             identity_service:
               - 'apps/backend/identity-service/**'
               - 'packages/**'
+              - 'docker-compose.yaml'
             blog_cms:
               - 'apps/frontend/blog-cms/**'
               - 'packages/**'
+              - 'docker-compose.yaml'
 
       - name: "🐳 Set up Docker Buildx"
         uses: docker/setup-buildx-action@v3
@@ -272,7 +276,9 @@ jobs:
           file: ./apps/backend/api-gateway/Dockerfile
           push: false
           tags: curator/api-gateway:pr-${{ github.sha }}
-          outputs: type=docker,dest=/tmp/api-gateway.tar
+          outputs: type=cacheonly
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: "🏗️ Build Identity Service"
         if: steps.filter.outputs.identity_service == 'true'
@@ -282,7 +288,9 @@ jobs:
           file: ./apps/backend/identity-service/Dockerfile
           push: false
           tags: curator/identity-service:pr-${{ github.sha }}
-          outputs: type=docker,dest=/tmp/identity-service.tar
+          outputs: type=cacheonly
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: "🏗️ Build Authentication Service"
         if: steps.filter.outputs.auth_service == 'true'
@@ -292,7 +300,9 @@ jobs:
           file: ./apps/backend/authentication-service/Dockerfile
           push: false
           tags: curator/authentication-service:pr-${{ github.sha }}
-          outputs: type=docker,dest=/tmp/authentication-service.tar
+          outputs: type=cacheonly
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: "🏗️ Build Blog CMS"
         if: steps.filter.outputs.blog_cms == 'true'
@@ -302,11 +312,17 @@ jobs:
           file: ./apps/frontend/blog-cms/Dockerfile
           push: false
           tags: curator/blog-cms:pr-${{ github.sha }}
-          outputs: type=docker,dest=/tmp/blog-cms.tar
+          outputs: type=cacheonly
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: "📤 Upload Docker Artifacts"
+        if: steps.filter.outputs.api_gateway == 'true' ||
+          steps.filter.outputs.identity_service == 'true' ||
+          steps.filter.outputs.auth_service == 'true' ||
+          steps.filter.outputs.blog_cms == 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: docker-images-tar
-          path: /tmp/*.tar
+          name: docker-images-cache
+          path: /tmp/
           retention-days: 1
