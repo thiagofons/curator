@@ -228,7 +228,7 @@ jobs:
   # -----------------------------------------------------------------
   build-docker-images:
     name: 🐳 Build Images (Local)
-    needs: [snyk-scan]
+    needs: [unit-tests, integration-tests, sonar-analysis, snyk-scan]
     runs-on: ubuntu-latest
 
     permissions:
