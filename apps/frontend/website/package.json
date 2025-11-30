@@ -13,7 +13,8 @@
     "test:integration": "vitest run --exclude **/*.it.spec.ts",
     "test:integration:coverage": "vitest run --exclude **/*.it.spec.ts --coverage",
     "test:integration:watch": "vitest run --exclude **/*.it.spec.ts --watch",
-    "check": "astro check"
+    "check": "astro check",
+    "sonar": "pnpx sonar-scanner"
   },
   "dependencies": {
     "@astrojs/check": "catalog:astro",

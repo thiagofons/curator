@@ -14,7 +14,8 @@
     "test:integration": "vitest run --exclude **/*.it.spec.ts",
     "test:integration:coverage": "vitest run --exclude **/*.it.spec.ts --coverage",
     "test:integration:watch": "vitest run --exclude **/*.it.spec.ts --watch",
-    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind"
+    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind",
+    "sonar": "pnpx sonar-scanner"
   },
   "keywords": [],
   "author": "",
