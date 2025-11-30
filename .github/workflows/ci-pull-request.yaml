@@ -49,6 +49,7 @@ jobs:
   # ------------------------------------------------------------------
   unit-tests:
     name: 🧪 Unit Tests
+    needs: [static-checks]
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout Repo
@@ -88,6 +89,7 @@ jobs:
   # ------------------------------------------------------------------
   integration-tests:
     name: ⚙️ Integration Tests
+    needs: [static-checks]
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -128,7 +130,7 @@ jobs:
   # ------------------------------------------------------------------
   sonar-analysis:
     name: 🔍 Sonar (${{ matrix.service }})
-    needs: [unit-tests, integration-tests] # Waits for coverage artifacts
+    needs: [unit-tests, integration-tests]
     runs-on: ubuntu-latest
 
     strategy:
@@ -196,6 +198,7 @@ jobs:
   # -----------------------------------------------------------------
   snyk-scan:
     name: 🕵️ Snyk Vulnerability Scan
+    needs: [sonar-analysis]
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout Repo
