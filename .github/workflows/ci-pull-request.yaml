@@ -315,7 +315,7 @@ jobs:
 
       # --- CRIAÇÃO DE PLACEHOLDER (Para evitar erro de artefato não encontrado) ---
       - name: "📁 Create Placeholder"
-        run: touch /tmp/images/.placeholder
+        run: touch /tmp/images/placeholder.txt
 
       - name: "📤 Upload Image Artifacts"
         uses: actions/upload-artifact@v4
@@ -323,7 +323,7 @@ jobs:
           name: built-images
           path: |
             /tmp/images/*.tar
-            /tmp/images/.placeholder
+            /tmp/images/placeholder.txt
           retention-days: 1
           if-no-files-found: error
 
