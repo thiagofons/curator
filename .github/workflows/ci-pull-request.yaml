@@ -145,9 +145,6 @@ jobs:
           - service: backend/identity-service
             path: apps/backend/identity-service
 
-          - service: backend/roadmap-service
-            path: apps/backend/roadmap-service
-
           # --- FRONTEND SERVICES ---
           - service: frontend/blog-cms
             path: apps/frontend/blog-cms
