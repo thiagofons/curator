@@ -1,7 +1,7 @@
 {
   "extends": "@repo/typescript-config/base",
   "compilerOptions": {
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "outDir": "dist",
     "rootDir": "src"
   },
