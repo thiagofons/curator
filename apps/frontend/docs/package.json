@@ -24,7 +24,7 @@
     "@repo/ui-web": "workspace:*",
     "@repo/vitest-config": "workspace:*",
     "class-validator": "^0.14.2",
-    "next": "catalog:next16",
+    "next": "16.0.7",
     "nextra": "catalog:nextra4",
     "nextra-theme-docs": "catalog:nextra4",
     "react": "catalog:react19",
