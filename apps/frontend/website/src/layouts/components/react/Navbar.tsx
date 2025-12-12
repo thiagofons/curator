@@ -1,10 +1,10 @@
 import menuData from "@/config/menu.json";
 import { Button } from "@repo/ui-web/base/button";
-import { Typography } from "@repo/ui-web/custom/typography";
+import { H3 } from "@repo/ui-web/custom/typography";
 import { cn } from "@repo/ui-web/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
-import { IoClose, IoMenu, IoSearch } from "react-icons/io5";
+import { IoClose, IoMenu } from "react-icons/io5";
 import { Logo } from "./Logo";
 
 export const Navbar = () => {
@@ -36,23 +36,27 @@ export const Navbar = () => {
           <nav className="hidden md:flex items-center gap-6">
             {navLinks.map((item) => (
               <a key={item.name} href={item.url}>
-                <Typography className="text-foreground hover:text-primary transition-colors">
+                <H3
+                  as="span"
+                  variant="heading-h3"
+                  className="text-foreground hover:text-primary transition-colors"
+                >
                   {item.name}
-                </Typography>
+                </H3>
               </a>
             ))}
           </nav>
 
           {/* ACTIONS (Search + CTA + Mobile Toggle) */}
           <div className="flex items-center gap-3">
-            {/* Search Icon */}
+            {/* Search Icon
             <a
               href="/blog/search"
               className="p-2 text-muted-foreground hover:text-primary transition-colors"
               aria-label="Pesquisar"
             >
               <IoSearch size={20} />
-            </a>
+            </a> */}
             {/* CTA Button (Desktop Only) */}
             <div className="hidden md:block">
               <Button>Começar Jornada</Button>
@@ -87,9 +91,13 @@ export const Navbar = () => {
                 transition={{ delay: 0.1 + i * 0.1 }}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <Typography className="text-foreground hover:text-primary transition-colors">
+                <H3
+                  as="span"
+                  variant="heading-h3"
+                  className="text-foreground hover:text-primary transition-colors"
+                >
                   {item.name}
-                </Typography>
+                </H3>
               </motion.a>
             ))}
 
