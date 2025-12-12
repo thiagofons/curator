@@ -63,6 +63,7 @@
     "cmdk": "catalog:ui-libs",
     "date-fns": "catalog:ui-libs",
     "embla-carousel-react": "catalog:ui-libs",
+    "framer-motion": "^12.23.26",
     "input-otp": "catalog:ui-libs",
     "lucide-react": "catalog:ui-libs",
     "next-themes": "catalog:ui-libs",
