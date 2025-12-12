@@ -1,8 +1,20 @@
 {
   "main": [
     {
+      "name": "Início",
+      "url": "/"
+    },
+    {
+      "name": "Open Source",
+      "url": "/open-source"
+    },
+    {
       "name": "Blog",
       "url": "/blog"
+    },
+    {
+      "name": "Sobre",
+      "url": "/about"
     }
   ],
   "footer": [

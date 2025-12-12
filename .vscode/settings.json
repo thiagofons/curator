@@ -71,5 +71,8 @@
   },
   "[github-actions-workflow]": {
     "editor.defaultFormatter": "trunk.io"
+  },
+  "[astro]": {
+    "editor.defaultFormatter": "astro-build.astro-vscode"
   }
 }
