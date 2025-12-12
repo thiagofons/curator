@@ -1,0 +1,32 @@
+---
+import DownloadButton from "@/components/DownloadButton.astro";
+import { HeroCard } from "@/components/react/HeroCard";
+import Base from "@/layouts/Base.astro";
+---
+
+<Base title="Home">
+  <main class="flex min-h-screen items-center justify-center p-5">
+    <HeroCard.Root orientation="horizontal" client:load>
+      <HeroCard.Content>
+        <HeroCard.Title
+          >Stop consuming noise. Start building wisdom.</HeroCard.Title
+        >
+        <HeroCard.Subtitle>
+          A curation platform that transforms scattered web content into
+          structured learning paths.
+        </HeroCard.Subtitle>
+        <HeroCard.Actions>
+          <DownloadButton store="Google Play" />
+          <DownloadButton store="App Store" />
+        </HeroCard.Actions>
+      </HeroCard.Content>
+
+      <HeroCard.Image
+        src="/images/home/hero.png"
+        alt="IIllustrative image of content curation"
+        width={400}
+        height={300}
+      />
+    </HeroCard.Root>
+  </main>
+</Base>
