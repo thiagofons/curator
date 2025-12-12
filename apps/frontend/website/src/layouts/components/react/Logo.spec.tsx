@@ -12,7 +12,7 @@ describe("Logo", () => {
     const img = screen.getByRole("img", { name: "Curator" });
 
     expect(img).toBeInTheDocument();
-    expect(img).toHaveAttribute("src", "/images/logo-light.svg");
+    expect(img).toHaveAttribute("src", "/images/logo-light.png");
     expect(img).toHaveAttribute("alt", "Curator");
     expect(img).toHaveAttribute("loading", "lazy");
     expect(img).toHaveClass("h-8", "w-auto");
@@ -22,14 +22,14 @@ describe("Logo", () => {
     render(<Logo type="light" />);
     const img = screen.getByRole("img", { name: "Curator" });
 
-    expect(img).toHaveAttribute("src", "/images/logo-light.svg");
+    expect(img).toHaveAttribute("src", "/images/logo-light.png");
   });
 
   it("renders dark logo when type is dark", () => {
     render(<Logo type="dark" />);
     const img = screen.getByRole("img", { name: "Curator" });
 
-    expect(img).toHaveAttribute("src", "/images/logo-dark.svg");
+    expect(img).toHaveAttribute("src", "/images/logo-dark.png");
     expect(img).toHaveAttribute("alt", "Curator");
   });
 
