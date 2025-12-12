@@ -7,6 +7,17 @@ export const sharedConfig = {
     },
     passWithNoTests: true,
     decoratorMetadata: true,
+    maxConcurrency: 0, // 0 = sem limite explícito (usa o padrão do sistema)
+    poolOptions: {
+      threads: {
+        maxThreads: 0, // 0 = usa todos os núcleos disponíveis
+        minThreads: 0,
+      },
+      forks: {
+        maxForks: 0,
+        minForks: 0,
+      },
+    },
     coverage: {
       provider: "v8",
       reporter: ["text", "lcov"],
@@ -31,7 +42,12 @@ export const sharedConfig = {
       },
     },
     all: true,
-    include: ["**/*.spec.ts", "**/*.it.spec.ts"],
+    include: [
+      "**/*.spec.ts",
+      "**/*.it.spec.ts",
+      "**/*.spec.tsx",
+      "**/*.it.spec.tsx",
+    ],
     exclude: ["**/node_modules/**", "**/.git/**"],
   },
 };

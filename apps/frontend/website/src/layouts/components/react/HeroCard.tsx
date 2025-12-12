@@ -11,7 +11,7 @@ type RootProps = React.HTMLAttributes<HTMLDivElement> & {
 
 const Root = ({
   orientation = "horizontal",
-  imageSide = "right",
+  imageSide: _imageSide = "right",
   className,
   containerClassName,
   children,
@@ -44,7 +44,7 @@ const Root = ({
 const Content = ({
   className,
   ...props
-}: React.ImgHTMLAttributes<HTMLImageElement>) => (
+}: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
       "flex h-auto w-full flex-col gap-[18px] rounded-2xl object-cover",

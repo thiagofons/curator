@@ -45,8 +45,7 @@
     "remark-collapse": "catalog:ui-libs",
     "remark-toc": "catalog:ui-libs",
     "tailwind-merge": "^3.4.0",
-    "vite": "catalog:vite7",
-    "vitest": "catalog:testing"
+    "vite": "catalog:vite7"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
@@ -55,6 +54,9 @@
     "@tailwindcss/forms": "catalog:ui-libs",
     "@tailwindcss/typography": "catalog:ui-libs",
     "@tailwindcss/vite": "catalog:ui-libs",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@types/jest": "^30.0.0",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
     "prettier": "catalog:code-quality",
@@ -62,6 +64,7 @@
     "prettier-plugin-tailwindcss": "catalog:code-quality",
     "sharp": "catalog:ui-libs",
     "tailwindcss": "^4.1.17",
-    "typescript": "catalog:tooling"
+    "typescript": "catalog:tooling",
+    "vitest": "link:@testing-library/jest-dom/vitest"
   }
 }

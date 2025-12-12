@@ -1,8 +1,0 @@
-{
-  "devDependencies": {
-    "prettier": "catalog:tooling",
-    "prettier-plugin-astro": "^0.14.1",
-    "prettier-plugin-tailwindcss": "^0.6.11",
-    "tailwindcss": "catalog:react19"
-  }
-}
