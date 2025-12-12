@@ -12,17 +12,19 @@ export const Logo = ({
     <div className={`flex items-center gap-2 ${className}`}>
       {type === "light" ? (
         <img
-          src="/images/logo-light.svg"
+          src="/images/logo-light.png"
           alt="Curator"
           loading="lazy"
           className="h-8 w-auto"
+          draggable="false"
         />
       ) : (
         <img
-          src="/images/logo-dark.svg"
+          src="/images/logo-dark.png"
           alt="Curator"
           loading="lazy"
           className="h-8 w-auto"
+          draggable="false"
         />
       )}
     </div>
