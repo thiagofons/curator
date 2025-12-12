@@ -1,9 +1,7 @@
 import menuData from "@/config/menu.json";
-import {
-  getLangFromUrl,
-  useTranslatedPath,
-  useTranslations,
-} from "@/i18n/utils";
+import type { RouteKey } from "@/i18n/localized-routes";
+import { getLocaleFromPath, getLocalizedRoute } from "@/i18n/routing";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 import { Button } from "@repo/ui-web/base/button";
 import { H3 } from "@repo/ui-web/custom/typography";
 import { cn } from "@repo/ui-web/lib/utils";
@@ -17,13 +15,29 @@ import { Logo } from "./Logo";
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [currentPath, setCurrentPath] = useState(
+    typeof window !== "undefined" ? window.location.pathname : "/",
+  );
 
-  // Pegando a estrutura 'main' do seu JSON
   const navLinks = menuData.main;
 
   const lang = getLangFromUrl(new URL(window.location.href));
+  const locale = getLocaleFromPath(currentPath);
   const t = useTranslations(lang);
-  const translatePath = useTranslatedPath(lang);
+
+  // Sincroniza o path atual
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCurrentPath(window.location.pathname);
+
+      const handleLocationChange = () => {
+        setCurrentPath(window.location.pathname);
+      };
+
+      window.addEventListener("popstate", handleLocationChange);
+      return () => window.removeEventListener("popstate", handleLocationChange);
+    }
+  }, []);
 
   // Lógica de Scroll
   useEffect(() => {
@@ -32,6 +46,26 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Helper para obter a rota localizada baseada no nome do menu
+  const getMenuLink = (url: string): string => {
+    // Mapeia as URLs do menu.json para as RouteKeys
+    const routeMap: Record<string, RouteKey> = {
+      "/": "home",
+      "/about": "about",
+      "/roadmaps": "roadmaps",
+      "/contact": "contact",
+      "/blog": "blog",
+    };
+
+    const routeKey = routeMap[url];
+    if (routeKey) {
+      return getLocalizedRoute(routeKey, locale);
+    }
+
+    // Fallback para URLs não mapeadas
+    return locale === "pt" ? url : `/en${url}`;
+  };
+
   return (
     <>
       <motion.header
@@ -39,14 +73,17 @@ export const Navbar = () => {
       >
         <div className="container mx-auto flex w-full max-w-[1300px] items-center justify-between px-4 md:px-6">
           {/* LOGO */}
-          <a href={translatePath("/")} aria-label={t("nav.home")}>
+          <a
+            href={getLocalizedRoute("home", locale)}
+            aria-label={t("nav.home")}
+          >
             <Logo />
           </a>
 
           {/* DESKTOP NAV */}
           <nav className="hidden items-center gap-6 md:flex">
             {navLinks.map((item) => (
-              <a key={item.name} href={translatePath(item.url)}>
+              <a key={item.name} href={getMenuLink(item.url)}>
                 <H3
                   as="span"
                   variant="heading-h3"
@@ -62,7 +99,7 @@ export const Navbar = () => {
           <div className="flex items-center gap-3">
             {/* Language Switcher */}
             <div className="hidden md:block">
-              <LocaleSwitcher />
+              <LocaleSwitcher initialPath={currentPath} />
             </div>
 
             {/* CTA Button (Desktop Only) */}
@@ -74,6 +111,7 @@ export const Navbar = () => {
             <button
               className="text-foreground p-2 md:hidden"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label={isMobileMenuOpen ? "Fechar menu" : "Abrir menu"}
             >
               {isMobileMenuOpen ? <IoClose size={24} /> : <IoMenu size={24} />}
             </button>
@@ -94,7 +132,7 @@ export const Navbar = () => {
             {navLinks.map((item, i) => (
               <motion.a
                 key={item.name}
-                href={translatePath(item.url)}
+                href={getMenuLink(item.url)}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + i * 0.1 }}
@@ -116,8 +154,8 @@ export const Navbar = () => {
               transition={{ delay: 0.4 }}
               className="flex flex-col items-center gap-4"
             >
-              <LocaleSwitcher />
-              <Button>Começar</Button>
+              <LocaleSwitcher initialPath={currentPath} />
+              <Button>{t("nav.start_journey")}</Button>
             </motion.div>
           </motion.div>
         )}

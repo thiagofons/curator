@@ -1,51 +1,80 @@
-import { getLangFromUrl, useTranslatedPath } from "@/i18n/utils";
+import { type Locale } from "@/i18n/localized-routes";
+import { getLocaleFromPath, switchLocale } from "@/i18n/routing";
 import { Button } from "@repo/ui-web/base/button";
 import * as React from "react";
+import { useEffect, useState } from "react";
 
-const supportedLocales = ["pt", "en"] as const;
-type SupportedLocale = (typeof supportedLocales)[number];
+interface LocaleSwitcherProps {
+  /**
+   * O pathname atual (window.location.pathname no cliente)
+   * Pode ser passado via Astro.url.pathname no servidor
+   */
+  initialPath?: string;
+  className?: string;
+}
 
-const getCurrentLocale = (): SupportedLocale => {
-  const lang = getLangFromUrl(new URL(window.location.href));
-  return supportedLocales.includes(lang as SupportedLocale)
-    ? (lang as SupportedLocale)
-    : "pt";
-};
+export const LocaleSwitcher: React.FC<LocaleSwitcherProps> = ({
+  initialPath,
+  className = "",
+}) => {
+  const [currentPath, setCurrentPath] = useState(initialPath || "/");
+  const currentLocale = getLocaleFromPath(currentPath);
 
-const stripLocalePrefix = (pathname: string) =>
-  pathname.replace(/^\/(pt|en)(\/|$)/, "/");
+  // Sincroniza com mudanças de rota no cliente
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setCurrentPath(window.location.pathname);
 
-export const LocaleSwitcher: React.FC = () => {
-  const [currentLocale, setCurrentLocale] =
-    React.useState<SupportedLocale | null>(null);
+      // Listener para SPAs que usam History API
+      const handleLocationChange = () => {
+        setCurrentPath(window.location.pathname);
+      };
 
-  React.useEffect(() => {
-    if (typeof window === "undefined") return;
-    setCurrentLocale(getCurrentLocale());
+      window.addEventListener("popstate", handleLocationChange);
+
+      return () => {
+        window.removeEventListener("popstate", handleLocationChange);
+      };
+    }
   }, []);
 
-  const nextLocale: SupportedLocale = currentLocale === "en" ? "pt" : "en";
-  const translatePath = useTranslatedPath(nextLocale);
+  const handleLocaleChange = (newLocale: Locale) => {
+    if (newLocale === currentLocale) return;
 
-  const handleSwitch = () => {
-    if (!currentLocale) return;
-    const basePath = stripLocalePrefix(window.location.pathname) || "/";
-    const nextPath = translatePath(basePath);
+    const newPath = switchLocale(currentPath, newLocale);
+
+    // Preserva query params e hash
     const query = window.location.search ?? "";
     const hash = window.location.hash ?? "";
-    window.location.assign(`${nextPath}${query}${hash}`);
+
+    // Navega para a nova rota localizada
+    window.location.href = `${newPath}${query}${hash}`;
   };
 
-  if (!currentLocale) return null;
+  // Determina o próximo locale (toggle entre os disponíveis)
+  const nextLocale: Locale = currentLocale === "pt" ? "en" : "pt";
 
-  // Bandeiras por locale (emoji)
-  const localeFlag = currentLocale === "pt" ? "🇧🇷" : "🇺🇸";
-  const localeLabel = currentLocale.toUpperCase();
+  // Bandeiras e labels por locale
+  const localeConfig = {
+    pt: { flag: "🇧🇷", label: "PT", ariaLabel: "Português" },
+    en: { flag: "🇺🇸", label: "EN", ariaLabel: "English" },
+  };
+
+  const currentConfig = localeConfig[currentLocale];
+  const nextConfig = localeConfig[nextLocale];
+  const targetPath = switchLocale(currentPath, nextLocale);
 
   return (
-    <Button variant="ghost" size="sm" onClick={handleSwitch} className="gap-2">
-      <span aria-hidden="true">{localeFlag}</span>
-      <span>{localeLabel}</span>
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={() => handleLocaleChange(nextLocale)}
+      className={`gap-2 ${className}`}
+      aria-label={`Mudar idioma para ${nextConfig.ariaLabel}`}
+      title={`Alternar para ${nextConfig.ariaLabel}`}
+    >
+      <span aria-hidden="true">{currentConfig.flag}</span>
+      <span>{currentConfig.label}</span>
     </Button>
   );
 };
