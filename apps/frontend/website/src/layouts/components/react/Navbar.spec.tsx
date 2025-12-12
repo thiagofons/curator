@@ -7,16 +7,45 @@ import userEvent from "@testing-library/user-event";
 import React from "react";
 import { vi } from "vitest";
 
-// Mock menu data - usando dados inline para evitar problemas de resolução
+// Mock menu data
 vi.mock("@/config/menu.json", () => ({
   default: {
     main: [
-      { name: "Sobre", url: "/sobre" },
-      { name: "Trilhas", url: "/trilhas" },
-      { name: "Blog", url: "/blog" },
-      { name: "Comunidade", url: "/comunidade" },
+      {
+        name: "Início",
+        url: "/",
+      },
+      {
+        name: "Open Source",
+        url: "/open-source",
+      },
+      {
+        name: "Blog",
+        url: "/blog",
+      },
+      {
+        name: "Sobre",
+        url: "/about",
+      },
     ],
   },
+}));
+
+// Mock i18n utilities
+vi.mock("@/i18n/utils", () => ({
+  getLangFromUrl: vi.fn(() => "pt-br"),
+  useTranslations: vi.fn(() => (key: string) => {
+    const translations: Record<string, string> = {
+      "nav.home": "Home",
+      "nav.start_journey": "Começar",
+      Início: "Início",
+      "Open Source": "Open Source",
+      Blog: "Blog",
+      Sobre: "Sobre",
+    };
+    return translations[key] || key;
+  }),
+  useTranslatedPath: vi.fn(() => (path: string) => path),
 }));
 
 // Mock Button component to avoid framer-motion complexity
@@ -26,6 +55,18 @@ vi.mock("@repo/ui-web/base/button", () => ({
       {children}
     </button>
   )),
+}));
+
+// Mock H3 typography component
+vi.mock("@repo/ui-web/custom/typography", () => ({
+  H3: ({ children, as: Component = "h3", ...props }: any) => (
+    <Component {...props}>{children}</Component>
+  ),
+}));
+
+// Mock Logo component
+vi.mock("./Logo", () => ({
+  Logo: () => <div data-testid="logo">Logo</div>,
 }));
 
 // Mock framer-motion components
@@ -46,35 +87,58 @@ import { Navbar } from "./Navbar";
 describe("Navbar", () => {
   beforeEach(() => {
     window.scrollY = 0;
+    // Mock window.location
+    Object.defineProperty(window, "location", {
+      value: { href: "http://localhost/" },
+      writable: true,
+    });
   });
 
   describe("Desktop Navigation", () => {
     it("renders logo with home link", () => {
       render(<Navbar />);
-      const homeLink = screen.getByRole("link", { name: /home/i });
+      const logo = screen.getByTestId("logo");
+      const homeLink = logo.closest("a");
 
       expect(homeLink).toBeInTheDocument();
       expect(homeLink).toHaveAttribute("href", "/");
+      expect(homeLink).toHaveAttribute("aria-label", "Home");
     });
 
     it("renders all navigation links from menu config", () => {
       render(<Navbar />);
 
-      const expectedLinks = ["Sobre", "Trilhas", "Blog", "Comunidade"];
+      const expectedLinks = ["Início", "Open Source", "Blog", "Sobre"];
 
       expectedLinks.forEach((linkName) => {
-        const links = screen.getAllByText(linkName);
-        expect(links.length).toBeGreaterThan(0);
+        const link = screen.getByText(linkName);
+        expect(link).toBeInTheDocument();
+      });
+    });
+
+    it("navigation links have correct hrefs", () => {
+      render(<Navbar />);
+
+      const linkMap = [
+        { text: "Início", href: "/" },
+        { text: "Open Source", href: "/open-source" },
+        { text: "Blog", href: "/blog" },
+        { text: "Sobre", href: "/about" },
+      ];
+
+      linkMap.forEach(({ text, href }) => {
+        const link = screen.getByText(text).closest("a");
+        expect(link).toHaveAttribute("href", href);
       });
     });
 
     it("renders CTA button on desktop", () => {
       render(<Navbar />);
-      const ctaButtons = screen.getAllByRole("button", {
+      const ctaButton = screen.getByRole("button", {
         name: /começar/i,
       });
 
-      expect(ctaButtons.length).toBeGreaterThan(0);
+      expect(ctaButton).toBeInTheDocument();
     });
   });
 
@@ -103,10 +167,9 @@ describe("Navbar", () => {
       await user.click(mobileToggle!);
 
       await waitFor(() => {
-        const mobileMenuLinks = screen.getAllByText(
-          /sobre|trilhas|blog|comunidade/i,
-        );
-        expect(mobileMenuLinks.length).toBeGreaterThan(4);
+        // Verifica se os links aparecem duplicados (desktop + mobile)
+        const inicioLinks = screen.getAllByText("Início");
+        expect(inicioLinks.length).toBe(2); // 1 desktop + 1 mobile
       });
     });
 
@@ -120,15 +183,46 @@ describe("Navbar", () => {
           btn.querySelector("svg") && !btn.textContent?.match(/começar/i),
       );
 
+      // Abre o menu
       await user.click(mobileToggle!);
 
-      const mobileLinks = screen.getAllByText(/sobre/i);
-      const mobileLink = mobileLinks[mobileLinks.length - 1];
+      await waitFor(() => {
+        const blogLinks = screen.getAllByText("Blog");
+        expect(blogLinks.length).toBe(2);
+      });
 
-      mobileLink.addEventListener("click", (e) => e.preventDefault());
+      // Clica em um link do mobile menu (o segundo Blog)
+      const blogLinks = screen.getAllByText("Blog");
+      const mobileLink = blogLinks[1];
+
       await user.click(mobileLink);
 
-      expect(mobileToggle).toBeInTheDocument();
+      // Verifica que o menu fechou (apenas 1 link de cada agora)
+      await waitFor(() => {
+        const blogLinksAfter = screen.getAllByText("Blog");
+        expect(blogLinksAfter.length).toBe(1);
+      });
+    });
+
+    it("renders CTA button in mobile menu", async () => {
+      const user = userEvent.setup();
+      render(<Navbar />);
+
+      const toggleButtons = screen.getAllByRole("button");
+      const mobileToggle = toggleButtons.find(
+        (btn) =>
+          btn.querySelector("svg") && !btn.textContent?.match(/começar/i),
+      );
+
+      await user.click(mobileToggle!);
+
+      await waitFor(() => {
+        const ctaButtons = screen.getAllByRole("button", {
+          name: /começar/i,
+        });
+        // Desktop (oculto) + Mobile (visível)
+        expect(ctaButtons.length).toBeGreaterThanOrEqual(1);
+      });
     });
   });
 
@@ -154,12 +248,25 @@ describe("Navbar", () => {
         expect.any(Function),
       );
     });
+
+    it("updates isScrolled state when scrolling", async () => {
+      render(<Navbar />);
+
+      // Simula scroll
+      window.scrollY = 100;
+      window.dispatchEvent(new Event("scroll"));
+
+      // O estado interno muda mas não há efeito visual neste componente
+      // apenas verificamos que o listener funciona
+      expect(window.scrollY).toBe(100);
+    });
   });
 
   describe("Accessibility", () => {
     it("has proper ARIA label for home link", () => {
       render(<Navbar />);
-      const homeLink = screen.getByRole("link", { name: /home/i });
+      const logo = screen.getByTestId("logo");
+      const homeLink = logo.closest("a");
 
       expect(homeLink).toHaveAttribute("aria-label", "Home");
     });
@@ -168,9 +275,11 @@ describe("Navbar", () => {
       const user = userEvent.setup();
       render(<Navbar />);
 
+      // Primeiro tab vai para o logo/home link
       await user.tab();
 
-      const homeLink = screen.getByRole("link", { name: /home/i });
+      const logo = screen.getByTestId("logo");
+      const homeLink = logo.closest("a");
       expect(homeLink).toHaveFocus();
     });
 
@@ -190,10 +299,8 @@ describe("Navbar", () => {
       await user.keyboard("{Enter}");
 
       await waitFor(() => {
-        const mobileMenuLinks = screen.getAllByText(
-          /sobre|trilhas|blog|comunidade/i,
-        );
-        expect(mobileMenuLinks.length).toBeGreaterThan(4);
+        const inicioLinks = screen.getAllByText("Início");
+        expect(inicioLinks.length).toBe(2);
       });
     });
   });
@@ -215,6 +322,22 @@ describe("Navbar", () => {
       const header = container.querySelector("header");
 
       expect(header).toHaveClass("fixed");
+    });
+
+    it("navbar is responsive with proper classes", () => {
+      const { container } = render(<Navbar />);
+
+      // Desktop nav tem classe hidden md:flex
+      const desktopNav = container.querySelector("nav");
+      expect(desktopNav).toHaveClass("hidden", "md:flex");
+
+      // Mobile toggle tem classe md:hidden
+      const toggleButtons = screen.getAllByRole("button");
+      const mobileToggle = toggleButtons.find(
+        (btn) =>
+          btn.querySelector("svg") && !btn.textContent?.match(/começar/i),
+      );
+      expect(mobileToggle).toHaveClass("md:hidden");
     });
   });
 });

@@ -57,20 +57,16 @@ export const Navbar = () => {
             ))}
           </nav>
 
-          {/* ACTIONS (Search + CTA + Mobile Toggle) */}
+          {/* ACTIONS (Language + CTA + Mobile Toggle) */}
           <div className="flex items-center gap-3">
-            {/* Search Icon
-            <a
-              href="/blog/search"
-              className="p-2 text-muted-foreground hover:text-primary transition-colors"
-              aria-label="Pesquisar"
-            >
-              <IoSearch size={20} />
-            </a> */}
+            {/* Language Switcher */}
+            {/* <LanguageSwitcher /> */}
+
             {/* CTA Button (Desktop Only) */}
             <div className="hidden md:block">
               <Button>{t("nav.start_journey")}</Button>
             </div>
+
             {/* Mobile Toggle */}
             <button
               className="text-foreground p-2 md:hidden"
@@ -115,7 +111,9 @@ export const Navbar = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
+              className="flex flex-col items-center gap-4"
             >
+              {/* <LanguageSwitcher showLabel variant="outline" /> */}
               <Button>Começar</Button>
             </motion.div>
           </motion.div>
