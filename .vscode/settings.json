@@ -40,6 +40,9 @@
   "material-icon-theme.activeIconPack": "nest",
   "files.eol": "\n",
   "vitest.workspaceConfig": "vitest.workspace.ts",
+  "vitest.nodeEnv": {
+    "NODE_ENV": "test"
+  },
   "conventionalCommits.scopes": [
     "infrastructure",
     "monorepo",
