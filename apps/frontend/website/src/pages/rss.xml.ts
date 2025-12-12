@@ -1,8 +1,9 @@
-import rss from "@astrojs/rss";
 import { getPayloadPosts } from "@/lib/payload";
-import config from "../config/config.json";
 import type { RSSFeedItem } from "@astrojs/rss";
+import rss from "@astrojs/rss";
 import type { APIContext } from "astro";
+import config from "../config/config.json";
+
 /**
  * Generates the site's RSS feed from Payload-backed blog posts.
  * Uses @astrojs/rss to produce XML.

@@ -17,6 +17,11 @@
     "sonar": "pnpx sonar-scanner"
   },
   "dependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/trpc": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@repo/ui-web": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
     "@astrojs/check": "catalog:astro",
     "@astrojs/mdx": "catalog:astro",
     "@astrojs/react": "catalog:astro",
@@ -24,11 +29,6 @@
     "@astrojs/sitemap": "catalog:astro",
     "@digi4care/astro-google-tagmanager": "catalog:astro",
     "@justinribeiro/lite-youtube": "catalog:astro",
-    "@repo/eslint-config": "workspace:*",
-    "@repo/trpc": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
-    "@repo/ui-web": "workspace:*",
-    "@repo/vitest-config": "workspace:*",
     "astro": "catalog:astro",
     "astro-auto-import": "catalog:astro",
     "astro-font": "catalog:astro",

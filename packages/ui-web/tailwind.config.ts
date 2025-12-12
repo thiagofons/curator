@@ -13,6 +13,33 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["var(--font-primary)", "sans-serif"],
+      },
+      fontSize: {
+        // Display
+        "display-h1": ["60px", { lineHeight: "1.1" }], // 110%
+
+        // Heading
+        "heading-h2": ["36px", { lineHeight: "1.2" }], // 120%
+        "heading-h3": ["24px", { lineHeight: "1.33" }], // 133%
+        "heading-h4": ["20px", { lineHeight: "1.4" }], // 140%
+
+        // Subheading
+        "subheading-xl": ["24px", { lineHeight: "1.3" }], // 130%
+        "subheading-lg": ["20px", { lineHeight: "1.4" }], // 140%
+        "subheading-md": ["18px", { lineHeight: "1.4" }], // 140%
+        "subheading-sm": ["16px", { lineHeight: "1.0" }], // 100%
+        "subheading-xs": ["14px", { lineHeight: "1.0" }], // 100%
+
+        // Body
+        "body-large": ["18px", { lineHeight: "1.6" }], // 160%
+        "body-base": ["16px", { lineHeight: "1.5" }], // 150%
+        "body-small": ["14px", { lineHeight: "1.4" }], // 140%
+
+        // Button
+        "btn-text": ["16px", { lineHeight: "1.0" }], // 100%
+      },
       colors: {
         yellow: {
           theme: "var(--fluorescent-yellow)",
