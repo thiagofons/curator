@@ -3,7 +3,8 @@ import { Button } from "@repo/ui-web/base/button";
 import { H3 } from "@repo/ui-web/custom/typography";
 import { cn } from "@repo/ui-web/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import * as React from "react";
+import { useEffect, useState } from "react";
 import { IoClose, IoMenu } from "react-icons/io5";
 import { Logo } from "./Logo";
 
@@ -24,16 +25,16 @@ export const Navbar = () => {
   return (
     <>
       <motion.header
-        className={cn("bg-white fixed top-0 left-0 right-0 z-50 py-6")}
+        className={cn("fixed top-0 right-0 left-0 z-50 bg-white py-6")}
       >
-        <div className="w-full max-w-[1300px] container mx-auto px-4 md:px-6 flex items-center justify-between">
+        <div className="container mx-auto flex w-full max-w-[1300px] items-center justify-between px-4 md:px-6">
           {/* LOGO */}
           <a href="/" aria-label="Home">
             <Logo />
           </a>
 
           {/* DESKTOP NAV */}
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden items-center gap-6 md:flex">
             {navLinks.map((item) => (
               <a key={item.name} href={item.url}>
                 <H3
@@ -63,7 +64,7 @@ export const Navbar = () => {
             </div>
             {/* Mobile Toggle */}
             <button
-              className="md:hidden p-2 text-foreground"
+              className="text-foreground p-2 md:hidden"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? <IoClose size={24} /> : <IoMenu size={24} />}
@@ -80,7 +81,7 @@ export const Navbar = () => {
             animate={{ opacity: 1, clipPath: "circle(150% at 100% 0%)" }}
             exit={{ opacity: 0, clipPath: "circle(0% at 100% 0%)" }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="fixed inset-0 z-40 bg-white md:hidden flex flex-col items-center justify-center space-y-8 pt-20"
+            className="fixed inset-0 z-40 flex flex-col items-center justify-center space-y-8 bg-white pt-20 md:hidden"
           >
             {navLinks.map((item, i) => (
               <motion.a

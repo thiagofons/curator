@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React from "react";
+import * as React from "react";
 
 export const Logo = ({
   className = "",

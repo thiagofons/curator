@@ -24,7 +24,7 @@ const typographyVariants = cva(
       variant: {
         // --- Display ---
         /** Large display heading - typically for hero sections */
-        "display-h1": "text-display-h1 font-bold tracking-tight",
+        "display-h1": "text-display-h1 font-medium tracking-tight text-black",
 
         // --- Heading ---
         /** Secondary heading - major page sections */
@@ -36,11 +36,11 @@ const typographyVariants = cva(
 
         // --- Subheading ---
         /** Extra large subheading - prominent descriptive text */
-        "subheading-xl": "text-subheading-xl font-medium",
+        "subheading-xl": "text-subheading-xl font-medium text-secondary",
         /** Large subheading - descriptive text */
         "subheading-lg": "text-subheading-lg font-medium",
         /** Medium subheading - standard descriptive text */
-        "subheading-md": "text-subheading-md font-medium",
+        "subheading-md": "text-subheading-md font-medium text-secondary",
         /** Small subheading - labels and tags (uppercase) */
         "subheading-sm":
           "text-subheading-sm font-medium uppercase tracking-wide",

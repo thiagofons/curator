@@ -1,0 +1,42 @@
+---
+import { Image } from "astro:assets";
+
+type Props = {
+  store: "Google Play" | "App Store";
+};
+
+const { store } = Astro.props;
+
+const downloadLinks: Record<string, string> = {
+  "Google Play": "",
+  "App Store": "",
+};
+
+const href = downloadLinks[store];
+---
+
+<a href={href} class="cursor-pointer" target="_blank">
+  {
+    store === "Google Play" && (
+      <Image
+        src="/images/google-play.svg"
+        alt={store}
+        width={141}
+        height={42}
+        draggable={false}
+      />
+    )
+  }
+
+  {
+    store === "App Store" && (
+      <Image
+        src="/images/app-store.svg"
+        alt={store}
+        width={128}
+        height={42}
+        draggable={false}
+      />
+    )
+  }
+</a>

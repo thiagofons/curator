@@ -31,6 +31,9 @@
 
     // --- FRONTEND ---
     "bradlc.vscode-tailwindcss", // Autocomplete for Tailwind CSS (Frontend standard).
-    "astro-build.astro-vscode"
+    "astro-build.astro-vscode", // Astro syntax highlighting, snippets, and tooling.
+
+    // -- DEBUGGING --
+    "firefox-devtools.vscode-firefox-debug" // Debugging for Firefox
   ]
 }

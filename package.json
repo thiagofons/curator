@@ -68,7 +68,9 @@
     "husky": "catalog:automation",
     "lint-staged": "catalog:automation",
     "prettier": "catalog:code-quality",
-    "turbo": "catalog:tooling",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "turbo": "2.3.3",
     "typescript": "catalog:tooling"
   },
   "lint-staged": {

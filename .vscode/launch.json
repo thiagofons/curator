@@ -1,0 +1,57 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug: Firefox (Attach)",
+      "type": "firefox",
+      "request": "launch",
+      "reAttach": true,
+      "url": "http://localhost:5000",
+      "webRoot": "${workspaceFolder}/apps/frontend/website",
+      "pathMappings": [
+        {
+          "url": "webpack://_N_E/./",
+          "path": "${workspaceFolder}/apps/frontend/website"
+        }
+      ]
+    },
+    {
+      "name": "Serve: Front-End (Website)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "pnpm dev",
+      "cwd": "${workspaceFolder}/apps/frontend/website",
+      "env": {
+        "PORT": "5000"
+      }
+    },
+    {
+      "name": "Debug: Backend (NestJS)",
+      "type": "node",
+      "request": "launch",
+      "args": ["start:debug"],
+      "runtimeExecutable": "pnpm",
+      "cwd": "${workspaceFolder}/apps/api",
+      "console": "integratedTerminal",
+      "restart": true,
+      "sourceMaps": true
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Full Stack: Curator (Firefox + Nest)",
+      "configurations": [
+        "Serve: Front-End (Website)",
+        "Debug: Firefox (Attach)",
+        "Debug: Backend (NestJS)"
+      ]
+    },
+    {
+      "name": "Front-End Only (Firefox)",
+      "configurations": [
+        "Serve: Front-End (Website)",
+        "Debug: Firefox (Attach)"
+      ]
+    }
+  ]
+}
