@@ -3,7 +3,7 @@
     "title": "Curator | Blog",
     "base_url": "https://curator.com.br",
     "base_path": "/",
-    "trailing_slash": false,
+    "trailing_slash": "ignore",
     "favicon": "/images/favicon.png",
     "logo": "/images/logo-light.svg",
     "logo_width": "128",

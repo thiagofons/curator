@@ -1,4 +1,9 @@
 import menuData from "@/config/menu.json";
+import {
+  getLangFromUrl,
+  useTranslatedPath,
+  useTranslations,
+} from "@/i18n/utils";
 import { Button } from "@repo/ui-web/base/button";
 import { H3 } from "@repo/ui-web/custom/typography";
 import { cn } from "@repo/ui-web/lib/utils";
@@ -15,6 +20,10 @@ export const Navbar = () => {
   // Pegando a estrutura 'main' do seu JSON
   const navLinks = menuData.main;
 
+  const lang = getLangFromUrl(new URL(window.location.href));
+  const t = useTranslations(lang);
+  const translatePath = useTranslatedPath(lang);
+
   // Lógica de Scroll
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -29,20 +38,20 @@ export const Navbar = () => {
       >
         <div className="container mx-auto flex w-full max-w-[1300px] items-center justify-between px-4 md:px-6">
           {/* LOGO */}
-          <a href="/" aria-label="Home">
+          <a href={translatePath("/")} aria-label={t("nav.home")}>
             <Logo />
           </a>
 
           {/* DESKTOP NAV */}
           <nav className="hidden items-center gap-6 md:flex">
             {navLinks.map((item) => (
-              <a key={item.name} href={item.url}>
+              <a key={item.name} href={translatePath(item.url)}>
                 <H3
                   as="span"
                   variant="heading-h3"
                   className="text-foreground hover:text-primary transition-colors"
                 >
-                  {item.name}
+                  {t(item.name as keyof typeof t)}
                 </H3>
               </a>
             ))}
@@ -60,7 +69,7 @@ export const Navbar = () => {
             </a> */}
             {/* CTA Button (Desktop Only) */}
             <div className="hidden md:block">
-              <Button>Começar Jornada</Button>
+              <Button>{t("nav.start_journey")}</Button>
             </div>
             {/* Mobile Toggle */}
             <button
@@ -86,7 +95,7 @@ export const Navbar = () => {
             {navLinks.map((item, i) => (
               <motion.a
                 key={item.name}
-                href={item.url}
+                href={translatePath(item.url)}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + i * 0.1 }}
@@ -97,7 +106,7 @@ export const Navbar = () => {
                   variant="heading-h3"
                   className="text-foreground hover:text-primary transition-colors"
                 >
-                  {item.name}
+                  {t(item.name as keyof typeof t)}
                 </H3>
               </motion.a>
             ))}
