@@ -8,50 +8,48 @@
       "reAttach": true,
       "url": "http://localhost:5000",
       "webRoot": "${workspaceFolder}/apps/frontend/website",
-      "pathMappings": [
-        {
-          "url": "webpack://_N_E/./",
-          "path": "${workspaceFolder}/apps/frontend/website"
-        }
-      ]
+      "firefoxExecutable": "/usr/bin/firefox"
     },
     {
-      "name": "Serve: Front-End (Website)",
+      "name": "Front-End | Blog CMS",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "pnpm dev",
+      "cwd": "${workspaceFolder}/apps/frontend/blog-cms",
+      "env": {
+        "PORT": "4001"
+      }
+    },
+    {
+      "name": "Front-End | Docs",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "pnpm dev",
+      "cwd": "${workspaceFolder}/apps/frontend/docs",
+      "env": {
+        "PORT": "4002"
+      }
+    },
+    {
+      "name": "Front-End | Storybook (Web)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "pnpm storybook-web:dev",
+      "cwd": "${workspaceFolder}/apps/frontend/storybook/web",
+      "env": {
+        "PORT": "6006"
+      }
+    },
+    {
+      "name": "Front-End | Website",
       "type": "node-terminal",
       "request": "launch",
       "command": "pnpm dev",
       "cwd": "${workspaceFolder}/apps/frontend/website",
       "env": {
-        "PORT": "5000"
+        "PORT": "4003"
       }
-    },
-    {
-      "name": "Debug: Backend (NestJS)",
-      "type": "node",
-      "request": "launch",
-      "args": ["start:debug"],
-      "runtimeExecutable": "pnpm",
-      "cwd": "${workspaceFolder}/apps/api",
-      "console": "integratedTerminal",
-      "restart": true,
-      "sourceMaps": true
     }
   ],
-  "compounds": [
-    {
-      "name": "Full Stack: Curator (Firefox + Nest)",
-      "configurations": [
-        "Serve: Front-End (Website)",
-        "Debug: Firefox (Attach)",
-        "Debug: Backend (NestJS)"
-      ]
-    },
-    {
-      "name": "Front-End Only (Firefox)",
-      "configurations": [
-        "Serve: Front-End (Website)",
-        "Debug: Firefox (Attach)"
-      ]
-    }
-  ]
+  "compounds": []
 }
