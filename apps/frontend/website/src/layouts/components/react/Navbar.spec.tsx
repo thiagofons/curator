@@ -81,7 +81,12 @@ vi.mock("framer-motion", () => ({
   AnimatePresence: ({ children }: any) => <>{children}</>,
 }));
 
-// Importar depois dos mocks
+// Mock LocaleSwitcher to a simple identifiable component
+vi.mock("./LocaleSwitcher", () => ({
+  LocaleSwitcher: () => <div data-testid="locale-switcher">LocaleSwitcher</div>,
+}));
+
+// Import after mocks
 import { Navbar } from "./Navbar";
 
 describe("Navbar", () => {
@@ -167,7 +172,7 @@ describe("Navbar", () => {
       await user.click(mobileToggle!);
 
       await waitFor(() => {
-        // Verifica se os links aparecem duplicados (desktop + mobile)
+        // Checks links appear duplicated (desktop + mobile)
         const inicioLinks = screen.getAllByText("Início");
         expect(inicioLinks.length).toBe(2); // 1 desktop + 1 mobile
       });
@@ -183,7 +188,7 @@ describe("Navbar", () => {
           btn.querySelector("svg") && !btn.textContent?.match(/começar/i),
       );
 
-      // Abre o menu
+      // Open the menu
       await user.click(mobileToggle!);
 
       await waitFor(() => {
@@ -191,13 +196,13 @@ describe("Navbar", () => {
         expect(blogLinks.length).toBe(2);
       });
 
-      // Clica em um link do mobile menu (o segundo Blog)
+      // Click a mobile menu link (the second Blog)
       const blogLinks = screen.getAllByText("Blog");
       const mobileLink = blogLinks[1];
 
       await user.click(mobileLink);
 
-      // Verifica que o menu fechou (apenas 1 link de cada agora)
+      // Check the menu closed (only 1 link remains)
       await waitFor(() => {
         const blogLinksAfter = screen.getAllByText("Blog");
         expect(blogLinksAfter.length).toBe(1);
@@ -220,7 +225,7 @@ describe("Navbar", () => {
         const ctaButtons = screen.getAllByRole("button", {
           name: /começar/i,
         });
-        // Desktop (oculto) + Mobile (visível)
+        // Desktop (hidden) + Mobile (visible)
         expect(ctaButtons.length).toBeGreaterThanOrEqual(1);
       });
     });
@@ -252,12 +257,12 @@ describe("Navbar", () => {
     it("updates isScrolled state when scrolling", async () => {
       render(<Navbar />);
 
-      // Simula scroll
+      // Simulate scroll
       window.scrollY = 100;
       window.dispatchEvent(new Event("scroll"));
 
-      // O estado interno muda mas não há efeito visual neste componente
-      // apenas verificamos que o listener funciona
+      // The internal state changes but there is no visual effect in this component
+      // just verify the listener works
       expect(window.scrollY).toBe(100);
     });
   });
@@ -275,7 +280,7 @@ describe("Navbar", () => {
       const user = userEvent.setup();
       render(<Navbar />);
 
-      // Primeiro tab vai para o logo/home link
+      // First tab focuses the logo/home link
       await user.tab();
 
       const logo = screen.getByTestId("logo");
@@ -327,17 +332,40 @@ describe("Navbar", () => {
     it("navbar is responsive with proper classes", () => {
       const { container } = render(<Navbar />);
 
-      // Desktop nav tem classe hidden md:flex
+      // Desktop nav has hidden md:flex classes
       const desktopNav = container.querySelector("nav");
       expect(desktopNav).toHaveClass("hidden", "md:flex");
 
-      // Mobile toggle tem classe md:hidden
+      // Mobile toggle has md:hidden class
       const toggleButtons = screen.getAllByRole("button");
       const mobileToggle = toggleButtons.find(
         (btn) =>
           btn.querySelector("svg") && !btn.textContent?.match(/começar/i),
       );
       expect(mobileToggle).toHaveClass("md:hidden");
+    });
+
+    it("renders LocaleSwitcher in the navbar (desktop actions) and in the mobile menu", async () => {
+      const user = userEvent.setup();
+      render(<Navbar />);
+
+      // Desktop: LocaleSwitcher inside actions (hidden on md:hidden, but present in DOM)
+      const desktopLocaleSwitcher = screen.getAllByTestId("locale-switcher")[0];
+      expect(desktopLocaleSwitcher).toBeInTheDocument();
+
+      // Open mobile menu
+      const toggleButtons = screen.getAllByRole("button");
+      const mobileToggle = toggleButtons.find(
+        (btn) =>
+          btn.querySelector("svg") && !btn.textContent?.match(/começar/i),
+      );
+      await user.click(mobileToggle!);
+
+      // Mobile: LocaleSwitcher rendered inside the mobile menu content
+      await waitFor(() => {
+        const localeSwitchers = screen.getAllByTestId("locale-switcher");
+        expect(localeSwitchers.length).toBeGreaterThanOrEqual(2);
+      });
     });
   });
 });

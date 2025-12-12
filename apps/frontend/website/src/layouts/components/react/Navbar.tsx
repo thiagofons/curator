@@ -11,6 +11,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { IoClose, IoMenu } from "react-icons/io5";
+import { LocaleSwitcher } from "./LocaleSwitcher";
 import { Logo } from "./Logo";
 
 export const Navbar = () => {
@@ -60,7 +61,9 @@ export const Navbar = () => {
           {/* ACTIONS (Language + CTA + Mobile Toggle) */}
           <div className="flex items-center gap-3">
             {/* Language Switcher */}
-            {/* <LanguageSwitcher /> */}
+            <div className="hidden md:block">
+              <LocaleSwitcher />
+            </div>
 
             {/* CTA Button (Desktop Only) */}
             <div className="hidden md:block">
@@ -113,7 +116,7 @@ export const Navbar = () => {
               transition={{ delay: 0.4 }}
               className="flex flex-col items-center gap-4"
             >
-              {/* <LanguageSwitcher showLabel variant="outline" /> */}
+              <LocaleSwitcher />
               <Button>Começar</Button>
             </motion.div>
           </motion.div>
