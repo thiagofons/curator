@@ -1,5 +1,6 @@
-import { DEFAULT_LOCALE, getLocaleFromPath } from "@/i18n/routing";
+import { getLocaleFromPath } from "@/i18n/routing";
 import { defineMiddleware } from "astro:middleware";
+import { DEFAULT_LOCALE } from "./i18n/localized-routes";
 
 export const onRequest = defineMiddleware((context, next) => {
   const locale = getLocaleFromPath(context.url.pathname);
