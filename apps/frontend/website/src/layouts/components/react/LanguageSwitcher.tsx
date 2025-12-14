@@ -56,6 +56,7 @@ export function LanguageSwitcher({
           <button
             key={locale}
             type="button"
+            data-locale={locale}
             onClick={() => handleLocaleChange(locale)}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {

@@ -90,6 +90,11 @@ vi.mock("./LocaleSwitcher", () => ({
 import { Navbar } from "./Navbar";
 
 describe("Navbar", () => {
+  const preventAnchorNavigation = (e: Event) => {
+    const target = e.target as Element | null;
+    if (target?.closest?.("a")) e.preventDefault();
+  };
+
   beforeEach(() => {
     window.scrollY = 0;
     Object.defineProperty(window, "location", {
@@ -101,6 +106,12 @@ describe("Navbar", () => {
       },
       writable: true,
     });
+
+    document.addEventListener("click", preventAnchorNavigation, true);
+  });
+
+  afterEach(() => {
+    document.removeEventListener("click", preventAnchorNavigation, true);
   });
 
   describe("Desktop Navigation", () => {

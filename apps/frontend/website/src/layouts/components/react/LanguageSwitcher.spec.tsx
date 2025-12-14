@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom/vitest";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import * as React from "react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -92,5 +92,51 @@ describe("LanguageSwitcher", () => {
     const ptButton = screen.getByText("PT");
 
     expect(ptButton).toHaveAttribute("aria-current", "true");
+  });
+
+  it("uses window.location.pathname when initialPath is not provided", () => {
+    delete (window as any).location;
+    window.location = { href: "", pathname: "/en/about" } as any;
+
+    render(<LanguageSwitcher />);
+
+    const enButton = screen.getByText("EN");
+    expect(enButton).toHaveAttribute("aria-current", "true");
+  });
+
+  it("updates active locale on popstate", async () => {
+    delete (window as any).location;
+    window.location = { href: "", pathname: "/sobre" } as any;
+
+    render(<LanguageSwitcher />);
+
+    expect(screen.getByText("PT")).toHaveAttribute("aria-current", "true");
+
+    window.location.pathname = "/en/about";
+    fireEvent(window, new PopStateEvent("popstate"));
+
+    await waitFor(() => {
+      expect(screen.getByText("EN")).toHaveAttribute("aria-current", "true");
+    });
+  });
+
+  it("is keyboard accessible (Enter triggers navigation)", () => {
+    delete (window as any).location;
+    window.location = { href: "", pathname: "/sobre" } as any;
+
+    render(<LanguageSwitcher />);
+
+    const enButton = screen.getByText("EN");
+    enButton.focus();
+    fireEvent.keyDown(enButton, { key: "Enter" });
+
+    expect(window.location.href).toBe("/en/about");
+  });
+
+  it("sets title to the target localized path", () => {
+    render(<LanguageSwitcher initialPath="/trilhas" />);
+
+    const enButton = screen.getByText("EN");
+    expect(enButton).toHaveAttribute("title", "/en/roadmaps");
   });
 });

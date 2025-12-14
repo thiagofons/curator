@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import "@testing-library/jest-dom/vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { vi } from "vitest";
@@ -123,5 +123,59 @@ describe("LocaleSwitcher", () => {
 
     await user.keyboard("{Enter}");
     expect(window.location.assign).toHaveBeenCalled();
+  });
+
+  it("uses window.location.pathname when initialPath is not provided", () => {
+    delete (window as any).location;
+    window.location = {
+      pathname: "/en/roadmaps",
+      search: "",
+      hash: "",
+      assign: vi.fn(),
+    } as any;
+
+    render(<LocaleSwitcher />);
+
+    expect(screen.getByRole("button")).toHaveTextContent("EN");
+  });
+
+  it("updates when pathname changes via popstate", async () => {
+    delete (window as any).location;
+    window.location = {
+      pathname: "/pt/trilhas",
+      search: "",
+      hash: "",
+      assign: vi.fn(),
+    } as any;
+
+    render(<LocaleSwitcher />);
+
+    expect(screen.getByRole("button")).toHaveTextContent("PT");
+
+    window.location.pathname = "/en/roadmaps";
+    window.dispatchEvent(new PopStateEvent("popstate"));
+
+    await waitFor(() => {
+      expect(screen.getByRole("button")).toHaveTextContent("EN");
+    });
+  });
+
+  it("falls back to setting href when location.assign is not available (no navigation throw)", async () => {
+    const user = userEvent.setup();
+
+    delete (window as any).location;
+    window.location = {
+      pathname: "/pt/trilhas",
+      search: "",
+      hash: "",
+      href: "",
+      // assign intentionally missing
+    } as any;
+
+    render(<LocaleSwitcher />);
+
+    await user.click(screen.getByRole("button"));
+
+    expect(window.location.href).toContain("/en/roadmaps");
   });
 });
