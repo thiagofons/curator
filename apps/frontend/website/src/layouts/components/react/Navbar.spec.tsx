@@ -1,6 +1,7 @@
 /**
  * @vitest-environment jsdom
  */
+// Nota: este spec previne navegação real do JSDOM ao clicar em <a> para evitar "Not implemented: navigation".
 import "@testing-library/jest-dom/vitest";
 import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -83,7 +84,11 @@ vi.mock("framer-motion", () => ({
 
 // Mock LocaleSwitcher to a simple identifiable component
 vi.mock("./LocaleSwitcher", () => ({
-  LocaleSwitcher: () => <div data-testid="locale-switcher">LocaleSwitcher</div>,
+  LocaleSwitcher: ({ initialPath }: any) => (
+    <div data-testid="locale-switcher" data-initial-path={initialPath}>
+      LocaleSwitcher
+    </div>
+  ),
 }));
 
 // Import after mocks
@@ -159,6 +164,23 @@ describe("Navbar", () => {
       });
 
       expect(ctaButton).toBeInTheDocument();
+    });
+
+    it("prefixes unmapped routes with /en when current locale is English", () => {
+      Object.defineProperty(window, "location", {
+        value: {
+          href: "http://localhost/en/about",
+          pathname: "/en/about",
+          search: "",
+          hash: "",
+        },
+        writable: true,
+      });
+
+      render(<Navbar />);
+
+      const openSourceLink = screen.getByText("Open Source").closest("a");
+      expect(openSourceLink).toHaveAttribute("href", "/en/open-source");
     });
   });
 
@@ -381,5 +403,41 @@ describe("Navbar", () => {
         expect(localeSwitchers.length).toBeGreaterThanOrEqual(2);
       });
     });
+
+    it("syncs currentPath on popstate and propagates it to LocaleSwitcher", async () => {
+      Object.defineProperty(window, "location", {
+        value: {
+          href: "http://localhost/",
+          pathname: "/",
+          search: "",
+          hash: "",
+        },
+        writable: true,
+      });
+
+      render(<Navbar />);
+
+      const ls = screen.getAllByTestId("locale-switcher")[0];
+      expect(ls).toHaveAttribute("data-initial-path", "/");
+
+      (window.location as any).pathname = "/en/about";
+      act(() => window.dispatchEvent(new PopStateEvent("popstate")));
+
+      await waitFor(() => {
+        const updated = screen.getAllByTestId("locale-switcher")[0];
+        expect(updated).toHaveAttribute("data-initial-path", "/en/about");
+      });
+    });
+  });
+
+  it("does not trigger jsdom navigation when clicking a nav link (preventDefault in capture)", async () => {
+    const user = userEvent.setup();
+    render(<Navbar />);
+
+    // clicar no link "Blog" não deve tentar navegar de verdade (sem throw)
+    await expect(
+      user.click(screen.getAllByText("Blog")[0]),
+    ).resolves.toBeUndefined();
+    expect(window.location.pathname).toBe("/");
   });
 });

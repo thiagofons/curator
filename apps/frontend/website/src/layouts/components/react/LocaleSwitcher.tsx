@@ -1,11 +1,9 @@
+import { LOCALES, type Locale } from "@/i18n/localized-routes";
 import {
-  DEFAULT_LOCALE,
-  LOCALES,
-  localizedRoutes,
-  type Locale,
-  type RouteKey,
-} from "@/i18n/localized-routes";
-import { getLocaleFromPath, getLocalizedRoute } from "@/i18n/routing";
+  getLocaleFromPath,
+  getLocalizedRoute,
+  getRouteKeyFromPath,
+} from "@/i18n/routing";
 import { Button } from "@repo/ui-web/base/button";
 import * as React from "react";
 import { useEffect, useState } from "react";
@@ -49,37 +47,16 @@ export const LocaleSwitcher: React.FC<LocaleSwitcherProps> = ({
     return pathname.replace(/\/+$/, "");
   };
 
-  const stripAnyLocalePrefix = (pathname: string) => {
+  const stripDefaultLocalePrefix = (
+    pathname: string,
+    defaultLocale: Locale,
+  ) => {
     const normalized = normalizePathname(pathname);
-    const segments = normalized.split("/").filter(Boolean);
-    const first = segments[0];
-    if (first && LOCALES.includes(first as Locale)) {
-      const rest = segments.slice(1);
-      return rest.length ? `/${rest.join("/")}` : "/";
-    }
+    const prefix = `/${defaultLocale}`;
+    if (normalized === prefix) return "/";
+    if (normalized.startsWith(`${prefix}/`))
+      return normalized.slice(prefix.length) || "/";
     return normalized;
-  };
-
-  const findRouteKey = (pathname: string): RouteKey | null => {
-    const raw = normalizePathname(pathname);
-    const withoutPrefix = stripAnyLocalePrefix(raw);
-    const candidates = new Set([raw, withoutPrefix]);
-
-    for (const [key, routes] of Object.entries(localizedRoutes)) {
-      for (const loc of LOCALES) {
-        if (candidates.has(normalizePathname(routes[loc])))
-          return key as RouteKey;
-      }
-      // suporte extra: "/pt/..." deve bater com as rotas pt canônicas (sem "/pt")
-      if (
-        getLocaleFromPath(raw) === DEFAULT_LOCALE &&
-        candidates.has(normalizePathname(routes.pt))
-      ) {
-        return key as RouteKey;
-      }
-    }
-
-    return null;
   };
 
   const buildPrefixSwapPath = (pathname: string, targetLocale: Locale) => {
@@ -90,6 +67,12 @@ export const LocaleSwitcher: React.FC<LocaleSwitcherProps> = ({
       segments.length > 0 && LOCALES.includes(segments[0] as Locale)
         ? segments.slice(1)
         : segments;
+
+    // pt é o idioma padrão: sem prefixo
+    if (targetLocale === "pt") {
+      const next = rest.length ? `/${rest.join("/")}` : `/`;
+      return next.replace(/\/{2,}/g, "/");
+    }
 
     const next = rest.length
       ? `/${targetLocale}/${rest.join("/")}`
@@ -103,14 +86,16 @@ export const LocaleSwitcher: React.FC<LocaleSwitcherProps> = ({
       assign?: (u: string) => void;
       href: string;
     };
+
     if (typeof loc.assign === "function") {
       loc.assign(url);
       return;
     }
+
     try {
       loc.href = url;
     } catch {
-      // noop
+      // noop (evita quebrar em ambientes tipo JSDOM)
     }
   };
 
@@ -118,14 +103,24 @@ export const LocaleSwitcher: React.FC<LocaleSwitcherProps> = ({
     if (newLocale === currentLocale) return;
     if (typeof window === "undefined") return;
 
-    const routeKey = findRouteKey(currentPath);
+    const normalizedCurrent = normalizePathname(currentPath);
+    const routeKey = getRouteKeyFromPath(normalizedCurrent);
 
     let newPath = routeKey
       ? getLocalizedRoute(routeKey, newLocale)
-      : buildPrefixSwapPath(currentPath, newLocale);
+      : buildPrefixSwapPath(normalizedCurrent, newLocale);
 
-    // testes esperam "/en/" e "/pt/" na home
-    if (routeKey === "home") newPath = `/${newLocale}/`.replace(/\/{2,}/g, "/");
+    // home: pt => "/" | en => "/en/"
+    if (routeKey === "home") {
+      newPath = newLocale === "pt" ? "/" : `/${newLocale}/`;
+    }
+
+    // garante que pt nunca fique com "/pt" como prefixo
+    if (newLocale === "pt") {
+      newPath = stripDefaultLocalePrefix(newPath, "pt");
+    }
+
+    newPath = newPath.replace(/\/{2,}/g, "/");
 
     const query = window.location?.search ?? "";
     const hash = window.location?.hash ?? "";
