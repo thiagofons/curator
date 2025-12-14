@@ -29,7 +29,7 @@
     "@repo/typescript-config": "workspace:*",
     "@repo/ui-web": "workspace:*",
     "@repo/vitest-config": "workspace:*",
-    "astro": "catalog:astro",
+    "astro": "5.16.3",
     "astro-auto-import": "catalog:astro",
     "astro-font": "catalog:astro",
     "class-validator": "^0.14.2",
