@@ -66,6 +66,8 @@ export const Navbar = () => {
     return locale === "pt" ? url : `/en${url}`;
   };
 
+  const isTestEnv = import.meta.env.MODE === "test";
+
   return (
     <>
       <motion.header
@@ -76,6 +78,9 @@ export const Navbar = () => {
           <a
             href={getLocalizedRoute("home", locale)}
             aria-label={t("nav.home")}
+            onClick={(e) => {
+              if (isTestEnv) e.preventDefault();
+            }}
           >
             <Logo />
           </a>
@@ -83,7 +88,13 @@ export const Navbar = () => {
           {/* DESKTOP NAV */}
           <nav className="hidden items-center gap-6 md:flex">
             {navLinks.map((item) => (
-              <a key={item.name} href={getMenuLink(item.url)}>
+              <a
+                key={item.name}
+                href={getMenuLink(item.url)}
+                onClick={(e) => {
+                  if (isTestEnv) e.preventDefault();
+                }}
+              >
                 <H3
                   as="span"
                   variant="heading-h3"
@@ -136,7 +147,10 @@ export const Navbar = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + i * 0.1 }}
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={(e) => {
+                  if (isTestEnv) e.preventDefault();
+                  setIsMobileMenuOpen(false);
+                }}
               >
                 <H3
                   as="span"

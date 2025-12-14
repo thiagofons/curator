@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import "@testing-library/jest-dom/vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { vi } from "vitest";
@@ -92,9 +92,13 @@ import { Navbar } from "./Navbar";
 describe("Navbar", () => {
   beforeEach(() => {
     window.scrollY = 0;
-    // Mock window.location
     Object.defineProperty(window, "location", {
-      value: { href: "http://localhost/" },
+      value: {
+        href: "http://localhost/",
+        pathname: "/",
+        search: "",
+        hash: "",
+      },
       writable: true,
     });
   });
@@ -128,7 +132,7 @@ describe("Navbar", () => {
         { text: "Início", href: "/" },
         { text: "Open Source", href: "/open-source" },
         { text: "Blog", href: "/blog" },
-        { text: "Sobre", href: "/about" },
+        { text: "Sobre", href: "/sobre" },
       ];
 
       linkMap.forEach(({ text, href }) => {
@@ -257,12 +261,11 @@ describe("Navbar", () => {
     it("updates isScrolled state when scrolling", async () => {
       render(<Navbar />);
 
-      // Simulate scroll
       window.scrollY = 100;
-      window.dispatchEvent(new Event("scroll"));
+      act(() => {
+        window.dispatchEvent(new Event("scroll"));
+      });
 
-      // The internal state changes but there is no visual effect in this component
-      // just verify the listener works
       expect(window.scrollY).toBe(100);
     });
   });

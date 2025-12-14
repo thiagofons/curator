@@ -1,5 +1,7 @@
 import type { Locale } from "@/i18n/localized-routes";
+import { LOCALES } from "@/i18n/localized-routes";
 import { getLocaleFromPath, switchLocale } from "@/i18n/routing";
+import * as React from "react";
 import { useEffect, useState } from "react";
 
 interface LanguageSwitcherProps {
@@ -15,33 +17,32 @@ export function LanguageSwitcher({
   initialPath,
   className = "",
 }: LanguageSwitcherProps) {
-  const [currentPath, setCurrentPath] = useState(initialPath || "/");
+  const [currentPath, setCurrentPath] = useState(() => {
+    if (initialPath) return initialPath;
+    if (typeof window === "undefined") return "/";
+    return window.location?.pathname || "/";
+  });
+
   const currentLocale = getLocaleFromPath(currentPath);
 
   // Sincroniza com mudanças de rota no cliente
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setCurrentPath(window.location.pathname);
+    if (typeof window === "undefined") return;
 
-      // Listener para SPAs que usam History API
-      const handleLocationChange = () => {
-        setCurrentPath(window.location.pathname);
-      };
+    const handleLocationChange = () => {
+      const next = window.location?.pathname;
+      if (typeof next === "string" && next.length > 0) setCurrentPath(next);
+    };
 
-      window.addEventListener("popstate", handleLocationChange);
-
-      return () => {
-        window.removeEventListener("popstate", handleLocationChange);
-      };
-    }
+    window.addEventListener("popstate", handleLocationChange);
+    return () => window.removeEventListener("popstate", handleLocationChange);
   }, []);
 
   const handleLocaleChange = (newLocale: Locale) => {
     if (newLocale === currentLocale) return;
+    if (typeof window === "undefined") return;
 
     const newPath = switchLocale(currentPath, newLocale);
-
-    // Navega para a nova rota localizada
     window.location.href = newPath;
   };
 
@@ -54,7 +55,14 @@ export function LanguageSwitcher({
         return (
           <button
             key={locale}
+            type="button"
             onClick={() => handleLocaleChange(locale)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                handleLocaleChange(locale);
+              }
+            }}
             className={`rounded-md px-3 py-1 font-medium transition-colors ${
               isActive
                 ? "bg-primary text-primary-foreground"

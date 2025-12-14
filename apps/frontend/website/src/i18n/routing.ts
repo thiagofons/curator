@@ -17,8 +17,8 @@ export function getLocalizedRoute(route: RouteKey, locale: Locale): string {
  * Obtém o locale da URL atual
  */
 export function getLocaleFromPath(pathname: string): Locale {
-  const segments = pathname.split("/").filter(Boolean);
-  const firstSegment = segments[0];
+  const segments = pathname?.split("/").filter(Boolean);
+  const firstSegment = segments?.[0];
 
   if (LOCALES.includes(firstSegment as Locale)) {
     return firstSegment as Locale;
@@ -31,24 +31,40 @@ export function getLocaleFromPath(pathname: string): Locale {
  * Remove o prefixo de locale da URL
  */
 export function removeLocalePrefix(pathname: string): string {
-  const locale = getLocaleFromPath(pathname);
+  const segments = pathname?.split("/").filter(Boolean);
+  const firstSegment = segments?.[0];
 
-  if (locale === DEFAULT_LOCALE) {
-    return pathname;
+  // Remove sempre que houver um segmento de locale (inclusive o DEFAULT_LOCALE)
+  if (LOCALES.includes(firstSegment as Locale)) {
+    const without = pathname.replace(`/${firstSegment}`, "") || "/";
+    return without === "" ? "/" : without;
   }
 
-  return pathname.replace(`/${locale}`, "") || "/";
+  return pathname || "/";
 }
 
 /**
  * Encontra a chave da rota baseado no pathname
  */
 export function getRouteKeyFromPath(pathname: string): RouteKey | null {
-  const locale = getLocaleFromPath(pathname);
+  const normalizePathname = (p: string) => {
+    if (!p) return "/";
+    if (p === "/") return "/";
+    return p.replace(/\/+$/, "");
+  };
+
+  const normalized = normalizePathname(pathname);
+  const locale = getLocaleFromPath(normalized);
+
+  const candidates = new Set<string>([
+    normalized,
+    normalizePathname(removeLocalePrefix(normalized)),
+  ]);
 
   for (const [key, routes] of Object.entries(localizedRoutes)) {
-    if (routes[locale] === pathname) {
-      return key as RouteKey;
+    const expected = normalizePathname(routes[locale]);
+    for (const candidate of candidates) {
+      if (candidate === expected) return key as RouteKey;
     }
   }
 
