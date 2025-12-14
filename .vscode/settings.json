@@ -7,7 +7,7 @@
   "explorer.fileNesting.patterns": {
     "vitest.config.ts": "vitest.*.ts",
     "*.ts": "$(capture).js, $(capture).*.ts, $(capture).*.js",
-    "*.tsx": "$(capture).stories.tsx, $(capture).spec.ts, $(capture).spec.tsx",
+    "*.tsx": "$(capture).stories.tsx, $(capture).spec.ts, $(capture).*,spec.tsx",
     "*.js": "$(capture).js.map, $(capture).*.ts, $(capture).*.js",
     "tsconfig.json": "tsconfig.*.json",
     "Dockerfile": "docker-compose.yml, .dockerignore",

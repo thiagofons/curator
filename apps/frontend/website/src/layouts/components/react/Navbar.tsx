@@ -12,7 +12,7 @@ import { IoClose, IoMenu } from "react-icons/io5";
 import { LocaleSwitcher } from "./LocaleSwitcher";
 import { Logo } from "./Logo";
 
-export const Navbar = () => {
+export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [currentPath, setCurrentPath] = useState(
@@ -21,7 +21,13 @@ export const Navbar = () => {
 
   const navLinks = menuData.main;
 
-  const lang = getLangFromUrl(new URL(window.location.href));
+  // SSR-safe: window não existe no servidor
+  const url =
+    typeof window === "undefined"
+      ? new URL("http://localhost/") // fallback
+      : new URL(window.location.href);
+
+  const lang = getLangFromUrl(url);
   const locale = getLocaleFromPath(currentPath);
   const t = useTranslations(lang);
 
@@ -46,9 +52,7 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Helper para obter a rota localizada baseada no nome do menu
   const getMenuLink = (url: string): string => {
-    // Mapeia as URLs do menu.json para as RouteKeys
     const routeMap: Record<string, RouteKey> = {
       "/": "home",
       "/about": "about",
@@ -66,8 +70,6 @@ export const Navbar = () => {
     return locale === "pt" ? url : `/en${url}`;
   };
 
-  const isTestEnv = import.meta.env.MODE === "test";
-
   return (
     <>
       <motion.header
@@ -78,9 +80,6 @@ export const Navbar = () => {
           <a
             href={getLocalizedRoute("home", locale)}
             aria-label={t("nav.home")}
-            onClick={(e) => {
-              if (isTestEnv) e.preventDefault();
-            }}
           >
             <Logo />
           </a>
@@ -88,13 +87,7 @@ export const Navbar = () => {
           {/* DESKTOP NAV */}
           <nav className="hidden items-center gap-6 md:flex">
             {navLinks.map((item) => (
-              <a
-                key={item.name}
-                href={getMenuLink(item.url)}
-                onClick={(e) => {
-                  if (isTestEnv) e.preventDefault();
-                }}
-              >
+              <a key={item.name} href={getMenuLink(item.url)}>
                 <H3
                   as="span"
                   variant="heading-h3"
@@ -106,14 +99,12 @@ export const Navbar = () => {
             ))}
           </nav>
 
-          {/* ACTIONS (Language + CTA + Mobile Toggle) */}
+          {/* ACTIONS */}
           <div className="flex items-center gap-3">
-            {/* Language Switcher */}
             <div className="hidden md:block">
               <LocaleSwitcher initialPath={currentPath} />
             </div>
 
-            {/* CTA Button (Desktop Only) */}
             <div className="hidden md:block">
               <Button>{t("nav.start_journey")}</Button>
             </div>
@@ -130,7 +121,7 @@ export const Navbar = () => {
         </div>
       </motion.header>
 
-      {/* MOBILE MENU FULLSCREEN */}
+      {/* MOBILE MENU */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -147,10 +138,7 @@ export const Navbar = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + i * 0.1 }}
-                onClick={(e) => {
-                  if (isTestEnv) e.preventDefault();
-                  setIsMobileMenuOpen(false);
-                }}
+                onClick={() => setIsMobileMenuOpen(false)}
               >
                 <H3
                   as="span"
@@ -176,4 +164,4 @@ export const Navbar = () => {
       </AnimatePresence>
     </>
   );
-};
+}

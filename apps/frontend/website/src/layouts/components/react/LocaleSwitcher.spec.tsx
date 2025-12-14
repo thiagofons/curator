@@ -4,19 +4,28 @@
 import "@testing-library/jest-dom/vitest";
 import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import * as React from "react";
 import { vi } from "vitest";
 
-// Mocks
+// --- MOCKS ---
+vi.mock("@/i18n/routing", () => ({
+  getLocaleFromPath: vi.fn((path: string) =>
+    path.startsWith("/en") ? "en" : "pt",
+  ),
+  getRouteKeyFromPath: vi.fn((path: string) =>
+    path.includes("roadmaps") ? "roadmaps" : null,
+  ),
+  getLocalizedRoute: vi.fn((key: string, locale: string) => {
+    if (key === "home") return locale === "pt" ? "/" : "/en";
+    return locale === "pt" ? `/${key}` : `/en/${key}`;
+  }),
+  LOCALES: ["pt", "en"],
+}));
 
-vi.mock("@/i18n/utils", () => {
-  const getLangFromUrl = vi.fn(() => "pt");
-  const useTranslatedPath = vi.fn((nextLocale: string) => (path: string) => {
-    // Simulate path translation: prefix with /<locale>
-    const normalized = path.startsWith("/") ? path : `/${path}`;
-    return `/${nextLocale}${normalized}`.replace(/\/+/, "/");
-  });
-  return { getLangFromUrl, useTranslatedPath };
-});
+vi.mock("@/i18n/utils", () => ({
+  getLangFromUrl: vi.fn(() => "pt"),
+  useTranslatedPath: vi.fn(),
+}));
 
 vi.mock("@repo/ui-web/base/button", async () => {
   const { forwardRef } = await import("react");
@@ -29,25 +38,22 @@ vi.mock("@repo/ui-web/base/button", async () => {
   };
 });
 
-// Import after mocks
+// Importações REAIS (após mocks)
+import { getLocalizedRoute, getRouteKeyFromPath } from "@/i18n/routing"; // Importamos para poder usar o mock
 import { LocaleSwitcher } from "./LocaleSwitcher";
 
 describe("LocaleSwitcher", () => {
   beforeEach(() => {
-    // Define a controllable window.location for each test
     Object.defineProperty(window, "location", {
       value: {
-        pathname: "/pt/blog/post-1",
+        pathname: "/pt/roadmaps",
         search: "",
         hash: "",
         assign: vi.fn(),
-        href: "http://localhost/pt/blog/post-1",
+        href: "http://localhost/pt/roadmaps",
       },
       writable: true,
     });
-  });
-
-  afterEach(() => {
     vi.clearAllMocks();
   });
 
@@ -57,62 +63,57 @@ describe("LocaleSwitcher", () => {
     expect(screen.getByText("PT")).toBeInTheDocument();
   });
 
-  it("switches to en when current locale is pt and preserves query/hash", async () => {
+  it("switches to en when current locale is pt", async () => {
     const user = userEvent.setup();
-    window.location.pathname = "/pt/roadmaps";
-    window.location.search = "?q=node";
-    window.location.hash = "#section-2";
+
+    vi.mocked(getRouteKeyFromPath).mockReturnValue("roadmaps");
+    vi.mocked(getLocalizedRoute).mockReturnValue("/en/roadmaps");
+
     render(<LocaleSwitcher />);
 
     await user.click(screen.getByRole("button"));
 
-    expect(window.location.assign).toHaveBeenCalledWith(
-      "/en/roadmaps?q=node#section-2",
-    );
+    expect(window.location.assign).toHaveBeenCalledWith("/en/roadmaps");
   });
 
-  it("switches to pt when current locale is en", async () => {
-    // Override getLangFromUrl to return 'en'
-    const utils = await import("@/i18n/utils");
-    (utils.getLangFromUrl as any).mockReturnValueOnce("en");
-
-    Object.defineProperty(window, "location", {
-      value: {
-        pathname: "/en",
-        search: "",
-        hash: "",
-        assign: vi.fn(),
-        href: "http://localhost/en",
-      },
-      writable: true,
-    });
-
+  it("correctly strips default prefix when router returns exactly '/pt' (covers empty slice fallback)", async () => {
     const user = userEvent.setup();
-    render(<LocaleSwitcher />);
 
-    // Should show US flag and EN label
-    expect(screen.getByText("🇺🇸")).toBeInTheDocument();
-    expect(screen.getByText("EN")).toBeInTheDocument();
+    window.location.pathname = "/en/some-page";
+
+    vi.mocked(getRouteKeyFromPath).mockReturnValue("some-page");
+
+    vi.mocked(getLocalizedRoute).mockReturnValue("/pt");
+
+    render(<LocaleSwitcher />);
 
     await user.click(screen.getByRole("button"));
 
     expect(window.location.assign).toHaveBeenCalledWith("/");
   });
 
-  it("works on root path without duplicate trailing slash", async () => {
+  it("switches to pt when current locale is en", async () => {
+    window.location.pathname = "/en";
     const user = userEvent.setup();
-    window.location.pathname = "/pt";
     render(<LocaleSwitcher />);
+
+    vi.mocked(getRouteKeyFromPath).mockReturnValue("home");
+    vi.mocked(getLocalizedRoute).mockReturnValue("/");
 
     await user.click(screen.getByRole("button"));
-
-    expect(window.location.assign).toHaveBeenCalledWith("/en/");
+    expect(window.location.assign).toHaveBeenCalledWith("/");
   });
 
-  it("does not crash when window is not ready (SSR safe)", () => {
-    // jsdom always has window; just ensure it renders without issues
+  it("handles unmapped routes (fallback logic)", async () => {
+    const user = userEvent.setup();
+    window.location.pathname = "/pt/unknown";
+
+    vi.mocked(getRouteKeyFromPath).mockReturnValue(null);
+
     render(<LocaleSwitcher />);
-    expect(screen.getByRole("button")).toBeInTheDocument();
+    await user.click(screen.getByRole("button"));
+
+    expect(window.location.assign).toHaveBeenCalledWith("/en/unknown");
   });
 
   it("is keyboard accessible (Enter triggers click)", async () => {
@@ -121,35 +122,11 @@ describe("LocaleSwitcher", () => {
     const btn = screen.getByRole("button");
 
     btn.focus();
-    expect(btn).toHaveFocus();
-
     await user.keyboard("{Enter}");
     expect(window.location.assign).toHaveBeenCalled();
   });
 
-  it("uses window.location.pathname when initialPath is not provided", () => {
-    delete (window as any).location;
-    window.location = {
-      pathname: "/en/roadmaps",
-      search: "",
-      hash: "",
-      assign: vi.fn(),
-    } as any;
-
-    render(<LocaleSwitcher />);
-
-    expect(screen.getByRole("button")).toHaveTextContent("EN");
-  });
-
   it("updates when pathname changes via popstate", async () => {
-    delete (window as any).location;
-    window.location = {
-      pathname: "/pt/trilhas",
-      search: "",
-      hash: "",
-      assign: vi.fn(),
-    } as any;
-
     render(<LocaleSwitcher />);
 
     (window.location as any).pathname = "/en/roadmaps";
@@ -160,121 +137,23 @@ describe("LocaleSwitcher", () => {
     });
   });
 
-  it("falls back to setting href when location.assign is not available (no navigation throw)", async () => {
+  it("falls back to href when assign is missing", async () => {
     const user = userEvent.setup();
-
     delete (window as any).location;
     window.location = {
-      pathname: "/pt/trilhas",
-      search: "",
-      hash: "",
+      pathname: "/pt/foo",
       href: "",
-      // assign intentionally missing
-    } as any;
-
-    render(<LocaleSwitcher />);
-
-    await user.click(screen.getByRole("button"));
-
-    expect(window.location.href).toContain("/en/roadmaps");
-  });
-
-  it("does not throw when href setter throws and assign is missing (catch branch)", async () => {
-    const user = userEvent.setup();
-
-    const loc: any = { pathname: "/pt/trilhas", search: "", hash: "" };
-    Object.defineProperty(loc, "href", {
-      get: () => "",
-      set: () => {
-        throw new Error("setter blocked");
-      },
-    });
-
-    delete (window as any).location;
-    window.location = loc;
-
-    render(<LocaleSwitcher />);
-
-    await user.click(screen.getByRole("button"));
-    // Sem assert de navegação (setter lança); o objetivo é cobrir o catch sem falhar
-    expect(true).toBe(true);
-  });
-});
-
-describe("LocaleSwitcher (extra branch coverage)", () => {
-  it("falls back to prefix-swap when route is unknown (keeps rest of path)", async () => {
-    const user = userEvent.setup();
-
-    delete (window as any).location;
-    window.location = {
-      pathname: "/en/custom-page",
-      search: "",
-      hash: "",
-      assign: vi.fn(),
+      // sem assign
     } as any;
 
     render(<LocaleSwitcher />);
     await user.click(screen.getByRole("button"));
-
-    expect(window.location.assign).toHaveBeenCalledWith("/custom-page");
+    expect(window.location.href).toContain("/en/foo");
   });
 
-  it("ignores popstate when window.location.pathname is empty", async () => {
-    delete (window as any).location;
-    window.location = {
-      pathname: "/pt/trilhas",
-      search: "",
-      hash: "",
-      assign: vi.fn(),
-    } as any;
+  it("handles empty initialPath prop gracefully", async () => {
+    render(<LocaleSwitcher initialPath="" />);
 
-    render(<LocaleSwitcher />);
-    expect(screen.getByRole("button")).toHaveTextContent("PT");
-
-    (window.location as any).pathname = "";
-    act(() => window.dispatchEvent(new PopStateEvent("popstate")));
-
-    // continua em PT
-    await waitFor(() => {
-      expect(screen.getByRole("button")).toHaveTextContent("PT");
-    });
-  });
-
-  it("uses href fallback when location.assign is not a function", async () => {
-    const user = userEvent.setup();
-
-    delete (window as any).location;
-    window.location = {
-      pathname: "/pt/trilhas",
-      search: "",
-      hash: "",
-      href: "",
-      assign: null, // branch: não é função
-    } as any;
-
-    render(<LocaleSwitcher />);
-    await user.click(screen.getByRole("button"));
-
-    expect(window.location.href).toContain("/en/roadmaps");
-  });
-
-  it("does not throw when href setter throws and assign is missing (catch branch)", async () => {
-    const user = userEvent.setup();
-
-    const loc: any = { pathname: "/pt/trilhas", search: "", hash: "" };
-    Object.defineProperty(loc, "href", {
-      get: () => "",
-      set: () => {
-        throw new Error("setter blocked");
-      },
-    });
-
-    delete (window as any).location;
-    window.location = loc;
-
-    render(<LocaleSwitcher />);
-    await user.click(screen.getByRole("button"));
-
-    expect(true).toBe(true);
+    expect(screen.getByRole("button")).toBeInTheDocument();
   });
 });

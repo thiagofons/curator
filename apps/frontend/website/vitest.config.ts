@@ -16,6 +16,13 @@ export default mergeConfig(
       globals: true,
       environment: "jsdom",
       include: ["src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+      coverage: {
+        exclude: [
+          // assets/config não-executáveis derrubam o threshold sem agregar valor
+          "src/config/menu.json",
+          "src/config/**",
+        ],
+      },
     },
   }),
 );

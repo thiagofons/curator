@@ -48,6 +48,14 @@ export const sharedConfig = {
       "**/*.spec.tsx",
       "**/*.it.spec.tsx",
     ],
-    exclude: ["**/node_modules/**", "**/.git/**"],
+    exclude: [
+      "**/node_modules/**",
+      "**/.git/**",
+      "node_modules/",
+      "dist/",
+      "**/*.d.ts",
+      "**/*.config.{ts,js}",
+      "**/main.ts",
+    ],
   },
 };

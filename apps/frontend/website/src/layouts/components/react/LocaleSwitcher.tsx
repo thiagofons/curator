@@ -22,7 +22,8 @@ export const LocaleSwitcher: React.FC<LocaleSwitcherProps> = ({
   className = "",
 }) => {
   const [currentPath, setCurrentPath] = useState(() => {
-    if (initialPath) return initialPath;
+    // Prioridade: prop explicita > window > raiz
+    if (typeof initialPath === "string") return initialPath;
     if (typeof window === "undefined") return "/";
     return window.location?.pathname || "/";
   });
@@ -30,8 +31,6 @@ export const LocaleSwitcher: React.FC<LocaleSwitcherProps> = ({
   const currentLocale = getLocaleFromPath(currentPath);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
     const handleLocationChange = () => {
       const next = window.location?.pathname;
       if (typeof next === "string" && next.length > 0) setCurrentPath(next);
@@ -53,9 +52,12 @@ export const LocaleSwitcher: React.FC<LocaleSwitcherProps> = ({
   ) => {
     const normalized = normalizePathname(pathname);
     const prefix = `/${defaultLocale}`;
-    if (normalized === prefix) return "/";
-    if (normalized.startsWith(`${prefix}/`))
+
+    if (normalized === prefix || normalized.startsWith(`${prefix}/`)) {
+      // Se normalized for exatamente "/pt", slice retorna "" -> fallback para "/"
       return normalized.slice(prefix.length) || "/";
+    }
+
     return normalized;
   };
 
@@ -95,13 +97,13 @@ export const LocaleSwitcher: React.FC<LocaleSwitcherProps> = ({
     try {
       loc.href = url;
     } catch {
-      // noop (evita quebrar em ambientes tipo JSDOM)
+      // noop (evita quebrar em ambientes tipo JSDOM restritos)
     }
   };
 
   const handleLocaleChange = (newLocale: Locale) => {
     if (newLocale === currentLocale) return;
-    if (typeof window === "undefined") return;
+    // Removido check de window aqui pois onClick só roda no cliente
 
     const normalizedCurrent = normalizePathname(currentPath);
     const routeKey = getRouteKeyFromPath(normalizedCurrent);
@@ -110,12 +112,12 @@ export const LocaleSwitcher: React.FC<LocaleSwitcherProps> = ({
       ? getLocalizedRoute(routeKey, newLocale)
       : buildPrefixSwapPath(normalizedCurrent, newLocale);
 
-    // home: pt => "/" | en => "/en/"
+    // Hardcode para home para garantir raiz limpa
     if (routeKey === "home") {
       newPath = newLocale === "pt" ? "/" : `/${newLocale}/`;
     }
 
-    // garante que pt nunca fique com "/pt" como prefixo
+    // Garante limpeza do prefixo padrão se a rota gerada o contiver
     if (newLocale === "pt") {
       newPath = stripDefaultLocalePrefix(newPath, "pt");
     }
