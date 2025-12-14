@@ -4,7 +4,7 @@ import {
   localizedRoutes,
   type Locale,
   type RouteKey,
-} from "@/i18n/localized-routes";
+} from "./localized-routes";
 
 /**
  * Obtém a rota localizada para um locale específico
@@ -44,7 +44,6 @@ export function removeLocalePrefix(pathname: string): string {
  * Encontra a chave da rota baseado no pathname
  */
 export function getRouteKeyFromPath(pathname: string): RouteKey | null {
-  const cleanPath = removeLocalePrefix(pathname);
   const locale = getLocaleFromPath(pathname);
 
   for (const [key, routes] of Object.entries(localizedRoutes)) {

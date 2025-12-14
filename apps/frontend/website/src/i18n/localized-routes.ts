@@ -24,7 +24,6 @@ export const localizedRoutes = {
     pt: "/blog",
     en: "/en/blog",
   },
-  // Adicione mais rotas conforme necessário
 } as const;
 
 export type RouteKey = keyof typeof localizedRoutes;
