@@ -31,7 +31,7 @@
     "cross-env": "catalog:tooling",
     "dotenv": "catalog:tooling",
     "graphql": "catalog:api",
-    "next": "catalog:next16",
+    "next": "16.0.10",
     "payload": "catalog:payload",
     "react": "catalog:react19",
     "react-dom": "catalog:react19",
