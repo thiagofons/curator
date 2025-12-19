@@ -2,6 +2,8 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 
+import { cn } from "@repo/ui-web/lib/utils";
+
 const logoVariants = cva("w-auto", {
   variants: {
     size: {
@@ -23,12 +25,12 @@ export interface LogoProps extends VariantProps<typeof logoVariants> {
   type?: "dark" | "light";
 }
 
-export const Logo = ({ type = "light", size }: LogoProps) => {
+export const Logo = ({ className, type = "light", size }: LogoProps) => {
   const src =
     type === "light" ? "/images/logo-light.png" : "/images/logo-dark.png";
 
   return (
-    <div className="flex items-center gap-2">
+    <div className={cn("flex items-center gap-2", className)}>
       <img
         src={src}
         alt="Curator"

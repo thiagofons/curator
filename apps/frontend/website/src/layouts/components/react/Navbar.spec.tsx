@@ -61,9 +61,40 @@ vi.mock("@repo/ui-web/base/button", () => ({
 }));
 
 vi.mock("@repo/ui-web/custom/typography", () => ({
-  H3: ({ children, as: Component = "h3", ...props }: any) => (
+  H3: ({ children, as: Component = "h3", color: _color, ...props }: any) => (
     <Component {...props}>{children}</Component>
   ),
+  Display: ({
+    children,
+    as: Component = "h1",
+    color: _color,
+    ...props
+  }: any) => <Component {...props}>{children}</Component>,
+  SubheadingXL: ({
+    children,
+    as: Component = "p",
+    color: _color,
+    ...props
+  }: any) => <Component {...props}>{children}</Component>,
+  BodyBase: ({
+    children,
+    as: Component = "p",
+    color: _color,
+    ...props
+  }: any) => <Component {...props}>{children}</Component>,
+  BodySmall: ({
+    children,
+    as: Component = "p",
+    color: _color,
+    ...props
+  }: any) => <Component {...props}>{children}</Component>,
+  Typography: ({
+    children,
+    as: Component = "p",
+    color: _color,
+    variant: _variant,
+    ...props
+  }: any) => <Component {...props}>{children}</Component>,
 }));
 
 vi.mock("./Logo", () => ({
