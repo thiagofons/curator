@@ -1,8 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap");
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../tailwind.config.ts";
 
 @layer base {
   :root {
@@ -106,5 +105,39 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Primitive color utilities for Typography component */
+@layer utilities {
+  .text-white {
+    color: #ffffff;
+  }
+  .text-black {
+    color: #000000;
+  }
+  .text-brand-blue {
+    color: hsl(var(--brand-blue));
+  }
+  .text-brand-blue-dark {
+    color: hsl(var(--brand-blue-dark));
+  }
+  .text-gray-lighter {
+    color: hsl(var(--gray-lighter));
+  }
+  .text-gray-light {
+    color: hsl(var(--gray-light));
+  }
+  .text-gray-normal {
+    color: hsl(var(--gray-normal));
+  }
+  .text-gray-dark {
+    color: hsl(var(--gray-dark));
+  }
+  .text-status-green {
+    color: hsl(var(--status-green));
+  }
+  .text-status-red {
+    color: hsl(var(--status-red));
   }
 }

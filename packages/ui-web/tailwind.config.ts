@@ -2,12 +2,12 @@ import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
 
 const config = {
-  darkMode: ["class"],
+  darkMode: "class",
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
+    "./pages/**/*.{astro,ts,tsx}",
+    "./components/**/*.{astro,ts,tsx}",
+    "./app/**/*.{astro,ts,tsx}",
+    "./src/**/*.{astro,ts,tsx}",
     // Adicione o path da sua lib de UI se for monorepo
     "../../packages/ui/**/*.{ts,tsx}",
   ],
@@ -25,10 +25,20 @@ const config = {
         sans: ["var(--font-primary)", "sans-serif"],
       },
       fontSize: {
-        "display-h1": ["60px", { lineHeight: "1.1", letterSpacing: "-0.02em" }],
-        "heading-h2": ["36px", { lineHeight: "1.2", letterSpacing: "-0.01em" }],
-        "heading-h3": ["24px", { lineHeight: "1.33" }],
-        "heading-h4": ["20px", { lineHeight: "1.4" }],
+        "display-h1": [
+          "clamp(2rem, 4vw + 1rem, 3rem)",
+          {
+            lineHeight: "1.1",
+            letterSpacing: "-0.02em",
+            fontWeight: "700",
+          },
+        ],
+        "heading-h2": [
+          "clamp(1.5rem, 3vw + 1rem, 2.25rem)",
+          { lineHeight: "1.2", letterSpacing: "-0.01em", fontWeight: "600" },
+        ],
+        "heading-h3": ["24px", { lineHeight: "1.33", fontWeight: "600" }],
+        "heading-h4": ["20px", { lineHeight: "1.4", fontWeight: "600" }],
         "subheading-xl": ["24px", { lineHeight: "1.3", fontWeight: "500" }],
         "subheading-lg": ["20px", { lineHeight: "1.4", fontWeight: "500" }],
         "subheading-md": ["18px", { lineHeight: "1.4", fontWeight: "500" }],

@@ -1,6 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import React, { type ElementType } from "react";
-import { cn } from "../../lib/utils";
+
+import { themeColorClasses, type ThemeColor } from "../../types/theme-colors";
 
 // ----------------------------------------------------------------------
 // Typography Variants Definition (CVA) - Visual Contract
@@ -18,13 +19,13 @@ import { cn } from "../../lib/utils";
  * @see {@link https://cva.style/docs | CVA Documentation}
  */
 const typographyVariants = cva(
-  "text-slate-900", // Base default color
+  "", // Removed base color - now controlled by `color` prop
   {
     variants: {
       variant: {
         // --- Display ---
         /** Large display heading - typically for hero sections */
-        "display-h1": "text-display-h1 font-medium tracking-tight text-black",
+        "display-h1": "text-display-h1 font-medium tracking-tight",
 
         // --- Heading ---
         /** Secondary heading - major page sections */
@@ -36,17 +37,15 @@ const typographyVariants = cva(
 
         // --- Subheading ---
         /** Extra large subheading - prominent descriptive text */
-        "subheading-xl": "text-subheading-xl font-medium text-secondary",
+        "subheading-xl": "text-subheading-xl font-medium",
         /** Large subheading - descriptive text */
         "subheading-lg": "text-subheading-lg font-medium",
         /** Medium subheading - standard descriptive text */
-        "subheading-md": "text-subheading-md font-medium text-secondary",
+        "subheading-md": "text-subheading-md font-medium",
         /** Small subheading - labels and tags (uppercase) */
-        "subheading-sm":
-          "text-subheading-sm font-medium uppercase tracking-wide",
+        "subheading-sm": "text-subheading-sm font-medium tracking-wide",
         /** Extra small subheading - micro labels (uppercase) */
-        "subheading-xs":
-          "text-subheading-xs font-medium uppercase tracking-wide",
+        "subheading-xs": "text-subheading-xs font-medium tracking-wide",
 
         // --- Body ---
         /** Large body text - emphasized paragraphs */
@@ -58,7 +57,7 @@ const typographyVariants = cva(
 
         // --- Button ---
         /** Button text styling - uppercase with tracking */
-        "btn-text": "text-btn-text font-semibold uppercase tracking-wide",
+        "btn-text": "text-btn-text font-semibold tracking-wide",
       },
     },
     defaultVariants: {
@@ -97,6 +96,20 @@ export interface TypographyProps
 
   /** Content to be rendered inside the typography element */
   children: React.ReactNode;
+
+  /**
+   * Theme color to apply to the text.
+   * Supports semantic colors (theme-aware) and primitive colors (fixed).
+   *
+   * @defaultValue 'foreground'
+   * @example
+   * ```tsx
+   * <Typography color="primary">Primary colored text</Typography>
+   * <Typography color="brand-blue">Brand blue text</Typography>
+   * <Typography color="muted-foreground">Muted text</Typography>
+   * ```
+   */
+  color?: ThemeColor;
 }
 
 /**
@@ -121,16 +134,17 @@ export interface TypographyProps
 export const Typography = ({
   variant,
   as,
-  className,
   children,
+  color = "black",
   ...props
 }: TypographyProps) => {
-  const Component = as || "p"; // Safe fallback to paragraph
+  const Component = as || "p";
+  const colorClass = themeColorClasses[color];
 
   return (
     <Component
-      className={cn(typographyVariants({ variant, className }))}
       {...props}
+      className={`${typographyVariants({ variant })} ${colorClass}`}
     >
       {children}
     </Component>
@@ -158,8 +172,12 @@ export const Typography = ({
  * <Display as="div">Non-semantic display text</Display>
  * ```
  */
-export const Display = ({ as = "h1", ...props }: TypographyProps) => (
-  <Typography variant="display-h1" as={as} {...props} />
+export const Display = ({
+  as = "h1",
+  color = "black",
+  ...props
+}: TypographyProps) => (
+  <Typography variant="display-h1" as={as} color={color} {...props} />
 );
 
 /**
@@ -169,8 +187,12 @@ export const Display = ({ as = "h1", ...props }: TypographyProps) => (
  * - Visual: `heading-h2` variant
  * - Semantic default: `<h2>`
  */
-export const H2 = ({ as = "h2", ...props }: TypographyProps) => (
-  <Typography variant="heading-h2" as={as} {...props} />
+export const H2 = ({
+  as = "h2",
+  color = "black",
+  ...props
+}: TypographyProps) => (
+  <Typography variant="heading-h2" as={as} color={color} {...props} />
 );
 
 /**
@@ -180,8 +202,12 @@ export const H2 = ({ as = "h2", ...props }: TypographyProps) => (
  * - Visual: `heading-h3` variant
  * - Semantic default: `<h3>`
  */
-export const H3 = ({ as = "h3", ...props }: TypographyProps) => (
-  <Typography variant="heading-h3" as={as} {...props} />
+export const H3 = ({
+  as = "h3",
+  color = "foreground",
+  ...props
+}: TypographyProps) => (
+  <Typography variant="heading-h3" as={as} color={color} {...props} />
 );
 
 /**
@@ -191,8 +217,12 @@ export const H3 = ({ as = "h3", ...props }: TypographyProps) => (
  * - Visual: `heading-h4` variant
  * - Semantic default: `<h4>`
  */
-export const H4 = ({ as = "h4", ...props }: TypographyProps) => (
-  <Typography variant="heading-h4" as={as} {...props} />
+export const H4 = ({
+  as = "h4",
+  color = "foreground",
+  ...props
+}: TypographyProps) => (
+  <Typography variant="heading-h4" as={as} color={color} {...props} />
 );
 
 // --- SUBHEADINGS ---
@@ -205,8 +235,12 @@ export const H4 = ({ as = "h4", ...props }: TypographyProps) => (
  * - Semantic default: `<p>` (avoids polluting document outline)
  * - Use `as="h5"` if SEO hierarchy requires it
  */
-export const SubheadingXL = ({ as = "p", ...props }: TypographyProps) => (
-  <Typography variant="subheading-xl" as={as} {...props} />
+export const SubheadingXL = ({
+  as = "p",
+  color = "secondary",
+  ...props
+}: TypographyProps) => (
+  <Typography variant="subheading-xl" as={as} color={color} {...props} />
 );
 
 /**
@@ -216,8 +250,12 @@ export const SubheadingXL = ({ as = "p", ...props }: TypographyProps) => (
  * - Visual: `subheading-lg` variant
  * - Semantic default: `<p>`
  */
-export const SubheadingLG = ({ as = "p", ...props }: TypographyProps) => (
-  <Typography variant="subheading-lg" as={as} {...props} />
+export const SubheadingLG = ({
+  as = "p",
+  color = "foreground",
+  ...props
+}: TypographyProps) => (
+  <Typography variant="subheading-lg" as={as} color={color} {...props} />
 );
 
 /**
@@ -227,8 +265,12 @@ export const SubheadingLG = ({ as = "p", ...props }: TypographyProps) => (
  * - Visual: `subheading-md` variant
  * - Semantic default: `<p>`
  */
-export const SubheadingMD = ({ as = "p", ...props }: TypographyProps) => (
-  <Typography variant="subheading-md" as={as} {...props} />
+export const SubheadingMD = ({
+  as = "p",
+  color = "secondary",
+  ...props
+}: TypographyProps) => (
+  <Typography variant="subheading-md" as={as} color={color} {...props} />
 );
 
 /**
@@ -238,8 +280,12 @@ export const SubheadingMD = ({ as = "p", ...props }: TypographyProps) => (
  * - Visual: `subheading-sm` variant (uppercase with tracking)
  * - Semantic default: `<span>` (inline usage)
  */
-export const SubheadingSM = ({ as = "span", ...props }: TypographyProps) => (
-  <Typography variant="subheading-sm" as={as} {...props} />
+export const SubheadingSM = ({
+  as = "span",
+  color = "foreground",
+  ...props
+}: TypographyProps) => (
+  <Typography variant="subheading-sm" as={as} color={color} {...props} />
 );
 
 /**
@@ -249,8 +295,12 @@ export const SubheadingSM = ({ as = "span", ...props }: TypographyProps) => (
  * - Visual: `subheading-xs` variant (uppercase with tracking)
  * - Semantic default: `<span>` (inline usage)
  */
-export const SubheadingXS = ({ as = "span", ...props }: TypographyProps) => (
-  <Typography variant="subheading-xs" as={as} {...props} />
+export const SubheadingXS = ({
+  as = "span",
+  color = "foreground",
+  ...props
+}: TypographyProps) => (
+  <Typography variant="subheading-xs" as={as} color={color} {...props} />
 );
 
 // --- BODY ---
@@ -262,8 +312,12 @@ export const SubheadingXS = ({ as = "span", ...props }: TypographyProps) => (
  * - Visual: `body-large` variant
  * - Semantic default: `<p>`
  */
-export const BodyLarge = ({ as = "p", ...props }: TypographyProps) => (
-  <Typography variant="body-large" as={as} {...props} />
+export const BodyLarge = ({
+  as = "p",
+  color = "foreground",
+  ...props
+}: TypographyProps) => (
+  <Typography variant="body-large" as={as} color={color} {...props} />
 );
 
 /**
@@ -273,8 +327,12 @@ export const BodyLarge = ({ as = "p", ...props }: TypographyProps) => (
  * - Visual: `body-base` variant (default)
  * - Semantic default: `<p>`
  */
-export const BodyBase = ({ as = "p", ...props }: TypographyProps) => (
-  <Typography variant="body-base" as={as} {...props} />
+export const BodyBase = ({
+  as = "p",
+  color = "foreground",
+  ...props
+}: TypographyProps) => (
+  <Typography variant="body-base" as={as} color={color} {...props} />
 );
 
 /**
@@ -284,8 +342,12 @@ export const BodyBase = ({ as = "p", ...props }: TypographyProps) => (
  * - Visual: `body-small` variant
  * - Semantic default: `<p>`
  */
-export const BodySmall = ({ as = "p", ...props }: TypographyProps) => (
-  <Typography variant="body-small" as={as} {...props} />
+export const BodySmall = ({
+  as = "p",
+  color = "foreground",
+  ...props
+}: TypographyProps) => (
+  <Typography variant="body-small" as={as} color={color} {...props} />
 );
 
 // --- BUTTON TEXT ---
@@ -305,6 +367,10 @@ export const BodySmall = ({ as = "p", ...props }: TypographyProps) => (
  * </button>
  * ```
  */
-export const ButtonText = ({ as = "span", ...props }: TypographyProps) => (
-  <Typography variant="btn-text" as={as} {...props} />
+export const ButtonText = ({
+  as = "span",
+  color = "foreground",
+  ...props
+}: TypographyProps) => (
+  <Typography variant="btn-text" as={as} color={color} {...props} />
 );

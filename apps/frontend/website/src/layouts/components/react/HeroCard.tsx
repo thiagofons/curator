@@ -1,6 +1,12 @@
-import { Display, SubheadingXL } from "@repo/ui-web/custom/typography";
+import {
+  Display,
+  SubheadingMD,
+  type TypographyProps,
+} from "@repo/ui-web/custom/typography";
 import { cn } from "@repo/ui-web/lib/utils";
+import type { ThemeColor } from "@repo/ui-web/types/theme-colors";
 import * as React from "react";
+
 type Orientation = "horizontal" | "vertical";
 
 type RootProps = React.HTMLAttributes<HTMLDivElement> & {
@@ -22,7 +28,7 @@ const Root = ({
   return (
     <div
       className={cn(
-        "bg-card text-card-foreground mt-24 min-h-24 w-full max-w-[1200px] rounded-3xl text-center shadow-sm md:mt-0 md:text-left",
+        "bg-card text-card-foreground mt-24 min-h-24 w-full max-w-300 rounded-3xl text-center shadow-sm md:mt-0 md:text-left",
         "border-border border",
         className,
       )}
@@ -47,7 +53,7 @@ const Content = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "flex h-auto w-full flex-col gap-[18px] rounded-2xl object-cover",
+      "flex h-auto w-full flex-col gap-4.5 rounded-2xl object-cover",
       className,
     )}
     {...props}
@@ -65,18 +71,26 @@ const Image = ({
   />
 );
 
-const Title = ({
-  children,
-  ...props
-}: React.HTMLAttributes<HTMLHeadingElement>) => (
-  <Display {...props}>{children}</Display>
+/** Props for Title - extends Typography but omits variant (fixed to display-h1) */
+type TitleProps = Omit<TypographyProps, "variant"> & {
+  color?: ThemeColor;
+};
+
+const Title = ({ children, color = "black", ...props }: TitleProps) => (
+  <Display color={color} {...props}>
+    {children}
+  </Display>
 );
 
-const Subtitle = ({
-  children,
-  ...props
-}: React.HTMLAttributes<HTMLParagraphElement>) => (
-  <SubheadingXL {...props}>{children}</SubheadingXL>
+/** Props for Subtitle - extends Typography but omits variant (fixed to subheading-xl) */
+type SubtitleProps = Omit<TypographyProps, "variant"> & {
+  color?: ThemeColor;
+};
+
+const Subtitle = ({ children, color = "gray", ...props }: SubtitleProps) => (
+  <SubheadingMD color={color} {...props}>
+    {children}
+  </SubheadingMD>
 );
 
 const Actions = ({

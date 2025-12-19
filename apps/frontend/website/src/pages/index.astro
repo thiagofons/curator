@@ -1,16 +1,19 @@
 ---
 import DownloadButton from "@/components/DownloadButton.astro";
 import { HeroCard } from "@/components/react/HeroCard";
+import { Logo } from "@/components/react/Logo";
 import Base from "@/layouts/Base.astro";
+import { H2 } from "@repo/ui-web/components/custom/typography.jsx";
+import "@repo/ui-web/globals.css";
 ---
 
 <Base title="Home">
-  <main class="min-h-screen flex items-center justify-center p-5">
+  <main class="flex min-h-screen items-center justify-center p-5">
     <HeroCard.Root orientation="horizontal" client:load>
       <HeroCard.Content>
-        <HeroCard.Title
-          >Pare de consumir ruído. Comece a construir sabedoria.</HeroCard.Title
-        >
+        <HeroCard.Title>
+          Pare de consumir ruído.<br />Comece a construir sabedoria.
+        </HeroCard.Title>
         <HeroCard.Subtitle>
           Uma plataforma de curadoria que transforma conteúdos dispersos da web
           em trilhas de aprendizado estruturadas.
@@ -29,4 +32,24 @@ import Base from "@/layouts/Base.astro";
       />
     </HeroCard.Root>
   </main>
+
+  <!-- Seção de Comparação -->
+  <section class="bg-brand-dark px-5 py-16">
+    <div class="mx-auto max-w-6xl">
+      <!-- Header -->
+      <div class="mb-12 flex items-center justify-center gap-6">
+        <div class="flex w-full items-center justify-center">
+          <H2 color="white">Redes Sociais</H2>
+        </div>
+
+        <span class="text-gray-light text-xl">vs</span>
+
+        <div class="flex w-full items-center justify-center">
+          <Logo type="dark" size="2xl" />
+        </div>
+      </div>
+
+      <!-- Timeline com comparações -->
+    </div>
+  </section>
 </Base>

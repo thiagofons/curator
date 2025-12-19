@@ -3,7 +3,7 @@ import type { RouteKey } from "@/i18n/localized-routes";
 import { getLocaleFromPath, getLocalizedRoute } from "@/i18n/routing";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 import { Button } from "@repo/ui-web/base/button";
-import { H3 } from "@repo/ui-web/custom/typography";
+import { H3, Typography } from "@repo/ui-web/custom/typography";
 import { cn } from "@repo/ui-web/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import * as React from "react";
@@ -88,13 +88,13 @@ export function Navbar() {
           <nav className="hidden items-center gap-6 md:flex">
             {navLinks.map((item) => (
               <a key={item.name} href={getMenuLink(item.url)}>
-                <H3
+                <Typography
                   as="span"
-                  variant="heading-h3"
+                  variant="subheading-sm"
                   className="text-foreground hover:text-primary transition-colors"
                 >
                   {t(item.name as keyof typeof t)}
-                </H3>
+                </Typography>
               </a>
             ))}
           </nav>
