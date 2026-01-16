@@ -1,6 +1,6 @@
 import {
   Display,
-  SubheadingMD,
+  SubheadingXL,
   type TypographyProps,
 } from "@repo/ui-web/custom/typography";
 import { cn } from "@repo/ui-web/lib/utils";
@@ -74,11 +74,12 @@ const Image = ({
 /** Props for Title - extends Typography but omits variant (fixed to display-h1) */
 type TitleProps = Omit<TypographyProps, "variant"> & {
   color?: ThemeColor;
+  html?: string;
 };
 
-const Title = ({ children, color = "black", ...props }: TitleProps) => (
+const Title = ({ children, color = "black", html, ...props }: TitleProps) => (
   <Display color={color} {...props}>
-    {children}
+    {html ? <span dangerouslySetInnerHTML={{ __html: html }} /> : children}
   </Display>
 );
 
@@ -87,10 +88,14 @@ type SubtitleProps = Omit<TypographyProps, "variant"> & {
   color?: ThemeColor;
 };
 
-const Subtitle = ({ children, color = "gray", ...props }: SubtitleProps) => (
-  <SubheadingMD color={color} {...props}>
+const Subtitle = ({
+  children,
+  color = "gray-normal",
+  ...props
+}: SubtitleProps) => (
+  <SubheadingXL color={color} {...props}>
     {children}
-  </SubheadingMD>
+  </SubheadingXL>
 );
 
 const Actions = ({

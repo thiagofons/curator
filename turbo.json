@@ -1,6 +1,6 @@
 {
   "$schema": "https://turborepo.com/schema.json",
-  "globalEnv": ["PAYLOAD_SECRET", "DATABASE_URL"],
+  "globalEnv": ["PAYLOAD_SECRET", "DATABASE_URL", "FLAGSMITH_ENV_KEY"],
   "ui": "tui",
   "tasks": {
     "build": {

@@ -1,37 +1,18 @@
 ---
-import DownloadButton from "@/components/DownloadButton.astro";
+import Hero from "@/components/pages/home/Hero.astro";
 import SocialMediaVsCurator from "@/components/pages/home/SocialMediaVsCurator.astro";
-import { HeroCard } from "@/components/react/HeroCard";
 import Base from "@/layouts/Base.astro";
+import { flagsmith } from "@/lib/flagsmith";
 import "@repo/ui-web/globals.css";
+
+const flags = await flagsmith.getEnvironmentFlags();
+
+const isHeroEnabled = flags.isFeatureEnabled("home.hero");
+const isComparisonEnabled = flags.isFeatureEnabled("home.comparison");
 ---
 
 <Base title="Home">
-  <main class="flex min-h-screen items-center justify-center p-5">
-    <HeroCard.Root orientation="horizontal" client:load>
-      <HeroCard.Content>
-        <HeroCard.Title>
-          Pare de consumir ruído.<br />Comece a construir sabedoria.
-        </HeroCard.Title>
-        <HeroCard.Subtitle>
-          Uma plataforma de curadoria que transforma conteúdos dispersos da web
-          em trilhas de aprendizado estruturadas.
-        </HeroCard.Subtitle>
-        <HeroCard.Actions>
-          <DownloadButton store="Google Play" />
-          <DownloadButton store="App Store" />
-        </HeroCard.Actions>
-      </HeroCard.Content>
+  {isHeroEnabled && <Hero />}
 
-      <HeroCard.Image
-        src="/images/home/hero.png"
-        alt="Imagem ilustrativa de curadoria de conteúdos"
-        width={400}
-        height={300}
-      />
-    </HeroCard.Root>
-  </main>
-
-  <!-- Seção de Comparação -->
-  <SocialMediaVsCurator />
+  {isComparisonEnabled && <SocialMediaVsCurator />}
 </Base>

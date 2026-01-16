@@ -21,17 +21,23 @@ type Content = {
 const t = useTranslations();
 
 const socialMedia: Content[] = [
-  { icon: Eye, description: t("comparison.left.algorithm") },
-  { icon: Infinity, description: t("comparison.left.infinite_feed") },
-  { icon: Megaphone, description: t("comparison.left.viral_dictatorship") },
-  { icon: Candy, description: t("comparison.left.cheap_dopamine") },
+  { icon: Eye, description: t("home.comparison.left.algorithm") },
+  { icon: Infinity, description: t("home.comparison.left.infinite_feed") },
+  {
+    icon: Megaphone,
+    description: t("home.comparison.left.viral_dictatorship"),
+  },
+  { icon: Candy, description: t("home.comparison.left.cheap_dopamine") },
 ];
 
 const curator: Content[] = [
-  { icon: Brain, description: t("comparison.right.pedagogical_logic") },
-  { icon: MoveUp, description: t("comparison.right.structured_journey") },
-  { icon: Crown, description: t("comparison.right.elite_curation") },
-  { icon: TreeDeciduous, description: t("comparison.right.deep_knowledge") },
+  { icon: Brain, description: t("home.comparison.right.pedagogical_logic") },
+  { icon: MoveUp, description: t("home.comparison.right.structured_journey") },
+  { icon: Crown, description: t("home.comparison.right.elite_curation") },
+  {
+    icon: TreeDeciduous,
+    description: t("home.comparison.right.deep_knowledge"),
+  },
 ];
 
 const interleavedItems = socialMedia.flatMap((item, index) => [
@@ -46,7 +52,7 @@ const interleavedItems = socialMedia.flatMap((item, index) => [
       class="mb-12 flex flex-col items-center justify-center gap-4 md:flex-row md:gap-6"
     >
       <div class="flex w-full items-center justify-center text-center">
-        <H2 color="white">{t("comparison.left.title")}</H2>
+        <H2 color="white">{t("home.comparison.left.title")}</H2>
       </div>
       <span class="text-gray-light text-xl font-bold">VS</span>
       <div class="flex w-full items-center justify-center">
@@ -72,8 +78,6 @@ const interleavedItems = socialMedia.flatMap((item, index) => [
             <div
               class={`flex w-full items-start gap-3 rounded-lg border p-4 transition-all ${cardStyles} max-w-full md:max-w-108`}
             >
-              {/* Note que removemos o justify-self-end/start acima para permitir a centralização global */}
-
               <div
                 class={`${iconBgStyles} mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md`}
               >

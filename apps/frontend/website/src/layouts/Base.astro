@@ -3,6 +3,7 @@ import TwSizeIndicator from "@/components/TwSizeIndicator.astro";
 import config from "@/config/config.json";
 import theme from "@/config/theme.json";
 import { getLangFromUrl } from "@/i18n/utils";
+import { flagsmith } from "@/lib/flagsmith";
 import { plainify } from "@/lib/utils/textConverter";
 import Footer from "@/partials/Footer.astro";
 import "@/styles/main.css";
@@ -39,6 +40,11 @@ const ENABLE_ASTRO_FONT =
   String(ENV.ENABLE_ASTRO_FONT || "").toLowerCase() === "true";
 
 const lang = getLangFromUrl(Astro.url);
+
+const flags = await flagsmith.getEnvironmentFlags();
+
+const isNavbarEnabled = flags.isFeatureEnabled("global.navbar");
+const isFooterEnabled = flags.isFeatureEnabled("global.footer");
 ---
 
 <!doctype html>
@@ -207,10 +213,13 @@ const lang = getLangFromUrl(Astro.url);
     }
 
     <TwSizeIndicator />
-    <Navbar client:only />
+
+    {isNavbarEnabled && <Navbar />}
+
     <main id="main-content">
       <slot />
     </main>
-    <Footer />
+
+    {isFooterEnabled && <Footer />}
   </body>
 </html>

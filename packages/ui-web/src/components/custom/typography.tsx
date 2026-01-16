@@ -37,7 +37,7 @@ const typographyVariants = cva(
 
         // --- Subheading ---
         /** Extra large subheading - prominent descriptive text */
-        "subheading-xl": "text-subheading-xl font-medium",
+        "subheading-xl": "text-subheading-xl font-normal",
         /** Large subheading - descriptive text */
         "subheading-lg": "text-subheading-lg font-medium",
         /** Medium subheading - standard descriptive text */
@@ -95,7 +95,7 @@ export interface TypographyProps
   as?: ElementType;
 
   /** Content to be rendered inside the typography element */
-  children: React.ReactNode;
+  children?: React.ReactNode;
 
   /**
    * Theme color to apply to the text.

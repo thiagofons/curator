@@ -1,18 +1,17 @@
 ---
 import DownloadButton from "@/components/DownloadButton.astro";
 import { HeroCard } from "@/components/react/HeroCard";
+import { useTranslations } from "@/i18n/utils";
+
+const t = useTranslations();
 ---
 
 <main class="flex min-h-screen items-center justify-center p-5">
   <HeroCard.Root orientation="horizontal" client:load>
     <HeroCard.Content>
-      <HeroCard.Title>
-        Pare de consumir ruído.<br />Comece a construir sabedoria.
-      </HeroCard.Title>
-      <HeroCard.Subtitle>
-        Uma plataforma de curadoria que transforma conteúdos dispersos da web em
-        trilhas de aprendizado estruturadas.
-      </HeroCard.Subtitle>
+      <HeroCard.Title html={t("home.hero.title")} />
+
+      <HeroCard.Subtitle>{t("home.hero.subtitle")}</HeroCard.Subtitle>
       <HeroCard.Actions>
         <DownloadButton store="Google Play" />
         <DownloadButton store="App Store" />
@@ -21,7 +20,7 @@ import { HeroCard } from "@/components/react/HeroCard";
 
     <HeroCard.Image
       src="/images/home/hero.png"
-      alt="Imagem ilustrativa de curadoria de conteúdos"
+      alt={t("home.hero.alt_text")}
       width={400}
       height={300}
     />
