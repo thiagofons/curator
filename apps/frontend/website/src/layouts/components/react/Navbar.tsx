@@ -9,7 +9,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { IoClose, IoMenu } from "react-icons/io5";
-import { LocaleSwitcher } from "./LocaleSwitcher";
 import { Logo } from "./Logo";
 
 export function Navbar() {
@@ -102,7 +101,7 @@ export function Navbar() {
           {/* ACTIONS */}
           <div className="flex items-center gap-3">
             <div className="hidden md:block">
-              <LocaleSwitcher initialPath={currentPath} />
+              {/* <LocaleSwitcher initialPath={currentPath} /> */}
             </div>
 
             <div className="hidden md:block">
@@ -150,7 +149,7 @@ export function Navbar() {
               </motion.a>
             ))}
 
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
@@ -158,7 +157,7 @@ export function Navbar() {
             >
               <LocaleSwitcher initialPath={currentPath} />
               <Button>{t("nav.start_journey")}</Button>
-            </motion.div>
+            </motion.div> */}
           </motion.div>
         )}
       </AnimatePresence>

@@ -44,6 +44,7 @@
     "framer-motion": "^12.23.26",
     "fuse.js": "catalog:search",
     "github-slugger": "catalog:astro",
+    "lucide-react": "^0.562.0",
     "marked": "catalog:astro",
     "postcss": "catalog:ui-libs",
     "react": "catalog:react19",

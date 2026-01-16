@@ -7,12 +7,12 @@ import { cn } from "@repo/ui-web/lib/utils";
 const logoVariants = cva("w-auto", {
   variants: {
     size: {
-      xs: "h-4",
-      sm: "h-6",
-      md: "h-8",
-      lg: "h-10",
-      xl: "h-12",
-      "2xl": "h-16",
+      xs: "h-3 sm:h-4",
+      sm: "h-4 sm:h-6",
+      md: "h-6 sm:h-8",
+      lg: "h-8 sm:h-10",
+      xl: "h-10 sm:h-12",
+      "2xl": "h-12 sm:h-16",
     },
   },
   defaultVariants: {

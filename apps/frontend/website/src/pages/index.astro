@@ -1,9 +1,8 @@
 ---
 import DownloadButton from "@/components/DownloadButton.astro";
+import SocialMediaVsCurator from "@/components/pages/home/SocialMediaVsCurator.astro";
 import { HeroCard } from "@/components/react/HeroCard";
-import { Logo } from "@/components/react/Logo";
 import Base from "@/layouts/Base.astro";
-import { H2 } from "@repo/ui-web/components/custom/typography.jsx";
 import "@repo/ui-web/globals.css";
 ---
 
@@ -34,22 +33,5 @@ import "@repo/ui-web/globals.css";
   </main>
 
   <!-- Seção de Comparação -->
-  <section class="bg-brand-dark px-5 py-16">
-    <div class="mx-auto max-w-6xl">
-      <!-- Header -->
-      <div class="mb-12 flex items-center justify-center gap-6">
-        <div class="flex w-full items-center justify-center">
-          <H2 color="white">Redes Sociais</H2>
-        </div>
-
-        <span class="text-gray-light text-xl">vs</span>
-
-        <div class="flex w-full items-center justify-center">
-          <Logo type="dark" size="2xl" />
-        </div>
-      </div>
-
-      <!-- Timeline com comparações -->
-    </div>
-  </section>
+  <SocialMediaVsCurator />
 </Base>
