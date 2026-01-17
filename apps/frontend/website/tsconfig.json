@@ -13,12 +13,7 @@
     "incremental": true,
     "allowSyntheticDefaultImports": true,
     "paths": {
-      "@/components/*": ["./src/layouts/components/*"],
-      "@/shortcodes/*": ["./src/layouts/shortcodes/*"],
-      "@/helpers/*": ["./src/layouts/helpers/*"],
-      "@/partials/*": ["./src/layouts/partials/*"],
-      "@/*": ["./src/*"],
-      "@/mocks/*": ["./__mocks__/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": [".astro/types.d.ts", "**/*.ts", "**/*.tsx", "**/*.astro"],

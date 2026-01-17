@@ -1,8 +1,0 @@
-{
-  "main": [
-    { "name": "Sobre", "url": "/sobre" },
-    { "name": "Trilhas", "url": "/trilhas" },
-    { "name": "Blog", "url": "/blog" },
-    { "name": "Comunidade", "url": "/comunidade" }
-  ]
-}

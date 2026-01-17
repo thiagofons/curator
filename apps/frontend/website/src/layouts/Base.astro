@@ -1,11 +1,11 @@
 ---
-import TwSizeIndicator from "@/components/TwSizeIndicator.astro";
+import Footer from "@/components/common/Footer.astro";
+import { Navbar } from "@/components/common/Navbar";
+import TwSizeIndicator from "@/components/common/TwSizeIndicator.astro";
 import config from "@/config/config.json";
 import theme from "@/config/theme.json";
-import { getLangFromUrl } from "@/i18n/utils";
 import { flagsmith } from "@/lib/flagsmith";
 import { plainify } from "@/lib/utils/textConverter";
-import Footer from "@/partials/Footer.astro";
 import "@/styles/main.css";
 import {
   GoogleTagmanager,
@@ -13,7 +13,6 @@ import {
 } from "@digi4care/astro-google-tagmanager";
 import { AstroFont } from "astro-font";
 import { ClientRouter } from "astro:transitions";
-import { Navbar } from "./components/react/Navbar";
 
 // font families
 const pf = theme.fonts.font_family.primary;
@@ -39,8 +38,6 @@ const ENV = (import.meta as any).env || {};
 const ENABLE_ASTRO_FONT =
   String(ENV.ENABLE_ASTRO_FONT || "").toLowerCase() === "true";
 
-const lang = getLangFromUrl(Astro.url);
-
 const flags = await flagsmith.getEnvironmentFlags();
 
 const isNavbarEnabled = flags.isFeatureEnabled("global.navbar");
@@ -48,8 +45,9 @@ const isFooterEnabled = flags.isFeatureEnabled("global.footer");
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={"pt-BR"}>
   <head>
+    <meta charset="UTF-8" />
     <!-- google tag manager -->
     {
       config.google_tag_manager.enable && (

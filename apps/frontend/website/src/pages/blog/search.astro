@@ -1,17 +1,17 @@
 ---
-import SearchBar from "@/helpers/SearchBar"
-import Base from "@/layouts/Base.astro"
-import { getPayloadPosts } from "@/lib/payload"
+import SearchBar from "@/components/react/SearchBar";
+import Base from "@/layouts/Base.astro";
+import { getPayloadPosts } from "@/lib/payload";
 
 // Fetch posts from Payload CMS instead of local content
-const posts = await getPayloadPosts()
+const posts = await getPayloadPosts();
 
 // List of items to search in
 const searchList = posts.map((item) => ({
   slug: item.id,
   data: item.data,
   content: item.body,
-}))
+}));
 ---
 
 <Base title={`Search`}>

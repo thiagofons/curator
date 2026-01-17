@@ -1,9 +1,13 @@
 ---
-import Hero from "@/components/pages/home/Hero.astro";
-import SocialMediaVsCurator from "@/components/pages/home/SocialMediaVsCurator.astro";
+import Hero from "@/components/home/Hero.astro";
+import SocialMediaVsCurator from "@/components/home/SocialMediaVsCurator.astro";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 import Base from "@/layouts/Base.astro";
 import { flagsmith } from "@/lib/flagsmith";
 import "@repo/ui-web/globals.css";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 const flags = await flagsmith.getEnvironmentFlags();
 

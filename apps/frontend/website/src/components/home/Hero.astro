@@ -1,0 +1,34 @@
+---
+import HeroImage from "@/assets/images/home/hero.png";
+import HeroCard from "@/components/common/HeroCard.astro";
+import {
+  Display,
+  SubheadingXL,
+} from "@repo/ui-web/components/custom/typography.jsx";
+import { Image } from "astro:assets";
+---
+
+<main class="flex min-h-screen items-center justify-center p-5">
+  <HeroCard orientation="horizontal" imageSide="right">
+    <div slot="image">
+      <Image
+        src={HeroImage}
+        alt="Hero Image"
+        class="h-auto w-full object-cover"
+      />
+    </div>
+
+    <Display variant="display-h1" color="black">
+      Título do <span class="text-primary">Hero</span>
+    </Display>
+
+    <SubheadingXL color="gray-normal">
+      Este é o subtítulo que antes ficava dentro de HeroCard.Subtitle. Agora ele
+      é livre!
+    </SubheadingXL>
+
+    <div class="mt-6 flex items-center justify-center gap-4 md:justify-start">
+      <button>Meu Botão</button>
+    </div>
+  </HeroCard>
+</main>

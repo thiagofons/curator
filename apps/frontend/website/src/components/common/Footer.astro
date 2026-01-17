@@ -1,11 +1,11 @@
 ---
-import { Logo } from "@/components/react/Logo"
-import Social from "@/components/Social.astro"
-import config from "@/config/config.json"
-import menu from "@/config/menu.json"
-import social from "@/config/social.json"
+import Social from "@/components/common/Social.astro";
+import config from "@/config/config.json";
+import menu from "@/config/menu.json";
+import social from "@/config/social.json";
 
-import { markdownify } from "@/lib/utils/textConverter"
+import { markdownify } from "@/lib/utils/textConverter";
+import Logo from "./Logo.astro";
 ---
 
 <footer class="bg-light section">
@@ -36,7 +36,7 @@ import { markdownify } from "@/lib/utils/textConverter"
     </div>
 
     {/* rss feed */}
-    <p class="text-sm mt-4">
+    <p class="mt-4 text-sm">
       <a href="/rss.xml" target="_blank" class="inline-flex items-center gap-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -59,7 +59,7 @@ import { markdownify } from "@/lib/utils/textConverter"
 
     {/* copyright */}
     <p
-      class="footer-copyright-text mt-6 [&_a]:text-primary [&_a]:no-underline [&_a:hover]:underline"
+      class="footer-copyright-text [&_a]:text-primary mt-6 [&_a]:no-underline [&_a:hover]:underline"
       set:html={markdownify(config.params.copyright)}
     />
   </div>
