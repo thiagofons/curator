@@ -41,7 +41,7 @@ const typographyVariants = cva(
         /** Large subheading - descriptive text */
         "subheading-lg": "text-subheading-lg font-medium",
         /** Medium subheading - standard descriptive text */
-        "subheading-md": "text-subheading-md font-medium",
+        "subheading-md": "text-subheading-md font-normal",
         /** Small subheading - labels and tags (uppercase) */
         "subheading-sm": "text-subheading-sm font-medium tracking-wide",
         /** Extra small subheading - micro labels (uppercase) */

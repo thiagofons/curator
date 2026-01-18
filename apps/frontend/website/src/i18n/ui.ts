@@ -35,5 +35,22 @@ export const ui = {
       "<b>Curadoria de Elite:</b> Especialistas verificados ajudam a definir a ordem lógica do que você estuda.",
     "home.comparison.right.deep_knowledge":
       "<b>Conhecimento Profundo:</b> Construção de modelos mentais que duram para sempre.",
+
+    // Home - Learn From The Source
+    "home.learn_from_the_source.title": "Aprenda direto da fonte",
+    "home.learn_from_the_source.subtitle":
+      "Sua conexão direta com as mentes e obras que resistiram ao tempo",
+    "home.learn_from_the_source.cinema_beyond_the_script":
+      "Cinema além do roteiro",
+    "home.learn_from_the_source.cinema_beyond_the_script_description":
+      "Não consuma filmes apenas pela história. Decodifique a linguagem visual de Kubrick, entenda a semiótica das cores em Wes Anderson e estude como a montagem soviética mudou a forma como sentimos emoção na tela. Transforme seu 'binge-watching' em análise crítica de arte.",
+    "home.learn_from_the_source.jazz_improvisation":
+      "Ouça o que a maioria ignora",
+    "home.learn_from_the_source.jazz_improvisation_description":
+      "Sair do loop das playlists de algoritmo exige treino. Mergulhe na estrutura do Jazz, entenda a harmonia funcional e descubra por que certas progressões de acordes manipulam seu humor há 300 anos. Pare de ouvir música como ruído de fundo e comece a ouvir a composição.",
+    "home.learn_from_the_source.renaissance_masterpiece":
+      "A História oculta nas tintas",
+    "home.learn_from_the_source.renaissance_masterpiece_description":
+      "Uma pintura renascentista não é apenas uma imagem bonita; é um manifesto político e teológico da sua época. Não olhe apenas para a técnica; estude o contexto que financiou a obra, os símbolos escondidos e a revolução filosófica por trás de cada pincelada. Aprenda a ler paredes de museus como se fossem livros.",
   },
 } as const;

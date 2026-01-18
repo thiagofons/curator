@@ -1,0 +1,46 @@
+---
+import {
+  H2,
+  SubheadingMD,
+} from "@repo/ui-web/components/custom/typography.jsx";
+import { cn } from "@repo/ui-web/lib/utils";
+
+type Props = {
+  icon: (_props: any) => any;
+  title: string;
+  subtitle: string;
+  theme?: "light" | "dark";
+};
+
+const { icon: Icon, title, subtitle, theme = "light" } = Astro.props;
+---
+
+<section
+  class={cn(
+    "flex flex-col gap-9 px-5 py-12",
+    theme === "light" ? "bg-white" : "bg-brand-dark",
+  )}
+>
+  <div class="flex items-center justify-center">
+    <div
+      class="flex max-w-150 flex-col items-center justify-center gap-2 text-center"
+    >
+      <div
+        class="border-primary flex h-16 w-16 items-center justify-center rounded-full border-4"
+      >
+        <Icon size={24} color="#0060F7" />
+      </div>
+      <H2 color={theme === "light" ? "black" : "white"}>{title}</H2>
+      <SubheadingMD
+        className="max-w-75"
+        color={theme === "light" ? "gray-normal" : "gray-lighter"}
+      >
+        {subtitle}
+      </SubheadingMD>
+    </div>
+  </div>
+
+  <div>
+    <slot />
+  </div>
+</section>

@@ -1,0 +1,134 @@
+---
+import ArrowSteps from "@/assets/images/home/arrow-steps.svg";
+import Jazz from "@/assets/images/home/jazz.jpeg";
+import Kubrick from "@/assets/images/home/kubrick.jpg";
+import LeftSteps from "@/assets/images/home/left-steps.svg";
+import MonaLisa from "@/assets/images/home/mona-lisa.jpg";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import { BodyBase, H4 } from "@repo/ui-web/components/custom/typography.jsx";
+import { Image } from "astro:assets";
+import { Gem } from "lucide-react";
+import InfoSection from "../common/InfoSection.astro";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<style>
+  .image-container {
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .image-container:hover {
+    transform: scale(1.1);
+  }
+
+  .image-container:hover img {
+    transform: scale(1.15);
+  }
+
+  .image-inner {
+    transition: transform 0.3s ease-in-out;
+  }
+</style>
+
+<InfoSection
+  icon={Gem}
+  title={t("home.learn_from_the_source.title")}
+  subtitle={t("home.learn_from_the_source.subtitle")}
+  theme="light"
+>
+  <div class="relative flex flex-col items-center gap-12 pb-[100px]">
+    <div
+      class="relative z-10 flex w-full max-w-[550px] flex-row items-center gap-4 overflow-visible"
+    >
+      <div class="absolute top-0 right-full h-full w-full overflow-hidden">
+        <LeftSteps
+          class="h-full w-full"
+          style="mask-image: linear-gradient(to right, transparent, black);"
+        />
+      </div>
+
+      <div
+        class="image-container border-brand-blue flex items-center overflow-hidden rounded-full border-4"
+        style="min-height: 150px; min-width: 150px; height: 150px; width: 150px;"
+      >
+        <Image
+          src={Kubrick}
+          alt="Stanley Kubrick"
+          class="image-inner h-full w-full object-cover"
+          draggable="false"
+        />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <div class="bg-brand-blue w-fit rounded-sm p-2">
+          <H4 color="white"
+            >{t("home.learn_from_the_source.cinema_beyond_the_script")}</H4
+          >
+        </div>
+
+        <BodyBase>
+          {t("home.learn_from_the_source.cinema_beyond_the_script_description")}
+        </BodyBase>
+      </div>
+    </div>
+
+    <div class="z-10 flex w-full max-w-[550px] flex-row items-center gap-4">
+      <div
+        class="image-container border-brand-blue flex items-center overflow-hidden rounded-full border-4"
+        style="min-height: 150px; min-width: 150px; height: 150px; width: 150px;"
+      >
+        <Image
+          src={Jazz}
+          alt="Jazz Music"
+          class="image-inner h-full w-full object-cover"
+          draggable="false"
+        />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <div class="bg-brand-blue w-fit rounded-sm p-2">
+          <H4 color="white"
+            >{t("home.learn_from_the_source.jazz_improvisation")}</H4
+          >
+        </div>
+
+        <BodyBase>
+          {t("home.learn_from_the_source.jazz_improvisation_description")}
+        </BodyBase>
+      </div>
+    </div>
+
+    <div class="z-10 flex w-full max-w-[550px] flex-row items-center gap-4">
+      <div
+        class="image-container border-brand-blue flex items-center overflow-hidden rounded-full border-4"
+        style="min-height: 150px; min-width: 150px; height: 150px; width: 150px;"
+      >
+        <Image
+          src={MonaLisa}
+          alt="Mona Lisa"
+          class="image-inner h-full w-full object-cover"
+          draggable="false"
+        />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <div class="bg-brand-blue w-fit rounded-sm p-2">
+          <H4 color="white"
+            >{t("home.learn_from_the_source.renaissance_masterpiece")}</H4
+          >
+        </div>
+
+        <BodyBase>
+          {t("home.learn_from_the_source.renaissance_masterpiece_description")}
+        </BodyBase>
+      </div>
+    </div>
+
+    <ArrowSteps
+      class="absolute bottom-0 z-0"
+      style="mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);"
+    />
+  </div>
+</InfoSection>

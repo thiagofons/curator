@@ -1,5 +1,6 @@
 ---
 import Hero from "@/components/home/Hero.astro";
+import LearnFromTheSource from "@/components/home/LearnFromTheSource.astro";
 import SocialMediaVsCurator from "@/components/home/SocialMediaVsCurator.astro";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 import Base from "@/layouts/Base.astro";
@@ -13,10 +14,15 @@ const flags = await flagsmith.getEnvironmentFlags();
 
 const isHeroEnabled = flags.isFeatureEnabled("home.hero");
 const isComparisonEnabled = flags.isFeatureEnabled("home.comparison");
+const isLearnFromSourceEnabled = flags.isFeatureEnabled(
+  "home.learn_from_the_source",
+);
 ---
 
 <Base title="Home">
   {isHeroEnabled && <Hero />}
 
   {isComparisonEnabled && <SocialMediaVsCurator />}
+
+  {isLearnFromSourceEnabled && <LearnFromTheSource />}
 </Base>
