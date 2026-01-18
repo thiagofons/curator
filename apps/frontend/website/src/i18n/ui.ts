@@ -11,6 +11,11 @@ export const ui = {
     "nav.home": "Início",
     "nav.about": "Sobre",
 
+    // Home - Hero
+    "home.hero.title": "Pare de consumir ruído. Comece a construir sabedoria.",
+    "home.hero.subtitle":
+      "Uma plataforma de curadoria que transforma conteúdos dispersos da web em trilhas de aprendizado estruturadas.",
+
     // Home - Comparação Redes Sociais vs Curator
     "home.comparison.left.title": "Redes Sociais",
     "home.comparison.left.algorithm":

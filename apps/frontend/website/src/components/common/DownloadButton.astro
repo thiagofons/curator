@@ -1,4 +1,6 @@
 ---
+import AppStore from "@/assets/images/app-store.svg";
+import GooglePlay from "@/assets/images/google-play.svg";
 import { Image } from "astro:assets";
 
 type Props = {
@@ -19,7 +21,7 @@ const href = downloadLinks[store];
   {
     store === "Google Play" && (
       <Image
-        src="/images/google-play.svg"
+        src={GooglePlay}
         alt={store}
         width={141}
         height={42}
@@ -31,7 +33,7 @@ const href = downloadLinks[store];
   {
     store === "App Store" && (
       <Image
-        src="/images/app-store.svg"
+        src={AppStore}
         alt={store}
         width={128}
         height={42}

@@ -1,14 +1,26 @@
 ---
+import BG from "@/assets/images/home/hero-bg.svg";
 import HeroImage from "@/assets/images/home/hero.png";
 import HeroCard from "@/components/common/HeroCard.astro";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 import {
   Display,
   SubheadingXL,
 } from "@repo/ui-web/components/custom/typography.jsx";
 import { Image } from "astro:assets";
+import DownloadButton from "../common/DownloadButton.astro";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
-<main class="flex min-h-screen items-center justify-center p-5">
+<main class="relative flex min-h-screen items-center justify-center p-5">
+  <Image
+    src={BG}
+    alt="Hero Background"
+    class="absolute top-0 left-0 -z-10 h-full w-full object-cover"
+  />
+
   <HeroCard orientation="horizontal" imageSide="right">
     <div slot="image">
       <Image
@@ -19,16 +31,16 @@ import { Image } from "astro:assets";
     </div>
 
     <Display variant="display-h1" color="black">
-      Título do <span class="text-primary">Hero</span>
+      {t("home.hero.title")}
     </Display>
 
     <SubheadingXL color="gray-normal">
-      Este é o subtítulo que antes ficava dentro de HeroCard.Subtitle. Agora ele
-      é livre!
+      {t("home.hero.subtitle")}
     </SubheadingXL>
 
     <div class="mt-6 flex items-center justify-center gap-4 md:justify-start">
-      <button>Meu Botão</button>
+      <DownloadButton store="Google Play" />
+      <DownloadButton store="App Store" />
     </div>
   </HeroCard>
 </main>
