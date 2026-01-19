@@ -32,7 +32,7 @@
     "dotenv": "catalog:tooling",
     "graphql": "catalog:api",
     "next": "catalog:next16",
-    "payload": "catalog:payload",
+    "payload": "3.72.0",
     "react": "catalog:react19",
     "react-dom": "catalog:react19",
     "sharp": "catalog:ui-libs"
