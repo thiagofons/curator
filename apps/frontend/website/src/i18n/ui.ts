@@ -52,5 +52,19 @@ export const ui = {
       "A História oculta nas tintas",
     "home.learn_from_the_source.renaissance_masterpiece_description":
       "Uma pintura renascentista não é apenas uma imagem bonita; é um manifesto político e teológico da sua época. Não olhe apenas para a técnica; estude o contexto que financiou a obra, os símbolos escondidos e a revolução filosófica por trás de cada pincelada. Aprenda a ler paredes de museus como se fossem livros.",
+
+    // Home - Build In Community
+    "home.build_in_community.title": "Construa em comunidade",
+    "home.build_in_community.subtitle":
+      "Debata com quem está na mesma trilha que você. Aprender é um ato coletivo.",
+    "home.build_in_community.dont_learn_alone": "Não aprenda sozinho",
+    "home.build_in_community.dont_learn_alone_description":
+      "Veja quem está na mesma trilha que você, compartilhe anotações e motive-se com o progresso coletivo.",
+    "home.build_in_community.contextual_discussions": "Debates contextuais",
+    "home.build_in_community.contextual_discussions_description":
+      "Esqueça as caixas de comentários tóxicas. Aqui, as discussões são focadas no tema da trilha, gerando insights profundos.",
+    "home.build_in_community.collaborative_curation": "Curadoria colaborativa",
+    "home.build_in_community.collaborative_curation_description":
+      "Encontrou um link quebrado ou um artigo melhor? Sugira edições na trilha e ajude a manter o conteúdo sempre atualizado.",
   },
 } as const;

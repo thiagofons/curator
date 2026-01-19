@@ -1,4 +1,5 @@
 ---
+import BuildInCommunity from "@/components/home/BuildInCommunity.astro";
 import Hero from "@/components/home/Hero.astro";
 import LearnFromTheSource from "@/components/home/LearnFromTheSource.astro";
 import SocialMediaVsCurator from "@/components/home/SocialMediaVsCurator.astro";
@@ -17,6 +18,9 @@ const isComparisonEnabled = flags.isFeatureEnabled("home.comparison");
 const isLearnFromSourceEnabled = flags.isFeatureEnabled(
   "home.learn_from_the_source",
 );
+const isBuildInCommunityEnabled = flags.isFeatureEnabled(
+  "home.build_in_community",
+);
 ---
 
 <Base title="Home">
@@ -25,4 +29,6 @@ const isLearnFromSourceEnabled = flags.isFeatureEnabled(
   {isComparisonEnabled && <SocialMediaVsCurator />}
 
   {isLearnFromSourceEnabled && <LearnFromTheSource />}
+
+  {isBuildInCommunityEnabled && <BuildInCommunity />}
 </Base>
