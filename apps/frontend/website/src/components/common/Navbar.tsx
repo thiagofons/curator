@@ -48,7 +48,6 @@ export function Navbar() {
   }, [isOpen]);
 
   const isNavItemEnabled = (itemName: string): boolean => {
-    console.log(flags);
     if (!flags) return true;
 
     return flags.isFeatureEnabled(itemName);
