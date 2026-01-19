@@ -1,6 +1,7 @@
 ---
 import CTA from "@/components/common/CTA.astro";
 import BuildInCommunity from "@/components/home/BuildInCommunity.astro";
+import ComeTogether from "@/components/home/ComeTogether.astro";
 import FAQ from "@/components/home/FAQ.astro";
 import Hero from "@/components/home/Hero.astro";
 import LearnFromTheSource from "@/components/home/LearnFromTheSource.astro";
@@ -27,6 +28,7 @@ const isBuildInCommunityEnabled = flags.isFeatureEnabled(
 const isCTAEnabled = flags.isFeatureEnabled("home.cta");
 const isFAQEnabled = flags.isFeatureEnabled("home.faq");
 const isOpenSourceEnabled = flags.isFeatureEnabled("home.open_source");
+const isComeTogetherEnabled = flags.isFeatureEnabled("home.come_together");
 ---
 
 <Base title={t("home.meta.title")} description={t("home.meta.description")}>
@@ -43,4 +45,6 @@ const isOpenSourceEnabled = flags.isFeatureEnabled("home.open_source");
   {isFAQEnabled && <FAQ />}
 
   {isOpenSourceEnabled && <OpenSource />}
+
+  {isComeTogetherEnabled && <ComeTogether />}
 </Base>

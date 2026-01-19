@@ -112,6 +112,11 @@ export const ui = {
     "home.open_source.github": "Abrir GitHub",
     "home.open_source.more": "Saiba mais",
 
+    // Home - Come Together
+    "home.come_together.title": "Venha fazer parte",
+    "home.come_together.subtitle":
+      "Ajude a construir a maior biblioteca de trilhas da internet. Sugira novos temas, torne-se um curador verificado e ajude a organizar o conhecimento mundial!",
+
     // Nav
     "nav.home": "Início",
     "nav.about": "Sobre",

@@ -10,23 +10,34 @@ type Props = {
   title: string;
   subtitle: string;
   theme?: "light" | "dark";
+  bg?: (_props: any) => any;
 };
 
-const { icon: Icon, title, subtitle, theme = "light" } = Astro.props;
+const { icon: Icon, title, subtitle, theme = "light", bg: Bg } = Astro.props;
 ---
 
 <section
   class={cn(
-    "flex items-center justify-center flex-col gap-9 px-5 py-12 min-h-screen lg:min-h-175",
+    "relative flex items-center justify-center flex-col gap-9 px-5 py-12 min-h-[80vh] lg:min-h-175 overflow-hidden",
     theme === "light" ? "bg-white" : "bg-brand-dark",
   )}
 >
-  <div class="flex items-center justify-center">
+  {
+    Bg && (
+      <div class="absolute top-0 left-0 z-0">
+        <Bg class="h-full w-full object-cover" />
+      </div>
+    )
+  }
+  <div class="z-10 flex items-center justify-center">
     <div
       class="flex max-w-150 flex-col items-center justify-center gap-2 text-center"
     >
       <div
-        class="border-primary flex h-16 w-16 items-center justify-center rounded-full border-4"
+        class={cn(
+          "border-primary flex h-16 w-16 items-center justify-center rounded-full border-4 ",
+          theme === "light" ? "bg-white" : "bg-brand-dark",
+        )}
       >
         <Icon size={24} color="#0060F7" />
       </div>
@@ -40,7 +51,7 @@ const { icon: Icon, title, subtitle, theme = "light" } = Astro.props;
     </div>
   </div>
 
-  <div>
+  <div class="relative">
     <slot />
   </div>
 </section>
