@@ -1,0 +1,37 @@
+---
+import CTA from "@/components/common/CTA.astro";
+
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import Base from "@/layouts/Base.astro";
+import "@repo/ui-web/globals.css";
+import BuildInCommunity from "./sections/BuildInCommunity.astro";
+import ComeTogether from "./sections/ComeTogether.astro";
+import FAQ from "./sections/FAQ.astro";
+import Hero from "./sections/Hero.astro";
+import LearnFromTheSource from "./sections/LearnFromTheSource.astro";
+import OpenSource from "./sections/OpenSource.astro";
+import SocialMediaVsCurator from "./sections/SocialMediaVsCurator.astro";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const { isFeatureEnabled } = Astro.locals;
+---
+
+<Base title={t("home.meta.title")} description={t("home.meta.description")}>
+  {isFeatureEnabled("home.hero") && <Hero />}
+
+  {isFeatureEnabled("home.comparison") && <SocialMediaVsCurator />}
+
+  {isFeatureEnabled("home.learn_from_the_source") && <LearnFromTheSource />}
+
+  {isFeatureEnabled("home.build_in_community") && <BuildInCommunity />}
+
+  {isFeatureEnabled("home.cta") && <CTA />}
+
+  {isFeatureEnabled("home.faq") && <FAQ />}
+
+  {isFeatureEnabled("home.open_source") && <OpenSource />}
+
+  {isFeatureEnabled("home.come_together") && <ComeTogether />}
+</Base>

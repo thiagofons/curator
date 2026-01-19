@@ -1,11 +1,11 @@
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { motion } from "framer-motion"; // Importando tipos corretos
+import { motion } from "framer-motion";
 import * as React from "react";
 import { cn } from "../../lib/utils";
 
 const buttonVariants = cva(
-  "font-medium inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 text-btn-text transform-gpu",
+  "font-medium inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 text-btn-text",
   {
     variants: {
       variant: {
@@ -54,35 +54,26 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref,
   ) => {
     const BaseComponent = asChild ? Slot : "button";
-
-    // O 'as any' continua necessário para compatibilidade de tipos entre Radix e Framer
-    const MotionComponent = motion(BaseComponent) as any;
-
-    const tapAnimation = disableAnimation
-      ? {}
-      : {
-          scale: 0.96,
-          transition: {
-            ease: [0.32, 0.72, 0, 1],
-            duration: 0.15,
-          },
-        };
+    const MotionComponent = motion.create(BaseComponent) as any;
 
     return (
       <MotionComponent
         ref={ref}
-        // CRUCIAL: layout={false} impede que o Framer tente corrigir o texto
-        // e cause o efeito de "deslizamento" ou achatamento.
         layout={false}
-        whileTap={tapAnimation}
+        whileTap={
+          disableAnimation
+            ? {}
+            : {
+                scale: 0.95,
+
+                transition: {
+                  duration: 0.2,
+                  ease: "easeOut",
+                },
+              }
+        }
         className={cn(buttonVariants({ variant, size, className }))}
-        // ESTILOS DE CORREÇÃO DE RENDERIZAÇÃO
         style={{
-          // Força o navegador a rasterizar o elemento antes de animar
-          transform: "translateZ(0)",
-          backfaceVisibility: "hidden",
-          WebkitFontSmoothing: "subpixel-antialiased",
-          // Garante que a escala aconteça a partir do centro exato
           transformOrigin: "center center",
         }}
         {...props}

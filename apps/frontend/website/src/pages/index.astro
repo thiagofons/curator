@@ -1,50 +1,19 @@
 ---
-import CTA from "@/components/common/CTA.astro";
-import BuildInCommunity from "@/components/home/BuildInCommunity.astro";
-import ComeTogether from "@/components/home/ComeTogether.astro";
-import FAQ from "@/components/home/FAQ.astro";
-import Hero from "@/components/home/Hero.astro";
-import LearnFromTheSource from "@/components/home/LearnFromTheSource.astro";
-import OpenSource from "@/components/home/OpenSource.astro";
-import SocialMediaVsCurator from "@/components/home/SocialMediaVsCurator.astro";
+import Home from "@/components/home/Home.astro";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
-import Base from "@/layouts/Base.astro";
-import { flagsmith } from "@/lib/flagsmith";
 import "@repo/ui-web/globals.css";
 
+// Mantendo seus utilitários de tradução caso precise passar props no futuro
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const flags = await flagsmith.getEnvironmentFlags();
+const { isFeatureEnabled } = Astro.locals;
 
-const isHeroEnabled = flags.isFeatureEnabled("home.hero");
-const isComparisonEnabled = flags.isFeatureEnabled("home.comparison");
-const isLearnFromSourceEnabled = flags.isFeatureEnabled(
-  "home.learn_from_the_source",
-);
-const isBuildInCommunityEnabled = flags.isFeatureEnabled(
-  "home.build_in_community",
-);
-const isCTAEnabled = flags.isFeatureEnabled("home.cta");
-const isFAQEnabled = flags.isFeatureEnabled("home.faq");
-const isOpenSourceEnabled = flags.isFeatureEnabled("home.open_source");
-const isComeTogetherEnabled = flags.isFeatureEnabled("home.come_together");
+// Lógica de Redirecionamento (Guarda)
+if (!isFeatureEnabled("home")) {
+  // Redireciona para a rota /404
+  return Astro.redirect("/404");
+}
 ---
 
-<Base title={t("home.meta.title")} description={t("home.meta.description")}>
-  {isHeroEnabled && <Hero />}
-
-  {isComparisonEnabled && <SocialMediaVsCurator />}
-
-  {isLearnFromSourceEnabled && <LearnFromTheSource />}
-
-  {isBuildInCommunityEnabled && <BuildInCommunity />}
-
-  {isCTAEnabled && <CTA />}
-
-  {isFAQEnabled && <FAQ />}
-
-  {isOpenSourceEnabled && <OpenSource />}
-
-  {isComeTogetherEnabled && <ComeTogether />}
-</Base>
+<Home />

@@ -1,0 +1,41 @@
+---
+import menu from "@/config/menu.json";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import NavbarBase from "./Navbar";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const { isFeatureEnabled } = Astro.locals;
+
+const getMenuLink = (path: string) => {
+  if (path.startsWith("http")) return path;
+  if (lang === "pt") return path;
+
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  if (cleanPath === "/" && lang) return `/${lang}`;
+  return `/${lang}${cleanPath}`;
+};
+
+const navItems = menu.main
+  .filter((item) => {
+    // Se a flag não existir ou estiver false, remove o item
+    console.log(item);
+    return isFeatureEnabled(item.name);
+  })
+  .map((item) => {
+    return {
+      label: t(`nav.${item.name}` as any), // Traduz aqui
+      url: getMenuLink(item.url), // Resolve a URL aqui
+    };
+  });
+
+const isCTAEnabled = isFeatureEnabled("start_journey");
+
+const cta = {
+  enabled: isCTAEnabled,
+  label: t("nav.start_journey"),
+};
+---
+
+{/* 4. Renderiza o componente React passando os dados estáticos prontos */}
+<NavbarBase client:load items={navItems} cta={cta} />

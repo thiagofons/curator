@@ -23,6 +23,14 @@ export const ui = {
     "cta.subscribe": "Assinar",
     "cta.month": "mês",
 
+    // Error
+    "error.404.meta.title": "Erro 404 - Página não encontrada",
+    "error.404.meta.description":
+      "A página que você está procurando não existe ou foi movida.",
+    "error.404.title": "Erro 404",
+    "error.404.message": "Ops! A página que você está procurando não existe.",
+    "error.404.back_to_home": "Voltar para a página inicial",
+
     // Footer
     "footer.description":
       "O Curator nasceu para devolver o controle do aprendizado a você. Somos uma iniciativa Open Source que transforma o caos da informação em trilhas estruturadas, priorizando a profundidade sobre o engajamento e a comunidade sobre o algoritmo.",
@@ -130,6 +138,7 @@ export const ui = {
     "nav.open_source": "Open Source",
     "nav.blog": "Blog",
     "nav.about": "Sobre",
+    "nav.start_journey": "Começar Jornada",
 
     // Social
     "social.discord": "Entre na comunidade!",

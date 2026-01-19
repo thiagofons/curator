@@ -1,39 +1,37 @@
-import menu from "@/config/menu.json";
-import { getLangFromUrl, useTranslations } from "@/i18n/utils";
-import { flagsmith } from "@/lib/flagsmith";
 import { Button } from "@repo/ui-web/base/button";
 import { Menu, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Logo } from "./Logo";
 
-export function Navbar() {
+interface MenuItem {
+  label: string;
+  url: string;
+}
+
+interface NavbarProps {
+  items: MenuItem[];
+  cta: {
+    enabled: boolean;
+    label: string;
+  };
+}
+
+export default function Navbar({ items, cta }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [currentPath, setCurrentPath] = useState("");
-  const [lang, setLang] = useState("pt");
-  const [flags, setFlags] = useState<any>(null);
-
-  const t = useTranslations(lang as any);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window !== "undefined") {
+      setCurrentPath(window.location.pathname);
 
-    const pathname = window.location.pathname;
-    setCurrentPath(pathname);
+      const handleScroll = () => {
+        setIsScrolled(window.scrollY > 50);
+      };
 
-    const currentUrl = new URL(window.location.href);
-    const detectedLang = getLangFromUrl(currentUrl);
-    setLang(detectedLang);
-
-    // Fetch feature flags
-    flagsmith.getEnvironmentFlags().then(setFlags);
-
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    }
   }, []);
 
   useEffect(() => {
@@ -46,20 +44,6 @@ export function Navbar() {
       document.body.style.overflow = "";
     };
   }, [isOpen]);
-
-  const isNavItemEnabled = (itemName: string): boolean => {
-    if (!flags) return true;
-
-    return flags.isFeatureEnabled(itemName);
-  };
-
-  const getMenuLink = (path: string) => {
-    if (path.startsWith("http")) return path;
-    if (lang === "pt") return path;
-    const cleanPath = path.startsWith("/") ? path : `/${path}`;
-    if (cleanPath === "/" && lang) return `/${lang}`;
-    return `/${lang}${cleanPath}`;
-  };
 
   const pillClasses = `
     relative flex w-full max-w-[1000px] items-center justify-between
@@ -79,28 +63,25 @@ export function Navbar() {
     <>
       <header className="pointer-events-none fixed top-0 right-0 left-0 z-50 flex justify-center px-4 py-4">
         <div className={`${pillClasses} pointer-events-auto`}>
-          <a href={getMenuLink("/")} className="relative z-10 flex-shrink-0">
+          <a href="/" className="relative z-10 flex-shrink-0">
             <Logo />
           </a>
 
           <nav className="hidden items-center gap-8 md:flex">
-            {menu.main.map((item) => {
-              if (!isNavItemEnabled(item.name)) return null;
-
-              const linkUrl = getMenuLink(item.url);
+            {items.map((item) => {
               const isActive =
-                currentPath === linkUrl ||
-                (linkUrl !== "/" && currentPath.startsWith(linkUrl));
+                currentPath === item.url ||
+                (item.url !== "/" && currentPath.startsWith(item.url));
 
               return (
                 <a
                   key={item.url}
-                  href={linkUrl}
+                  href={item.url}
                   className={`hover:text-primary text-sm font-medium transition-colors ${
                     isActive ? "text-primary font-bold" : "text-black"
                   }`}
                 >
-                  {t(item.name as any)}
+                  {item.label}
                 </a>
               );
             })}
@@ -108,9 +89,9 @@ export function Navbar() {
 
           <div className="flex items-center gap-3">
             <div className="hidden md:block">
-              <Button className="h-10 rounded-full px-6">
-                {t("nav.start_journey" as any) || "Começar"}
-              </Button>
+              {cta.enabled && (
+                <Button className="h-10 rounded-full px-6">{cta.label}</Button>
+              )}
             </div>
 
             <button
@@ -128,8 +109,9 @@ export function Navbar() {
         </div>
       </header>
 
+      {/* Mobile Menu */}
       <div
-        className="fixed inset-0 z-40 flex flex-col items-center justify-center space-y-8 bg-white/95 backdrop-blur-xl md:hidden"
+        className="fixed inset-0 z-40 flex flex-col items-center justify-between bg-white/95 p-8 backdrop-blur-xl md:hidden"
         style={{
           clipPath: isOpen
             ? "circle(150% at 100% 0%)"
@@ -138,13 +120,12 @@ export function Navbar() {
           pointerEvents: isOpen ? "auto" : "none",
         }}
       >
-        {menu.main.map((item, index) => {
-          if (!isNavItemEnabled(item.name)) return null;
-
-          return (
+        <div />
+        <div className="flex flex-col items-center justify-center space-y-8">
+          {items.map((item, index) => (
             <a
               key={item.url}
-              href={getMenuLink(item.url)}
+              href={item.url}
               onClick={() => setIsOpen(false)}
               className="text-foreground hover:text-primary text-3xl font-bold transition-all duration-500 ease-out"
               style={{
@@ -153,10 +134,10 @@ export function Navbar() {
                 transitionDelay: isOpen ? `${0.1 + index * 0.1}s` : "0s",
               }}
             >
-              {t(item.name as any)}
+              {item.label}
             </a>
-          );
-        })}
+          ))}
+        </div>
 
         <div
           className="transition-all duration-500 ease-out"
@@ -166,9 +147,11 @@ export function Navbar() {
             transitionDelay: isOpen ? "0.6s" : "0s",
           }}
         >
-          <Button className="w-full rounded-full px-10 py-6 text-lg">
-            {t("nav.start_journey" as any) || "Começar"}
-          </Button>
+          {cta.enabled && (
+            <Button className="w-full rounded-full px-10 py-6 text-lg">
+              {cta.label}
+            </Button>
+          )}
         </div>
       </div>
     </>

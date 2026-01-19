@@ -1,11 +1,11 @@
 ---
+import InfoSection from "@/components/common/InfoSection.astro";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 import {
   BodyBase,
   SubheadingMD,
 } from "@repo/ui-web/components/custom/typography.jsx";
 import { Handshake, Megaphone, UsersRound } from "lucide-react";
-import InfoSection from "../common/InfoSection.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);

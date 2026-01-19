@@ -1,17 +1,30 @@
 ---
-import Base from "@/layouts/Base.astro"
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import Base from "@/layouts/Base.astro";
+import { Button } from "@repo/ui-web/components/base/button.jsx";
+import { BodySmall, H2 } from "@repo/ui-web/components/custom/typography.jsx";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
-<Base title="Page Not Found">
+<Base
+  title={t("error.404.meta.title")}
+  description={t("error.404.meta.description")}
+>
   <section class="section">
     <div class="container">
       <div class="flex h-[40vh] items-center justify-center">
         <div class="text-center">
-          <h1 class="h2 md:h1 mb-4">Error 404</h1>
+          <H2>{t("error.404.title")}</H2>
           <div class="content">
-            <p>Page Not Found</p>
+            <BodySmall>{t("error.404.message")}</BodySmall>
           </div>
-          <a href="/" class="btn btn-primary mt-8">Back to home</a>
+          <a href="/">
+            <Button client:load>
+              {t("error.404.back_to_home")}
+            </Button>
+          </a>
         </div>
       </div>
     </div>

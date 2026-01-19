@@ -24,7 +24,9 @@ const BaseFAQ = ({ items }: Props) => {
             <AccordionTrigger className="text-left">
               {item.question}
             </AccordionTrigger>
-            <AccordionContent>{item.answer}</AccordionContent>
+            <AccordionContent className="text-brand-blue">
+              {item.answer}
+            </AccordionContent>
           </AccordionItem>
         ))}
       </Accordion>

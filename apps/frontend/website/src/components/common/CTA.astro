@@ -99,7 +99,7 @@ const benefits: Benefit[] = [
               </div>
             ))
           }
-          <Button variant={"secondary"} size={"full"}>
+          <Button variant={"secondary"} size={"full"} client:load>
             {t("cta.download")}
           </Button>
         </div>
@@ -122,7 +122,7 @@ const benefits: Benefit[] = [
               </div>
             ))
           }
-          <Button size={"full"}>
+          <Button size={"full"} client:load>
             {`${t("cta.subscribe")} (R$ 9,90/${t("cta.month")})`}
           </Button>
         </div>

@@ -1,8 +1,8 @@
 ---
 import BaseFAQ from "@/components/common/BaseFAQ";
+import InfoSection from "@/components/common/InfoSection.astro";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 import { MessageCircle } from "lucide-react";
-import InfoSection from "../common/InfoSection.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -36,5 +36,5 @@ const items = [
   subtitle={t("home.faq.subtitle")}
   icon={MessageCircle}
 >
-  <BaseFAQ items={items} />
+  <BaseFAQ items={items} client:load />
 </InfoSection>

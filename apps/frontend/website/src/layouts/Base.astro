@@ -1,6 +1,6 @@
 ---
 import Footer from "@/components/common/Footer.astro";
-import { Navbar } from "@/components/common/Navbar";
+import Navbar from "@/components/common/Navbar.astro";
 import TwSizeIndicator from "@/components/common/TwSizeIndicator.astro";
 import config from "@/config/config.json";
 import theme from "@/config/theme.json";
@@ -139,7 +139,7 @@ const isFooterEnabled = flags.isFeatureEnabled("global.footer");
     <meta
       name="description"
       content={plainify(
-        description ? description : config.metadata.meta_description
+        description ? description : config.metadata.meta_description,
       )}
     />
 
@@ -152,7 +152,7 @@ const isFooterEnabled = flags.isFeatureEnabled("global.footer");
     <meta
       property="og:title"
       content={plainify(
-        meta_title ? meta_title : title ? title : config.site.title
+        meta_title ? meta_title : title ? title : config.site.title,
       )}
     />
 
@@ -160,7 +160,7 @@ const isFooterEnabled = flags.isFeatureEnabled("global.footer");
     <meta
       property="og:description"
       content={plainify(
-        description ? description : config.metadata.meta_description
+        description ? description : config.metadata.meta_description,
       )}
     />
     <meta property="og:type" content="website" />
@@ -173,7 +173,7 @@ const isFooterEnabled = flags.isFeatureEnabled("global.footer");
     <meta
       name="twitter:title"
       content={plainify(
-        meta_title ? meta_title : title ? title : config.site.title
+        meta_title ? meta_title : title ? title : config.site.title,
       )}
     />
 
@@ -181,7 +181,7 @@ const isFooterEnabled = flags.isFeatureEnabled("global.footer");
     <meta
       name="twitter:description"
       content={plainify(
-        description ? description : config.metadata.meta_description
+        description ? description : config.metadata.meta_description,
       )}
     />
 

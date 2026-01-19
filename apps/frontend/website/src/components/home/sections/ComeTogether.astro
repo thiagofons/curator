@@ -1,9 +1,9 @@
 ---
 import BG from "@/assets/images/home/hero-bg.svg";
+import CentralSection from "@/components/common/CentralSection.astro";
+import DownloadButton from "@/components/common/DownloadButton.astro";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 import { UsersRound } from "lucide-react";
-import CentralSection from "../common/CentralSection.astro";
-import DownloadButton from "../common/DownloadButton.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);

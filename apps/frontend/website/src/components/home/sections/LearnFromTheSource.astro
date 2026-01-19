@@ -4,11 +4,11 @@ import Kubrick from "@/assets/images/home/kubrick.jpg";
 import LeftSteps from "@/assets/images/home/left-steps.svg";
 import MonaLisa from "@/assets/images/home/mona-lisa.jpg";
 import VerticalSteps from "@/assets/images/home/vertical-steps.svg";
+import InfoSection from "@/components/common/InfoSection.astro";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 import { BodyBase, H4 } from "@repo/ui-web/components/custom/typography.jsx";
 import { Image } from "astro:assets";
 import { Gem } from "lucide-react";
-import InfoSection from "../common/InfoSection.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);

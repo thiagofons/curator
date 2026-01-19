@@ -1,6 +1,7 @@
 ---
 import BG from "@/assets/images/home/hero-bg.svg";
 import HeroImage from "@/assets/images/home/hero.png";
+import DownloadButton from "@/components/common/DownloadButton.astro";
 import HeroCard from "@/components/common/HeroCard.astro";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 import {
@@ -8,7 +9,6 @@ import {
   SubheadingXL,
 } from "@repo/ui-web/components/custom/typography.jsx";
 import { Image } from "astro:assets";
-import DownloadButton from "../common/DownloadButton.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
