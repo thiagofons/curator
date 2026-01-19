@@ -4,6 +4,7 @@ import BuildInCommunity from "@/components/home/BuildInCommunity.astro";
 import FAQ from "@/components/home/FAQ.astro";
 import Hero from "@/components/home/Hero.astro";
 import LearnFromTheSource from "@/components/home/LearnFromTheSource.astro";
+import OpenSource from "@/components/home/OpenSource.astro";
 import SocialMediaVsCurator from "@/components/home/SocialMediaVsCurator.astro";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 import Base from "@/layouts/Base.astro";
@@ -25,9 +26,10 @@ const isBuildInCommunityEnabled = flags.isFeatureEnabled(
 );
 const isCTAEnabled = flags.isFeatureEnabled("home.cta");
 const isFAQEnabled = flags.isFeatureEnabled("home.faq");
+const isOpenSourceEnabled = flags.isFeatureEnabled("home.open_source");
 ---
 
-<Base title="Home">
+<Base title={t("home.meta.title")} description={t("home.meta.description")}>
   {isHeroEnabled && <Hero />}
 
   {isComparisonEnabled && <SocialMediaVsCurator />}
@@ -39,4 +41,6 @@ const isFAQEnabled = flags.isFeatureEnabled("home.faq");
   {isCTAEnabled && <CTA />}
 
   {isFAQEnabled && <FAQ />}
+
+  {isOpenSourceEnabled && <OpenSource />}
 </Base>

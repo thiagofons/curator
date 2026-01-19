@@ -1,0 +1,28 @@
+---
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import { RiGithubFill } from "@remixicon/react";
+import { Button } from "@repo/ui-web/components/base/button.jsx";
+import { ButtonText } from "@repo/ui-web/components/custom/typography.jsx";
+import { GitPullRequestArrow } from "lucide-react";
+import CentralSection from "../common/CentralSection.astro";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<CentralSection
+  theme="dark"
+  icon={GitPullRequestArrow}
+  title={t("home.open_source.title")}
+  subtitle={t("home.open_source.subtitle")}
+>
+  <div class="flex items-center gap-4">
+    <Button color="black" className="bg-black hover:bg-black/50">
+      <RiGithubFill size={24} color="#FFFFFF" />
+      <ButtonText color="white">{t("home.open_source.github")}</ButtonText>
+    </Button>
+    <Button color="white" className="bg-white hover:bg-white/50">
+      <ButtonText color="black">{t("home.open_source.more")}</ButtonText>
+    </Button>
+  </div>
+</CentralSection>

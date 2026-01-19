@@ -23,6 +23,11 @@ export const ui = {
     "cta.subscribe": "Assinar",
     "cta.month": "mês",
 
+    // Home - Meta
+    "home.meta.title": "Curator - Aprenda de forma estruturada e consciente",
+    "home.meta.description":
+      "O Curator é uma plataforma de curadoria que transforma conteúdos dispersos da web em trilhas de aprendizado estruturadas. Pare de consumir ruído e comece a construir sabedoria.",
+
     // Home - Hero
     "home.hero.title": "Pare de consumir ruído. Comece a construir sabedoria.",
     "home.hero.subtitle":
@@ -99,6 +104,13 @@ export const ui = {
     "home.faq.q5.question": "Onde o conteúdo fica hospedado? É pirataria?",
     "home.faq.q5.answer":
       "Nós não hospedamos o conteúdo, nós organizamos o acesso a ele. O Curator funciona como um indexador inteligente: quando você clica em um vídeo ou artigo, você é direcionado à fonte original (YouTube, blogs, sites de notícias). Isso garante que os criadores originais recebam seus views e monetização, enquanto você ganha o contexto e a ordem correta de estudo.",
+
+    // Home - Open Source
+    "home.open_source.title": "Transparente e Feito para Durar",
+    "home.open_source.subtitle":
+      "O Curator é Open Source (código aberto). Isso significa que somos uma plataforma pública, auditável e sem algoritmos escondidos manipulando o que você aprende. Seu conhecimento pertence a você.",
+    "home.open_source.github": "Abrir GitHub",
+    "home.open_source.more": "Saiba mais",
 
     // Nav
     "nav.home": "Início",
