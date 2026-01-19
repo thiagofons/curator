@@ -82,7 +82,7 @@ export default function Navbar({ items, cta }: NavbarProps) {
           </nav>
 
           <div className="flex items-center gap-3">
-            <div className="hidden md:block">
+            <div className="hidden min-w-[190px] md:block">
               {cta.enabled && (
                 <Button className="h-10 rounded-full px-6">{cta.label}</Button>
               )}
