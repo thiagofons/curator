@@ -7,9 +7,21 @@ export const defaultLang = "pt";
 
 export const ui = {
   pt: {
-    // Nav
-    "nav.home": "Início",
-    "nav.about": "Sobre",
+    // CTA
+    "cta.title": "Escolha a sua jornada",
+    "cta.description":
+      "O conhecimento no Curator é sempre livre. As ferramentas do PRO são para quem busca ir mais fundo na jornada.",
+    "cta.benefits": "Benefícios",
+    "cta.public_access": "Acesso a todas as trilhas públicas",
+    "cta.ads_free": "Sem anúncios ou rastreadores",
+    "cta.offline_access": "Baixe para estudar offline",
+    "cta.contextual_ai": "IA Contextual",
+    "cta.sync": "Sincronização com Notion / Obsidian",
+    "cta.private_roadmaps": "Trilhas Privadas Ilimitadas",
+    "cta.open_source": "Apoia o desenvolvimento Open Source",
+    "cta.download": "Baixar",
+    "cta.subscribe": "Assinar",
+    "cta.month": "mês",
 
     // Home - Hero
     "home.hero.title": "Pare de consumir ruído. Comece a construir sabedoria.",
@@ -66,5 +78,9 @@ export const ui = {
     "home.build_in_community.collaborative_curation": "Curadoria colaborativa",
     "home.build_in_community.collaborative_curation_description":
       "Encontrou um link quebrado ou um artigo melhor? Sugira edições na trilha e ajude a manter o conteúdo sempre atualizado.",
+
+    // Nav
+    "nav.home": "Início",
+    "nav.about": "Sobre",
   },
 } as const;

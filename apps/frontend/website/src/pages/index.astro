@@ -1,4 +1,5 @@
 ---
+import CTA from "@/components/common/CTA.astro";
 import BuildInCommunity from "@/components/home/BuildInCommunity.astro";
 import Hero from "@/components/home/Hero.astro";
 import LearnFromTheSource from "@/components/home/LearnFromTheSource.astro";
@@ -21,6 +22,7 @@ const isLearnFromSourceEnabled = flags.isFeatureEnabled(
 const isBuildInCommunityEnabled = flags.isFeatureEnabled(
   "home.build_in_community",
 );
+const isCTAEnabled = flags.isFeatureEnabled("home.cta");
 ---
 
 <Base title="Home">
@@ -31,4 +33,6 @@ const isBuildInCommunityEnabled = flags.isFeatureEnabled(
   {isLearnFromSourceEnabled && <LearnFromTheSource />}
 
   {isBuildInCommunityEnabled && <BuildInCommunity />}
+
+  {isCTAEnabled && <CTA />}
 </Base>

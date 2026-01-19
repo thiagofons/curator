@@ -94,7 +94,7 @@ export function Navbar() {
                   key={item.url}
                   href={linkUrl}
                   className={`hover:text-primary text-sm font-medium transition-colors ${
-                    isActive ? "text-primary font-bold" : "text-gray-600"
+                    isActive ? "text-primary font-bold" : "text-black"
                   }`}
                 >
                   {t(item.name as any)}

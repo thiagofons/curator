@@ -24,6 +24,7 @@
     "@astrojs/sitemap": "catalog:astro",
     "@digi4care/astro-google-tagmanager": "catalog:astro",
     "@justinribeiro/lite-youtube": "catalog:astro",
+    "@remixicon/react": "^4.8.0",
     "@repo/eslint-config": "workspace:*",
     "@repo/trpc": "workspace:*",
     "@repo/ui-web": "workspace:*",
