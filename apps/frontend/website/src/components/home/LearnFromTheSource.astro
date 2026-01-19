@@ -23,8 +23,9 @@ const t = useTranslations(lang);
   <div
     class="relative flex flex-col items-center gap-12 overflow-hidden pb-[100px]"
   >
+    <!-- Card 1: Kubrick -->
     <div
-      class="relative z-10 flex w-full max-w-[550px] flex-row gap-4 overflow-visible"
+      class="relative z-10 flex w-full max-w-[550px] flex-col items-center gap-4 overflow-visible md:flex-row md:items-start md:text-left"
     >
       <div
         class="image-container border-brand-blue flex items-center overflow-hidden rounded-full border-6"
@@ -37,7 +38,9 @@ const t = useTranslations(lang);
           draggable="false"
         />
 
-        <div class="absolute right-full h-full w-full overflow-hidden">
+        <div
+          class="absolute right-full hidden h-full w-full overflow-hidden md:block"
+        >
           <LeftSteps
             class="h-full w-full"
             style="mask-image: linear-gradient(to right, transparent, black);"
@@ -46,12 +49,14 @@ const t = useTranslations(lang);
       </div>
 
       <div
-        class="absolute top-20 z-0 flex min-w-[150px] justify-center [mask-image:linear-gradient(to_bottom,black_80%,transparent)]"
+        class="absolute top-20 z-0 hidden min-h-full min-w-[150px] justify-center [mask-image:linear-gradient(to_bottom,black_80%,transparent)] md:flex"
       >
         <VerticalSteps />
       </div>
 
-      <div class="flex flex-col gap-2">
+      <div
+        class="flex flex-col items-center gap-2 text-center md:items-start md:text-left"
+      >
         <div class="bg-brand-blue w-fit rounded-sm p-2">
           <H4 color="white"
             >{t("home.learn_from_the_source.cinema_beyond_the_script")}</H4
@@ -64,9 +69,12 @@ const t = useTranslations(lang);
       </div>
     </div>
 
-    <div class="z-10 flex w-full max-w-[550px] flex-row items-center gap-4">
+    <!-- Card 2: Jazz -->
+    <div
+      class="relative z-10 flex w-full max-w-[550px] flex-col items-center gap-4 overflow-visible md:flex-row md:items-start md:text-left"
+    >
       <div
-        class="image-container border-brand-blue flex items-center overflow-hidden rounded-full border-6"
+        class="image-container border-brand-blue z-20 flex items-center overflow-hidden rounded-full border-6"
         style="min-height: 150px; min-width: 150px; height: 150px; width: 150px;"
       >
         <Image
@@ -77,7 +85,9 @@ const t = useTranslations(lang);
         />
       </div>
 
-      <div class="flex flex-col gap-2">
+      <div
+        class="flex flex-col items-center gap-2 text-center md:items-start md:text-left"
+      >
         <div class="bg-brand-blue w-fit rounded-sm p-2">
           <H4 color="white"
             >{t("home.learn_from_the_source.jazz_improvisation")}</H4
@@ -90,7 +100,10 @@ const t = useTranslations(lang);
       </div>
     </div>
 
-    <div class="z-10 flex w-full max-w-[550px] flex-row items-center gap-4">
+    <!-- Card 3: Mona Lisa -->
+    <div
+      class="relative z-10 flex w-full max-w-[550px] flex-col items-center gap-4 overflow-visible md:flex-row md:items-start md:text-left"
+    >
       <div
         class="image-container border-brand-blue flex items-center overflow-hidden rounded-full border-6"
         style="min-height: 150px; min-width: 150px; height: 150px; width: 150px;"
@@ -103,7 +116,9 @@ const t = useTranslations(lang);
         />
       </div>
 
-      <div class="flex flex-col gap-2">
+      <div
+        class="flex flex-col items-center gap-2 text-center md:items-start md:text-left"
+      >
         <div class="bg-brand-blue w-fit rounded-sm p-2">
           <H4 color="white"
             >{t("home.learn_from_the_source.renaissance_masterpiece")}</H4
