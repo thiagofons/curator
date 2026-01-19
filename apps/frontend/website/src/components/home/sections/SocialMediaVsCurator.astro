@@ -1,0 +1,118 @@
+---
+import WhiteSteps from "@/assets/images/home/white-steps.svg";
+import Logo from "@/components/common/Logo.astro";
+import { APP_ROUTES } from "@/constants/routes";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import { BodyLarge, H2 } from "@repo/ui-web/components/custom/typography.jsx";
+import { Image } from "astro:assets";
+import {
+  Brain,
+  Candy,
+  Crown,
+  Eye,
+  Infinity,
+  Megaphone,
+  MoveUp,
+  TreeDeciduous,
+} from "lucide-react";
+
+interface ComparisonItem {
+  icon: any;
+  description: string;
+}
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const socialData: ComparisonItem[] = [
+  { icon: Eye, description: t("home.comparison.left.algorithm") },
+  { icon: Infinity, description: t("home.comparison.left.infinite_feed") },
+  {
+    icon: Megaphone,
+    description: t("home.comparison.left.viral_dictatorship"),
+  },
+  { icon: Candy, description: t("home.comparison.left.cheap_dopamine") },
+];
+
+const curatorData: ComparisonItem[] = [
+  { icon: Brain, description: t("home.comparison.right.pedagogical_logic") },
+  { icon: MoveUp, description: t("home.comparison.right.structured_journey") },
+  { icon: Crown, description: t("home.comparison.right.elite_curation") },
+  {
+    icon: TreeDeciduous,
+    description: t("home.comparison.right.deep_knowledge"),
+  },
+];
+
+const interleavedItems = socialData.flatMap((item, index) => {
+  const rightItem = curatorData[index];
+  return rightItem ? [item, rightItem] : [item];
+});
+---
+
+<section
+  id={APP_ROUTES.HOME.sections.SOCIAL_MEDIA_VS_CURATOR}
+  class="bg-brand-dark relative overflow-hidden px-5 py-16"
+>
+  <Image
+    src={WhiteSteps}
+    alt="Steps"
+    class="absolute top-0 left-42 z-0 hidden object-cover 2xl:block"
+  />
+  <Image
+    src={WhiteSteps}
+    alt="Steps"
+    class="absolute top-0 right-42 z-0 hidden object-cover 2xl:block"
+  />
+
+  <div class="z-10 mx-auto max-w-6xl">
+    <div
+      class="mb-12 flex flex-col items-center justify-center gap-4 md:flex-row md:gap-6"
+    >
+      <div class="flex w-full items-center justify-center text-center">
+        <H2 color="white">{t("home.comparison.left.title")}</H2>
+      </div>
+      <span class="text-gray-light text-xl font-bold">VS</span>
+      <div class="flex w-full items-center justify-center">
+        <Logo type="dark" size="2xl" />
+      </div>
+    </div>
+
+    <div
+      class="grid grid-cols-1 justify-items-center gap-x-8 gap-y-4 md:grid-cols-2"
+    >
+      {
+        interleavedItems.map((item, index) => {
+          const Icon = item.icon;
+
+          const isSocial = index % 2 === 0;
+
+          const cardStyles = isSocial
+            ? "border-status-red bg-status-red/10"
+            : "border-status-green bg-status-green/10";
+
+          const iconBgStyles = isSocial ? "bg-status-red" : "bg-status-green";
+
+          return (
+            <div
+              class={`flex w-full items-start gap-3 rounded-lg border p-4 transition-all hover:scale-105 hover:shadow-xl ${cardStyles} max-w-full md:max-w-108`}
+            >
+              <div
+                class={`${iconBgStyles} mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md`}
+              >
+                <Icon size={18} color="white" />
+              </div>
+
+              <BodyLarge
+                color="white"
+                className="leading-tight [&_b]:font-bold [&_b]:text-white"
+              >
+                <span set:html={item.description} />
+              </BodyLarge>
+            </div>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>

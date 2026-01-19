@@ -1,0 +1,42 @@
+---
+import BaseFAQ from "@/components/common/BaseFAQ";
+import InfoSection from "@/components/common/InfoSection.astro";
+import { APP_ROUTES } from "@/constants/routes";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import { MessageCircle } from "lucide-react";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const items = [
+  {
+    question: t("home.faq.q1.question"),
+    answer: t("home.faq.q1.answer"),
+  },
+  {
+    question: t("home.faq.q2.question"),
+    answer: t("home.faq.q2.answer"),
+  },
+  {
+    question: t("home.faq.q3.question"),
+    answer: t("home.faq.q3.answer"),
+  },
+  {
+    question: t("home.faq.q4.question"),
+    answer: t("home.faq.q4.answer"),
+  },
+  {
+    question: t("home.faq.q5.question"),
+    answer: t("home.faq.q5.answer"),
+  },
+];
+---
+
+<InfoSection
+  id={APP_ROUTES.HOME.sections.FAQ}
+  title={t("home.faq.title")}
+  subtitle={t("home.faq.subtitle")}
+  icon={MessageCircle}
+>
+  <BaseFAQ items={items} client:load />
+</InfoSection>

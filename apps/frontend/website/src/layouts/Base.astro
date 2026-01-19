@@ -1,46 +1,53 @@
 ---
-import TwSizeIndicator from "@/components/TwSizeIndicator.astro"
-import config from "@/config/config.json"
-import theme from "@/config/theme.json"
-import { plainify } from "@/lib/utils/textConverter"
-import Footer from "@/partials/Footer.astro"
-import Header from "@/partials/Header.astro"
-import "@/styles/main.css"
-import { ClientRouter } from "astro:transitions"
+import Footer from "@/components/common/Footer.astro";
+import Navbar from "@/components/common/Navbar.astro";
+import TwSizeIndicator from "@/components/common/TwSizeIndicator.astro";
+import config from "@/config/config.json";
+import theme from "@/config/theme.json";
+import { flagsmith } from "@/lib/flagsmith";
+import { plainify } from "@/lib/utils/textConverter";
+import "@/styles/main.css";
 import {
   GoogleTagmanager,
   GoogleTagmanagerNoscript,
-} from "@digi4care/astro-google-tagmanager"
-import { AstroFont } from "astro-font"
+} from "@digi4care/astro-google-tagmanager";
+import { AstroFont } from "astro-font";
+import { ClientRouter } from "astro:transitions";
 
 // font families
-const pf = theme.fonts.font_family.primary
-const sf = theme.fonts.font_family.secondary
+const pf = theme.fonts.font_family.primary;
+const sf = theme.fonts.font_family.secondary;
 
-let fontPrimary, fontSecondary
+let fontPrimary, fontSecondary;
 if (theme.fonts.font_family.primary) {
   fontPrimary = theme.fonts.font_family.primary
     .replace(/\+/g, " ")
-    .replace(/:[ital,]*[ital@]*[wght@]*[0-9,;]+/gi, "")
+    .replace(/:[ital,]*[ital@]*[wght@]*[0-9,;]+/gi, "");
 }
 if (theme.fonts.font_family.secondary) {
   fontSecondary = theme.fonts.font_family.secondary
     .replace(/\+/g, " ")
-    .replace(/:[ital,]*[ital@]*[wght@]*[0-9,;]+/gi, "")
+    .replace(/:[ital,]*[ital@]*[wght@]*[0-9,;]+/gi, "");
 }
 
 const { title, meta_title, description, image, noindex, canonical } =
-  Astro.props
-const ENV = (import.meta as any).env || {}
+  Astro.props;
+const ENV = (import.meta as any).env || {};
 // Enable AstroFont only when explicitly allowed; otherwise fall back to
 // client-side Google Fonts <link> to avoid build-time network fetches.
 const ENABLE_ASTRO_FONT =
-  String(ENV.ENABLE_ASTRO_FONT || "").toLowerCase() === "true"
+  String(ENV.ENABLE_ASTRO_FONT || "").toLowerCase() === "true";
+
+const flags = await flagsmith.getEnvironmentFlags();
+
+const isNavbarEnabled = flags.isFeatureEnabled("global.navbar");
+const isFooterEnabled = flags.isFeatureEnabled("global.footer");
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={"pt-BR"}>
   <head>
+    <meta charset="UTF-8" />
     <!-- google tag manager -->
     {
       config.google_tag_manager.enable && (
@@ -132,7 +139,7 @@ const ENABLE_ASTRO_FONT =
     <meta
       name="description"
       content={plainify(
-        description ? description : config.metadata.meta_description
+        description ? description : config.metadata.meta_description,
       )}
     />
 
@@ -145,7 +152,7 @@ const ENABLE_ASTRO_FONT =
     <meta
       property="og:title"
       content={plainify(
-        meta_title ? meta_title : title ? title : config.site.title
+        meta_title ? meta_title : title ? title : config.site.title,
       )}
     />
 
@@ -153,7 +160,7 @@ const ENABLE_ASTRO_FONT =
     <meta
       property="og:description"
       content={plainify(
-        description ? description : config.metadata.meta_description
+        description ? description : config.metadata.meta_description,
       )}
     />
     <meta property="og:type" content="website" />
@@ -166,7 +173,7 @@ const ENABLE_ASTRO_FONT =
     <meta
       name="twitter:title"
       content={plainify(
-        meta_title ? meta_title : title ? title : config.site.title
+        meta_title ? meta_title : title ? title : config.site.title,
       )}
     />
 
@@ -174,7 +181,7 @@ const ENABLE_ASTRO_FONT =
     <meta
       name="twitter:description"
       content={plainify(
-        description ? description : config.metadata.meta_description
+        description ? description : config.metadata.meta_description,
       )}
     />
 
@@ -204,10 +211,13 @@ const ENABLE_ASTRO_FONT =
     }
 
     <TwSizeIndicator />
-    <Header />
+
+    {isNavbarEnabled && <Navbar />}
+
     <main id="main-content">
       <slot />
     </main>
-    <Footer />
+
+    {isFooterEnabled && <Footer />}
   </body>
 </html>

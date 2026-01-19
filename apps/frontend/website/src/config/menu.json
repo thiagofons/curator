@@ -1,8 +1,20 @@
 {
   "main": [
     {
-      "name": "Blog",
+      "name": "home",
+      "url": "/"
+    },
+    {
+      "name": "open_source",
+      "url": "/open-source"
+    },
+    {
+      "name": "blog",
       "url": "/blog"
+    },
+    {
+      "name": "about",
+      "url": "/about"
     }
   ],
   "footer": [

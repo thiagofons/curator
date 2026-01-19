@@ -36,6 +36,7 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@repo/vitest-config": "workspace:*",
+    "@tailwindcss/postcss": "^4.1.18",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
     "pagefind": "catalog:nextra4",

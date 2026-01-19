@@ -1,85 +1,101 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap");
 
-@custom-variant dark (&:is(.dark *));
+@import "tailwindcss";
+@config "../tailwind.config.ts";
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
-    --radius: 0.5rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    --font-primary: "Lexend", sans-serif;
+    /* ------------------------------------------------------------------ */
+    /* 1. PRIMITIVE TOKENS (Sua Paleta "Curator")                         */
+    /* Convertidos para HSL para permitir opacidade no Tailwind           */
+    /* ------------------------------------------------------------------ */
 
-    /* Planefica */
-    --fluorescent-yellow: #fff700;
-    --fluorescent-green: #39ff14;
-    --fluorescent-blue: #00e7ff;
-    --fluorescent-orange: #ff7300;
-    --gray-lighter: #f1f1f1;
-    --gray-light: #bdbdbd;
-    --gray-normal: #707070;
-    --gray-dark: #3a3a3a;
-    --gray-darker: #111111;
+    /* Brand Colors */
+    --brand-blue: 217 100% 48%; /* #0060f7 */
+    --brand-blue-dark: 216 100% 8%; /* #001028 */
+
+    /* Grays (Neutral) */
+    --gray-lighter: 0 0% 93%; /* #eeeeee */
+    --gray-light: 0 0% 84%; /* #d5d5d5 */
+    --gray-normal: 215 14% 34%; /* #4b5563 (Seu 'gray') */
+    --gray-dark: 0 0% 0%; /* #000000 (Seu 'gray-translucid' base) */
+
+    /* Status Colors */
+    --status-green: 135 59% 49%; /* #34c759 */
+    --status-red: 359 100% 61%; /* #ff383c */
+
+    /* ------------------------------------------------------------------ */
+    /* 2. SEMANTIC TOKENS (O Sistema do shadcn/ui)                        */
+    /* Aqui mapeamos a "Função" para a "Cor Primitiva"                    */
+    /* ------------------------------------------------------------------ */
+
+    --background: 0 0% 100%; /* #ffffff */
+    --foreground: 216 100% 8%; /* Texto padrão -> Blue Dark */
+
+    --card: 0 0% 100%;
+    --card-foreground: 216 100% 8%; /* Blue Dark */
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 216 100% 8%;
+
+    /* PRIMARY: A cor principal de ação (Botões, Links ativos) */
+    --primary: 217 100% 48%; /* -> Brand Blue */
+    --primary-foreground: 0 0% 100%; /* Texto no botão primário -> Branco */
+
+    /* SECONDARY: Ações secundárias */
+    --secondary: 215 14% 34%; /* -> Gray */
+    --secondary-foreground: 216 100% 8%; /* -> Blue Dark */
+
+    /* MUTED: Textos de apoio, fundos desabilitados */
+    --muted: 0 0% 93%; /* -> Gray Lighter */
+    --muted-foreground: 215 14% 34%; /* -> Gray Normal */
+
+    /* ACCENT: Hovers em dropdowns, itens de lista */
+    --accent: 0 0% 93%; /* -> Gray Lighter */
+    --accent-foreground: 217 100% 48%; /* -> Brand Blue (Opcional, ou manter preto) */
+
+    /* DESTRUCTIVE: Erros, deletar */
+    --destructive: 359 100% 61%; /* -> Status Red */
+    --destructive-foreground: 0 0% 100%;
+
+    /* BORDERS & INPUTS */
+    --border: 0 0% 84%; /* -> Gray Light */
+    --input: 0 0% 84%; /* -> Gray Light */
+    --ring: 217 100% 48%; /* -> Brand Blue (Foco de acessibilidade) */
+
+    --radius: 0.5rem;
   }
 
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    /* Mapeamento Dark Mode (Exemplo básico, ajuste conforme gosto) */
+    --background: 216 100% 8%; /* Blue Dark como fundo */
+    --foreground: 0 0% 100%; /* Texto branco */
 
-    /* Planefica */
-    --fluorescent-yellow: #fff700;
-    --fluorescent-green: #39ff14;
-    --fluorescent-blue: #00e7ff;
-    --fluorescent-orange: #ff7300;
-    --gray-lighter: #f1f1f1;
-    --gray-light: #bdbdbd;
-    --gray-normal: #707070;
-    --gray-dark: #3a3a3a;
-    --gray-darker: #111111;
+    --card: 216 100% 10%; /* Levemente mais claro que o fundo */
+    --card-foreground: 0 0% 100%;
+
+    --popover: 216 100% 10%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 217 100% 48%; /* Brand Blue mantém */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 215 14% 34%; /* Gray Normal */
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 216 100% 15%;
+    --muted-foreground: 0 0% 60%;
+
+    --accent: 216 100% 15%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 359 100% 61%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 215 14% 34%;
+    --input: 215 14% 34%;
+    --ring: 217 100% 48%;
   }
 }
 
@@ -92,76 +108,36 @@
   }
 }
 
-:root {
-  --sidebar: hsl(0 0% 98%);
-  --sidebar-foreground: hsl(240 5.3% 26.1%);
-  --sidebar-primary: hsl(240 5.9% 10%);
-  --sidebar-primary-foreground: hsl(0 0% 98%);
-  --sidebar-accent: hsl(240 4.8% 95.9%);
-  --sidebar-accent-foreground: hsl(240 5.9% 10%);
-  --sidebar-border: hsl(220 13% 91%);
-  --sidebar-ring: hsl(217.2 91.2% 59.8%);
-}
-
-.dark {
-  --sidebar: hsl(240 5.9% 10%);
-  --sidebar-foreground: hsl(240 4.8% 95.9%);
-  --sidebar-primary: hsl(224.3 76.3% 48%);
-  --sidebar-primary-foreground: hsl(0 0% 100%);
-  --sidebar-accent: hsl(240 3.7% 15.9%);
-  --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
-  --sidebar-border: hsl(240 3.7% 15.9%);
-  --sidebar-ring: hsl(217.2 91.2% 59.8%);
-}
-
-@theme inline {
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --animate-accordion-down: accordion-down 0.2s ease-out;
-  --animate-accordion-up: accordion-up 0.2s ease-out;
-
-  @keyframes accordion-down {
-    from {
-      height: 0;
-    }
-    to {
-      height: var(--radix-accordion-content-height);
-    }
+/* Primitive color utilities for Typography component */
+@layer utilities {
+  .text-white {
+    color: #ffffff;
   }
-
-  @keyframes accordion-up {
-    from {
-      height: var(--radix-accordion-content-height);
-    }
-    to {
-      height: 0;
-    }
+  .text-black {
+    color: #000000;
   }
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
+  .text-brand-blue {
+    color: hsl(var(--brand-blue));
   }
-  body {
-    @apply bg-background text-foreground;
+  .text-brand-blue-dark {
+    color: hsl(var(--brand-blue-dark));
   }
-
-  /* Button */
-  .btn-3d {
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-    transition:
-      box-shadow 0.5s ease,
-      transform 0.5s ease;
+  .text-gray-lighter {
+    color: hsl(var(--gray-lighter));
   }
-  .btn-3d:active {
-    box-shadow: none;
-    transform: translateY(2px);
+  .text-gray-light {
+    color: hsl(var(--gray-light));
+  }
+  .text-gray-normal {
+    color: hsl(var(--gray-normal));
+  }
+  .text-gray-dark {
+    color: hsl(var(--gray-dark));
+  }
+  .text-status-green {
+    color: hsl(var(--status-green));
+  }
+  .text-status-red {
+    color: hsl(var(--status-red));
   }
 }

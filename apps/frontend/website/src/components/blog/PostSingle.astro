@@ -1,0 +1,104 @@
+---
+import { getSinglePage } from "@/lib/contentParser.astro";
+import dateFormat from "@/lib/utils/dateFormat";
+import { humanize, markdownify, slugify } from "@/lib/utils/textConverter";
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { render } from "astro:content";
+import Share from "./Share.astro";
+
+type Props = {
+  post: any;
+  isPayload?: boolean;
+  contentHtml?: string;
+};
+
+const allAuthors = await getSinglePage("authors");
+const { post, isPayload = false, contentHtml = "" } = Astro.props as Props;
+
+let Content: any = null;
+if (!isPayload) {
+  const rendered = await render(post as CollectionEntry<"posts">);
+  Content = rendered.Content;
+}
+
+const { title, authors = [], categories = [], image, date } = post.data || {};
+---
+
+<section class="section">
+  <div class="container">
+    <div class="row px-3">
+      <div class="mx-auto lg:col-8">
+        <div class="rounded-xl px-9 py-12 shadow md:p-[60px]">
+          <article>
+            <h1 set:html={markdownify(title)} class="h2" />
+            <ul
+              class="text-text mt-4 mb-8 flex flex-wrap items-center space-x-3"
+            >
+              <li>
+                {
+                  isPayload
+                    ? authors.map((name: string, i: number) => (
+                        <a
+                          href={`/blog/authors/${post.data.authorSlugs?.[i] || post.data.authorSlugs?.[0]}`}
+                          class="hover:text-primary flex items-center hover:underline"
+                        >
+                          <span>{name}</span>
+                        </a>
+                      ))
+                    : allAuthors
+                        .filter((author) =>
+                          authors
+                            .map((author: string) => slugify(author))
+                            .includes(slugify(author.data.title)),
+                        )
+                        .map((author) => (
+                          <a
+                            href={`/blog/authors/${slugify(author.id)}`}
+                            class="hover:text-primary flex items-center hover:underline"
+                          >
+                            <span>{author.data.title}</span>
+                          </a>
+                        ))
+                }
+              </li>
+              <li>{dateFormat(date)}</li>
+              <li>
+                <ul>
+                  {
+                    categories.map((category: string, i: number) => (
+                      <li class="inline-block">
+                        <a
+                          href={`/blog/categories/${post.data.categorySlugs?.[i] || slugify(category)}`}
+                          class="hover:text-primary mr-3 hover:underline"
+                        >
+                          {humanize(category)}
+                        </a>
+                      </li>
+                    ))
+                  }
+                </ul>
+              </li>
+            </ul>
+            {
+              image &&
+                (isPayload ? (
+                  <img src={image} height={500} width={1000} alt={title} />
+                ) : (
+                  <Image src={image} height={500} width={1000} alt={title} />
+                ))
+            }
+            <div class="content mb-16 text-left">
+              {isPayload ? <div set:html={contentHtml} /> : <Content />}
+            </div>
+          </article>
+
+          <div class="flex items-center">
+            <h5 class="mr-3">Compartilhe :</h5>
+            <Share className="social-icons" title={title} slug={post.id} />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

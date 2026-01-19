@@ -2,6 +2,7 @@
   "name": "@repo/ui-web",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "ui": "pnpx shadcn@latest",
     "lint": "eslint .",
@@ -18,6 +19,7 @@
     "./tailwind.config": "./tailwind.config.ts",
     "./next.config": "./next.config.mjs",
     "./globals.css": "./src/globals.css",
+    "./theme.css": "./src/theme.css",
     "./lib/*": "./src/lib/*.ts",
     "./hooks/*": [
       "./src/hooks/*.ts",
@@ -25,7 +27,8 @@
     ],
     "./components/*": "./src/components/*",
     "./base/*": "./src/components/base/*.tsx",
-    "./custom/*": "./src/components/custom/*.tsx"
+    "./custom/*": "./src/components/custom/*.tsx",
+    "./styles.css": "./src/styles/globals.css"
   },
   "dependencies": {
     "@hookform/resolvers": "catalog:core-libs",
@@ -63,15 +66,18 @@
     "cmdk": "catalog:ui-libs",
     "date-fns": "catalog:ui-libs",
     "embla-carousel-react": "catalog:ui-libs",
+    "framer-motion": "^12.23.26",
     "input-otp": "catalog:ui-libs",
     "lucide-react": "catalog:ui-libs",
     "next-themes": "catalog:ui-libs",
+    "postcss": "catalog:ui-libs",
     "react-day-picker": "catalog:ui-libs",
     "react-hook-form": "catalog:core-libs",
     "react-resizable-panels": "catalog:ui-libs",
     "recharts": "catalog:ui-libs",
     "sonner": "catalog:ui-libs",
     "tailwind-merge": "catalog:ui-libs",
+    "tailwindcss": "catalog:ui-libs",
     "tailwindcss-animate": "catalog:ui-libs",
     "vaul": "catalog:ui-libs",
     "vitest": "catalog:testing"
@@ -84,12 +90,12 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@repo/vitest-config": "workspace:*",
+    "@tailwindcss/postcss": "catalog:ui-libs",
     "@types/node": "catalog:tooling",
     "@types/react": "catalog:react19",
     "autoprefixer": "catalog:ui-libs",
     "postcss": "catalog:ui-libs",
     "postcss-load-config": "catalog:ui-libs",
-    "tailwindcss": "catalog:ui-libs",
     "typescript": "catalog:tooling"
   }
 }

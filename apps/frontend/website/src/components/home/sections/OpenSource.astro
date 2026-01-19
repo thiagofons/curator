@@ -1,0 +1,47 @@
+---
+import CentralSection from "@/components/common/CentralSection.astro";
+import { APP_ROUTES } from "@/constants/routes";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import { RiGithubFill } from "@remixicon/react";
+import { Button } from "@repo/ui-web/components/base/button.jsx";
+import { GitPullRequestArrow } from "lucide-react";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const { isFeatureEnabled } = Astro.locals;
+---
+
+<CentralSection
+  id={APP_ROUTES.HOME.sections.OPEN_SOURCE}
+  theme="dark"
+  icon={GitPullRequestArrow}
+  title={t("home.open_source.title")}
+  subtitle={t("home.open_source.subtitle")}
+>
+  <div class="flex items-center gap-4">
+    <a
+      href="https://www.github.com/thiagofons/curator"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <Button
+        color="black"
+        className="bg-black text-white hover:bg-black/50"
+        client:load
+      >
+        <RiGithubFill size={24} color="#FFFFFF" />
+        {t("home.open_source.github")}
+      </Button>
+    </a>
+
+    <Button
+      color="white"
+      className="bg-white text-black hover:bg-white/50"
+      client:load
+      disabled={!isFeatureEnabled("open_source")}
+    >
+      {t("home.open_source.more")}
+    </Button>
+  </div>
+</CentralSection>

@@ -1,10 +1,10 @@
 {
   "$schema": "https://turborepo.com/schema.json",
-  "globalEnv": ["PAYLOAD_SECRET", "DATABASE_URL"],
+  "globalEnv": ["PAYLOAD_SECRET", "DATABASE_URL", "FLAGSMITH_ENV_KEY"],
   "ui": "tui",
   "tasks": {
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "^db:generate"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },

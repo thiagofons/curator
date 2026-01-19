@@ -1,0 +1,77 @@
+---
+import { getSinglePage } from "@/lib/contentParser.astro";
+import { markdownify } from "@/lib/utils/textConverter";
+import { Image } from "astro:assets";
+import { render } from "astro:content";
+import Post from "./Post.astro";
+
+type Props = {
+  author: any;
+  posts?: any[];
+  isPayload?: boolean;
+  contentHtml?: string;
+};
+
+const {
+  author,
+  posts = null,
+  isPayload = false,
+  contentHtml = "",
+} = Astro.props as Props;
+
+const { title, image } = author.data || {};
+
+let Content: any = null;
+if (!isPayload) {
+  const rendered = await render(author);
+  Content = rendered.Content;
+}
+let filterByAuthor = posts;
+if (!filterByAuthor) {
+  const allPosts = await getSinglePage("posts");
+  filterByAuthor = allPosts.filter((post) => post.data.authors.includes(title));
+}
+---
+
+<section class="section">
+  <div class="container">
+    <div class="row justify-center">
+      <div class="lg:col-8">
+        <div class="p-12 text-center shadow">
+          {
+            image &&
+              (isPayload ? (
+                <img
+                  src={image}
+                  class="mx-auto mb-8 rounded-full"
+                  height={300}
+                  width={300}
+                  alt={title}
+                />
+              ) : (
+                <Image
+                  src={image}
+                  class="mx-auto mb-8"
+                  height={300}
+                  width={300}
+                  alt={title}
+                />
+              ))
+          }
+          <h1 set:html={markdownify(title)} class="h2 mb-8" />
+          <div class="content">
+            {isPayload ? <div set:html={contentHtml} /> : <Content />}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-16 justify-center">
+      <div class="lg:col-8">
+        <h2 class="mb-4">Posts de <span class="text-primary">{title}</span></h2>
+        <div class="rounded px-9 py-12 shadow md:p-[60px]">
+          {filterByAuthor.map((post: any) => <Post post={post} />)}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

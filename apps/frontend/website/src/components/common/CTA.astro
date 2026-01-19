@@ -1,0 +1,145 @@
+---
+import { APP_ROUTES } from "@/constants/routes";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import { scrollToSection } from "@/lib/scrollToSection";
+import { RiCheckboxCircleFill } from "@remixicon/react";
+import { Button } from "@repo/ui-web/components/base/button.jsx";
+import {
+  H3,
+  SubheadingSM,
+} from "@repo/ui-web/components/custom/typography.jsx";
+import { Minus, MoveUp } from "lucide-react";
+import InfoSection from "./InfoSection.astro";
+import Logo from "./Logo.astro";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+type Benefit = {
+  title: string;
+  curator: boolean;
+  curatorPro: boolean;
+};
+
+const benefits: Benefit[] = [
+  {
+    title: t("cta.public_access"),
+    curator: true,
+    curatorPro: true,
+  },
+  {
+    title: t("cta.ads_free"),
+    curator: true,
+    curatorPro: true,
+  },
+  {
+    title: t("cta.offline_access"),
+    curator: false,
+    curatorPro: true,
+  },
+  {
+    title: t("cta.contextual_ai"),
+    curator: false,
+    curatorPro: true,
+  },
+  {
+    title: t("cta.sync"),
+    curator: false,
+    curatorPro: true,
+  },
+  {
+    title: t("cta.private_roadmaps"),
+    curator: false,
+    curatorPro: true,
+  },
+  {
+    title: t("cta.open_source"),
+    curator: false,
+    curatorPro: true,
+  },
+];
+
+const { isFeatureEnabled } = Astro.locals;
+const isCuratorProEnabled = isFeatureEnabled("curator_pro");
+---
+
+<InfoSection
+  id={APP_ROUTES.COMMON.sections.CTA}
+  title={t("cta.title")}
+  subtitle={t("cta.description")}
+  icon={MoveUp}
+  theme="dark"
+>
+  <div class="w-full overflow-x-auto">
+    <div class="flex w-fit min-w-full justify-center p-4">
+      <div class="grid w-225 min-w-225 grid-cols-3 grid-rows-1 gap-9">
+        <div class="grid-col-1 grid grid-rows-9 items-center gap-4 p-3">
+          <div class="flex h-9 items-center">
+            <H3 color="white" className="min-h-9">{t("cta.benefits")}</H3>
+          </div>
+
+          {
+            benefits.map((benefit) => (
+              <div class="flex h-9 items-center">
+                <SubheadingSM color="white">{benefit.title}</SubheadingSM>
+              </div>
+            ))
+          }
+        </div>
+
+        <div
+          class="border-gray-normal flex flex-col items-center justify-between gap-4 rounded-[9px] border bg-black/20 p-3"
+        >
+          <div class="flex h-9 items-center">
+            <Logo type="dark" />
+          </div>
+
+          {
+            benefits.map((benefit) => (
+              <div class="flex h-9 items-center justify-center">
+                {benefit.curator ? (
+                  <RiCheckboxCircleFill color="#FFFFFF" />
+                ) : (
+                  <Minus color="#FFFFFF" />
+                )}
+              </div>
+            ))
+          }
+          <Button
+            variant={"outline"}
+            size={"full"}
+            onClick={() => scrollToSection(APP_ROUTES.COMMON.sections.DOWNLOAD)}
+            client:load
+            color="gray-light"
+            disabled
+          >
+            {t("cta.download")}
+          </Button>
+        </div>
+
+        <div
+          class="border-brand-blue bg-brand-blue/5 flex flex-col items-center justify-between gap-4 rounded-[9px] border p-3"
+        >
+          <div class="flex h-9 items-center">
+            <Logo type="dark" variant="pro" />
+          </div>
+
+          {
+            benefits.map((benefit) => (
+              <div class="flex h-9 items-center justify-center">
+                {benefit.curatorPro ? (
+                  <RiCheckboxCircleFill color="#FFFFFF" />
+                ) : (
+                  <Minus color="#FFFFFF" />
+                )}
+              </div>
+            ))
+          }
+          <Button size={"full"} disabled={!isCuratorProEnabled} client:load>
+            {`${t("cta.subscribe")} (R$ 9,90/${t("cta.month")})`}
+          </Button>
+        </div>
+      </div>
+    </div>
+  </div>
+</InfoSection>

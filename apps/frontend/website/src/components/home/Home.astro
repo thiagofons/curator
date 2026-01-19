@@ -1,0 +1,35 @@
+---
+import CTA from "@/components/common/CTA.astro";
+
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import Base from "@/layouts/Base.astro";
+import "@repo/ui-web/globals.css";
+import BuildInCommunity from "./sections/BuildInCommunity.astro";
+import ComeTogether from "./sections/ComeTogether.astro";
+import FAQ from "./sections/FAQ.astro";
+import Hero from "./sections/Hero.astro";
+import LearnFromTheSource from "./sections/LearnFromTheSource.astro";
+import OpenSource from "./sections/OpenSource.astro";
+import SocialMediaVsCurator from "./sections/SocialMediaVsCurator.astro";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<Base title={t("home.meta.title")} description={t("home.meta.description")}>
+  <Hero />
+
+  <SocialMediaVsCurator />
+
+  <LearnFromTheSource />
+
+  <BuildInCommunity />
+
+  <CTA />
+
+  <FAQ />
+
+  <OpenSource />
+
+  <ComeTogether />
+</Base>

@@ -1,0 +1,136 @@
+---
+import Jazz from "@/assets/images/home/jazz.jpeg";
+import Kubrick from "@/assets/images/home/kubrick.jpg";
+import LeftSteps from "@/assets/images/home/left-steps.svg";
+import MonaLisa from "@/assets/images/home/mona-lisa.jpg";
+import VerticalSteps from "@/assets/images/home/vertical-steps.svg";
+import InfoSection from "@/components/common/InfoSection.astro";
+import { APP_ROUTES } from "@/constants/routes";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import { BodyBase, H4 } from "@repo/ui-web/components/custom/typography.jsx";
+import { Image } from "astro:assets";
+import { Gem } from "lucide-react";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<InfoSection
+  id={APP_ROUTES.HOME.sections.LEARN_FROM_THE_SOURCE}
+  icon={Gem}
+  title={t("home.learn_from_the_source.title")}
+  subtitle={t("home.learn_from_the_source.subtitle")}
+  theme="light"
+>
+  <div
+    class="relative flex flex-col items-center gap-12 overflow-hidden pb-[100px]"
+  >
+    <!-- Card 1: Kubrick -->
+    <div
+      class="relative z-10 flex w-full max-w-[550px] flex-col items-center gap-4 overflow-visible md:flex-row md:items-start md:text-left"
+    >
+      <div
+        class="image-container border-brand-blue flex items-center overflow-hidden rounded-full border-6"
+        style="min-height: 150px; min-width: 150px; height: 150px; width: 150px;"
+      >
+        <Image
+          src={Kubrick}
+          alt="Stanley Kubrick"
+          class="image-inner z-10 h-full w-full object-cover"
+          draggable="false"
+        />
+
+        <div
+          class="absolute right-full hidden h-full w-full overflow-hidden md:block"
+        >
+          <LeftSteps
+            class="h-full w-full"
+            style="mask-image: linear-gradient(to right, transparent, black);"
+          />
+        </div>
+      </div>
+
+      <div
+        class="absolute top-20 z-0 hidden min-h-full min-w-[150px] justify-center [mask-image:linear-gradient(to_bottom,black_80%,transparent)] md:flex"
+      >
+        <VerticalSteps />
+      </div>
+
+      <div
+        class="flex flex-col items-center gap-2 text-center md:items-start md:text-left"
+      >
+        <div class="bg-brand-blue w-fit rounded-sm p-2">
+          <H4 color="white"
+            >{t("home.learn_from_the_source.cinema_beyond_the_script")}</H4
+          >
+        </div>
+
+        <BodyBase>
+          {t("home.learn_from_the_source.cinema_beyond_the_script_description")}
+        </BodyBase>
+      </div>
+    </div>
+
+    <!-- Card 2: Jazz -->
+    <div
+      class="relative z-10 flex w-full max-w-[550px] flex-col items-center gap-4 overflow-visible md:flex-row md:items-start md:text-left"
+    >
+      <div
+        class="image-container border-brand-blue z-20 flex items-center overflow-hidden rounded-full border-6"
+        style="min-height: 150px; min-width: 150px; height: 150px; width: 150px;"
+      >
+        <Image
+          src={Jazz}
+          alt="Jazz Music"
+          class="image-inner h-full w-full object-cover"
+          draggable="false"
+        />
+      </div>
+
+      <div
+        class="flex flex-col items-center gap-2 text-center md:items-start md:text-left"
+      >
+        <div class="bg-brand-blue w-fit rounded-sm p-2">
+          <H4 color="white"
+            >{t("home.learn_from_the_source.jazz_improvisation")}</H4
+          >
+        </div>
+
+        <BodyBase>
+          {t("home.learn_from_the_source.jazz_improvisation_description")}
+        </BodyBase>
+      </div>
+    </div>
+
+    <!-- Card 3: Mona Lisa -->
+    <div
+      class="relative z-10 flex w-full max-w-[550px] flex-col items-center gap-4 overflow-visible md:flex-row md:items-start md:text-left"
+    >
+      <div
+        class="image-container border-brand-blue flex items-center overflow-hidden rounded-full border-6"
+        style="min-height: 150px; min-width: 150px; height: 150px; width: 150px;"
+      >
+        <Image
+          src={MonaLisa}
+          alt="Mona Lisa"
+          class="image-inner h-full w-full object-cover"
+          draggable="false"
+        />
+      </div>
+
+      <div
+        class="flex flex-col items-center gap-2 text-center md:items-start md:text-left"
+      >
+        <div class="bg-brand-blue w-fit rounded-sm p-2">
+          <H4 color="white"
+            >{t("home.learn_from_the_source.renaissance_masterpiece")}</H4
+          >
+        </div>
+
+        <BodyBase>
+          {t("home.learn_from_the_source.renaissance_masterpiece_description")}
+        </BodyBase>
+      </div>
+    </div>
+  </div>
+</InfoSection>

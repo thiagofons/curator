@@ -1,0 +1,56 @@
+---
+import AppStore from "@/assets/images/app-store.svg";
+import GooglePlay from "@/assets/images/google-play.svg";
+import { Image } from "astro:assets";
+
+type Props = {
+  store: "Google Play" | "App Store";
+};
+
+const { store } = Astro.props;
+
+const downloadLinks: Record<string, string> = {
+  "Google Play": "",
+  "App Store": "",
+};
+
+const href = downloadLinks[store];
+
+const { isFeatureEnabled } = Astro.locals;
+---
+
+<a href={href} class="cursor-pointer" target="_blank">
+  {
+    store === "Google Play" && (
+      <button
+        disabled={!isFeatureEnabled("download_google_play")}
+        class="disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        <Image
+          src={GooglePlay}
+          alt={store}
+          width={141}
+          height={42}
+          draggable={false}
+        />
+      </button>
+    )
+  }
+
+  {
+    store === "App Store" && (
+      <button
+        disabled={!isFeatureEnabled("download_app_store")}
+        class="disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        <Image
+          src={AppStore}
+          alt={store}
+          width={128}
+          height={42}
+          draggable={false}
+        />
+      </button>
+    )
+  }
+</a>

@@ -1,0 +1,50 @@
+---
+import BG from "@/assets/images/home/hero-bg.svg";
+import HeroImage from "@/assets/images/home/hero.png";
+import DownloadButton from "@/components/common/DownloadButton.astro";
+import HeroCard from "@/components/common/HeroCard.astro";
+import { APP_ROUTES } from "@/constants/routes";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import {
+  Display,
+  SubheadingXL,
+} from "@repo/ui-web/components/custom/typography.jsx";
+import { Image } from "astro:assets";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<main
+  id={APP_ROUTES.HOME.sections.HERO}
+  class="relative flex min-h-screen items-center justify-center p-5"
+>
+  <Image
+    src={BG}
+    alt="Hero Background"
+    class="absolute top-0 left-0 -z-10 h-full w-full object-cover"
+  />
+
+  <HeroCard orientation="horizontal" imageSide="right">
+    <div slot="image">
+      <Image
+        src={HeroImage}
+        alt="Hero Image"
+        class="h-auto w-full object-cover"
+      />
+    </div>
+
+    <Display variant="display-h1" color="black">
+      {t("home.hero.title")}
+    </Display>
+
+    <SubheadingXL color="gray-normal">
+      {t("home.hero.subtitle")}
+    </SubheadingXL>
+
+    <div class="mt-6 flex items-center justify-center gap-4 md:justify-start">
+      <DownloadButton store="Google Play" />
+      <DownloadButton store="App Store" />
+    </div>
+  </HeroCard>
+</main>

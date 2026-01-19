@@ -1,10 +1,10 @@
 ---
-import Base from "@/layouts/Base.astro"
-import { getPayloadAuthors, getPayloadPostsByAuthorSlug } from "@/lib/payload"
-import AuthorSingle from "@/partials/AuthorSingle.astro"
+import AuthorSingle from "@/components/blog/AuthorSingle.astro";
+import Base from "@/layouts/Base.astro";
+import { getPayloadAuthors, getPayloadPostsByAuthorSlug } from "@/lib/payload";
 
 export async function getStaticPaths() {
-  const authors = await getPayloadAuthors()
+  const authors = await getPayloadAuthors();
 
   const paths = authors.map((author) => ({
     params: {
@@ -15,19 +15,24 @@ export async function getStaticPaths() {
       isPayload: true,
       contentHtml: author.contentHtml,
     },
-  }))
-  return paths
+  }));
+  return paths;
 }
 
 const { author, isPayload, contentHtml } = Astro.props as {
-  author: any
-  isPayload?: boolean
-  contentHtml?: string
-}
-const { title, image } = author.data
-const posts = await getPayloadPostsByAuthorSlug(author.slug)
+  author: any;
+  isPayload?: boolean;
+  contentHtml?: string;
+};
+const { title, image } = author.data;
+const posts = await getPayloadPostsByAuthorSlug(author.slug);
 ---
 
 <Base title={title}>
-  <AuthorSingle author={author} posts={posts} isPayload={isPayload} contentHtml={contentHtml} />
+  <AuthorSingle
+    author={author}
+    posts={posts}
+    isPayload={isPayload}
+    contentHtml={contentHtml}
+  />
 </Base>

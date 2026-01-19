@@ -1,0 +1,25 @@
+---
+import BG from "@/assets/images/home/hero-bg.svg";
+import CentralSection from "@/components/common/CentralSection.astro";
+import DownloadButton from "@/components/common/DownloadButton.astro";
+import { APP_ROUTES } from "@/constants/routes";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import { UsersRound } from "lucide-react";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<CentralSection
+  id={APP_ROUTES.COMMON.sections.DOWNLOAD}
+  theme="light"
+  icon={UsersRound}
+  title={t("home.come_together.title")}
+  subtitle={t("home.come_together.subtitle")}
+  bg={BG}
+>
+  <div class="flex items-center gap-4">
+    <DownloadButton store="Google Play" />
+    <DownloadButton store="App Store" />
+  </div>
+</CentralSection>

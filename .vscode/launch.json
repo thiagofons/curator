@@ -1,0 +1,55 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug: Firefox (Attach)",
+      "type": "firefox",
+      "request": "launch",
+      "reAttach": true,
+      "url": "http://localhost:5000",
+      "webRoot": "${workspaceFolder}/apps/frontend/website",
+      "firefoxExecutable": "/usr/bin/firefox"
+    },
+    {
+      "name": "Front-End | Blog CMS",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "pnpm dev",
+      "cwd": "${workspaceFolder}/apps/frontend/blog-cms",
+      "env": {
+        "PORT": "4001"
+      }
+    },
+    {
+      "name": "Front-End | Docs",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "pnpm dev",
+      "cwd": "${workspaceFolder}/apps/frontend/docs",
+      "env": {
+        "PORT": "4002"
+      }
+    },
+    {
+      "name": "Front-End | Storybook (Web)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "pnpm storybook-web:dev",
+      "cwd": "${workspaceFolder}/apps/frontend/storybook/web",
+      "env": {
+        "PORT": "6006"
+      }
+    },
+    {
+      "name": "Front-End | Website",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "pnpm dev",
+      "cwd": "${workspaceFolder}/apps/frontend/website",
+      "env": {
+        "PORT": "4003"
+      }
+    }
+  ],
+  "compounds": []
+}
