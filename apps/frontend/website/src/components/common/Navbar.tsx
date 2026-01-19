@@ -69,17 +69,11 @@ export default function Navbar({ items, cta }: NavbarProps) {
 
           <nav className="hidden items-center gap-8 md:flex">
             {items.map((item) => {
-              const isActive =
-                currentPath === item.url ||
-                (item.url !== "/" && currentPath.startsWith(item.url));
-
               return (
                 <a
                   key={item.url}
                   href={item.url}
-                  className={`hover:text-primary text-sm font-medium transition-colors ${
-                    isActive ? "text-primary font-bold" : "text-black"
-                  }`}
+                  className={`hover:text-primary text-sm font-medium text-black transition-colors duration-300`}
                 >
                   {item.label}
                 </a>
@@ -127,7 +121,7 @@ export default function Navbar({ items, cta }: NavbarProps) {
               key={item.url}
               href={item.url}
               onClick={() => setIsOpen(false)}
-              className="text-foreground hover:text-primary text-3xl font-bold transition-all duration-500 ease-out"
+              className={`hover:text-primary text-foreground ease-outhover:font-bold text-3xl font-bold transition-all duration-300`}
               style={{
                 opacity: isOpen ? 1 : 0,
                 transform: isOpen ? "translateY(0)" : "translateY(1rem)",
