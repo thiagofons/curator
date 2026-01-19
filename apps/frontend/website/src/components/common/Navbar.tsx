@@ -1,19 +1,19 @@
-import menu from "@/config/menu.json"; // Importando o JSON
+import menu from "@/config/menu.json";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import { flagsmith } from "@/lib/flagsmith";
 import { Button } from "@repo/ui-web/base/button";
 import { Menu, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { Logo } from "./Logo"; // Certifique-se de ter criado o Logo.tsx
+import { Logo } from "./Logo";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [currentPath, setCurrentPath] = useState("");
-
   const [lang, setLang] = useState("pt");
+  const [flags, setFlags] = useState<any>(null);
 
   const t = useTranslations(lang as any);
-  const navLinks = menu.main;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -24,6 +24,9 @@ export function Navbar() {
     const currentUrl = new URL(window.location.href);
     const detectedLang = getLangFromUrl(currentUrl);
     setLang(detectedLang);
+
+    // Fetch feature flags
+    flagsmith.getEnvironmentFlags().then(setFlags);
 
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -44,18 +47,21 @@ export function Navbar() {
     };
   }, [isOpen]);
 
+  const isNavItemEnabled = (itemName: string): boolean => {
+    console.log(flags);
+    if (!flags) return true;
+
+    return flags.isFeatureEnabled(itemName);
+  };
+
   const getMenuLink = (path: string) => {
     if (path.startsWith("http")) return path;
-
     if (lang === "pt") return path;
-
     const cleanPath = path.startsWith("/") ? path : `/${path}`;
     if (cleanPath === "/" && lang) return `/${lang}`;
-
     return `/${lang}${cleanPath}`;
   };
 
-  // Classes dinâmicas para a Pílula
   const pillClasses = `
     relative flex w-full max-w-[1000px] items-center justify-between
     rounded-full border border-white/20
@@ -72,18 +78,16 @@ export function Navbar() {
 
   return (
     <>
-      {/* WRAPPER FIXO */}
       <header className="pointer-events-none fixed top-0 right-0 left-0 z-50 flex justify-center px-4 py-4">
-        {/* PÍLULA FLUTUANTE */}
         <div className={`${pillClasses} pointer-events-auto`}>
-          {/* LOGO */}
           <a href={getMenuLink("/")} className="relative z-10 flex-shrink-0">
             <Logo />
           </a>
 
-          {/* DESKTOP NAV */}
           <nav className="hidden items-center gap-8 md:flex">
-            {navLinks.map((item) => {
+            {menu.main.map((item) => {
+              if (!isNavItemEnabled(item.name)) return null;
+
               const linkUrl = getMenuLink(item.url);
               const isActive =
                 currentPath === linkUrl ||
@@ -103,7 +107,6 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* ACTIONS */}
           <div className="flex items-center gap-3">
             <div className="hidden md:block">
               <Button className="h-10 rounded-full px-6">
@@ -111,7 +114,6 @@ export function Navbar() {
               </Button>
             </div>
 
-            {/* MOBILE TOGGLE */}
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-foreground relative z-50 p-1 md:hidden"
@@ -127,7 +129,6 @@ export function Navbar() {
         </div>
       </header>
 
-      {/* MOBILE MENU OVERLAY */}
       <div
         className="fixed inset-0 z-40 flex flex-col items-center justify-center space-y-8 bg-white/95 backdrop-blur-xl md:hidden"
         style={{
@@ -138,21 +139,25 @@ export function Navbar() {
           pointerEvents: isOpen ? "auto" : "none",
         }}
       >
-        {navLinks.map((item, index) => (
-          <a
-            key={item.url}
-            href={getMenuLink(item.url)}
-            onClick={() => setIsOpen(false)}
-            className="text-foreground hover:text-primary text-3xl font-bold transition-all duration-500 ease-out"
-            style={{
-              opacity: isOpen ? 1 : 0,
-              transform: isOpen ? "translateY(0)" : "translateY(1rem)",
-              transitionDelay: isOpen ? `${0.1 + index * 0.1}s` : "0s",
-            }}
-          >
-            {t(item.name as any)}
-          </a>
-        ))}
+        {menu.main.map((item, index) => {
+          if (!isNavItemEnabled(item.name)) return null;
+
+          return (
+            <a
+              key={item.url}
+              href={getMenuLink(item.url)}
+              onClick={() => setIsOpen(false)}
+              className="text-foreground hover:text-primary text-3xl font-bold transition-all duration-500 ease-out"
+              style={{
+                opacity: isOpen ? 1 : 0,
+                transform: isOpen ? "translateY(0)" : "translateY(1rem)",
+                transitionDelay: isOpen ? `${0.1 + index * 0.1}s` : "0s",
+              }}
+            >
+              {t(item.name as any)}
+            </a>
+          );
+        })}
 
         <div
           className="transition-all duration-500 ease-out"

@@ -23,6 +23,14 @@ export const ui = {
     "cta.subscribe": "Assinar",
     "cta.month": "mês",
 
+    // Footer
+    "footer.description":
+      "O Curator nasceu para devolver o controle do aprendizado a você. Somos uma iniciativa Open Source que transforma o caos da informação em trilhas estruturadas, priorizando a profundidade sobre o engajamento e a comunidade sobre o algoritmo.",
+    "footer.open_source":
+      "Orgulhosamente Open Source & Built in Public no Brasil",
+    "footer.copyright": "Curator. Todos os direitos reservados.",
+    "footer.email": "contato@curator.com.br",
+
     // Home - Meta
     "home.meta.title": "Curator - Aprenda de forma estruturada e consciente",
     "home.meta.description":
@@ -119,6 +127,12 @@ export const ui = {
 
     // Nav
     "nav.home": "Início",
+    "nav.open_source": "Open Source",
+    "nav.blog": "Blog",
     "nav.about": "Sobre",
+
+    // Social
+    "social.discord": "Entre na comunidade!",
+    "social.github": "Dê uma estrela no GitHub!",
   },
 } as const;

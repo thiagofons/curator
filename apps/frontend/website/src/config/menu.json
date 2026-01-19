@@ -1,19 +1,19 @@
 {
   "main": [
     {
-      "name": "nav.home",
+      "name": "home",
       "url": "/"
     },
     {
-      "name": "nav.open_source",
+      "name": "open_source",
       "url": "/open-source"
     },
     {
-      "name": "nav.blog",
+      "name": "blog",
       "url": "/blog"
     },
     {
-      "name": "nav.about",
+      "name": "about",
       "url": "/about"
     }
   ],

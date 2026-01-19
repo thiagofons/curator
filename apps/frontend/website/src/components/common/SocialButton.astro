@@ -1,0 +1,43 @@
+---
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import { RiDiscordFill, RiGithubFill } from "@remixicon/react";
+import { Button } from "@repo/ui-web/components/base/button.jsx";
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+type Network = "discord" | "github";
+
+type Props = {
+  network: Network;
+};
+
+const { network } = Astro.props;
+
+const links: Record<
+  Network,
+  { title: string; url: string; label: string; icon: any }
+> = {
+  discord: {
+    title: "Discord",
+    url: "https://discord.gg/fCucb3mm8B",
+    label: t("social.discord"),
+    icon: RiDiscordFill,
+  },
+  github: {
+    title: "GitHub",
+    url: "https://github.com/thiagofons/curator",
+    label: t("social.github"),
+    icon: RiGithubFill,
+  },
+};
+
+const item = links[network];
+
+const Icon = item.icon;
+---
+
+<a href={item.url} target="_blank" rel="noopener noreferrer">
+  <Button className="h-8 w-8" aria-description={item.label}>
+    <Icon size={16} color="#FFFFFF" />
+  </Button>
+</a>

@@ -1,66 +1,57 @@
 ---
-import Social from "@/components/common/Social.astro";
-import config from "@/config/config.json";
-import menu from "@/config/menu.json";
-import social from "@/config/social.json";
-
-import { markdownify } from "@/lib/utils/textConverter";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import { RiHeartFill } from "@remixicon/react";
+import { BodySmall } from "@repo/ui-web/components/custom/typography.jsx";
+import { Mail } from "lucide-react";
 import Logo from "./Logo.astro";
+import SocialButton from "./SocialButton.astro";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
-<footer class="bg-light section">
-  <div class="container text-center">
-    <div class="row items-center">
-      <div class="lg:col-4">
-        <Logo />
+<footer
+  class="bg-light border-t-gray-light flex justify-center border-t px-4 py-8 lg:py-10"
+>
+  <div class="flex w-full max-w-[1200px] flex-col gap-9">
+    <div
+      class="flex flex-col items-center gap-4 md:items-start lg:flex-row lg:justify-between"
+    >
+      <div class="flex flex-col gap-2">
+        <div class="flex flex-col items-center gap-6 md:items-start">
+          <Logo />
+          <div class="flex flex-row items-center gap-1">
+            <SocialButton network="discord" />
+            <SocialButton network="github" />
+          </div>
+          <div class="flex flex-row items-center gap-1">
+            <Mail size={16} color="#4B5563" />
+            <BodySmall color="gray-normal">
+              {t("footer.email")}
+            </BodySmall>
+          </div>
+        </div>
+        <div class="w-full max-w-[484px] text-center md:text-left">
+          <BodySmall color="gray-normal">
+            {t("footer.description")}
+          </BodySmall>
+        </div>
       </div>
-      <div class="mt-8 lg:col-4 lg:mt-0">
-        {/* footer menu */}
-        <ul class="space-x-4">
-          {
-            menu.footer.map((menu) => (
-              <li class="inline-block">
-                <a href={menu.url} class="text-text hover:underline lg:p-4">
-                  {menu.name}
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-
-      {/* social icons */}
-      <div class="mt-8 lg:col-4 lg:mt-0">
-        <Social source={social.main} className="social-icons" />
-      </div>
+      <!-- Sitemap -->
+      <div class=""></div>
     </div>
-
-    {/* rss feed */}
-    <p class="mt-4 text-sm">
-      <a href="/rss.xml" target="_blank" class="inline-flex items-center gap-2">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="var(--color-primary)"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M4 11a9 9 0 0 1 9 9"></path>
-          <path d="M4 4a16 16 0 0 1 16 16"></path>
-          <circle cx="5" cy="19" r="1"></circle>
-        </svg>
-        Feed RSS
-      </a>
-    </p>
-
-    {/* copyright */}
-    <p
-      class="footer-copyright-text [&_a]:text-primary mt-6 [&_a]:no-underline [&_a:hover]:underline"
-      set:html={markdownify(config.params.copyright)}
-    />
+    <div
+      class="flex w-full flex-col items-center justify-between gap-4 md:flex-row"
+    >
+      <div class="flex items-center gap-1">
+        <BodySmall color="gray-normal">
+          {t("footer.open_source")}
+        </BodySmall>
+        <RiHeartFill color="#0060F7" size={12} />
+      </div>
+      <BodySmall color="gray-normal">
+        {`© ${new Date().getFullYear()} ${t("footer.copyright")}`}
+      </BodySmall>
+    </div>
   </div>
 </footer>
