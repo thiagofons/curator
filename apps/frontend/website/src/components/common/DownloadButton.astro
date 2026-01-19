@@ -15,30 +15,42 @@ const downloadLinks: Record<string, string> = {
 };
 
 const href = downloadLinks[store];
+
+const { isFeatureEnabled } = Astro.locals;
 ---
 
 <a href={href} class="cursor-pointer" target="_blank">
   {
     store === "Google Play" && (
-      <Image
-        src={GooglePlay}
-        alt={store}
-        width={141}
-        height={42}
-        draggable={false}
-      />
+      <button
+        disabled={!isFeatureEnabled("download_google_play")}
+        class="disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        <Image
+          src={GooglePlay}
+          alt={store}
+          width={141}
+          height={42}
+          draggable={false}
+        />
+      </button>
     )
   }
 
   {
     store === "App Store" && (
-      <Image
-        src={AppStore}
-        alt={store}
-        width={128}
-        height={42}
-        draggable={false}
-      />
+      <button
+        disabled={!isFeatureEnabled("download_app_store")}
+        class="disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        <Image
+          src={AppStore}
+          alt={store}
+          width={128}
+          height={42}
+          draggable={false}
+        />
+      </button>
     )
   }
 </a>

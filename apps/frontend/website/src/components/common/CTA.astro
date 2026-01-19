@@ -106,10 +106,12 @@ const isCuratorProEnabled = isFeatureEnabled("curator_pro");
             ))
           }
           <Button
-            variant={"secondary"}
+            variant={"outline"}
             size={"full"}
             onClick={() => scrollToSection(APP_ROUTES.COMMON.sections.DOWNLOAD)}
             client:load
+            color="gray-light"
+            disabled
           >
             {t("cta.download")}
           </Button>
