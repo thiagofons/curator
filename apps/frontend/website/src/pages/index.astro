@@ -1,6 +1,7 @@
 ---
 import CTA from "@/components/common/CTA.astro";
 import BuildInCommunity from "@/components/home/BuildInCommunity.astro";
+import FAQ from "@/components/home/FAQ.astro";
 import Hero from "@/components/home/Hero.astro";
 import LearnFromTheSource from "@/components/home/LearnFromTheSource.astro";
 import SocialMediaVsCurator from "@/components/home/SocialMediaVsCurator.astro";
@@ -23,6 +24,7 @@ const isBuildInCommunityEnabled = flags.isFeatureEnabled(
   "home.build_in_community",
 );
 const isCTAEnabled = flags.isFeatureEnabled("home.cta");
+const isFAQEnabled = flags.isFeatureEnabled("home.faq");
 ---
 
 <Base title="Home">
@@ -35,4 +37,6 @@ const isCTAEnabled = flags.isFeatureEnabled("home.cta");
   {isBuildInCommunityEnabled && <BuildInCommunity />}
 
   {isCTAEnabled && <CTA />}
+
+  {isFAQEnabled && <FAQ />}
 </Base>

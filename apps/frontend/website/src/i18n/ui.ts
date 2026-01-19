@@ -79,6 +79,27 @@ export const ui = {
     "home.build_in_community.collaborative_curation_description":
       "Encontrou um link quebrado ou um artigo melhor? Sugira edições na trilha e ajude a manter o conteúdo sempre atualizado.",
 
+    // Home - FAQ
+    "home.faq.title": "Perguntas Frequentes",
+    "home.faq.subtitle": "Tudo o que você precisa saber sobre o Curator",
+    "home.faq.q1.question": "O Curator é gratuito?",
+    "home.faq.q1.answer":
+      "Sim, o acesso ao conhecimento é 100% gratuito. Nossa missão é democratizar a sabedoria, por isso você pode acessar, seguir e concluir qualquer trilha pública sem pagar nada. O Curator PRO é uma assinatura opcional para quem busca ferramentas de produtividade avançada, como Modo Offline (para estudar desconectado), integração com IA para resumos e sincronização automática com apps de anotação (Notion/Obsidian).",
+    "home.faq.q2.question":
+      "Qual a diferença entre uma trilha do Curator e uma playlist do YouTube?",
+    "home.faq.q2.answer":
+      'A intencionalidade. O YouTube e as redes sociais usam algoritmos desenhados para prender sua atenção pelo máximo de tempo possível (gerando vício). No Curator, as trilhas têm início, meio e fim. Elas são desenhadas pedagogicamente por humanos para você aprender uma habilidade e sair do app, misturando vídeos, artigos, livros e podcasts na ordem lógica ideal, e não apenas o que é "viral".',
+    "home.faq.q3.question":
+      "Se o Curator é Open Source, por que existe um plano pago?",
+    "home.faq.q3.answer":
+      "O código do Curator é aberto e auditável porque acreditamos na transparência e que você é dono dos seus dados. O plano Pro existe para sustentar os servidores, o desenvolvimento contínuo e os custos de API de Inteligência Artificial. Ao assinar o PRO, você financia a independência da plataforma (para que nunca precisemos vender seus dados ou colocar anúncios) e ganha ferramentas extras de conveniência.",
+    "home.faq.q4.question": "Quem cria as trilhas de aprendizado?",
+    "home.faq.q4.answer":
+      'A curadoria é feita por uma comunidade de especialistas, professores e autodidatas apaixonados ("Curadoria de Elite"). Diferente das redes sociais onde qualquer conteúdo aparece no feed, no Curator as trilhas passam por validação da comunidade através de um sistema de reputação. Você estuda o que foi testado e aprovado por humanos reais, não por robôs.',
+    "home.faq.q5.question": "Onde o conteúdo fica hospedado? É pirataria?",
+    "home.faq.q5.answer":
+      "Nós não hospedamos o conteúdo, nós organizamos o acesso a ele. O Curator funciona como um indexador inteligente: quando você clica em um vídeo ou artigo, você é direcionado à fonte original (YouTube, blogs, sites de notícias). Isso garante que os criadores originais recebam seus views e monetização, enquanto você ganha o contexto e a ordem correta de estudo.",
+
     // Nav
     "nav.home": "Início",
     "nav.about": "Sobre",
