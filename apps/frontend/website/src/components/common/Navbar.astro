@@ -1,6 +1,7 @@
 ---
 import menu from "@/config/menu.json";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import Logo from "./Logo.astro";
 import NavbarBase from "./Navbar";
 
 const lang = getLangFromUrl(Astro.url);
@@ -18,14 +19,12 @@ const getMenuLink = (path: string) => {
 
 const navItems = menu.main
   .filter((item) => {
-    // Se a flag não existir ou estiver false, remove o item
-    console.log(item);
     return isFeatureEnabled(item.name);
   })
   .map((item) => {
     return {
-      label: t(`nav.${item.name}` as any), // Traduz aqui
-      url: getMenuLink(item.url), // Resolve a URL aqui
+      label: t(`nav.${item.name}` as any),
+      url: getMenuLink(item.url),
     };
   });
 
@@ -37,5 +36,6 @@ const cta = {
 };
 ---
 
-{/* 4. Renderiza o componente React passando os dados estáticos prontos */}
-<NavbarBase client:load items={navItems} cta={cta} />
+<NavbarBase client:load items={navItems} cta={cta}>
+  <Logo slot="logo" size="md" />
+</NavbarBase>

@@ -3,10 +3,12 @@ import { cn } from "@repo/ui-web/lib/utils";
 import { Image } from "astro:assets";
 import { cva, type VariantProps } from "class-variance-authority";
 
-import logoDarkImg from "@/assets/images/logo-dark.png";
-import logoLightImg from "@/assets/images/logo-light.png";
+import LogoDark from "@/assets/images/logo-dark.png";
+import LogoLight from "@/assets/images/logo-light.png";
+import LogoProDark from "@/assets/images/logo-pro-dark.png";
+import LogoProLight from "@/assets/images/logo-pro-light.png";
 
-const logoVariants = cva("w-auto", {
+const logoVariants = cva("w-auto object-contain", {
   variants: {
     size: {
       xs: "h-3 sm:h-4",
@@ -22,23 +24,36 @@ const logoVariants = cva("w-auto", {
   },
 });
 
-interface Props extends VariantProps<typeof logoVariants> {
+export interface Props extends VariantProps<typeof logoVariants> {
   class?: string;
   type?: "dark" | "light";
-  [key: string]: any;
+  variant?: "default" | "pro";
 }
 
-const { class: className, type = "light", size, ...props } = Astro.props;
+const {
+  class: className,
+  type = "light",
+  size,
+  variant = "default",
+} = Astro.props;
 
-const imageSource = type === "light" ? logoLightImg : logoDarkImg;
+const getImageSrc = () => {
+  if (variant === "pro") {
+    return type === "light" ? LogoProLight : LogoProDark;
+  }
+  return type === "light" ? LogoLight : LogoDark;
+};
+
+const selectedImage = getImageSrc();
 ---
 
-<div class={cn("flex items-center gap-2", className)} {...props}>
+<div class={cn("flex items-center gap-2 select-none", className)}>
   <Image
-    src={imageSource}
-    alt="Curator"
-    loading="lazy"
+    src={selectedImage}
+    alt={variant === "pro" ? "Curator Pro" : "Curator"}
     class={logoVariants({ size })}
     draggable="false"
+    loading="eager"
+    fetchpriority="high"
   />
 </div>

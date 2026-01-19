@@ -8,7 +8,7 @@ import {
 } from "@repo/ui-web/components/custom/typography.jsx";
 import { Minus, MoveUp } from "lucide-react";
 import InfoSection from "./InfoSection.astro";
-import { Logo, LogoPro } from "./Logo";
+import Logo from "./Logo.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -108,7 +108,7 @@ const benefits: Benefit[] = [
           class="border-brand-blue bg-brand-blue/5 flex flex-col items-center justify-between gap-4 rounded-[9px] border p-3"
         >
           <div class="flex h-9 items-center">
-            <LogoPro type="dark" />
+            <Logo type="dark" variant="pro" />
           </div>
 
           {

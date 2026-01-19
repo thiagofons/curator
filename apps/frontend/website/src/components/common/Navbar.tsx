@@ -1,7 +1,6 @@
 import { Button } from "@repo/ui-web/base/button";
 import { Menu, X } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import { Logo } from "./Logo";
+import React, { useEffect, useState, type ReactNode } from "react";
 
 interface MenuItem {
   label: string;
@@ -14,9 +13,10 @@ interface NavbarProps {
     enabled: boolean;
     label: string;
   };
+  logo?: ReactNode;
 }
 
-export default function Navbar({ items, cta }: NavbarProps) {
+export default function Navbar({ items, cta, logo }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [currentPath, setCurrentPath] = useState("");
@@ -64,7 +64,7 @@ export default function Navbar({ items, cta }: NavbarProps) {
       <header className="pointer-events-none fixed top-0 right-0 left-0 z-50 flex justify-center px-4 py-4">
         <div className={`${pillClasses} pointer-events-auto`}>
           <a href="/" className="relative z-10 flex-shrink-0">
-            <Logo />
+            {logo}
           </a>
 
           <nav className="hidden items-center gap-8 md:flex">
