@@ -1,5 +1,4 @@
 ---
-import SearchBar from "@/components/react/SearchBar";
 import Base from "@/layouts/Base.astro";
 import { getPayloadPosts } from "@/lib/payload";
 
@@ -17,7 +16,7 @@ const searchList = posts.map((item) => ({
 <Base title={`Search`}>
   <section class="section">
     <div class="container">
-      <SearchBar client:load searchList={searchList} />
+      <!-- <SearchBar client:load searchList={searchList} /> -->
     </div>
   </section>
 </Base>

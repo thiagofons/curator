@@ -9,18 +9,23 @@ import remarkToc from "remark-toc";
 import sharp from "sharp";
 import config from "./src/config/config.json";
 
+import vercel from "@astrojs/vercel";
+
 // https://astro.build/config
 export default defineConfig({
   output: "server",
   site: config.site.base_url,
   base: config.site.base_path,
   trailingSlash: "ignore",
+
   image: {
     service: sharp(),
   },
+
   vite: {
     plugins: [tailwindcss()],
   },
+
   i18n: {
     locales: ["en", "pt-br"],
     defaultLocale: "pt-br",
@@ -28,6 +33,7 @@ export default defineConfig({
       prefixDefaultLocale: false,
     },
   },
+
   integrations: [
     react(),
     sitemap(),
@@ -44,6 +50,7 @@ export default defineConfig({
     }),
     mdx(),
   ],
+
   markdown: {
     remarkPlugins: [
       remarkToc,
@@ -60,4 +67,6 @@ export default defineConfig({
     },
     extendDefaultPlugins: true,
   },
+
+  adapter: vercel(),
 });

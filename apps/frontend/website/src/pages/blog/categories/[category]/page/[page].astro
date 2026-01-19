@@ -1,37 +1,37 @@
 ---
-import Post from "@/components/Post.astro"
-import config from "@/config/config.json"
-import Base from "@/layouts/Base.astro"
-import Pagination from "@/layouts/components/Pagination.astro"
+import Pagination from "@/components/blog/Pagination.astro";
+import Post from "@/components/blog/Post.astro";
+import config from "@/config/config.json";
+import Base from "@/layouts/Base.astro";
 import {
   getPayloadCategories,
   getPayloadCategoryBySlug,
   getPayloadPostsByCategorySlug,
-} from "@/lib/payload"
-import { markdownify } from "@/lib/utils/textConverter"
-import type { GetStaticPathsOptions } from "astro"
+} from "@/lib/payload";
+import { markdownify } from "@/lib/utils/textConverter";
+import type { GetStaticPathsOptions } from "astro";
 
-const { page } = Astro.props
-const { category } = Astro.params
+const { page } = Astro.props;
+const { category } = Astro.params;
 
-const categoryObj = await getPayloadCategoryBySlug(category)
+const categoryObj = await getPayloadCategoryBySlug(category);
 
 export const getStaticPaths = async ({ paginate }: GetStaticPathsOptions) => {
-  const { pagination } = config.settings
-  const categories = await getPayloadCategories()
-  const allPaths: any[] = []
+  const { pagination } = config.settings;
+  const categories = await getPayloadCategories();
+  const allPaths: any[] = [];
   for (const c of categories) {
-    const posts = await getPayloadPostsByCategorySlug(c.slug)
+    const posts = await getPayloadPostsByCategorySlug(c.slug);
     const pages = paginate(posts, {
       params: {
         category: c.slug,
       },
       pageSize: pagination,
-    })
-    allPaths.push(...pages)
+    });
+    allPaths.push(...pages);
   }
-  return allPaths
-}
+  return allPaths;
+};
 ---
 
 <Base title={categoryObj?.data.title || category}>
@@ -43,7 +43,10 @@ export const getStaticPaths = async ({ paginate }: GetStaticPathsOptions) => {
     <div class="container">
       <div class="row">
         <div class="lg:col-6">
-          <h1 set:html={markdownify(categoryObj?.data.title || category)} class="h2 mb-8" />
+          <h1
+            set:html={markdownify(categoryObj?.data.title || category)}
+            class="h2 mb-8"
+          />
         </div>
       </div>
     </div>
@@ -55,7 +58,9 @@ export const getStaticPaths = async ({ paginate }: GetStaticPathsOptions) => {
       <div class="row px-3">
         <div class="mx-auto px-0 lg:col-8">
           <h1 class="h2 mb-8">
-            Posts relacionados com a categoria <span class="text-primary">{category}</span>
+            Posts relacionados com a categoria <span class="text-primary"
+              >{category}</span
+            >
           </h1>
           <div class="rounded px-9 py-12 shadow md:p-[60px]">
             {page.data.map((post: any) => <Post post={post} />)}

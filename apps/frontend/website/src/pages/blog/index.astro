@@ -1,16 +1,16 @@
 ---
-import Post from "@/components/Post.astro"
-import { settings } from "@/config/config.json"
-import Base from "@/layouts/Base.astro"
-import Pagination from "@/layouts/components/Pagination.astro"
-import { getPayloadPosts } from "@/lib/payload"
-import { sortByDate } from "@/lib/utils/sortFunctions"
+import Pagination from "@/components/blog/Pagination.astro";
+import Post from "@/components/blog/Post.astro";
+import { settings } from "@/config/config.json";
+import Base from "@/layouts/Base.astro";
+import { getPayloadPosts } from "@/lib/payload";
+import { sortByDate } from "@/lib/utils/sortFunctions";
 
 // All blog content is sourced from Payload CMS
-const posts = await getPayloadPosts()
+const posts = await getPayloadPosts();
 
-const sortPostByDate = sortByDate(posts)
-const totalPages = Math.ceil(posts.length / settings.pagination)
+const sortPostByDate = sortByDate(posts);
+const totalPages = Math.ceil(posts.length / settings.pagination);
 ---
 
 <Base>
@@ -29,7 +29,7 @@ const totalPages = Math.ceil(posts.length / settings.pagination)
           }
         </div>
       </div>
-      
+
     </div>
   </section>
   /End Banner -->
@@ -39,7 +39,7 @@ const totalPages = Math.ceil(posts.length / settings.pagination)
     <div class="container">
       <div class="row px-3">
         <div class="mx-auto px-0 lg:col-8">
-          <div class="rounded py-12 px-9 shadow md:p-[60px]">
+          <div class="rounded px-9 py-12 shadow md:p-[60px]">
             {
               sortPostByDate
                 .slice(0, settings.pagination)
@@ -52,5 +52,4 @@ const totalPages = Math.ceil(posts.length / settings.pagination)
     </div>
   </section>
   <!-- /End Blogs -->
-
 </Base>

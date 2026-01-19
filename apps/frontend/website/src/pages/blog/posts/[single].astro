@@ -1,10 +1,10 @@
 ---
-import Base from "@/layouts/Base.astro"
-import { getPayloadPosts } from "@/lib/payload"
-import PostSingle from "@/partials/PostSingle.astro"
+import PostSingle from "@/components/blog/PostSingle.astro";
+import Base from "@/layouts/Base.astro";
+import { getPayloadPosts } from "@/lib/payload";
 
 export async function getStaticPaths() {
-  const posts = (await getPayloadPosts()) as any
+  const posts = (await getPayloadPosts()) as any;
 
   const paths = posts.map((post: any) => ({
     params: {
@@ -15,16 +15,16 @@ export async function getStaticPaths() {
       isPayload: true,
       contentHtml: post.contentHtml,
     },
-  }))
-  return paths
+  }));
+  return paths;
 }
 
 const { post, isPayload, contentHtml } = Astro.props as {
-  post: any
-  isPayload?: boolean
-  contentHtml?: string
-}
-const { title, meta_title, description, image } = post.data
+  post: any;
+  isPayload?: boolean;
+  contentHtml?: string;
+};
+const { title, meta_title, description, image } = post.data;
 ---
 
 <Base

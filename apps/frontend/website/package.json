@@ -22,6 +22,7 @@
     "@astrojs/react": "catalog:astro",
     "@astrojs/rss": "catalog:astro",
     "@astrojs/sitemap": "catalog:astro",
+    "@astrojs/vercel": "^9.0.4",
     "@digi4care/astro-google-tagmanager": "catalog:astro",
     "@justinribeiro/lite-youtube": "catalog:astro",
     "@remixicon/react": "^4.8.0",
