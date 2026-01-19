@@ -5,6 +5,7 @@ import LeftSteps from "@/assets/images/home/left-steps.svg";
 import MonaLisa from "@/assets/images/home/mona-lisa.jpg";
 import VerticalSteps from "@/assets/images/home/vertical-steps.svg";
 import InfoSection from "@/components/common/InfoSection.astro";
+import { APP_ROUTES } from "@/constants/routes";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 import { BodyBase, H4 } from "@repo/ui-web/components/custom/typography.jsx";
 import { Image } from "astro:assets";
@@ -15,6 +16,7 @@ const t = useTranslations(lang);
 ---
 
 <InfoSection
+  id={APP_ROUTES.HOME.sections.LEARN_FROM_THE_SOURCE}
   icon={Gem}
   title={t("home.learn_from_the_source.title")}
   subtitle={t("home.learn_from_the_source.subtitle")}

@@ -1,6 +1,7 @@
 ---
 import BaseFAQ from "@/components/common/BaseFAQ";
 import InfoSection from "@/components/common/InfoSection.astro";
+import { APP_ROUTES } from "@/constants/routes";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 import { MessageCircle } from "lucide-react";
 
@@ -32,6 +33,7 @@ const items = [
 ---
 
 <InfoSection
+  id={APP_ROUTES.HOME.sections.FAQ}
   title={t("home.faq.title")}
   subtitle={t("home.faq.subtitle")}
   icon={MessageCircle}

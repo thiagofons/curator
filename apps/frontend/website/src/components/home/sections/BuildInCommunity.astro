@@ -1,5 +1,6 @@
 ---
 import InfoSection from "@/components/common/InfoSection.astro";
+import { APP_ROUTES } from "@/constants/routes";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 import {
   BodyBase,
@@ -14,6 +15,7 @@ const t = useTranslations(lang);
 <InfoSection
   title={t("home.build_in_community.title")}
   subtitle={t("home.build_in_community.subtitle")}
+  id={APP_ROUTES.HOME.sections.BUILD_IN_COMMUNITY}
   icon={UsersRound}
 >
   <div class="flex w-full justify-center">

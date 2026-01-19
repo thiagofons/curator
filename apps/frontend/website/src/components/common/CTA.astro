@@ -1,5 +1,7 @@
 ---
+import { APP_ROUTES } from "@/constants/routes";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import { scrollToSection } from "@/lib/scrollToSection";
 import { RiCheckboxCircleFill } from "@remixicon/react";
 import { Button } from "@repo/ui-web/components/base/button.jsx";
 import {
@@ -56,9 +58,13 @@ const benefits: Benefit[] = [
     curatorPro: true,
   },
 ];
+
+const { isFeatureEnabled } = Astro.locals;
+const isCuratorProEnabled = isFeatureEnabled("curator_pro");
 ---
 
 <InfoSection
+  id={APP_ROUTES.COMMON.sections.CTA}
   title={t("cta.title")}
   subtitle={t("cta.description")}
   icon={MoveUp}
@@ -99,7 +105,12 @@ const benefits: Benefit[] = [
               </div>
             ))
           }
-          <Button variant={"secondary"} size={"full"} client:load>
+          <Button
+            variant={"secondary"}
+            size={"full"}
+            onClick={() => scrollToSection(APP_ROUTES.COMMON.sections.DOWNLOAD)}
+            client:load
+          >
             {t("cta.download")}
           </Button>
         </div>
@@ -122,7 +133,7 @@ const benefits: Benefit[] = [
               </div>
             ))
           }
-          <Button size={"full"} client:load>
+          <Button size={"full"} disabled={!isCuratorProEnabled} client:load>
             {`${t("cta.subscribe")} (R$ 9,90/${t("cta.month")})`}
           </Button>
         </div>

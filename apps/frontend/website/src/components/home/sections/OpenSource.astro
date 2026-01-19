@@ -1,5 +1,6 @@
 ---
 import CentralSection from "@/components/common/CentralSection.astro";
+import { APP_ROUTES } from "@/constants/routes";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 import { RiGithubFill } from "@remixicon/react";
 import { Button } from "@repo/ui-web/components/base/button.jsx";
@@ -12,6 +13,7 @@ const { isFeatureEnabled } = Astro.locals;
 ---
 
 <CentralSection
+  id={APP_ROUTES.HOME.sections.OPEN_SOURCE}
   theme="dark"
   icon={GitPullRequestArrow}
   title={t("home.open_source.title")}

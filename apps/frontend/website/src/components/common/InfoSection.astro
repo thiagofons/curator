@@ -10,12 +10,14 @@ type Props = {
   title: string;
   subtitle: string;
   theme?: "light" | "dark";
+  id: string;
 };
 
-const { icon: Icon, title, subtitle, theme = "light" } = Astro.props;
+const { icon: Icon, title, subtitle, theme = "light", id } = Astro.props;
 ---
 
 <section
+  id={id}
   class={cn(
     "flex flex-col gap-9 px-5 py-12",
     theme === "light" ? "bg-white" : "bg-brand-dark",

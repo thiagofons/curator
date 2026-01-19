@@ -1,6 +1,7 @@
 ---
 import WhiteSteps from "@/assets/images/home/white-steps.svg";
 import Logo from "@/components/common/Logo.astro";
+import { APP_ROUTES } from "@/constants/routes";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 import { BodyLarge, H2 } from "@repo/ui-web/components/custom/typography.jsx";
 import { Image } from "astro:assets";
@@ -49,7 +50,10 @@ const interleavedItems = socialData.flatMap((item, index) => {
 });
 ---
 
-<section class="bg-brand-dark relative overflow-hidden px-5 py-16">
+<section
+  id={APP_ROUTES.HOME.sections.SOCIAL_MEDIA_VS_CURATOR}
+  class="bg-brand-dark relative overflow-hidden px-5 py-16"
+>
   <Image
     src={WhiteSteps}
     alt="Steps"

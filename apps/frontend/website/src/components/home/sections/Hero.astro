@@ -3,6 +3,7 @@ import BG from "@/assets/images/home/hero-bg.svg";
 import HeroImage from "@/assets/images/home/hero.png";
 import DownloadButton from "@/components/common/DownloadButton.astro";
 import HeroCard from "@/components/common/HeroCard.astro";
+import { APP_ROUTES } from "@/constants/routes";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 import {
   Display,
@@ -14,7 +15,10 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 ---
 
-<main class="relative flex min-h-screen items-center justify-center p-5">
+<main
+  id={APP_ROUTES.HOME.sections.HERO}
+  class="relative flex min-h-screen items-center justify-center p-5"
+>
   <Image
     src={BG}
     alt="Hero Background"
