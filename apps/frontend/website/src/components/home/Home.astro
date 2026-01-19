@@ -14,24 +14,22 @@ import SocialMediaVsCurator from "./sections/SocialMediaVsCurator.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-const { isFeatureEnabled } = Astro.locals;
 ---
 
 <Base title={t("home.meta.title")} description={t("home.meta.description")}>
-  {isFeatureEnabled("home.hero") && <Hero />}
+  <Hero />
 
-  {isFeatureEnabled("home.comparison") && <SocialMediaVsCurator />}
+  <SocialMediaVsCurator />
 
-  {isFeatureEnabled("home.learn_from_the_source") && <LearnFromTheSource />}
+  <LearnFromTheSource />
 
-  {isFeatureEnabled("home.build_in_community") && <BuildInCommunity />}
+  <BuildInCommunity />
 
-  {isFeatureEnabled("home.cta") && <CTA />}
+  <CTA />
 
-  {isFeatureEnabled("home.faq") && <FAQ />}
+  <FAQ />
 
-  {isFeatureEnabled("home.open_source") && <OpenSource />}
+  <OpenSource />
 
-  {isFeatureEnabled("home.come_together") && <ComeTogether />}
+  <ComeTogether />
 </Base>

@@ -7,6 +7,8 @@ import { GitPullRequestArrow } from "lucide-react";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+
+const { isFeatureEnabled } = Astro.locals;
 ---
 
 <CentralSection
@@ -16,18 +18,26 @@ const t = useTranslations(lang);
   subtitle={t("home.open_source.subtitle")}
 >
   <div class="flex items-center gap-4">
-    <Button
-      color="black"
-      className="bg-black text-white hover:bg-black/50"
-      client:load
+    <a
+      href="https://www.github.com/thiagofons/curator"
+      target="_blank"
+      rel="noopener noreferrer"
     >
-      <RiGithubFill size={24} color="#FFFFFF" />
-      {t("home.open_source.github")}
-    </Button>
+      <Button
+        color="black"
+        className="bg-black text-white hover:bg-black/50"
+        client:load
+      >
+        <RiGithubFill size={24} color="#FFFFFF" />
+        {t("home.open_source.github")}
+      </Button>
+    </a>
+
     <Button
       color="white"
       className="bg-white text-black hover:bg-white/50"
       client:load
+      disabled={!isFeatureEnabled("open_source")}
     >
       {t("home.open_source.more")}
     </Button>
