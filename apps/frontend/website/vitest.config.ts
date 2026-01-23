@@ -23,6 +23,12 @@ export default mergeConfig(
           "src/config/**",
         ],
       },
+      alias: {
+        "astro:env/server": new URL(
+          "./src/lib/__mocks__/astro-env-server.ts",
+          import.meta.url,
+        ).pathname,
+      },
     },
   }),
 );
