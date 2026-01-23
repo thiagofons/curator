@@ -1,4 +1,5 @@
 import { useTranslations } from "@/i18n/utils";
+import { formSchema, sendForm, type FormValues } from "@/lib/sendForm";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui-web/base/button";
 import { Field, FieldGroup, FieldLabel } from "@repo/ui-web/base/field";
@@ -6,15 +7,6 @@ import { Input } from "@repo/ui-web/base/input";
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import * as z from "zod";
-
-const formSchema = z.object({
-  name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
-  email: z.email("E-mail inválido"),
-  theme: z.string(),
-});
-
-type FormValues = z.infer<typeof formSchema>;
 
 const GetStartedForm = () => {
   const form = useForm<FormValues>({
@@ -26,23 +18,14 @@ const GetStartedForm = () => {
     },
   });
 
-  const onSubmit = (data: FormValues) => {
-    console.log("Submitting form...");
-
-    toast("You submitted the following values:", {
-      description: (
-        <pre className="bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4">
-          <code>{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-      position: "bottom-right",
-      classNames: {
-        content: "flex flex-col gap-2",
-      },
-      style: {
-        "--border-radius": "calc(var(--radius)  + 4px)",
-      } as React.CSSProperties,
-    });
+  const onSubmit = async (data: FormValues) => {
+    try {
+      await sendForm(data);
+      toast(t("get_started.form.success_message"));
+    } catch {
+      toast.error(t("get_started.form.error_message"));
+      return;
+    }
 
     form.reset();
   };

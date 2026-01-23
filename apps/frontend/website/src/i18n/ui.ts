@@ -156,6 +156,10 @@ export const ui = {
       "Literatura Russa, Filmes Nacionais, Machado de Assis...",
     "get_started.form.theme.description": "Diga-nos o que você quer explorar",
     "get_started.form.submit": "Entrar na lista de espera",
+    "get_started.form.success_message":
+      "Obrigado por se inscrever! Estamos animados para ter você conosco.",
+    "get_started.form.error_message":
+      "Ops! Algo deu errado ao enviar o formulário. Por favor, tente novamente mais tarde.",
 
     // Nav
     "nav.home": "Início",

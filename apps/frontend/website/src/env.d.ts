@@ -6,3 +6,13 @@ declare namespace App {
     allFlags?: any;
   }
 }
+
+interface ImportMetaEnv {
+  readonly FLAGSMITH_ENV_KEY: string;
+  readonly DISCORD_WEBHOOK_URL: string;
+
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
