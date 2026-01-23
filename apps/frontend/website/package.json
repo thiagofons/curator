@@ -19,6 +19,7 @@
   "dependencies": {
     "@astrojs/check": "catalog:astro",
     "@astrojs/mdx": "catalog:astro",
+    "@astrojs/partytown": "^2.1.4",
     "@astrojs/react": "catalog:astro",
     "@astrojs/rss": "catalog:astro",
     "@astrojs/sitemap": "catalog:astro",

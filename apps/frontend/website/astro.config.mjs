@@ -11,6 +11,8 @@ import config from "./src/config/config.json";
 
 import vercel from "@astrojs/vercel";
 
+import partytown from "@astrojs/partytown";
+
 // https://astro.build/config
 export default defineConfig({
   output: "server",
@@ -34,22 +36,17 @@ export default defineConfig({
     },
   },
 
-  integrations: [
-    react(),
-    sitemap(),
-    AutoImport({
-      imports: [
-        "@/shortcodes/Button",
-        "@/shortcodes/Accordion",
-        "@/shortcodes/Notice",
-        "@/shortcodes/Video",
-        "@/shortcodes/Youtube",
-        "@/shortcodes/Tabs",
-        "@/shortcodes/Tab",
-      ],
-    }),
-    mdx(),
-  ],
+  integrations: [react(), sitemap(), AutoImport({
+    imports: [
+      "@/shortcodes/Button",
+      "@/shortcodes/Accordion",
+      "@/shortcodes/Notice",
+      "@/shortcodes/Video",
+      "@/shortcodes/Youtube",
+      "@/shortcodes/Tabs",
+      "@/shortcodes/Tab",
+    ],
+  }), mdx(), partytown()],
 
   markdown: {
     remarkPlugins: [
