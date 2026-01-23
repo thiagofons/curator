@@ -19,4 +19,7 @@ export const APP_ROUTES = {
       COME_TOGETHER: "come_together",
     },
   },
+  GET_STARTED: {
+    path: "/get-started",
+  },
 } as const;

@@ -24,9 +24,9 @@ const imageOrderClass =
 
 <div
   class={cn(
-    "bg-card text-card-foreground mt-24 min-h-24 w-full max-w-300 rounded-3xl text-center shadow-sm md:mt-0 md:text-left",
+    "bg-card text-card-foreground mt-24 min-h-[627px] flex flex-col justify-center w-full max-w-300 rounded-3xl text-center shadow-sm md:mt-0 md:text-left",
     "border-border border",
-    className
+    className,
   )}
   {...props}
 >
@@ -34,7 +34,7 @@ const imageOrderClass =
     class={cn(
       "grid gap-8 p-10 md:gap-12 md:p-10",
       isHorizontal ? "items-center md:grid-cols-2" : "grid-cols-1",
-      containerClass
+      containerClass,
     )}
   >
     <div class="flex h-auto w-full flex-col gap-4.5 rounded-2xl object-cover">
