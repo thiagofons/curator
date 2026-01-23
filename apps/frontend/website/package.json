@@ -37,7 +37,7 @@
     "@tailwindcss/typography": "catalog:ui-libs",
     "@tailwindcss/vite": "catalog:ui-libs",
     "@vitejs/plugin-react": "^5.1.2",
-    "astro": "catalog:astro",
+    "astro": "5.16.10",
     "astro-auto-import": "catalog:astro",
     "astro-font": "catalog:astro",
     "astro-i18next": "1.0.0-beta.21",
