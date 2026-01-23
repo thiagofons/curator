@@ -84,7 +84,9 @@ export default function Navbar({ items, cta, logo }: NavbarProps) {
           <div className="flex items-center gap-3">
             <div className="hidden min-w-[110px] md:block">
               {cta.enabled && (
-                <Button className="h-10 rounded-full px-6">{cta.label}</Button>
+                <Button className="h-10 rounded-full px-6">
+                  <a href="/get-started">{cta.label}</a>
+                </Button>
               )}
             </div>
 
@@ -142,8 +144,8 @@ export default function Navbar({ items, cta, logo }: NavbarProps) {
           }}
         >
           {cta.enabled && (
-            <Button className="w-full rounded-full px-10 py-6 text-lg">
-              {cta.label}
+            <Button asChild className="w-full rounded-full px-10 py-6 text-lg">
+              <a href="/get-started">{cta.label}</a>
             </Button>
           )}
         </div>

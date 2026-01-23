@@ -25,6 +25,7 @@
     "@astrojs/sitemap": "catalog:astro",
     "@astrojs/vercel": "^9.0.4",
     "@digi4care/astro-google-tagmanager": "catalog:astro",
+    "@hookform/resolvers": "^5.2.2",
     "@justinribeiro/lite-youtube": "catalog:astro",
     "@remixicon/react": "^4.8.0",
     "@repo/eslint-config": "workspace:*",
@@ -57,13 +58,16 @@
     "postcss": "catalog:ui-libs",
     "react": "catalog:react19",
     "react-dom": "catalog:react19",
+    "react-hook-form": "^7.71.1",
     "react-icons": "catalog:ui-libs",
     "remark-collapse": "catalog:ui-libs",
     "remark-toc": "catalog:ui-libs",
+    "sonner": "^2.0.7",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "catalog:ui-libs",
     "tailwindcss-animate": "catalog:ui-libs",
-    "vite": "catalog:vite7"
+    "vite": "catalog:vite7",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

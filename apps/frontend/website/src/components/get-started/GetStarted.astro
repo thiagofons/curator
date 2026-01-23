@@ -1,0 +1,38 @@
+---
+import { APP_ROUTES } from "@/constants/routes";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import Base from "@/layouts/Base.astro";
+import {
+  Display,
+  SubheadingXL,
+} from "@repo/ui-web/components/custom/typography.jsx";
+import HeroCard from "../common/HeroCard.astro";
+import GetStartedForm from "./GetStartedForm";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<Base
+  title={t("get_started.meta.title")}
+  description={t("get_started.meta.description")}
+>
+  <main
+    id={APP_ROUTES.GET_STARTED.path}
+    class="relative flex min-h-screen items-center justify-center p-5"
+  >
+    <HeroCard orientation="horizontal" imageSide="right">
+      <div slot="image" class="w-full">
+        <GetStartedForm client:load />
+      </div>
+
+      <Display variant="display-h1" color="black">
+        {t("get_started.hero.title")}
+      </Display>
+
+      <SubheadingXL color="gray-normal">
+        {t("get_started.hero.subtitle")}
+      </SubheadingXL>
+    </HeroCard>
+  </main>
+</Base>

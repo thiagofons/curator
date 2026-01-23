@@ -1313,6 +1313,9 @@ importers:
       '@digi4care/astro-google-tagmanager':
         specifier: catalog:astro
         version: 1.6.0(astro@5.16.2(@types/node@24.5.2)(@vercel/functions@2.2.13)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.53.1)(sass@1.77.4)(terser@5.44.1)(tsx@4.20.6)(typescript@5.9.2)(yaml@2.8.1))
+      '@hookform/resolvers':
+        specifier: ^5.2.2
+        version: 5.2.2(react-hook-form@7.71.1(react@19.2.0))
       '@justinribeiro/lite-youtube':
         specifier: catalog:astro
         version: 1.9.0
@@ -1409,6 +1412,9 @@ importers:
       react-dom:
         specifier: catalog:react19
         version: 19.2.0(react@19.2.0)
+      react-hook-form:
+        specifier: ^7.71.1
+        version: 7.71.1(react@19.2.0)
       react-icons:
         specifier: catalog:ui-libs
         version: 5.5.0(react@19.2.0)
@@ -1418,6 +1424,9 @@ importers:
       remark-toc:
         specifier: catalog:ui-libs
         version: 9.0.0
+      sonner:
+        specifier: ^2.0.7
+        version: 2.0.7(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       tailwind-merge:
         specifier: ^3.4.0
         version: 3.4.0
@@ -1430,6 +1439,9 @@ importers:
       vite:
         specifier: catalog:vite7
         version: 7.2.2(@types/node@24.5.2)(jiti@2.6.1)(lightningcss@1.30.2)(sass@1.77.4)(terser@5.44.1)(tsx@4.20.6)(yaml@2.8.1)
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
     devDependencies:
       '@repo/typescript-config':
         specifier: workspace:*
@@ -9959,6 +9971,12 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
 
+  react-hook-form@7.71.1:
+    resolution: {integrity: sha512-9SUJKCGKo8HUSsCO+y0CtqkqI5nNuaDqTxyqPsZPqIwudpj4rCrAz/jZV+jn57bx5gtZKOh3neQu94DXMc+w5w==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18 || ^19
+
   react-icons@5.5.0:
     resolution: {integrity: sha512-MEFcXdkP3dLo8uumGI5xN3lDFNsRtrjbOEKDLD7yv76v4wpnEq2Lt2qeHaQOr34I/wPN3s3+N08WkQ+CW37Xiw==}
     peerDependencies:
@@ -12006,6 +12024,9 @@ packages:
   zod@4.0.0-beta.20250424T163858:
     resolution: {integrity: sha512-fKhW+lEJnfUGo0fvQjmam39zUytARR2UdCEh7/OXJSBbKScIhD343K74nW+UUHu/r6dkzN6Uc/GqwogFjzpCXg==}
 
+  zod@4.3.6:
+    resolution: {integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==}
+
   zustand@5.0.8:
     resolution: {integrity: sha512-gyPKpIaxY9XcO2vSMrLbiER7QMAMGOQZVRdJ6Zi782jkbzZygq5GI9nG8g+sMgitRtndwaBSl7uiqC49o1SSiw==}
     engines: {node: '>=12.20.0'}
@@ -13132,6 +13153,11 @@ snapshots:
     dependencies:
       '@standard-schema/utils': 0.3.0
       react-hook-form: 7.66.0(react@19.2.0)
+
+  '@hookform/resolvers@5.2.2(react-hook-form@7.71.1(react@19.2.0))':
+    dependencies:
+      '@standard-schema/utils': 0.3.0
+      react-hook-form: 7.71.1(react@19.2.0)
 
   '@humanfs/core@0.19.1': {}
 
@@ -21784,6 +21810,10 @@ snapshots:
     dependencies:
       react: 19.2.0
 
+  react-hook-form@7.71.1(react@19.2.0):
+    dependencies:
+      react: 19.2.0
+
   react-icons@5.5.0(react@19.2.0):
     dependencies:
       react: 19.2.0
@@ -24096,6 +24126,8 @@ snapshots:
   zod@4.0.0-beta.20250424T163858:
     dependencies:
       '@zod/core': 0.9.0
+
+  zod@4.3.6: {}
 
   zustand@5.0.8(@types/react@19.2.2)(react@19.2.0)(use-sync-external-store@1.6.0(react@19.2.0)):
     optionalDependencies:

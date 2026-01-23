@@ -133,6 +133,30 @@ export const ui = {
     "home.come_together.subtitle":
       "Ajude a construir a maior biblioteca de trilhas da internet. Sugira novos temas, torne-se um curador verificado e ajude a organizar o conhecimento mundial!",
 
+    // Get Started - Meta
+    "get_started.meta.title": "Comece sua jornada com o Curator",
+    "get_started.meta.description":
+      "Descubra como o Curator pode transformar sua forma de aprender. Explore trilhas estruturadas, participe da comunidade e acesse ferramentas exclusivas para potencializar seu aprendizado.",
+
+    // Get Started - Hero
+    "get_started.hero.title": "Chega de conteúdo raso!",
+    "get_started.hero.subtitle":
+      "Junte-se a outros curadores e aprendizes construindo o futuro da educação.",
+
+    "get_started.form.name.label": "Nome",
+    "get_started.form.name.placeholder": "João",
+    "get_started.form.name.description": "Insira o seu nome",
+    "get_started.form.email.label": "E-mail",
+    "get_started.form.email.placeholder": "joao@email.com",
+    "get_started.form.email.description":
+      "Insira o seu melhor endereço de e-mail",
+    "get_started.form.theme.label":
+      "Qual tema você mais gostaria de ver um roadmap hoje?",
+    "get_started.form.theme.placeholder":
+      "Literatura Russa, Filmes Nacionais, Machado de Assis...",
+    "get_started.form.theme.description": "Diga-nos o que você quer explorar",
+    "get_started.form.submit": "Entrar na lista de espera",
+
     // Nav
     "nav.home": "Início",
     "nav.open_source": "Open Source",
