@@ -4,7 +4,8 @@
     "PAYLOAD_SECRET",
     "DATABASE_URL",
     "FLAGSMITH_ENV_KEY",
-    "DISCORD_WEBHOOK_URL"
+    "DISCORD_WEBHOOK_URL",
+    "LEAD_DATABASE_URL"
   ],
   "ui": "tui",
   "tasks": {

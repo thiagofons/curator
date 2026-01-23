@@ -1,14 +1,17 @@
 import { useTranslations } from "@/i18n/utils";
-import { formSchema, sendForm, type FormValues } from "@/lib/sendForm";
+import { formSchema, type FormValues } from "@/lib/formSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui-web/base/button";
 import { Field, FieldGroup, FieldLabel } from "@repo/ui-web/base/field";
 import { Input } from "@repo/ui-web/base/input";
+import { actions } from "astro:actions";
 import * as React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 const GetStartedForm = () => {
+  const t = useTranslations();
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -20,17 +23,41 @@ const GetStartedForm = () => {
 
   const onSubmit = async (data: FormValues) => {
     try {
-      await sendForm(data);
-      toast(t("get_started.form.success_message"));
+      const { error } = await actions.createLead(data);
+
+      if (error) {
+        throw error;
+      }
+
+      toast(t("get_started.form.success_message"), {
+        position: "bottom-center",
+        duration: 8000,
+        style: {
+          textAlign: "center",
+          fontFamily: "Lexend, sans-serif",
+          borderRadius: 16,
+          backgroundColor: "#0060F7",
+          border: "4px solid #003c9c",
+          color: "#FFFFFF",
+        },
+      });
+
+      form.reset();
     } catch {
-      toast.error(t("get_started.form.error_message"));
-      return;
+      toast.error(t("get_started.form.error_message"), {
+        position: "bottom-center",
+        duration: 8000,
+        style: {
+          textAlign: "center",
+          fontFamily: "Lexend, sans-serif",
+          borderRadius: 16,
+          backgroundColor: "#FF383C",
+          border: "4px solid #a02628",
+          color: "#FFFFFF",
+        },
+      });
     }
-
-    form.reset();
   };
-
-  const t = useTranslations();
 
   return (
     <form
