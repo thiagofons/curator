@@ -1,9 +1,11 @@
 {
   "$schema": "https://turborepo.com/schema.json",
   "globalEnv": [
+    "DEV",
     "PAYLOAD_SECRET",
     "DATABASE_URL",
-    "FLAGSMITH_ENV_KEY",
+    "FLAGSMITH_DEV_KEY",
+    "FLAGSMITH_PROD_KEY",
     "DISCORD_WEBHOOK_URL",
     "LEAD_DATABASE_URL",
     "FIREBASE_AUTH_DOMAIN",

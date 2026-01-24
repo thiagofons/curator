@@ -8,7 +8,8 @@ declare namespace App {
 }
 
 interface ImportMetaEnv {
-  readonly FLAGSMITH_ENV_KEY: string;
+  readonly FLAGSMITH_DEV_KEY: string;
+  readonly FLAGSMITH_PROD_KEY: string;
   readonly DISCORD_WEBHOOK_URL: string;
   readonly FIREBASE_API_KEY: string;
   readonly FIREBASE_AUTH_DOMAIN: string;

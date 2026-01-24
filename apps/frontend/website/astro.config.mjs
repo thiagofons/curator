@@ -22,7 +22,11 @@ export default defineConfig({
 
   env: {
     schema: {
-      FLAGSMITH_ENV_KEY: envField.string({
+      FLAGSMITH_DEV_KEY: envField.string({
+        context: "client",
+        access: "public",
+      }),
+      FLAGSMITH_PROD_KEY: envField.string({
         context: "client",
         access: "public",
       }),
