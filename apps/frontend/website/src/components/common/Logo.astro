@@ -26,32 +26,42 @@ const logoVariants = cva("w-auto object-contain", {
 
 export interface Props extends VariantProps<typeof logoVariants> {
   class?: string;
+  /** Override opcional. Se omitido, segue o tema do BaseLayout (classe `.dark` no html). */
   type?: "dark" | "light";
   variant?: "default" | "pro";
 }
 
-const {
-  class: className,
-  type = "light",
-  size,
-  variant = "default",
-} = Astro.props;
+const { class: className, type, size, variant = "default" } = Astro.props;
 
-const getImageSrc = () => {
-  if (variant === "pro") {
-    return type === "light" ? LogoProLight : LogoProDark;
-  }
-  return type === "light" ? LogoLight : LogoDark;
+const getImageSrc = (forcedType: "dark" | "light") => {
+  if (variant === "pro")
+    return forcedType === "light" ? LogoProLight : LogoProDark;
+  return forcedType === "light" ? LogoLight : LogoDark;
 };
 
-const selectedImage = getImageSrc();
+const lightImage = getImageSrc("light");
+const darkImage = getImageSrc("dark");
+
+const lightClass =
+  type === "dark" ? "hidden" : type === "light" ? "block" : "block dark:hidden";
+
+const darkClass =
+  type === "light" ? "hidden" : type === "dark" ? "block" : "hidden dark:block";
 ---
 
-<div class={cn("flex items-center gap-2 select-none", className)}>
+<div class={cn("flex select-none items-center gap-2", className)}>
   <Image
-    src={selectedImage}
+    src={lightImage}
     alt={variant === "pro" ? "Curator Pro" : "Curator"}
-    class={logoVariants({ size })}
+    class={cn(logoVariants({ size }), lightClass)}
+    draggable="false"
+    loading="eager"
+    fetchpriority="high"
+  />
+  <Image
+    src={darkImage}
+    alt={variant === "pro" ? "Curator Pro" : "Curator"}
+    class={cn(logoVariants({ size }), darkClass)}
     draggable="false"
     loading="eager"
     fetchpriority="high"

@@ -20,6 +20,10 @@
     --gray-light: 0 0% 84%; /* #d5d5d5 */
     --gray-normal: 215 14% 34%; /* #4b5563 (Seu 'gray') */
     --gray-dark: 0 0% 0%; /* #000000 (Seu 'gray-translucid' base) */
+    --gray-bg: 0 0% 10%;
+
+    --white: 0 0% 100%; /* #ffffff */
+    --black: 0 0% 0%; /* #000000 */
 
     /* Status Colors */
     --status-green: 135 59% 49%; /* #34c759 */
@@ -69,8 +73,8 @@
 
   .dark {
     /* Mapeamento Dark Mode (Exemplo básico, ajuste conforme gosto) */
-    --background: 216 100% 8%; /* Blue Dark como fundo */
-    --foreground: 0 0% 100%; /* Texto branco */
+    --background: var(--gray-bg); /* Fundo preto */
+    --foreground: var(--white); /* Texto branco */
 
     --card: 216 100% 10%; /* Levemente mais claro que o fundo */
     --card-foreground: 0 0% 100%;

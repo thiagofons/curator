@@ -47,16 +47,16 @@ export default function Navbar({ items, cta, logo }: NavbarProps) {
 
   const pillClasses = `
     relative flex w-full max-w-[1000px] items-center justify-between
-    rounded-full border border-white/20
+    rounded-full border border-border/40
     px-6 py-3 shadow-lg backdrop-blur-md
     transition-all duration-500 ease-in-out
     md:px-8 md:py-4
     ${
       isOpen
         ? "bg-transparent border-transparent shadow-none"
-        : "bg-white/80 hover:bg-white/95 hover:shadow-xl"
+        : "bg-background/70 hover:bg-background/90 hover:shadow-xl"
     }
-    ${isScrolled && !isOpen ? "py-2 md:py-3 max-w-[900px] bg-white/95" : ""}
+    ${isScrolled && !isOpen ? "py-2 md:py-3 max-w-[900px] bg-background/90" : ""}
   `;
 
   return (
@@ -73,7 +73,7 @@ export default function Navbar({ items, cta, logo }: NavbarProps) {
                 <a
                   key={item.url}
                   href={item.url}
-                  className={`hover:text-primary text-sm font-medium text-black transition-colors duration-300`}
+                  className="hover:text-primary text-foreground text-sm font-medium transition-colors duration-300"
                 >
                   {item.label}
                 </a>
@@ -96,9 +96,9 @@ export default function Navbar({ items, cta, logo }: NavbarProps) {
               aria-label="Alternar menu"
             >
               {isOpen ? (
-                <X className="animate-in fade-in zoom-in h-6 w-6 text-gray-700 duration-300" />
+                <X className="animate-in fade-in zoom-in text-foreground/70 h-6 w-6 duration-300" />
               ) : (
-                <Menu className="animate-in fade-in zoom-in h-6 w-6 text-gray-700 duration-300" />
+                <Menu className="animate-in fade-in zoom-in text-foreground/70 h-6 w-6 duration-300" />
               )}
             </button>
           </div>
@@ -107,7 +107,7 @@ export default function Navbar({ items, cta, logo }: NavbarProps) {
 
       {/* Mobile Menu */}
       <div
-        className="fixed inset-0 z-40 flex flex-col items-center justify-between bg-white/95 p-8 backdrop-blur-xl md:hidden"
+        className="bg-background/95 text-foreground fixed inset-0 z-40 flex flex-col items-center justify-between p-8 backdrop-blur-xl md:hidden"
         style={{
           clipPath: isOpen
             ? "circle(150% at 100% 0%)"

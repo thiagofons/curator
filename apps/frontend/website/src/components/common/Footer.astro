@@ -11,7 +11,7 @@ const t = useTranslations(lang);
 ---
 
 <footer
-  class="bg-light border-t-gray-light flex justify-center border-t px-4 py-8 lg:py-10"
+  class="border-border bg-background flex justify-center border-t px-4 py-8 lg:py-10"
 >
   <div class="flex w-full max-w-[1200px] flex-col gap-9">
     <div
@@ -24,32 +24,37 @@ const t = useTranslations(lang);
             <SocialButton network="discord" />
             <SocialButton network="github" />
           </div>
-          <div class="flex flex-row items-center gap-1">
-            <Mail size={16} color="#4B5563" />
-            <BodySmall color="gray-normal">
+
+          <div class="text-muted-foreground flex flex-row items-center gap-1">
+            <Mail size={16} className="text-muted-foreground" />
+            <BodySmall className="text-muted-foreground">
               {t("footer.email")}
             </BodySmall>
           </div>
         </div>
+
         <div class="w-full max-w-[484px] text-center md:text-left">
-          <BodySmall color="gray-normal">
+          <BodySmall className="text-muted-foreground">
             {t("footer.description")}
           </BodySmall>
         </div>
       </div>
+
       <!-- Sitemap -->
       <div class=""></div>
     </div>
+
     <div
       class="flex w-full flex-col items-center justify-between gap-4 md:flex-row"
     >
-      <div class="flex items-center gap-1">
-        <BodySmall color="gray-normal">
+      <div class="text-muted-foreground flex items-center gap-1">
+        <BodySmall className="text-muted-foreground">
           {t("footer.open_source")}
         </BodySmall>
-        <RiHeartFill color="#0060F7" size={12} />
+        <RiHeartFill className="text-primary" size={12} />
       </div>
-      <BodySmall color="gray-normal">
+
+      <BodySmall className="text-muted-foreground">
         {`© ${new Date().getFullYear()} ${t("footer.copyright")}`}
       </BodySmall>
     </div>

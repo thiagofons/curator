@@ -3,7 +3,7 @@ import Footer from "@/components/common/Footer.astro";
 import Navbar from "@/components/common/Navbar.astro";
 import TwSizeIndicator from "@/components/common/TwSizeIndicator.astro";
 import config from "@/config/config.json";
-import theme from "@/config/theme.json";
+import siteTheme from "@/config/theme.json"; // rename (evita conflito com prop "theme")
 import { flagsmith } from "@/lib/flagsmith";
 import { plainify } from "@/lib/utils/textConverter";
 import "@/styles/main.css";
@@ -18,23 +18,28 @@ import { Toaster } from "@repo/ui-web/components/base/sonner.jsx";
 import SpeedInsights from "@vercel/speed-insights/astro";
 
 // font families
-const pf = theme.fonts.font_family.primary;
-const sf = theme.fonts.font_family.secondary;
+const pf = siteTheme.fonts.font_family.primary;
+const sf = siteTheme.fonts.font_family.secondary;
 
 let fontPrimary, fontSecondary;
-if (theme.fonts.font_family.primary) {
-  fontPrimary = theme.fonts.font_family.primary
+if (siteTheme.fonts.font_family.primary) {
+  fontPrimary = siteTheme.fonts.font_family.primary
     .replace(/\+/g, " ")
     .replace(/:[ital,]*[ital@]*[wght@]*[0-9,;]+/gi, "");
 }
-if (theme.fonts.font_family.secondary) {
-  fontSecondary = theme.fonts.font_family.secondary
+if (siteTheme.fonts.font_family.secondary) {
+  fontSecondary = siteTheme.fonts.font_family.secondary
     .replace(/\+/g, " ")
     .replace(/:[ital,]*[ital@]*[wght@]*[0-9,;]+/gi, "");
 }
 
 const { title, meta_title, description, image, noindex, canonical } =
   Astro.props;
+
+// Tema do layout (por página). Use: <Base theme="dark" />
+type LayoutTheme = "light" | "dark";
+const layoutTheme: LayoutTheme = (Astro.props.theme ?? "light") as LayoutTheme;
+
 const ENV = (import.meta as any).env || {};
 // Enable AstroFont only when explicitly allowed; otherwise fall back to
 // client-side Google Fonts <link> to avoid build-time network fetches.
@@ -48,7 +53,11 @@ const isFooterEnabled = flags.isFeatureEnabled("global.footer");
 ---
 
 <!doctype html>
-<html lang={"pt-BR"}>
+<html
+  lang={"pt-BR"}
+  data-theme={layoutTheme}
+  class={layoutTheme === "dark" ? "dark" : ""}
+>
   <head>
     <meta charset="UTF-8" />
     <!-- google tag manager -->
@@ -148,6 +157,26 @@ const isFooterEnabled = flags.isFeatureEnabled("global.footer");
 
     <ClientRouter />
 
+    <!-- Mantém o tema consistente ao navegar com astro:transitions -->
+    <script is:inline>
+      {
+        `
+        function applyLayoutTheme() {
+          const bodyTheme = document.body?.dataset?.theme;
+          const html = document.documentElement;
+          const theme = bodyTheme || html.dataset.theme || "light";
+          const isDark = theme === "dark";
+          html.classList.toggle("dark", isDark);
+          // melhora UI nativa (inputs/scrollbars) e combina com tokens
+          html.style.colorScheme = isDark ? "dark" : "light";
+        }
+
+        applyLayoutTheme();
+        document.addEventListener("astro:after-swap", applyLayoutTheme);
+      `;
+      }
+    </script>
+
     <!-- author from config.json -->
     <meta name="author" content={config.metadata.meta_author} />
 
@@ -224,7 +253,7 @@ const isFooterEnabled = flags.isFeatureEnabled("global.footer");
     <SpeedInsights />
   </head>
 
-  <body>
+  <body data-theme={layoutTheme} class="bg-background text-foreground">
     {/* google tag manager noscript */}
     {
       config.google_tag_manager.enable && (
