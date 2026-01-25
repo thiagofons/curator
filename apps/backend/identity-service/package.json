@@ -32,7 +32,7 @@
     "@nestjs/microservices": "catalog:nestjs11",
     "@nestjs/platform-express": "catalog:nestjs11",
     "@prisma/client": "catalog:prisma7",
-    "@trpc/server": "catalog:trpc11",
+    "@trpc/server": "11.8.0",
     "amqp-connection-manager": "catalog:rabbitmq",
     "class-validator": "catalog:core-libs",
     "junit": "catalog:code-quality",
