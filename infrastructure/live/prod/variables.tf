@@ -1,22 +1,22 @@
 variable "project_id" {
-  description = "O ID do seu projeto no Google Cloud (não é o nome, é o ID)"
+  description = "Google Cloud Project ID where resources will be created"
   type        = string
 }
 
 variable "region" {
-  description = "A região padrão para os recursos (ex: us-central1)"
+  description = "Default region for resources (e.g., us-central1)"
   type        = string
   default     = "us-central1"
 }
 
 variable "zone" {
-  description = "A zona específica para o Cluster Zonal (CRUCIAL para ser grátis)"
+  description = "Specific zone for the Zonal Cluster (CRUCIAL to be free)"
   type        = string
   default     = "us-central1-a"
 }
 
 variable "cluster_name" {
-  description = "O nome do cluster Kubernetes"
+  description = "Kubernetes cluster name"
   type        = string
   default     = "curator-platform-cluster"
 }
