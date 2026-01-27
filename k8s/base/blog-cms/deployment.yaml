@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog-cms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blog-cms
+  template:
+    metadata:
+      labels:
+        app: blog-cms
+    spec:
+      containers:
+        - name: cms
+          image: curator/blog-cms:local
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - secretRef:
+                name: blog-secrets # 👈 Vai puxar as env vars desse segredo
+          env:
+            - name: NODE_ENV
+              value: "development"
+            - name: FORCE_DB_SYNC
+              value: "true"
+          resources:
+            requests:
+              memory: "512Mi"
+            limits:
+              memory: "1Gi"

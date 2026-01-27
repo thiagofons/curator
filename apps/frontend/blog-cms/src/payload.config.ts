@@ -54,6 +54,9 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || "",
     },
+    push:
+      process.env.NODE_ENV === "development" ||
+      process.env.FORCE_DB_SYNC === "true",
   }),
   plugins: [
     // storage-adapter-placeholder
