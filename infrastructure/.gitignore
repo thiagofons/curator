@@ -28,6 +28,7 @@
 # Files that override variables, commonly used for local secrets
 # (e.g., API keys for testing).
 # ===================================================================
+*.tfvars
 *.auto.tfvars
 *.auto.tfvars.json
 override.tf
