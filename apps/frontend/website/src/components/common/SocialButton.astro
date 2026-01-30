@@ -1,11 +1,24 @@
 ---
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
-import { RiDiscordFill, RiGithubFill } from "@remixicon/react";
+import {
+  RiDiscordFill,
+  RiFacebookFill,
+  RiGithubFill,
+  RiInstagramFill,
+  RiPinterestFill,
+  RiTiktokFill,
+} from "@remixicon/react";
 import { Button } from "@repo/ui-web/components/base/button.jsx";
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-type Network = "discord" | "github";
+type Network =
+  | "discord"
+  | "github"
+  | "instagram"
+  | "pinterest"
+  | "tiktok"
+  | "facebook";
 
 type Props = {
   network: Network;
@@ -17,6 +30,30 @@ const links: Record<
   Network,
   { title: string; url: string; label: string; icon: any }
 > = {
+  instagram: {
+    title: "Instagram",
+    url: "https://www.instagram.com/curator_br/",
+    label: t("social.instagram"),
+    icon: RiInstagramFill,
+  },
+  pinterest: {
+    title: "Pinterest",
+    url: "https://www.pinterest.com/curator_br/",
+    label: t("social.pinterest"),
+    icon: RiPinterestFill,
+  },
+  tiktok: {
+    title: "TikTok",
+    url: "https://www.tiktok.com/@curator_br",
+    label: t("social.tiktok"),
+    icon: RiTiktokFill,
+  },
+  facebook: {
+    title: "Facebook",
+    url: "https://www.facebook.com/profile.php?id=61587282390193",
+    label: t("social.facebook"),
+    icon: RiFacebookFill,
+  },
   discord: {
     title: "Discord",
     url: "https://discord.gg/fCucb3mm8B",
