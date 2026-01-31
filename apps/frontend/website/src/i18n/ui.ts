@@ -171,5 +171,9 @@ export const ui = {
     // Social
     "social.discord": "Entre na comunidade!",
     "social.github": "Dê uma estrela no GitHub!",
+    "social.instagram": "Siga-nos no Instagram!",
+    "social.pinterest": "Siga-nos no Pinterest!",
+    "social.tiktok": "Siga-nos no TikTok!",
+    "social.facebook": "Curta nossa página no Facebook!",
   },
 } as const;
