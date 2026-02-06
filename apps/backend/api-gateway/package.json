@@ -22,7 +22,7 @@
   "dependencies": {
     "@repo/rabbitmq": "workspace:*",
     "@nestjs/common": "catalog:nestjs11",
-    "@nestjs/config": "catalog:nestjs11",
+    "@nestjs/config": "4.0.3",
     "@nestjs/core": "catalog:nestjs11",
     "@nestjs/microservices": "catalog:nestjs11",
     "@nestjs/platform-express": "catalog:nestjs11",
