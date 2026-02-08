@@ -23,7 +23,7 @@
   "license": "ISC",
   "dependencies": {
     "@nestjs/common": "catalog:nestjs11",
-    "@nestjs/config": "catalog:nestjs11",
+    "@nestjs/config": "4.0.3",
     "@nestjs/microservices": "catalog:nestjs11",
     "class-validator": "^0.14.2"
   },
