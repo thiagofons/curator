@@ -63,7 +63,8 @@
     "backend/authentication-service",
     "backend/identity-service",
     "_templates",
-    "backend/blog-cms"
+    "backend/blog-cms",
+    "backend/cms-service"
   ],
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

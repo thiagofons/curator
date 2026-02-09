@@ -904,7 +904,7 @@ importers:
         specifier: catalog:code-quality
         version: 8.46.3(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.2)
 
-  apps/backend/blog-cms:
+  apps/backend/cms-service:
     dependencies:
       '@payloadcms/db-postgres':
         specifier: catalog:payload

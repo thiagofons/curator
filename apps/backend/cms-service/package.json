@@ -1,5 +1,5 @@
 {
-  "name": "@backend/blog-cms",
+  "name": "@backend/cms-service",
   "version": "1.0.0",
   "description": "Curator Blog CMS built with Payload CMS and Next.js",
   "license": "MIT",
@@ -9,7 +9,7 @@
     "dev": "next dev",
     "dev:migrate": "pnpm db:push && pnpm dev",
     "db:push": "payload migrate",
-    "docker:build": "docker build -t curator/backend/blog-cms:latest -f Dockerfile ../../../",
+    "docker:build": "docker build -t curator/backend/cms-service:latest -f Dockerfile ../../../",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "lint": "eslint .",

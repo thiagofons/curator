@@ -10,7 +10,7 @@ RUN apk add --no-cache libc6-compat && \
 FROM base AS pruner
 WORKDIR /app
 COPY . .
-RUN turbo prune --scope=@backend/blog-cms --docker
+RUN turbo prune --scope=@backend/cms-service --docker
 
 # STAGE 3: Instalador de dependências (Full)
 FROM base AS deps
@@ -26,7 +26,7 @@ WORKDIR /app
 COPY --from=pruner /app/out/full/ .
 ENV NODE_ENV=development
 # Script que roda migrações e sobe em modo dev
-CMD ["pnpm", "--filter", "@backend/blog-cms", "dev:migrate"]
+CMD ["pnpm", "--filter", "@backend/cms-service", "dev:migrate"]
 
 # STAGE 4: Builder (Compila o Next.js em modo standalone)
 FROM base AS builder
@@ -36,7 +36,7 @@ COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 RUN pnpm install --frozen-lockfile
 COPY --from=pruner /app/out/full/ .
 ENV NEXT_TELEMETRY_DISABLED 1
-RUN turbo run build --filter=@backend/blog-cms...
+RUN turbo run build --filter=@backend/cms-service...
 
 # --- TARGET 2: PRODUÇÃO ---
 # Usado no Kubernetes. Imagem leve, segura e rápida.
@@ -49,9 +49,9 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Copia apenas o necessário do standalone build
-COPY --from=builder --chown=nextjs:nodejs /app/apps/backend/blog-cms/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/apps/backend/blog-cms/.next/static ./apps/backend/blog-cms/.next/static
-COPY --from=builder --chown=nextjs:nodejs /app/apps/backend/blog-cms/public ./apps/backend/blog-cms/public
+COPY --from=builder --chown=nextjs:nodejs /app/apps/backend/cms-service/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/apps/backend/cms-service/.next/static ./apps/backend/cms-service/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/backend/cms-service/public ./apps/backend/cms-service/public
 
 USER nextjs
 EXPOSE 3000
@@ -59,4 +59,4 @@ ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
 # Em produção, rodamos apenas o servidor otimizado
-CMD ["node", "apps/backend/blog-cms/server.js"]
+CMD ["node", "apps/backend/cms-service/server.js"]

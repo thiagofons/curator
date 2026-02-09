@@ -1,26 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: blog-cms
+  name: cms-service
+  namespace: core
+  labels:
+    app.kubernetes.io/name: cms-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: blog-cms
+      app: cms-service
   template:
     metadata:
       labels:
-        app: blog-cms
+        app: cms-service
     spec:
       containers:
-        - name: blog-cms
-          image: docker.io/curator/backend/blog-cms:latest
+        - name: cms-service
+          image: docker.io/curator/backend/cms-service:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
           envFrom:
             - secretRef:
-                name: blog-secrets # 👈 Vai puxar as env vars desse segredo
+                name: cms-secrets # 👈 Vai puxar as env vars desse segredo
           env:
             - name: NODE_ENV
               value: "development"
