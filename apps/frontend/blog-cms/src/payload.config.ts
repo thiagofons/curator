@@ -1,5 +1,4 @@
 // storage-adapter-import-placeholder
-
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import { en } from "@payloadcms/translations/languages/en";
@@ -23,26 +22,10 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  // Allow requests from website dev and production domains
   cors: [
-    "http://localhost:4001",
-    "http://127.0.0.1:4001",
-    "http://localhost:4003",
-    "http://127.0.0.1:4003",
     "http://localhost:3000",
-    "http://127.0.0.1:3000",
     "https://cms.curator.com.br",
     "https://curator.com.br",
-    "https://www.curator.com.br",
-  ],
-  csrf: [
-    "http://localhost:4001",
-    "http://127.0.0.1:4001",
-    "http://localhost:4003",
-    "http://127.0.0.1:4003",
-    "https://cms.curator.com.br",
-    "https://curator.com.br",
-    "https://www.curator.com.br",
   ],
   collections: [Users, Media, Authors, Categories, Posts],
   editor: lexicalEditor(),
@@ -55,17 +38,11 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI || "",
     },
     push:
-      process.env.NODE_ENV === "development" ||
-      process.env.FORCE_DB_SYNC === "true",
+      process.env.PAYLOAD_DB_PUSH === "true" ||
+      process.env.NODE_ENV === "development",
   }),
-  plugins: [
-    // storage-adapter-placeholder
-  ],
   i18n: {
     fallbackLanguage: "pt",
-    supportedLanguages: {
-      en,
-      pt,
-    },
+    supportedLanguages: { en, pt },
   },
 });

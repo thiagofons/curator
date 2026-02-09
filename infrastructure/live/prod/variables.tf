@@ -1,22 +1,9 @@
-variable "project_id" {
-  description = "Google Cloud Project ID where resources will be created"
-  type        = string
-}
+variable "project_id" {}
+variable "region" { default = "us-central1" }
+variable "zone" { default = "us-central1-a" }
+variable "cluster_name" { default = "curator" }
 
-variable "region" {
-  description = "Default region for resources (e.g., us-central1)"
-  type        = string
-  default     = "us-central1"
-}
-
-variable "zone" {
-  description = "Specific zone for the Zonal Cluster (CRUCIAL to be free)"
-  type        = string
-  default     = "us-central1-a"
-}
-
-variable "cluster_name" {
-  description = "Kubernetes cluster name"
-  type        = string
-  default     = "curator-platform-cluster"
-}
+# Segredos (Defina no terraform.tfvars ou via env vars TF_VAR_...)
+variable "db_user" { default = "payload" }
+variable "db_password" {}
+variable "payload_secret" {}

@@ -17,7 +17,7 @@
     "prettier.config.js": ".prettierignore",
     "prettier.config.cjs": ".prettierignore",
     ".gitignore": ".gitattributes",
-
+    ".terraform.lock.hcl": "terraform.tfvars, terraform.tfstate, terraform.tfstate.backup",
     "*.module.ts": "${capture}.controller.ts, ${capture}.service.ts, ${capture}.router.ts, ${capture}.resolver.ts, ${capture}.guard.ts, ${capture}.providers.ts, ${capture}.spec.ts",
     "page.tsx": "layout.tsx, error.tsx, loading.tsx, template.tsx",
     "layout.tsx": "page.tsx, error.tsx, loading.tsx, template.tsx"
@@ -81,5 +81,8 @@
   },
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[terraform]": {
+    "editor.defaultFormatter": "hashicorp.terraform"
   }
 }

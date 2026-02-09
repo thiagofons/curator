@@ -1,14 +1,10 @@
-output "cluster_name" {
-  description = "Cluster Name"
-  value       = google_container_cluster.primary.name
+output "registry_url" {
+  value = module.registry.repo_url
+}
+output "db_connection_name" {
+  value = module.db.instance_connection_name
 }
 
-output "cluster_endpoint" {
-  description = "Cluster Endpoint"
-  value       = google_container_cluster.primary.endpoint
-}
-
-output "get_credentials_command" {
-  description = "Run this command to connect your kubectl to the cluster"
-  value       = "gcloud container clusters get-credentials ${google_container_cluster.primary.name} --zone ${var.zone} --project ${var.project_id}"
+output "payload_url" {
+  value = module.payload.service_url
 }
