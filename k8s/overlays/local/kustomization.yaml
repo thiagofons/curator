@@ -4,4 +4,3 @@ kind: Kustomization
 resources:
   - ../../base/blog-db # Caminho relativo para a base do DB
   - ../../base/blog-cms # Caminho relativo para a base do CMS
-  - blog-secrets.yaml # Arquivo vizinho

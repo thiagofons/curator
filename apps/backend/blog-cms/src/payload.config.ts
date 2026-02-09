@@ -40,9 +40,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || "",
     },
-    push:
-      process.env.PAYLOAD_DB_PUSH === "true" ||
-      process.env.NODE_ENV === "development",
+    push: true,
   }),
   i18n: {
     fallbackLanguage: "pt",
