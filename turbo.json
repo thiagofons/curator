@@ -47,6 +47,14 @@
     "db:studio": {
       "dependsOn": ["^db:studio"]
     },
+    "docker:build": {
+      "cache": true,
+      "inputs": ["Dockerfile", "../../package.json", "src/**", "public/**"]
+    },
+    "k8s:deploy": {
+      "dependsOn": ["docker:build"],
+      "cache": false
+    },
     "lint": {
       "dependsOn": ["^lint"]
     },
