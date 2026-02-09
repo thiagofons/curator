@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: blog-cms
-          image: docker.io/curator/frontend/blog-cms:1.0.0
+          image: docker.io/curator/backend/blog-cms:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000

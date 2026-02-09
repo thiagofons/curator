@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: blog-cms-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: cms.curator.local
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific # Tente mudar para Prefix ou ImplementationSpecific
+            backend:
+              service:
+                name: blog-cms # <--- ESSE NOME TEM QUE SER IGUAL AO 'kubectl get svc'
+                port:
+                  number: 3000 # <--- ESSA PORTA TEM QUE SER A 'PORT' DO SERVICE

@@ -24,9 +24,12 @@ export default buildConfig({
   },
   cors: [
     "http://localhost:3000",
+    "http://localhost:4003",
+    "http://cms.curator.local",
     "https://cms.curator.com.br",
     "https://curator.com.br",
   ],
+  csrf: ["http://localhost:4003", "http://cms.curator.local"],
   collections: [Users, Media, Authors, Categories, Posts],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
