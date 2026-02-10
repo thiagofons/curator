@@ -22,7 +22,7 @@
     "k8s:deploy": "kubectl apply -k k8s/overlays/local",
     "k8s:pods": "kubectl get pods -A",
     "k8s:status": "kubectl get all",
-    "k8s:reset": "kubectl delete -k k8s/overlays/local && pnpm k8s:deploy",
+    "k8s:reset": "kubectl delete -k k8s/overlays/local --ignore-not-found && pnpm k8s:deploy",
     "// --- Database ---": "",
     "db:generate": "turbo run db:generate",
     "db:migrate:dev": "turbo run db:migrate:dev",

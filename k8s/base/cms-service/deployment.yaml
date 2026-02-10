@@ -5,8 +5,15 @@ metadata:
   namespace: core
   labels:
     app.kubernetes.io/name: cms-service
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/part-of: curator
 spec:
-  replicas: 1
+  replicas: 1 # Em produção, você mudaria para 2 ou 3 no overlay
+  strategy:
+    type: RollingUpdate # Garante zero downtime na atualização
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   selector:
     matchLabels:
       app: cms-service
@@ -17,20 +24,30 @@ spec:
     spec:
       containers:
         - name: cms-service
-          image: docker.io/curator/backend/cms-service:latest
-          imagePullPolicy: IfNotPresent
+          image: curator/backend/cms-service:latest # No KinD, remova o docker.io se for imagem local
+          imagePullPolicy: Never
           ports:
             - containerPort: 3000
           envFrom:
             - secretRef:
-                name: cms-secrets # 👈 Vai puxar as env vars desse segredo
-          env:
-            - name: NODE_ENV
-              value: "development"
-            - name: FORCE_DB_SYNC
-              value: "true"
+                name: cms-secrets
+          # Provas de Saúde (Ajuste os caminhos se seu app tiver /api/status)
+          livenessProbe:
+            httpGet:
+              path: /admin/login # O Payload responde aqui quando está vivo
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /admin/login
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 5
           resources:
             requests:
+              cpu: "100m" # Adicionar CPU é essencial para o scheduler
               memory: "512Mi"
             limits:
+              cpu: "500m"
               memory: "1Gi"

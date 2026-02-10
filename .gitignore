@@ -34,6 +34,8 @@ out/
 build
 dist
 
+# Secrets
+k8s/**/secret.yaml
 
 # Debug
 npm-debug.log*
