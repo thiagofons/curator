@@ -15,7 +15,7 @@
   "dependencies": {
     "class-validator": "^0.14.2",
     "@nestjs/common": "catalog:nestjs11",
-    "@nestjs/config": "catalog:nestjs11",
+    "@nestjs/config": "4.0.3",
     "@nestjs/core": "catalog:nestjs11",
     "@nestjs/microservices": "catalog:nestjs11",
     "nestjs-trpc": "catalog:nestjs11",
