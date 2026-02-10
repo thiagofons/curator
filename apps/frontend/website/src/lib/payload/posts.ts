@@ -104,6 +104,7 @@ export async function getPayloadPosts(options?: {
     params.set("where[author][equals]", options.authorId);
   }
   const url = `${CMS_BASE_URL}/api/posts?${params.toString()}`;
+
   try {
     const data = await fetchJSON<ListResponse>(url);
     const docs = Array.isArray((data as any).docs) ? (data as any).docs : [];
@@ -131,6 +132,8 @@ export async function getPayloadPostBySlug(
   } & Record<string, unknown>;
   const url = `${CMS_BASE_URL}/api/posts?where[slug][equals]=${encodeURIComponent(slug)}&limit=1&depth=1&locale=pt`;
   try {
+    console.debug(`[payload] Fetching post by slug from ${url}`);
+
     const data = await fetchJSON<ListResponse>(url);
     const doc =
       Array.isArray((data as any).docs) && (data as any).docs.length

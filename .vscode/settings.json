@@ -46,9 +46,7 @@
   "conventionalCommits.scopes": [
     "infrastructure",
     "monorepo",
-    "backend/agent",
     "e2e",
-    "frontend/blog-cms",
     "frontend/docs",
     "frontend/website",
     "frontend/storybook-web",
@@ -56,15 +54,15 @@
     "packages/ui-web",
     "packages/ui-mobile",
     "observability",
-    "backend/api-gateway",
     "packages/trpc",
     "packages/vitest",
     "cli",
+    "backend/agent",
+    "backend/api-gateway",
     "backend/authentication-service",
     "backend/identity-service",
-    "_templates",
-    "backend/blog-cms",
-    "backend/cms-service"
+    "backend/cms-service",
+    "_templates"
   ],
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

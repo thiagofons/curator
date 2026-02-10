@@ -20,7 +20,7 @@ const ENV = (import.meta as any).env || {};
 export const CMS_BASE_URL: string =
   (ENV.PUBLIC_CMS_BASE_URL as string) ||
   (ENV.CMS_BASE_URL as string) ||
-  (ENV.DEV ? "http://localhost:4001" : "https://cms.curator.com.br");
+  (ENV.DEV ? "http://cms.curator.local" : "https://cms.curator.com.br");
 
 /**
  * Fetches a JSON resource and throws on non-2xx responses.

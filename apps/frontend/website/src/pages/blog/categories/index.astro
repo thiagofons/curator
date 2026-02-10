@@ -1,12 +1,12 @@
 ---
-import Base from "@/layouts/Base.astro"
-import { getPayloadCategories } from "@/lib/payload"
-import { humanize } from "@/lib/utils/textConverter"
+import Base from "@/layouts/Base.astro";
+import { getPayloadCategories } from "@/lib/payload";
+import { humanize } from "@/lib/utils/textConverter";
 
-const categories = await getPayloadCategories()
+const categories = await getPayloadCategories();
 ---
 
-<Base title={"categories"}>
+<Base title={"categories"} theme="dark">
   <section class="section">
     <div class="container text-center">
       <h1 class="h2 mb-16">Categories</h1>
@@ -16,7 +16,7 @@ const categories = await getPayloadCategories()
             <li class="inline-block">
               <a
                 href={`/blog/categories/${category.slug}`}
-                class="rounded-lg bg-light px-4 py-2 text-text-dark transition hover:bg-primary hover:text-white"
+                class="bg-light text-text-dark hover:bg-primary rounded-lg px-4 py-2 transition hover:text-white"
               >
                 &#8226; {humanize(category.data.title || "")}
               </a>

@@ -1,37 +1,60 @@
 ---
 import PostSingle from "@/components/blog/PostSingle.astro";
 import Base from "@/layouts/Base.astro";
-import { getPayloadPosts } from "@/lib/payload";
+import {
+  getPayloadPostBySlug,
+  getPayloadPosts,
+  type AdaptedPost,
+} from "@/lib/payload";
 
 export async function getStaticPaths() {
-  const posts = (await getPayloadPosts()) as any;
+  try {
+    const posts = await getPayloadPosts();
 
-  const paths = posts.map((post: any) => ({
-    params: {
-      single: post.slug,
-    },
-    props: {
-      post,
-      isPayload: true,
-      contentHtml: post.contentHtml,
-    },
-  }));
-  return paths;
+    return posts
+      .filter((post: AdaptedPost) => Boolean(post?.slug))
+      .map((post: AdaptedPost) => ({
+        params: {
+          single: post.slug,
+        },
+      }));
+  } catch (error) {
+    console.error("Failed to generate static paths for blog posts:", error);
+    return [];
+  }
 }
 
-const { post, isPayload, contentHtml } = Astro.props as {
-  post: any;
-  isPayload?: boolean;
-  contentHtml?: string;
-};
-const { title, meta_title, description, image } = post.data;
+interface Props {
+  post?: AdaptedPost;
+}
+
+const slug = Astro.params.single;
+
+// Reaproveita props (se vier), senão busca pelo slug
+let post: AdaptedPost = Astro.props.post;
+
+if (!post?.slug || post.slug !== slug) {
+  try {
+    post = (await getPayloadPostBySlug(slug)) as AdaptedPost;
+  } catch (error) {
+    console.error(`Failed to fetch blog post by slug "${slug}":`, error);
+  }
+}
+
+// Validate post exists
+if (!post?.slug) {
+  return Astro.redirect("/blog");
+}
+
+const { title, meta_title, description, image, contentHtml } = post;
 ---
 
 <Base
-  title={title}
-  meta_title={meta_title}
+  title={title || "Blog Post"}
+  meta_title={meta_title || title}
   description={description}
   image={image}
+  theme="dark"
 >
-  <PostSingle post={post} isPayload={isPayload} contentHtml={contentHtml} />
+  <PostSingle {post} {contentHtml} />
 </Base>

@@ -6,29 +6,49 @@ import { getPayloadAuthors, getPayloadPostsByAuthorSlug } from "@/lib/payload";
 export async function getStaticPaths() {
   const authors = await getPayloadAuthors();
 
-  const paths = authors.map((author) => ({
-    params: {
-      single: author.slug,
-    },
-    props: {
-      author,
-      isPayload: true,
-      contentHtml: author.contentHtml,
-    },
-  }));
-  return paths;
+  return authors
+    .filter((author) => Boolean(author?.slug))
+    .map((author) => ({
+      params: {
+        single: author.slug,
+      },
+    }));
 }
 
-const { author, isPayload, contentHtml } = Astro.props as {
-  author: any;
+type Props = {
+  author?: any;
   isPayload?: boolean;
   contentHtml?: string;
 };
-const { title, image } = author.data;
+
+const slug = Astro.params.single;
+
+const initialProps = Astro.props as Props;
+
+let author = initialProps.author;
+let isPayload = initialProps.isPayload ?? true;
+let contentHtml = initialProps.contentHtml;
+
+// Resolve autor pelo slug (fallback quando não vier via props)
+if (!author?.slug || author.slug !== slug) {
+  try {
+    const authors = await getPayloadAuthors();
+    author = authors.find((a) => a?.slug === slug);
+    contentHtml = author?.contentHtml;
+  } catch (error) {
+    console.error(`Failed to fetch author by slug "${slug}":`, error);
+  }
+}
+
+if (!author?.slug) {
+  return Astro.redirect("/blog");
+}
+
+const { title, image } = author.data ?? {};
 const posts = await getPayloadPostsByAuthorSlug(author.slug);
 ---
 
-<Base title={title}>
+<Base title={title || "Autor"} theme="dark">
   <AuthorSingle
     author={author}
     posts={posts}

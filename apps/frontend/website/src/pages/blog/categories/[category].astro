@@ -30,7 +30,7 @@ const categoryObj = await getPayloadCategoryBySlug(category as string);
 const totalPages = Math.ceil(posts.length / pagination);
 ---
 
-<Base title={categoryObj?.data.title || category}>
+<Base title={categoryObj?.data.title || category} theme="dark">
   <!-- Banner -->
   <section
     class="banner"
