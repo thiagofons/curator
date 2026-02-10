@@ -1,0 +1,42 @@
+apiVersion: skaffold/v4beta3
+kind: Config
+metadata:
+  name: curator
+build:
+  local:
+    push: false
+  artifacts:
+    - image: curator/backend/cms-service
+      context: .
+      docker:
+        dockerfile: apps/backend/cms-service/Dockerfile
+      sync:
+        manual:
+          - src: "apps/backend/cms-service/**/*.ts"
+            dest: .
+          - src: "apps/backend/cms-service/**/*.tsx"
+            dest: .
+          - src: "apps/backend/cms-service/package.json"
+            dest: .
+
+manifests:
+  kustomize:
+    paths:
+      - k8s/overlays/local
+
+deploy:
+  kubectl: {}
+
+portForward:
+  # Abre o CMS automaticamente em localhost:3000
+  - resourceType: service
+    resourceName: cms-service
+    namespace: core
+    port: 3000
+    localPort: 3000
+  # Abre o Postgres em localhost:5432 (útil para o seu pnpm db:push local)
+  - resourceType: service
+    resourceName: cms-db
+    namespace: core
+    port: 5432
+    localPort: 5432
