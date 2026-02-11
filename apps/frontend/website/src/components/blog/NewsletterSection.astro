@@ -1,0 +1,35 @@
+---
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import { Button } from "@repo/ui-web/components/base/button.jsx";
+import {
+  H3,
+  SubheadingMD,
+} from "@repo/ui-web/components/custom/typography.jsx";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<div
+  class="border-primary bg-background flex flex-col items-start justify-between gap-6 rounded-2xl border-2 p-8 md:flex-row md:items-center"
+>
+  <div class="flex flex-col gap-1">
+    <H3>{t("blog.newsletter.title")}</H3>
+    <SubheadingMD color="muted-foreground">
+      {t("blog.newsletter.subtitle")}
+    </SubheadingMD>
+  </div>
+
+  <form
+    class="flex w-full items-center gap-3 md:w-auto"
+    onsubmit="event.preventDefault()"
+  >
+    <input
+      type="email"
+      placeholder={t("blog.newsletter.email_placeholder")}
+      class="border-border bg-muted text-foreground placeholder:text-muted-foreground focus:ring-primary w-full rounded-lg border px-4 py-2.5 text-sm outline-none focus:ring-2 md:w-64"
+      required
+    />
+    <Button type="submit" client:load>{t("blog.newsletter.cta")}</Button>
+  </form>
+</div>

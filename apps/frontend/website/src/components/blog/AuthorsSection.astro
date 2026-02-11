@@ -1,0 +1,79 @@
+---
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import type { AdaptedAuthor } from "@/lib/payload";
+import { Button } from "@repo/ui-web/components/base/button.jsx";
+import {
+  BodySmall,
+  H2,
+  SubheadingLG,
+  SubheadingMD,
+} from "@repo/ui-web/components/custom/typography.jsx";
+import { Github } from "lucide-react";
+
+type Props = {
+  authors: AdaptedAuthor[];
+};
+
+const { authors } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<section class="mx-auto flex w-full max-w-225 flex-col gap-9 p-4 md:p-12">
+  <div class="flex flex-col items-center gap-2 md:items-start">
+    <H2>{t("blog.authors.title")}</H2>
+    <SubheadingMD color="muted-foreground">
+      {t("blog.authors.subtitle")}
+    </SubheadingMD>
+  </div>
+
+  <div class="flex flex-col gap-6">
+    {
+      authors.map((author) => (
+        <div class="border-border flex flex-col items-center gap-6 rounded-2xl border p-6 md:flex-row md:items-start">
+          {author.data.image ? (
+            <img
+              src={author.data.image}
+              alt={author.data.title}
+              width={80}
+              height={80}
+              class="h-20 w-20 flex-shrink-0 rounded-full object-cover"
+            />
+          ) : (
+            <div class="bg-muted h-20 w-20 flex-shrink-0 rounded-full" />
+          )}
+
+          <div class="flex flex-1 flex-col gap-3">
+            <div class="flex items-center gap-3">
+              <SubheadingLG color="foreground">{author.data.title}</SubheadingLG>
+              <a
+                href={`https://github.com`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-muted-foreground hover:text-primary transition-colors"
+                aria-label={`GitHub de ${author.data.title}`}
+              >
+                <Github size={20} />
+              </a>
+            </div>
+
+            {author.contentHtml && (
+              <BodySmall color="muted-foreground">
+                <Fragment set:html={author.contentHtml} />
+              </BodySmall>
+            )}
+
+            <div>
+              <a href={`/blog/authors/${author.slug}`}>
+                <Button variant="ghost" size="sm" client:load>
+                  {t("blog.authors.learn_more")}
+                </Button>
+              </a>
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>

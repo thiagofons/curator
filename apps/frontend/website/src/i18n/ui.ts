@@ -161,6 +161,32 @@ export const ui = {
     "get_started.form.error_message":
       "Ops! Algo deu errado ao enviar o formulário. Por favor, tente novamente mais tarde.",
 
+    // Blog - Index
+    "blog.hero.badge": "Novo",
+    "blog.hero.cta": "Confira",
+    "blog.hero.author_prefix": "por",
+    "blog.posts.title": "Últimos posts",
+    "blog.posts.subtitle": "Confira o que tem de novo",
+
+    // Blog - Post card
+    "blog.post.badge": "Novo",
+    "blog.post.author_prefix": "por",
+
+    // Blog - Newsletter
+    "blog.newsletter.title": "Gosta dos nossos posts?",
+    "blog.newsletter.subtitle": "Inscreva-se na nossa newsletter",
+    "blog.newsletter.email_placeholder": "Email",
+    "blog.newsletter.cta": "Inscrever-se",
+
+    // Blog - Themes
+    "blog.themes.title": "Explorar por Temas",
+    "blog.themes.subtitle": "Confira o que tem de novo",
+
+    // Blog - Authors
+    "blog.authors.title": "Autores",
+    "blog.authors.subtitle": "Conheça melhor quem escreve no nosso posts",
+    "blog.authors.learn_more": "Saiba mais",
+
     // Nav
     "nav.home": "Início",
     "nav.open_source": "Open Source",

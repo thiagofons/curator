@@ -1,55 +1,103 @@
 ---
+import AuthorsSection from "@/components/blog/AuthorsSection.astro";
+import NewsletterSection from "@/components/blog/NewsletterSection.astro";
 import Pagination from "@/components/blog/Pagination.astro";
 import Post from "@/components/blog/Post.astro";
+import ThemesSection from "@/components/blog/ThemesSection.astro";
+import CTA from "@/components/common/CTA.astro";
 import { settings } from "@/config/config.json";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 import Base from "@/layouts/Base.astro";
-import { getPayloadPosts } from "@/lib/payload";
+import {
+  getPayloadAuthors,
+  getPayloadCategories,
+  getPayloadPosts,
+} from "@/lib/payload";
 import { sortByDate } from "@/lib/utils/sortFunctions";
+import { Button } from "@repo/ui-web/components/base/button.jsx";
+import {
+  ButtonText,
+  Display,
+  H2,
+  SubheadingMD,
+  SubheadingSM,
+  SubheadingXL,
+} from "@repo/ui-web/components/custom/typography.jsx";
 
-// All blog content is sourced from Payload CMS
-const posts = await getPayloadPosts();
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const [posts, categories, authors] = await Promise.all([
+  getPayloadPosts(),
+  getPayloadCategories(),
+  getPayloadAuthors(),
+]);
 
 const sortPostByDate = sortByDate(posts);
 const totalPages = Math.ceil(posts.length / settings.pagination);
+
+const coverPost = sortPostByDate[0];
 ---
 
 <Base theme="dark">
-  <!-- Banner
-  <section
-    class="banner"
-    style="background-image: url('/images/banner/banner-bg.svg')"
-  >
-    <div class="container">
-      <div class="row text-center">
-        <div class="">
-          {
-            banner?.title && (
-              <h1 set:html={markdownify(banner?.title)} class="h2 mb-8" />
-            )
-          }
-        </div>
-      </div>
-
-    </div>
-  </section>
-  /End Banner -->
-
-  <!-- Blogs -->
-  <section class="section">
-    <div class="container">
-      <div class="row px-3">
-        <div class="mx-auto px-0 lg:col-8">
-          <div class="rounded px-9 py-12 shadow md:p-[60px]">
-            {
-              sortPostByDate
-                .slice(0, settings.pagination)
-                .map((post) => <Post post={post} />)
-            }
-            <Pagination currentPage={1} totalPages={totalPages} />
+  <!-- Hero: Featured Post -->
+  <section class="flex min-h-screen items-end">
+    <div
+      class="relative mx-auto flex w-full max-w-225 flex-col items-start gap-5 p-4 md:p-12"
+    >
+      <div class="flex max-w-200 flex-col gap-4">
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center gap-2">
+            <div
+              class="bg-primary flex items-center justify-center rounded-full px-4 py-1"
+            >
+              <ButtonText color="white">{t("blog.hero.badge")}</ButtonText>
+            </div>
           </div>
+          <Display>{coverPost.data.title}</Display>
+          <SubheadingSM color="muted-foreground">
+            {t("blog.hero.author_prefix")}{" "}
+            {coverPost.data.authors.map((author: string) => author).join(", ")}
+          </SubheadingSM>
         </div>
+
+        <SubheadingXL color="gray-lighter">
+          {coverPost.data.description}
+        </SubheadingXL>
       </div>
+      <a href={`/blog/posts/${coverPost.id}`}>
+        <Button>{t("blog.hero.cta")}</Button>
+      </a>
     </div>
   </section>
-  <!-- /End Blogs -->
+
+  <!-- Latest Posts -->
+  <section class="mx-auto flex w-full max-w-225 flex-col gap-9 p-4 md:p-12">
+    <div class="flex flex-col items-center gap-2 md:items-start">
+      <H2>{t("blog.posts.title")}</H2>
+      <SubheadingMD color="muted-foreground">{t("blog.posts.subtitle")}</SubheadingMD>
+    </div>
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+      {
+        sortPostByDate
+          .slice(0, settings.pagination)
+          .map((post) => <Post post={post} />)
+      }
+      <Pagination currentPage={1} totalPages={totalPages} />
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="mx-auto w-full max-w-225 p-4 md:p-12">
+    <NewsletterSection />
+  </section>
+
+  <!-- Explore by Themes -->
+  {categories.length > 0 && <ThemesSection categories={categories} />}
+
+  <!-- Authors -->
+  {authors.length > 0 && <AuthorsSection authors={authors} />}
+
+  <!-- CTA -->
+  <CTA />
 </Base>

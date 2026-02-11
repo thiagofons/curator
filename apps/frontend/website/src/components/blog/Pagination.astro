@@ -1,20 +1,22 @@
 ---
-const { section, currentPage, totalPages } = Astro.props
+const { section, currentPage, totalPages } = Astro.props;
 
-const indexPageLink = currentPage === 2
-const hasPrevPage = currentPage > 1
-const hasNextPage = totalPages > currentPage
+const indexPageLink = currentPage === 2;
+const hasPrevPage = currentPage > 1;
+const hasNextPage = totalPages > currentPage;
 
-const pageList = []
+const pageList: number[] = [];
 for (let i = 1; i <= totalPages; i++) {
-  pageList.push(i)
+  pageList.push(i);
 }
 ---
 
 {
   totalPages > 1 && (
-    <nav class="mb-4 flex justify-center space-x-2" aria-label="Pagination">
-      {/* previous */}
+    <nav
+      class="col-span-2 flex justify-center gap-1 py-4"
+      aria-label="Pagination"
+    >
       {hasPrevPage && (
         <a
           href={
@@ -22,11 +24,11 @@ for (let i = 1; i <= totalPages; i++) {
               ? `${section ? "/" + section : "/"}`
               : `${section ? "/" + section : ""}/page/${currentPage - 1}`
           }
-          class="rounded px-2 py-2 text-text transition-all duration-200 hover:bg-primary hover:text-body"
+          class="border-border text-muted-foreground hover:bg-primary hover:text-primary-foreground flex h-9 w-9 items-center justify-center rounded-full border transition-colors duration-200"
+          aria-label="Página anterior"
         >
-          <span class="sr-only">Anterior</span>
           <svg
-            class="mt-1 h-5 w-5"
+            class="h-4 w-4"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             fill="currentColor"
@@ -41,12 +43,11 @@ for (let i = 1; i <= totalPages; i++) {
         </a>
       )}
 
-      {/* page index */}
       {pageList.map((pagination, i) =>
         pagination === currentPage ? (
           <span
             aria-current="page"
-            class={`rounded bg-primary px-4 py-2 text-white`}
+            class="bg-primary text-primary-foreground flex h-9 w-9 items-center justify-center rounded-full text-sm font-medium"
           >
             {pagination}
           </span>
@@ -57,23 +58,21 @@ for (let i = 1; i <= totalPages; i++) {
                 ? `${section ? "/" + section : "/"}`
                 : `${section ? "/" + section : ""}/page/${pagination}`
             }
-            aria-current="page"
-            class={`rounded px-4 py-2 text-text transition-all duration-200 hover:bg-primary hover:text-body`}
+            class="border-border text-muted-foreground hover:bg-primary hover:text-primary-foreground flex h-9 w-9 items-center justify-center rounded-full border text-sm transition-colors duration-200"
           >
             {pagination}
           </a>
-        )
+        ),
       )}
 
-      {/* next page */}
       {hasNextPage && (
         <a
           href={`${section ? "/" + section : ""}/page/${currentPage + 1}`}
-          class="rounded px-2 py-2 text-text transition-all duration-200 hover:bg-primary hover:text-body"
+          class="border-border text-muted-foreground hover:bg-primary hover:text-primary-foreground flex h-9 w-9 items-center justify-center rounded-full border transition-colors duration-200"
+          aria-label="Próxima página"
         >
-          <span class="sr-only">Próximo</span>
           <svg
-            class="mt-1 h-5 w-5"
+            class="h-4 w-4"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             fill="currentColor"

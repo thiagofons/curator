@@ -1,0 +1,52 @@
+---
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import type { AdaptedCategory } from "@/lib/payload";
+import {
+  BodySmall,
+  H2,
+  SubheadingMD,
+  SubheadingSM,
+} from "@repo/ui-web/components/custom/typography.jsx";
+
+type Props = {
+  categories: AdaptedCategory[];
+};
+
+const { categories } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<section class="mx-auto flex w-full max-w-225 flex-col gap-9 p-4 md:p-12">
+  <div class="flex flex-col items-center gap-2 md:items-start">
+    <H2>{t("blog.themes.title")}</H2>
+    <SubheadingMD color="muted-foreground">{t("blog.themes.subtitle")}</SubheadingMD>
+  </div>
+
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+    {
+      categories.map((category) => (
+        <a
+          href={`/blog/categories/${category.slug}`}
+          class="border-border hover:border-primary group relative overflow-hidden rounded-2xl border-2 transition-colors duration-200"
+        >
+          <div class="bg-muted aspect-445/230 w-full" />
+
+          <div class="absolute inset-x-0 bottom-0 flex flex-col gap-2 bg-linear-to-t from-black to-transparent p-4 pt-12">
+            <div class="w-fit">
+              <span class="border-primary group-hover:bg-primary group-hover:text-primary-foreground inline-flex items-center rounded-full border px-3 py-1 transition-colors duration-200">
+                <SubheadingSM color="white">{category.data.title}</SubheadingSM>
+              </span>
+            </div>
+            {category.contentHtml && (
+              <BodySmall color="white" className="line-clamp-2 opacity-80">
+                <Fragment set:html={category.contentHtml} />
+              </BodySmall>
+            )}
+          </div>
+        </a>
+      ))
+    }
+  </div>
+</section>

@@ -1,94 +1,93 @@
 ---
-import { Image } from "astro:assets"
-import { getSinglePage } from "@/lib/contentParser.astro"
-import dateFormat from "@/lib/utils/dateFormat"
-import { humanize, plainify, slugify } from "@/lib/utils/textConverter"
-
-// (no explicit CollectionEntry typing to allow remote CMS data)
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import {
+  BodySmall,
+  ButtonText,
+  H3,
+  SubheadingXS,
+} from "@repo/ui-web/components/custom/typography.jsx";
 
 type Props = {
-  post: any
-}
+  post: any;
+};
 
-const authors = await getSinglePage("authors")
-const { post } = Astro.props
+const { post } = Astro.props;
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
-<div class="card mb-12 border-b border-border pb-8">
-  {
-    post.data.image && (
-      <Image
-        src={post.data.image}
-        alt={post.data.title}
-        width={445}
-        height={230}
-        format="webp"
-        class="rounded"
-      />
-    )
-  }
+<a
+  href={`/blog/posts/${post.id}`}
+  class="border-primary hover:border-primary/60 group grid h-full grid-cols-1 grid-rows-[auto_1fr] overflow-hidden rounded-2xl border-2 transition-colors duration-200"
+>
+  <div class="overflow-hidden">
+    {
+      post.data.image ? (
+        <img
+          src={post.data.image}
+          alt={post.data.title}
+          width={445}
+          height={230}
+          class="aspect-445/230 w-full object-cover"
+        />
+      ) : (
+        <div class="bg-muted aspect-445/230 w-full" />
+      )
+    }
+  </div>
 
-  <h3 class="h4 mt-4">
-    <a
-      href={`/blog/posts/${post.id}`}
-      class="block font-normal text-primary hover:underline"
-    >
-      {post.data.title}
-    </a>
-  </h3>
-  <ul class="mb-4 mt-1.5 flex flex-wrap items-center space-x-3 text-text-light">
-    <li>
-      {
-        post.data.authorSlugs && post.data.authorSlugs.length > 0
-          ? post.data.authors.map((name: string, i: number) => (
-              <a
-                href={`/blog/authors/${post.data.authorSlugs![i] || post.data.authorSlugs![0]}`}
-                class="flex items-center hover:text-primary hover:underline"
+  <div class="flex flex-col gap-4 p-4">
+    <div class="flex flex-col gap-2.5">
+      <div class="flex flex-col gap-1">
+        <div class="flex w-full items-start justify-between gap-2">
+          <div class="flex flex-col gap-1">
+            <div class="flex items-center gap-2">
+              <div
+                class="bg-primary flex items-center justify-center rounded-full px-3 py-0.5"
               >
-                <span>{name}</span>
-              </a>
+                <ButtonText color="white">{t("blog.post.badge")}</ButtonText>
+              </div>
+            </div>
+            <H3 color="foreground" className="line-clamp-2 group-hover:text-primary transition-colors">
+              {post.data.title}
+            </H3>
+          </div>
+        </div>
+
+        <SubheadingXS color="muted-foreground">
+          {
+            post.data.authors.map((name: string) => (
+              <span>
+                {t("blog.post.author_prefix")} {name}
+              </span>
             ))
-          : authors
-              .filter((author) =>
-                post.data.authors
-                  .map((author: string) => slugify(author))
-                  .includes(slugify(author.data.title))
-              )
-              .map((author) => (
-                <a
-                  href={`/blog/authors/${slugify(author.data.title)}`}
-                  class="flex items-center hover:text-primary hover:underline"
-                >
-                  <span>{author.data.title}</span>
-                </a>
-              ))
-      }
-    </li>
-    <li>{dateFormat(post.data.date!)}</li>
-    <li>
-      <ul>
-        {
-          post.data.categories.map((category: string, i: number) => (
-            <li class="inline-block">
-              <a
-                href={`/blog/categories/${post.data.categorySlugs?.[i] || slugify(category)}`}
-                class="mr-3 hover:text-primary hover:underline"
+          }
+        </SubheadingXS>
+      </div>
+
+      {
+        post.data.categories && post.data.categories.length > 0 && (
+          <div class="flex flex-wrap gap-2">
+            {post.data.categories.map((category: string, i: number) => (
+              <span
+                class="text-foreground border-primary flex items-center justify-center rounded-full border px-3 py-0.5"
+                onclick={(e: MouseEvent) => e.preventDefault()}
               >
-                {humanize(category)}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </li>
-  </ul>
-  {
-    post.body && (
-      <p class="text-lg text-text line-clamp-2">{plainify(post.body)}</p>
-    )
-  }
-  <a
-    class="mt-3 inline-block border-b border-primary py-1 text-[15px] leading-[22px] text-primary"
-    href={`/blog/posts/${post.id}`}>Ler Mais</a
-  >
-</div>
+                <BodySmall>{category}</BodySmall>
+              </span>
+            ))}
+          </div>
+        )
+      }
+    </div>
+
+    {
+      post.body && (
+        <BodySmall color="muted-foreground" className="line-clamp-3">
+          {post.body}
+        </BodySmall>
+      )
+    }
+  </div>
+</a>

@@ -29,7 +29,7 @@ const typographyVariants = cva(
 
         // --- Heading ---
         /** Secondary heading - major page sections */
-        "heading-h2": "text-heading-h2 font-semibold tracking-tight",
+        "heading-h2": "text-heading-h2 font-medium tracking-tight",
         /** Tertiary heading - subsections */
         "heading-h3": "text-heading-h3 font-medium",
         /** Quaternary heading - minor subsections */
@@ -174,11 +174,11 @@ export const Typography = ({
  */
 export const Display = ({
   as = "h1",
-  color = "black",
+  color = "foreground",
   ...props
-}: TypographyProps) => (
-  <Typography variant="display-h1" as={as} color={color} {...props} />
-);
+}: TypographyProps) => {
+  return <Typography variant="display-h1" as={as} color={color} {...props} />;
+};
 
 /**
  * Secondary heading component for major page sections.
@@ -189,7 +189,7 @@ export const Display = ({
  */
 export const H2 = ({
   as = "h2",
-  color = "black",
+  color = "foreground",
   ...props
 }: TypographyProps) => (
   <Typography variant="heading-h2" as={as} color={color} {...props} />
@@ -267,7 +267,7 @@ export const SubheadingLG = ({
  */
 export const SubheadingMD = ({
   as = "p",
-  color = "secondary",
+  color = "foreground",
   ...props
 }: TypographyProps) => (
   <Typography variant="subheading-md" as={as} color={color} {...props} />
