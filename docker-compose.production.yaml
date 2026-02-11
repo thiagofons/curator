@@ -1,64 +1,107 @@
+# =============================================================================
+# Curator — Production
+# =============================================================================
+# Port Map (host:container)
+#   Web:         Nginx 80/443
+#   Apps:        CMS 3000 | API 3300          (internal only)
+#   Infra:       Redis 6379                    (internal only)
+#   Monitoring:  Prometheus 9090 | Grafana 9091 (internal only)
+#
+# Databases are managed externally — set DATABASE_URL / DATABASE_URI
+# in .env.production to point to your managed PostgreSQL instances.
+# =============================================================================
+
 services:
-  # >>> API <<<
+  # >>> NGINX — Reverse Proxy (ports 80/443) <<<
+  nginx:
+    container_name: nginx-gateway
+    image: nginx:alpine
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx:/etc/nginx/custom:ro
+      - nginx_logs:/var/log/nginx
+    command:
+      ["nginx", "-c", "/etc/nginx/custom/nginx.conf", "-g", "daemon off;"]
+    depends_on:
+      - api
+      - cms-service
+    networks:
+      - curator-net
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    profiles: ["all", "core", "blog"]
+
+  # >>> API (port 3300) <<<
   api:
     container_name: api
     build:
       context: .
       dockerfile: ./apps/backend/api/Dockerfile
-      target: runner
+      target: production
     restart: always
     env_file:
-      - ./apps/backend/api/.env
-    ports:
-      - "3300:3300"
+      - .env.production
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: ${API_DATABASE_URL}
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
+    expose:
+      - "3300"
     networks:
       - curator-net
     depends_on:
-      api-db:
-        condition: service_healthy
       redis:
         condition: service_healthy
-    profiles: ["all", "core"]
-
-  api-db:
-    container_name: api-db
-    image: postgres:15-alpine
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${API_DB}
-    env_file:
-      - .env.production
-    volumes:
-      - api_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${API_DB}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - curator-net
-    restart: always
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost:3300/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
     profiles: ["all", "core"]
 
-  redis:
-    container_name: infra-redis
-    image: redis:7-alpine
-    env_file:
-      - .env.production
-    volumes:
-      - redis_data:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    restart: always
-    networks:
-      - curator-net
-    profiles: ["all", "core"]
-
-  # >>> CMS <<<
+  # >>> CMS (port 3000) <<<
   cms-service:
     container_name: cms-service
     build:
@@ -69,49 +112,139 @@ services:
     env_file:
       - .env.production
     environment:
-      DATABASE_URI: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@cms-db:5432/${BLOGCMS_DB}
+      NODE_ENV: production
+      DATABASE_URI: ${CMS_DATABASE_URL}
       PAYLOAD_SECRET: ${PAYLOAD_SECRET}
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     networks:
       - curator-net
-    depends_on:
-      cms-db:
-        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost:3000/health",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
     profiles: ["all", "blog"]
 
-  cms-db:
-    container_name: cms-db
-    image: postgres:15-alpine
+  # >>> INFRASTRUCTURE <<<
+  redis:
+    container_name: infra-redis
+    image: redis:7-alpine
+    restart: always
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${BLOGCMS_DB}
-    env_file:
-      - .env.production
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
     volumes:
-      - cms_data:/var/lib/postgresql/data
+      - redis_data:/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${BLOGCMS_DB}"]
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
     networks:
       - curator-net
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    profiles: ["all", "core"]
+
+  # >>> MONITORING (port 9xxx) <<<
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
     restart: always
-    profiles: ["all", "blog"]
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=30d"
+    expose:
+      - "9090"
+    networks:
+      - curator-net
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+    profiles: ["monitoring"]
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    restart: always
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
+      GF_SERVER_HTTP_PORT: "9091"
+      GF_INSTALL_PLUGINS: grafana-clock-panel
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    expose:
+      - "9091"
+    networks:
+      - curator-net
+    depends_on:
+      - prometheus
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+    profiles: ["monitoring"]
 
 volumes:
-  api_data:
-    name: api_prod_data
-    driver: local
-  cms_data:
-    name: cms_prod_data
-    driver: local
   redis_data:
     name: redis_prod_data
+    driver: local
+  prometheus_data:
+    name: prometheus_data
+    driver: local
+  grafana_data:
+    name: grafana_data
+    driver: local
+  nginx_logs:
+    name: nginx_logs
     driver: local
 
 networks:
   curator-net:
     driver: bridge
+    name: curator-network
