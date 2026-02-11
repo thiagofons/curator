@@ -16,6 +16,7 @@ const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
 export default buildConfig({
+  serverURL: process.env.PAYLOAD_SERVER_URL || "http://localhost:3000",
   admin: {
     user: Users.slug,
     importMap: {
@@ -24,12 +25,15 @@ export default buildConfig({
   },
   cors: [
     "http://localhost:3000",
-    "http://localhost:4003",
     "http://cms.curator.local",
     "https://cms.curator.com.br",
     "https://curator.com.br",
   ],
-  csrf: ["http://localhost:4003", "http://cms.curator.local"],
+  csrf: [
+    "http://localhost:3000",
+    "http://cms.curator.local",
+    "https://cms.curator.com.br",
+  ],
   collections: [Users, Media, Authors, Categories, Posts],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
