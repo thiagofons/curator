@@ -1,17 +1,13 @@
-import { ApiGatewayModule } from "@/api-gateway.module";
 import { NestFactory } from "@nestjs/core";
-import { EnvService } from "./infrastructure/config/env";
+import { AppModule } from "./app.module";
 
 async function bootstrap() {
-  const app = await NestFactory.create(ApiGatewayModule, {
-    cors: true,
-  });
+  const app = await NestFactory.create(AppModule);
 
-  const envService = app.get(EnvService);
+  const port = process.env.API_PORT ?? 3300;
 
-  const port = envService.get("PORT");
   await app.listen(port);
 
-  console.log(`🚀 Application is running on: http://localhost:${port}`);
+  console.log(`API is running on port ${port}`);
 }
 bootstrap();

@@ -1,20 +1,10 @@
 # =============================================================================
 # Curator — Production
 # =============================================================================
-# Port Map (host:container)
-#   Web:         Nginx 80/443
-#   Apps:        CMS 3000 | API 3300          (internal only)
-#   Infra:       Redis 6379                    (internal only)
-#   Monitoring:  Prometheus 9090 | Grafana 9091 (internal only)
-#
-# Databases are managed externally — set DATABASE_URL / DATABASE_URI
-# in .env.production to point to your managed PostgreSQL instances.
-# =============================================================================
-
 services:
   # >>> NGINX — Reverse Proxy (ports 80/443) <<<
   nginx:
-    container_name: nginx-gateway
+    container_name: nginx
     image: nginx:alpine
     restart: always
     ports:
@@ -113,7 +103,7 @@ services:
       - .env.production
     environment:
       NODE_ENV: production
-      DATABASE_URI: ${CMS_DATABASE_URL}
+      CMS_DATABASE_URL: ${CMS_DATABASE_URL}
       PAYLOAD_SECRET: ${PAYLOAD_SECRET}
     expose:
       - "3000"

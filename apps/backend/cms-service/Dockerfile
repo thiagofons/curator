@@ -3,8 +3,7 @@ FROM node:22.17.0-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN apk add --no-cache libc6-compat && \
-    corepack enable && \
-    pnpm install turbo --global
+    npm install -g pnpm@9.5.0 turbo
 
 # STAGE 2: Pruner
 FROM base AS pruner
@@ -46,28 +45,22 @@ ENV NEXT_TELEMETRY_DISABLED 1
 EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
-CMD ["pnpm", "dev", "--filter=@backend/cms-service"]
+CMD ["sh", "-c", "pnpm --filter=@backend/cms-service db:push && pnpm dev --filter=@backend/cms-service"]
 
 # --- TARGET: RUNNER ---
 FROM base AS runner
 WORKDIR /app
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
 
-# Copia o standalone e static normalmente
-COPY --from=builder --chown=nextjs:nodejs /app/apps/backend/cms-service/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/apps/backend/cms-service/.next/static ./apps/backend/cms-service/.next/static
-
-# Usa o wildcard para evitar erro de "file does not exist"
-COPY --from=builder --chown=nextjs:nodejs /app/apps/backend/cms-service/public* ./apps/backend/cms-service/public/
+COPY --from=builder --chown=nextjs:nodejs /app ./
 
 USER nextjs
 EXPOSE 3000
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
-# O Next.js Standalone organiza os arquivos mantendo a estrutura do monorepo
-CMD ["node", "apps/backend/cms-service/server.js"]
+CMD ["sh", "-c", "pnpm --filter=@backend/cms-service db:push && pnpm --filter=@backend/cms-service start"]

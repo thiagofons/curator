@@ -23,17 +23,14 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  cors: [
-    "http://localhost:3000",
-    "http://cms.curator.local",
-    "https://cms.curator.com.br",
-    "https://curator.com.br",
-  ],
-  csrf: [
-    "http://localhost:3000",
-    "http://cms.curator.local",
-    "https://cms.curator.com.br",
-  ],
+  cors:
+    process.env.NODE_ENV === "production"
+      ? ["https://cms.curator.com.br"]
+      : ["http://localhost:3000", "http://localhost:4321"],
+  csrf:
+    process.env.NODE_ENV === "production"
+      ? ["https://cms.curator.com.br"]
+      : ["http://localhost:3000", "http://localhost:4321"],
   collections: [Users, Media, Authors, Categories, Posts],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
@@ -42,7 +39,7 @@ export default buildConfig({
   },
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URI || "",
+      connectionString: process.env.CMS_DATABASE_URL || "",
     },
     push: true,
   }),

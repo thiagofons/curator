@@ -15,7 +15,8 @@
     "FIREBASE_APP_ID",
     "FIREBASE_MEASUREMENT_ID",
     "FIREBASE_SERVICE_ACCOUNT_KEY",
-    "FIREBASE_API_KEY"
+    "FIREBASE_API_KEY",
+    "NODE_ENV"
   ],
   "ui": "tui",
   "tasks": {
@@ -50,10 +51,6 @@
     "docker:build": {
       "cache": true,
       "inputs": ["Dockerfile", "../../package.json", "src/**", "public/**"]
-    },
-    "k8s:deploy": {
-      "dependsOn": ["docker:build"],
-      "cache": false
     },
     "lint": {
       "dependsOn": ["^lint"]
