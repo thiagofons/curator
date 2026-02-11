@@ -22,8 +22,8 @@
     "sonar": "pnpx sonar-scanner"
   },
   "dependencies": {
-    "@payloadcms/db-postgres": "catalog:payload",
-    "@payloadcms/next": "catalog:payload",
+    "@payloadcms/db-postgres": "3.73.0",
+    "@payloadcms/next": "3.73.0",
     "@payloadcms/richtext-lexical": "catalog:payload",
     "@payloadcms/translations": "catalog:payload",
     "@payloadcms/ui": "catalog:payload",
@@ -32,7 +32,7 @@
     "dotenv": "catalog:tooling",
     "graphql": "catalog:api",
     "next": "catalog:next16",
-    "payload": "catalog:payload",
+    "payload": "3.74.0",
     "react": "catalog:react19",
     "react-dom": "catalog:react19",
     "sharp": "catalog:ui-libs"
