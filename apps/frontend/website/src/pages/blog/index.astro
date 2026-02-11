@@ -41,41 +41,56 @@ const coverPost = sortPostByDate[0];
 
 <Base theme="dark">
   <!-- Hero: Featured Post -->
-  <section class="flex min-h-screen items-end">
-    <div
-      class="relative mx-auto flex w-full max-w-225 flex-col items-start gap-5 p-4 md:p-12"
-    >
-      <div class="flex max-w-200 flex-col gap-4">
-        <div class="flex flex-col gap-3">
-          <div class="flex items-center gap-2">
-            <div
-              class="bg-primary flex items-center justify-center rounded-full px-4 py-1"
-            >
-              <ButtonText color="white">{t("blog.hero.badge")}</ButtonText>
-            </div>
-          </div>
-          <Display>{coverPost.data.title}</Display>
-          <SubheadingSM color="muted-foreground">
-            {t("blog.hero.author_prefix")}{" "}
-            {coverPost.data.authors.map((author: string) => author).join(", ")}
-          </SubheadingSM>
-        </div>
+  {
+    coverPost && (
+      <section class="relative flex min-h-screen items-end">
+        {coverPost.data.image ? (
+          <img
+            src={coverPost.data.image}
+            alt={coverPost.data.title}
+            class="absolute inset-0 h-full w-full object-cover"
+          />
+        ) : (
+          <div class="bg-muted absolute inset-0" />
+        )}
+        <div class="absolute inset-0 bg-linear-to-t from-black/90 via-black/50 to-transparent" />
 
-        <SubheadingXL color="gray-lighter">
-          {coverPost.data.description}
-        </SubheadingXL>
-      </div>
-      <a href={`/blog/posts/${coverPost.id}`}>
-        <Button>{t("blog.hero.cta")}</Button>
-      </a>
-    </div>
-  </section>
+        <div class="relative mx-auto flex w-full max-w-225 flex-col items-start gap-5 p-4 md:p-12">
+          <div class="flex max-w-200 flex-col gap-4">
+            <div class="flex flex-col gap-3">
+              <div class="flex items-center gap-2">
+                <div class="bg-primary flex items-center justify-center rounded-full px-4 py-1">
+                  <ButtonText color="white">{t("blog.hero.badge")}</ButtonText>
+                </div>
+              </div>
+              <Display color="white">{coverPost.data.title}</Display>
+              <SubheadingSM color="gray-lighter">
+                {t("blog.hero.author_prefix")}{" "}
+                {coverPost.data.authors
+                  .map((author: string) => author)
+                  .join(", ")}
+              </SubheadingSM>
+            </div>
+
+            <SubheadingXL color="gray-lighter">
+              {coverPost.data.description}
+            </SubheadingXL>
+          </div>
+          <a href={`/blog/posts/${coverPost.id}`}>
+            <Button>{t("blog.hero.cta")}</Button>
+          </a>
+        </div>
+      </section>
+    )
+  }
 
   <!-- Latest Posts -->
   <section class="mx-auto flex w-full max-w-225 flex-col gap-9 p-4 md:p-12">
     <div class="flex flex-col items-center gap-2 md:items-start">
       <H2>{t("blog.posts.title")}</H2>
-      <SubheadingMD color="muted-foreground">{t("blog.posts.subtitle")}</SubheadingMD>
+      <SubheadingMD color="muted-foreground"
+        >{t("blog.posts.subtitle")}</SubheadingMD
+      >
     </div>
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
       {

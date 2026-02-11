@@ -39,6 +39,15 @@ export const Posts: CollectionConfig = {
       unique: true,
     },
     {
+      name: "description",
+      type: "textarea",
+      localized: true,
+      required: false,
+      admin: {
+        description: "Short summary shown in post cards and the hero section.",
+      },
+    },
+    {
       name: "body",
       type: "richText",
       localized: true,

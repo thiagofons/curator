@@ -1,0 +1,117 @@
+services:
+  # >>> API <<<
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: ./apps/backend/api/Dockerfile
+      target: runner
+    restart: always
+    env_file:
+      - ./apps/backend/api/.env
+    ports:
+      - "3300:3300"
+    networks:
+      - curator-net
+    depends_on:
+      api-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    profiles: ["all", "core"]
+
+  api-db:
+    container_name: api-db
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${API_DB}
+    env_file:
+      - .env.production
+    volumes:
+      - api_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${API_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - curator-net
+    restart: always
+    profiles: ["all", "core"]
+
+  redis:
+    container_name: infra-redis
+    image: redis:7-alpine
+    env_file:
+      - .env.production
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+    networks:
+      - curator-net
+    profiles: ["all", "core"]
+
+  # >>> CMS <<<
+  cms-service:
+    container_name: cms-service
+    build:
+      context: .
+      dockerfile: ./apps/backend/cms-service/Dockerfile
+      target: runner
+    restart: always
+    env_file:
+      - .env.production
+    environment:
+      DATABASE_URI: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@cms-db:5432/${BLOGCMS_DB}
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET}
+    ports:
+      - "3000:3000"
+    networks:
+      - curator-net
+    depends_on:
+      cms-db:
+        condition: service_healthy
+    profiles: ["all", "blog"]
+
+  cms-db:
+    container_name: cms-db
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${BLOGCMS_DB}
+    env_file:
+      - .env.production
+    volumes:
+      - cms_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${BLOGCMS_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - curator-net
+    restart: always
+    profiles: ["all", "blog"]
+
+volumes:
+  api_data:
+    name: api_prod_data
+    driver: local
+  cms_data:
+    name: cms_prod_data
+    driver: local
+  redis_data:
+    name: redis_prod_data
+    driver: local
+
+networks:
+  curator-net:
+    driver: bridge

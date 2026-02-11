@@ -95,6 +95,9 @@ export function lexicalToHTML(input: any): string {
     if (node.type === "listitem") {
       return `<li>${inner}</li>`;
     }
+    if (node.type === "quote") {
+      return `<blockquote>${inner}</blockquote>`;
+    }
     return inner ? `<div>${inner}</div>` : "";
   };
 

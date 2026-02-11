@@ -1,0 +1,133 @@
+services:
+  # >>> API <<<
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: ./apps/backend/api/Dockerfile
+      target: development
+    restart: unless-stopped
+    env_file:
+      - .env.development
+    ports:
+      - "3300:3300"
+    volumes:
+      - ./apps/backend/api/src:/usr/src/app/apps/backend/api/src
+      - ./packages:/usr/src/app/packages
+      - /usr/src/app/node_modules
+      - /usr/src/app/apps/backend/api/node_modules
+    networks:
+      - curator-net
+    depends_on:
+      api-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: ["pnpm", "dev", "--filter=@backend/api..."]
+    profiles: ["all", "core"]
+
+  api-db:
+    container_name: api-db
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${API_DB}
+    env_file:
+      - .env.development
+    ports:
+      - "5433:5432"
+    volumes:
+      - api_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${API_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - curator-net
+    profiles: ["all", "core"]
+
+  redis:
+    container_name: infra-redis
+    image: redis:7-alpine
+    env_file:
+      - .env.development
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - curator-net
+    profiles: ["all", "core"]
+
+  # >>> CMS <<<
+  cms-service:
+    container_name: cms-service
+    build:
+      context: .
+      dockerfile: ./apps/backend/cms-service/Dockerfile
+      target: development
+    restart: unless-stopped
+    env_file:
+      - .env.development
+    environment:
+      DATABASE_URI: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@cms-db:5432/${BLOGCMS_DB}
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET}
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./apps/backend/cms-service/.env.local:/app/apps/backend/cms-service/.env.local
+      - ./apps/backend/cms-service/src:/app/apps/backend/cms-service/src
+      - ./packages:/app/packages
+      - /app/node_modules
+      - /app/apps/backend/cms-service/node_modules
+    networks:
+      - curator-net
+    depends_on:
+      cms-db:
+        condition: service_healthy
+    profiles: ["all", "blog"]
+
+  cms-db:
+    container_name: cms-db
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${BLOGCMS_DB}
+    env_file:
+      - .env.development
+    ports:
+      - "5432:5432"
+    volumes:
+      - cms_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${BLOGCMS_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - curator-net
+    profiles: ["all", "blog"]
+
+volumes:
+  api_data:
+    name: api_data
+    driver: local
+  cms_data:
+    name: cms_data
+    driver: local
+  redis_data:
+    name: redis_data
+    driver: local
+
+networks:
+  curator-net:
+    driver: bridge

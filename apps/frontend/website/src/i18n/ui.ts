@@ -187,6 +187,12 @@ export const ui = {
     "blog.authors.subtitle": "Conheça melhor quem escreve no nosso posts",
     "blog.authors.learn_more": "Saiba mais",
 
+    // Blog - Post Single
+    "blog.post_single.reading_time_prefix": "Leitura de",
+    "blog.post_single.reading_time_suffix": "min",
+    "blog.post_single.related_posts": "Posts relacionados",
+    "blog.post_single.about_author": "Sobre o Autor",
+
     // Nav
     "nav.home": "Início",
     "nav.open_source": "Open Source",

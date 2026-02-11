@@ -2,6 +2,7 @@
 import PostSingle from "@/components/blog/PostSingle.astro";
 import Base from "@/layouts/Base.astro";
 import {
+  getPayloadAuthorBySlug,
   getPayloadPostBySlug,
   getPayloadPosts,
   type AdaptedPost,
@@ -30,7 +31,6 @@ interface Props {
 
 const slug = Astro.params.single;
 
-// Reaproveita props (se vier), senão busca pelo slug
 let post: AdaptedPost = Astro.props.post;
 
 if (!post?.slug || post.slug !== slug) {
@@ -41,12 +41,22 @@ if (!post?.slug || post.slug !== slug) {
   }
 }
 
-// Validate post exists
 if (!post?.slug) {
   return Astro.redirect("/blog");
 }
 
-const { title, meta_title, description, image, contentHtml } = post;
+// Fetch related posts and author in parallel
+const [allPosts, author] = await Promise.all([
+  getPayloadPosts(),
+  post.data.authorSlugs?.[0]
+    ? getPayloadAuthorBySlug(post.data.authorSlugs[0]).catch(() => null)
+    : Promise.resolve(null),
+]);
+
+const relatedPosts = allPosts.filter((p) => p.slug !== post.slug);
+
+const { title, meta_title, description, image } = post.data;
+const { contentHtml } = post;
 ---
 
 <Base
@@ -56,5 +66,5 @@ const { title, meta_title, description, image, contentHtml } = post;
   image={image}
   theme="dark"
 >
-  <PostSingle {post} {contentHtml} />
+  <PostSingle {post} {contentHtml} {relatedPosts} {author} />
 </Base>

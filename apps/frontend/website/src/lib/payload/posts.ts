@@ -45,6 +45,9 @@ function adapt(doc: any): AdaptedPost {
   const title = pickLocale<string>(doc.title);
   const plain = lexicalToPlainText(body);
   const html = lexicalToHTML(body);
+  const description = doc.description
+    ? String(pickLocale<string>(doc.description) ?? "")
+    : plain.slice(0, 200) || undefined;
 
   const authorObj =
     doc.author && typeof doc.author === "object" ? doc.author : null;
@@ -73,7 +76,7 @@ function adapt(doc: any): AdaptedPost {
     data: {
       title: String(title ?? slug),
       meta_title: String(title ?? slug),
-      description: plain ? plain.slice(0, 200) : undefined,
+      description: description || undefined,
       image: undefined,
       date: created,
       authors: authorsArr,

@@ -233,6 +233,10 @@ export interface Post {
   author?: (number | null) | Author;
   title: string;
   slug: string;
+  /**
+   * Short summary shown in post cards and the hero section.
+   */
+  description?: string | null;
   body?: {
     root: {
       type: string;
@@ -409,6 +413,7 @@ export interface PostsSelect<T extends boolean = true> {
   author?: T;
   title?: T;
   slug?: T;
+  description?: T;
   body?: T;
   updatedAt?: T;
   createdAt?: T;

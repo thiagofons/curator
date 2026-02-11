@@ -35,6 +35,19 @@ RUN mkdir -p apps/backend/cms-service/public
 
 ENV NEXT_TELEMETRY_DISABLED 1
 RUN turbo run build --filter=@backend/cms-service...
+
+# --- TARGET: DEVELOPMENT ---
+FROM deps AS development
+WORKDIR /app
+COPY --from=pruner /app/out/full/ .
+RUN mkdir -p apps/backend/cms-service/public
+ENV NODE_ENV development
+ENV NEXT_TELEMETRY_DISABLED 1
+EXPOSE 3000
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
+CMD ["pnpm", "dev", "--filter=@backend/cms-service"]
+
 # --- TARGET: RUNNER ---
 FROM base AS runner
 WORKDIR /app

@@ -1,104 +1,316 @@
 ---
-import { getSinglePage } from "@/lib/contentParser.astro";
-import dateFormat from "@/lib/utils/dateFormat";
-import { humanize, markdownify, slugify } from "@/lib/utils/textConverter";
-import { Image } from "astro:assets";
-import type { CollectionEntry } from "astro:content";
-import { render } from "astro:content";
-import Share from "./Share.astro";
+import CTA from "@/components/common/CTA.astro";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import type { AdaptedAuthor, AdaptedPost } from "@/lib/payload";
+import { Button } from "@repo/ui-web/components/base/button.jsx";
+import {
+  BodySmall,
+  ButtonText,
+  Display,
+  H2,
+  H3,
+  SubheadingLG,
+  SubheadingSM,
+  SubheadingXL,
+  SubheadingXS,
+} from "@repo/ui-web/components/custom/typography.jsx";
+import { Github } from "lucide-react";
+import NewsletterSection from "./NewsletterSection.astro";
 
 type Props = {
-  post: any;
-  isPayload?: boolean;
+  post: AdaptedPost;
   contentHtml?: string;
+  relatedPosts?: AdaptedPost[];
+  author?: AdaptedAuthor | null;
 };
 
-const allAuthors = await getSinglePage("authors");
-const { post, isPayload = false, contentHtml = "" } = Astro.props as Props;
+const { post, contentHtml = "", relatedPosts = [], author } = Astro.props;
 
-let Content: any = null;
-if (!isPayload) {
-  const rendered = await render(post as CollectionEntry<"posts">);
-  Content = rendered.Content;
-}
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
-const { title, authors = [], categories = [], image, date } = post.data || {};
+const wordCount = (post.body ?? "").split(/\s+/).filter(Boolean).length;
+const readingTime = Math.max(1, Math.round(wordCount / 200));
+
+const {
+  title,
+  description,
+  image,
+  authors = [],
+  authorSlugs = [],
+  categories = [],
+  categorySlugs = [],
+} = post.data;
 ---
 
-<section class="section">
-  <div class="container">
-    <div class="row px-3">
-      <div class="mx-auto lg:col-8">
-        <div class="rounded-xl px-9 py-12 shadow md:p-[60px]">
-          <article>
-            <h1 set:html={markdownify(title)} class="h2" />
-            <ul
-              class="text-text mt-4 mb-8 flex flex-wrap items-center space-x-3"
-            >
-              <li>
-                {
-                  isPayload
-                    ? authors.map((name: string, i: number) => (
-                        <a
-                          href={`/blog/authors/${post.data.authorSlugs?.[i] || post.data.authorSlugs?.[0]}`}
-                          class="hover:text-primary flex items-center hover:underline"
-                        >
-                          <span>{name}</span>
-                        </a>
-                      ))
-                    : allAuthors
-                        .filter((author) =>
-                          authors
-                            .map((author: string) => slugify(author))
-                            .includes(slugify(author.data.title)),
-                        )
-                        .map((author) => (
-                          <a
-                            href={`/blog/authors/${slugify(author.id)}`}
-                            class="hover:text-primary flex items-center hover:underline"
-                          >
-                            <span>{author.data.title}</span>
-                          </a>
-                        ))
-                }
-              </li>
-              <li>{dateFormat(date)}</li>
-              <li>
-                <ul>
-                  {
-                    categories.map((category: string, i: number) => (
-                      <li class="inline-block">
-                        <a
-                          href={`/blog/categories/${post.data.categorySlugs?.[i] || slugify(category)}`}
-                          class="hover:text-primary mr-3 hover:underline"
-                        >
-                          {humanize(category)}
-                        </a>
-                      </li>
-                    ))
-                  }
-                </ul>
-              </li>
-            </ul>
-            {
-              image &&
-                (isPayload ? (
-                  <img src={image} height={500} width={1000} alt={title} />
-                ) : (
-                  <Image src={image} height={500} width={1000} alt={title} />
-                ))
-            }
-            <div class="content mb-16 text-left">
-              {isPayload ? <div set:html={contentHtml} /> : <Content />}
-            </div>
-          </article>
+<!-- Hero -->
+<section class="relative flex min-h-screen items-end">
+  {
+    image ? (
+      <img
+        src={image}
+        alt={title}
+        class="absolute inset-0 h-full w-full object-cover"
+      />
+    ) : (
+      <div class="bg-muted absolute inset-0" />
+    )
+  }
+  <div
+    class="absolute inset-0 bg-linear-to-t from-black/90 via-black/50 to-transparent"
+  >
+  </div>
 
-          <div class="flex items-center">
-            <h5 class="mr-3">Compartilhe :</h5>
-            <Share className="social-icons" title={title} slug={post.id} />
-          </div>
+  <div
+    class="relative mx-auto flex w-full max-w-225 flex-col items-start gap-5 p-4 md:p-12"
+  >
+    <div class="flex max-w-200 flex-col gap-4">
+      <div class="flex flex-col gap-3">
+        <div class="flex flex-wrap items-center gap-2">
+          {
+            categories.slice(0, 1).map((category: string, i: number) => (
+              <a href={`/blog/categories/${categorySlugs[i] ?? category}`}>
+                <div class="bg-primary flex items-center justify-center rounded-full px-4 py-1">
+                  <ButtonText color="white">{category}</ButtonText>
+                </div>
+              </a>
+            ))
+          }
+          <SubheadingXS color="gray-lighter">
+            {t("blog.post_single.reading_time_prefix")}
+            {readingTime}
+            {t("blog.post_single.reading_time_suffix")}
+          </SubheadingXS>
         </div>
+
+        <Display color="white">{title}</Display>
+
+        {
+          authors.length > 0 && (
+            <SubheadingSM color="gray-lighter">
+              {t("blog.post.author_prefix")}{" "}
+              {authors.map((name: string, i: number) => (
+                <a
+                  href={`/blog/authors/${authorSlugs[i] ?? ""}`}
+                  class="hover:text-primary transition-colors"
+                >
+                  {name}
+                </a>
+              ))}
+            </SubheadingSM>
+          )
+        }
       </div>
+
+      {
+        description && (
+          <SubheadingXL color="gray-lighter">{description}</SubheadingXL>
+        )
+      }
     </div>
   </div>
 </section>
+
+<!-- Article -->
+<article class="mx-auto w-full max-w-225 px-4 py-16 md:px-12">
+  <div class="mx-auto max-w-3xl">
+    <!-- Article Content -->
+    <div class="post-content" set:html={contentHtml} />
+  </div>
+</article>
+
+<!-- Newsletter -->
+<section class="mx-auto w-full max-w-225 px-4 pb-12 md:px-12">
+  <NewsletterSection />
+</section>
+
+<!-- Related Posts -->
+{
+  relatedPosts.length > 0 && (
+    <section class="mx-auto flex w-full max-w-225 flex-col gap-9 p-4 md:p-12">
+      <div class="flex flex-col items-center gap-2 md:items-start">
+        <H2>{t("blog.post_single.related_posts")}</H2>
+      </div>
+      <div class="flex flex-col gap-4">
+        {relatedPosts.slice(0, 3).map((relatedPost) => (
+          <a
+            href={`/blog/posts/${relatedPost.slug}`}
+            class="border-border hover:border-primary group flex gap-4 overflow-hidden rounded-2xl border-2 p-3 transition-colors duration-200"
+          >
+            <div class="w-32 shrink-0 overflow-hidden rounded-xl">
+              {relatedPost.data.image ? (
+                <img
+                  src={relatedPost.data.image}
+                  alt={relatedPost.data.title}
+                  width={128}
+                  height={80}
+                  class="aspect-video h-full w-full object-cover"
+                />
+              ) : (
+                <div class="bg-muted aspect-video w-full" />
+              )}
+            </div>
+            <div class="flex flex-1 flex-col gap-2 py-1">
+              <div class="flex items-center gap-2">
+                <div class="bg-primary flex items-center justify-center rounded-full px-3 py-0.5">
+                  <ButtonText color="white">{t("blog.post.badge")}</ButtonText>
+                </div>
+              </div>
+              <H3
+                color="foreground"
+                className="line-clamp-2 group-hover:text-primary transition-colors"
+              >
+                {relatedPost.data.title}
+              </H3>
+              <SubheadingXS color="muted-foreground">
+                {t("blog.post.author_prefix")}{" "}
+                {relatedPost.data.authors.join(", ")}
+              </SubheadingXS>
+              {relatedPost.data.categories &&
+                relatedPost.data.categories.length > 0 && (
+                  <div class="flex flex-wrap gap-1">
+                    {relatedPost.data.categories.map((cat: string) => (
+                      <span class="border-primary text-foreground inline-flex items-center rounded-full border px-2 py-0.5">
+                        <BodySmall>{cat}</BodySmall>
+                      </span>
+                    ))}
+                  </div>
+                )}
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+<!-- About the Author -->
+{
+  author && (
+    <section class="mx-auto flex w-full max-w-225 flex-col gap-9 p-4 md:p-12">
+      <div class="flex flex-col items-center gap-2 md:items-start">
+        <H2>{t("blog.post_single.about_author")}</H2>
+      </div>
+      <div class="border-border flex flex-col items-center gap-6 rounded-2xl border p-6 md:flex-row md:items-start">
+        {author.data.image ? (
+          <img
+            src={author.data.image}
+            alt={author.data.title}
+            width={80}
+            height={80}
+            class="h-20 w-20 shrink-0 rounded-full object-cover"
+          />
+        ) : (
+          <div class="bg-muted h-20 w-20 shrink-0 rounded-full" />
+        )}
+        <div class="flex flex-1 flex-col gap-3">
+          <div class="flex items-center gap-3">
+            <SubheadingLG color="foreground">{author.data.title}</SubheadingLG>
+            <a
+              href="https://github.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-muted-foreground hover:text-primary transition-colors"
+              aria-label={`GitHub de ${author.data.title}`}
+            >
+              <Github size={20} />
+            </a>
+          </div>
+          {author.contentHtml && (
+            <BodySmall color="muted-foreground">
+              <Fragment set:html={author.contentHtml} />
+            </BodySmall>
+          )}
+          <div>
+            <a href={`/blog/authors/${author.slug}`}>
+              <Button variant="ghost" size="sm" client:load>
+                {t("blog.authors.learn_more")}
+              </Button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<!-- CTA -->
+<CTA />
+
+<style is:global>
+  .post-content h1,
+  .post-content h2,
+  .post-content h3 {
+    border-left: 4px solid hsl(var(--primary));
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-left: 1rem;
+  }
+
+  .post-content h1 {
+    color: hsl(var(--foreground));
+    font-size: 1.375rem;
+    line-height: 1.875rem;
+    font-weight: 600;
+  }
+
+  .post-content h2 {
+    color: hsl(var(--foreground));
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    font-weight: 600;
+  }
+
+  .post-content h3 {
+    color: hsl(var(--foreground));
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    font-weight: 600;
+  }
+
+  .post-content p {
+    color: hsl(var(--foreground) / 0.8);
+    margin-bottom: 1rem;
+    line-height: 1.625;
+  }
+
+  .post-content blockquote {
+    border-left: 4px solid hsl(var(--primary));
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-left: 1rem;
+    font-style: italic;
+  }
+
+  .post-content blockquote p {
+    color: hsl(var(--muted-foreground));
+  }
+
+  .post-content a {
+    color: hsl(var(--primary));
+  }
+
+  .post-content a:hover {
+    text-decoration: underline;
+  }
+
+  .post-content ul,
+  .post-content ol {
+    color: hsl(var(--foreground) / 0.8);
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+  }
+
+  .post-content ul > * + *,
+  .post-content ol > * + * {
+    margin-top: 0.5rem;
+  }
+
+  .post-content ul {
+    list-style-type: disc;
+  }
+
+  .post-content ol {
+    list-style-type: decimal;
+  }
+</style>
