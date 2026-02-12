@@ -11,7 +11,7 @@ services:
     volumes:
       - ./nginx/nginx.prod.conf:/etc/nginx/custom/nginx.conf:ro
       - nginx_logs:/var/log/nginx
-      - certbot_certs:/etc/letsencrypt:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
       - certbot_www:/var/www/certbot:ro
     command:
       ["nginx", "-c", "/etc/nginx/custom/nginx.conf", "-g", "daemon off;"]
@@ -120,7 +120,7 @@ services:
   certbot:
     image: certbot/certbot
     volumes:
-      - certbot_certs:/etc/letsencrypt
+      - /etc/letsencrypt:/etc/letsencrypt
       - certbot_www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     networks:
@@ -178,9 +178,6 @@ volumes:
     driver: local
   nginx_logs:
     name: nginx_logs
-    driver: local
-  certbot_certs:
-    name: certbot_certs
     driver: local
   certbot_www:
     name: certbot_www
