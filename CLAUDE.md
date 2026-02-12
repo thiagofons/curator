@@ -21,14 +21,12 @@ Curator is a dark-academia ed-tech/media platform that fights "Brainrot" by offe
 curator/
 ├── apps/
 │   ├── frontend/
-│   │   ├── website/        # Astro 5 SSR — public blog + landing
+│   │   ├── website/        # Astro 5 SSR — public blog + landing (Vercel)
 │   │   ├── docs/           # Next.js 16 + Nextra — developer docs
 │   │   └── storybook/      # Storybook 9 — component explorer
 │   └── backend/
-│       ├── api-gateway/    # NestJS 11 + tRPC — central entry point (port 3300)
-│       ├── cms-service/    # Next.js 16 + Payload CMS 3 — headless CMS (port 3000)
-│       ├── authentication-service/  # NestJS 11 + Prisma (port 3301)
-│       └── identity-service/        # NestJS 11 + Prisma (port 3302)
+│       ├── api/            # NestJS 11 + tRPC — API service (port 3300)
+│       └── cms-service/    # Next.js 16 + Payload CMS 3 — headless CMS (port 3000)
 ├── packages/
 │   ├── ui-web/             # @repo/ui-web — shared React component library
 │   ├── ui-mobile/          # @repo/ui-mobile — React Native components
@@ -39,19 +37,143 @@ curator/
 │   ├── typescript-config/  # Shared tsconfig templates
 │   └── vitest-config/      # Shared Vitest config
 ├── infrastructure/         # Terraform — AWS Lightsail provisioning
-├── scripts/                # Operational scripts (SSL bootstrap, etc.)
-├── nginx/                  # Nginx configs (staging + production)
-├── observability/          # Grafana, Prometheus, Loki configs
-├── docker-compose.development.yaml   # Dev stack (hot reload, direct ports)
+│   ├── modules/lightsail/  # Reusable Lightsail module (instance, IP, firewall)
+│   ├── scripts/            # Cloud-init user-data for instance bootstrap
+│   ├── main.tf             # Root module composition
+│   ├── providers.tf        # AWS provider + default tags
+│   ├── variables.tf        # Input variables
+│   └── outputs.tf          # Static IP output for DNS
+├── scripts/                # Operational scripts (SSL bootstrap)
+├── nginx/                  # Reverse proxy configs
+│   ├── nginx.staging.conf  # Local staging (*.curator.local, HTTP)
+│   └── nginx.prod.conf     # Production (*.curator.com.br, HTTPS + Certbot)
+├── observability/          # Grafana, Prometheus, Loki, Tempo, OTEL configs
+├── .github/workflows/
+│   ├── ci-pull-request.yaml  # CI — lint, test, SonarQube (on PR + push)
+│   └── cd-deploy.yaml        # CD — build images, deploy to Lightsail (after CI passes on main)
+├── docker-compose.development.yaml   # Dev (hot reload, direct ports, local DBs)
 ├── docker-compose.staging.yaml       # Staging (production-like, *.curator.local)
 └── docker-compose.production.yaml    # Production (Docker Swarm, SSL, *.curator.com.br)
 ```
 
-**Workspace package aliases:** `@repo/ui-web`, `@repo/trpc`, `@repo/rabbitmq`, `@repo/lib`, `@backend/api-gateway`, `@backend/cms-service`, etc.
+**Workspace package aliases:** `@repo/ui-web`, `@repo/trpc`, `@repo/rabbitmq`, `@repo/lib`, `@backend/api`, `@backend/cms-service`, etc.
 
 ---
 
-## 3. Frontend: Astro Website (`apps/frontend/website`)
+## 3. Environments & Infrastructure
+
+### Three Environments
+
+| Environment     | Compose File                      | Access                                     | SSL                 | Database                  | Orchestration  |
+| --------------- | --------------------------------- | ------------------------------------------ | ------------------- | ------------------------- | -------------- |
+| **Development** | `docker-compose.development.yaml` | `localhost:3300`, `localhost:3000`         | No                  | Local Postgres containers | Docker Compose |
+| **Staging**     | `docker-compose.staging.yaml`     | `api.curator.local`, `cms.curator.local`   | No                  | Local Postgres containers | Docker Compose |
+| **Production**  | `docker-compose.production.yaml`  | `api.curator.com.br`, `cms.curator.com.br` | Yes (Let's Encrypt) | Supabase (managed)        | Docker Swarm   |
+
+- **Development:** Hot-reload with source mounts, direct port access. No nginx.
+- **Staging:** Builds production Docker images locally, nginx reverse proxy with `*.curator.local` subdomains. Requires `/etc/hosts` entries.
+- **Production:** Pre-built images from GHCR, nginx with SSL (Certbot auto-renewal), Docker Swarm on AWS Lightsail.
+
+### Production Stack (Docker Swarm on AWS Lightsail)
+
+```
+Internet → Lightsail Static IP
+              ↓
+     nginx (ports 80/443, SSL termination)
+       ├─ api.curator.com.br → api:3300
+       ├─ cms.curator.com.br → cms-service:3000
+       └─ /health → 200 ok
+     certbot (auto-renews certs every 12h)
+     redis (password-protected, persistent)
+```
+
+**Databases:** Hosted on Supabase (not in Docker). Connection strings in `.env.production`.
+**Container images:** `ghcr.io/thiagofons/curator-api` and `ghcr.io/thiagofons/curator-cms`.
+**Frontend website:** Deployed on Vercel (separate from Lightsail).
+
+### Terraform (Infrastructure as Code)
+
+Provisions the Lightsail instance, static IP, and firewall rules. Modular structure:
+
+```
+infrastructure/
+├── main.tf                          # Calls modules/lightsail
+├── providers.tf                     # AWS provider + default tags
+├── variables.tf                     # region, bundle_id, key_pair_name, etc.
+├── outputs.tf                       # static_ip (for DNS)
+├── terraform.tfvars.example         # Documented variable values
+├── modules/lightsail/
+│   ├── main.tf                      # Instance + static IP + attachment
+│   ├── firewall.tf                  # Dynamic port rules from open_ports list
+│   ├── variables.tf                 # Module inputs
+│   └── outputs.tf                   # Module outputs
+└── scripts/user-data.sh             # Cloud-init: Docker, Swarm, Certbot, Git
+```
+
+State is stored **locally** (not remote). Terraform files (`.terraform/`, `*.tfstate`, `*.tfvars`) are gitignored.
+
+### Nginx Configuration
+
+Both configs use `resolver 127.0.0.11` (Docker's internal DNS) with variable-based `proxy_pass` so nginx starts even if backend services are temporarily unavailable.
+
+- **`nginx/nginx.staging.conf`** — HTTP only, `*.curator.local` subdomains
+- **`nginx/nginx.prod.conf`** — HTTPS with Let's Encrypt certs, HTTP→HTTPS redirect, ACME challenge for Certbot
+
+---
+
+## 4. CI/CD Pipeline
+
+### Branch Protection (GitHub Ruleset)
+
+- **PRs required** to merge into `main` (no direct pushes)
+- **Required status checks:** Lint & Format, Unit Tests, Integration Tests
+- **Strict mode:** PR must be up to date with main before merging
+
+### CI — Pull Request Validation (`ci-pull-request.yaml`)
+
+Triggers on: push to `main`/`develop`, all pull requests.
+
+```
+Static Checks (Lint + Format)
+    ├── Unit Tests (with coverage) ──→ SonarQube Analysis (matrix: 9 services)
+    └── Integration Tests (with Postgres service container)
+```
+
+### CD — Deploy (`cd-deploy.yaml`)
+
+Triggers on: CI passes on `main` (via `workflow_run`).
+
+```
+CI Gate (only if CI succeeded)
+    ├── Terraform Provision (only if infrastructure/ files changed)
+    └── Build & Push to GHCR (matrix: api, cms-service)
+            └── Deploy to Lightsail via SSH (environment: production)
+                - docker pull images
+                - git pull config
+                - docker stack deploy
+                - force-update nginx
+```
+
+**Concurrency:** Only one production deploy at a time (queued, not cancelled).
+**Environment protection:** The `production` environment can require manual approval.
+
+### Required GitHub Secrets
+
+| Secret                    | Purpose                                |
+| ------------------------- | -------------------------------------- |
+| `LIGHTSAIL_HOST`          | Static IP of the Lightsail instance    |
+| `LIGHTSAIL_USER`          | SSH username (typically `ubuntu`)      |
+| `LIGHTSAIL_SSH_KEY`       | Private key for SSH access             |
+| `GHCR_PAT`                | GitHub PAT with `packages:write` scope |
+| `AWS_ACCESS_KEY_ID`       | For Terraform provisioning             |
+| `AWS_SECRET_ACCESS_KEY`   | For Terraform provisioning             |
+| `LIGHTSAIL_KEY_PAIR_NAME` | Lightsail SSH key pair name            |
+| `SONAR_TOKEN_GLOBAL`      | SonarQube authentication               |
+| `SONAR_HOST_URL`          | SonarQube server URL                   |
+
+---
+
+## 5. Frontend: Astro Website (`apps/frontend/website`)
 
 ### Framework Pattern
 
@@ -87,7 +209,7 @@ Pages guard features with Flagsmith checks; redirect to `/404` if flag disabled.
 
 ---
 
-## 4. Design System: `@repo/ui-web`
+## 6. Design System: `@repo/ui-web`
 
 ### Critical Rule
 
@@ -199,7 +321,7 @@ import { Input } from "@repo/ui-web/base/input";
 
 ---
 
-## 5. Backend: NestJS Services
+## 7. Backend: NestJS Services
 
 ### Architecture: Hexagonal / DDD
 
@@ -226,7 +348,7 @@ src/
 Type-safe RPC from backend to frontend. Add new procedures in `src/application/`:
 
 ```typescript
-// Router definition (api-gateway)
+// Router definition (api)
 export const appRouter = router({
   featureName: featureRouter,
 });
@@ -245,7 +367,7 @@ const result = await trpc.featureName.procedureName.query(input);
 Services communicate asynchronously via RabbitMQ. Use `@repo/rabbitmq` module:
 
 ```typescript
-// Publisher (API Gateway)
+// Publisher (API)
 this.rmqService.publish(RMQ_MESSAGES.USERS.GET_ALL, payload);
 
 // Consumer (microservice)
@@ -272,12 +394,13 @@ Blog content is managed via Payload CMS. Collections: `Posts`, `Authors`, `Categ
 - **Languages:** Portuguese (`pt`, default) + English (`en`)
 - **Access:** Public read, authenticated write for all content collections
 - **Editor:** Lexical rich text
+- **Server URL:** Configured via `PAYLOAD_SERVER_URL` env var (must match public domain in production)
 
 Frontend fetches content via Payload's REST API or GraphQL.
 
 ---
 
-## 6. Code Conventions
+## 8. Code Conventions
 
 ### TypeScript
 
@@ -303,7 +426,13 @@ fix(scope): :bug: short description
 refactor(scope): :art: short description
 ```
 
-Scope examples: `frontend/website`, `backend/cms-service`, `ui-web`
+Scope examples: `frontend/website`, `backend/cms-service`, `ui-web`, `infrastructure`
+
+### Git Workflow
+
+- **Always use branches + PRs** — direct pushes to `main` are blocked
+- CI must pass before merge (lint, unit tests, integration tests)
+- CD deploys automatically after CI passes on `main`
 
 ### Import Order
 
@@ -321,7 +450,7 @@ Scope examples: `frontend/website`, `backend/cms-service`, `ui-web`
 
 ---
 
-## 7. Key Development Commands
+## 9. Key Development Commands
 
 ```bash
 # Start all apps (native, no Docker)
@@ -346,35 +475,56 @@ pnpm check-types
 pnpm quality:lint:fix
 pnpm quality:format:fix
 
+# Database
+pnpm db:generate              # Generate Prisma client
+pnpm db:migrate:dev           # Run migrations locally
+pnpm db:studio                # Open Prisma Studio
+
+# Testing
+pnpm test:unit                # Unit tests
+pnpm test:unit:coverage       # With coverage
+pnpm test:integration         # Integration tests
+pnpm test:e2e                 # E2E tests
+
 # Add a new ShadcnUI component to ui-web
 cd packages/ui-web && pnpm ui add <component-name>
+
+# Terraform (from infrastructure/ dir)
+terraform init                # Initialize providers
+terraform plan                # Preview changes
+terraform apply               # Apply changes
 ```
 
 ---
 
-## 8. Critical Files Reference
+## 10. Critical Files Reference
 
-| File                                                   | Purpose                                     |
-| ------------------------------------------------------ | ------------------------------------------- |
-| `packages/ui-web/src/globals.css`                      | CSS custom properties (design tokens)       |
-| `packages/ui-web/src/components/custom/typography.tsx` | Typography component system                 |
-| `packages/ui-web/tailwind.config.ts`                   | Tailwind design tokens (colors, fontSize)   |
-| `apps/frontend/website/astro.config.mjs`               | Astro config (SSR, integrations, i18n)      |
-| `apps/frontend/website/src/layouts/Base.astro`         | Root page layout                            |
-| `apps/backend/api-gateway/src/application/`            | tRPC router definitions                     |
-| `packages/rabbitmq/src/messages/`                      | RabbitMQ message pattern constants          |
-| `docker-compose.development.yaml`                      | Dev stack (hot reload, direct ports)        |
-| `docker-compose.staging.yaml`                          | Staging (production-like, \*.curator.local) |
-| `docker-compose.production.yaml`                       | Production (Docker Swarm, SSL)              |
-| `nginx/nginx.staging.conf`                             | Nginx config for local staging              |
-| `nginx/nginx.prod.conf`                                | Nginx config for production (SSL)           |
-| `infrastructure/main.tf`                               | Terraform — Lightsail provisioning          |
-| `turbo.json`                                           | Task pipeline (build, test, lint)           |
-| `pnpm-workspace.yaml`                                  | Dependency catalog (canonical versions)     |
+| File                                                   | Purpose                                            |
+| ------------------------------------------------------ | -------------------------------------------------- |
+| `packages/ui-web/src/globals.css`                      | CSS custom properties (design tokens)              |
+| `packages/ui-web/src/components/custom/typography.tsx` | Typography component system                        |
+| `packages/ui-web/tailwind.config.ts`                   | Tailwind design tokens (colors, fontSize)          |
+| `apps/frontend/website/astro.config.mjs`               | Astro config (SSR, integrations, i18n)             |
+| `apps/frontend/website/src/layouts/Base.astro`         | Root page layout                                   |
+| `apps/backend/api/src/application/`                    | tRPC router definitions                            |
+| `apps/backend/cms-service/src/payload.config.ts`       | Payload CMS configuration                          |
+| `packages/rabbitmq/src/messages/`                      | RabbitMQ message pattern constants                 |
+| `docker-compose.development.yaml`                      | Dev stack (hot reload, direct ports)               |
+| `docker-compose.staging.yaml`                          | Staging (production-like, \*.curator.local)        |
+| `docker-compose.production.yaml`                       | Production (Docker Swarm, SSL, \*.curator.com.br)  |
+| `nginx/nginx.staging.conf`                             | Nginx reverse proxy for local staging              |
+| `nginx/nginx.prod.conf`                                | Nginx reverse proxy for production (SSL + Certbot) |
+| `infrastructure/main.tf`                               | Terraform root — Lightsail provisioning            |
+| `infrastructure/modules/lightsail/`                    | Reusable Lightsail Terraform module                |
+| `scripts/init-ssl.sh`                                  | One-time SSL certificate bootstrap (Certbot)       |
+| `.github/workflows/ci-pull-request.yaml`               | CI pipeline (lint, test, SonarQube)                |
+| `.github/workflows/cd-deploy.yaml`                     | CD pipeline (build, deploy to Lightsail)           |
+| `turbo.json`                                           | Task pipeline (build, test, lint)                  |
+| `pnpm-workspace.yaml`                                  | Dependency catalog (canonical versions)            |
 
 ---
 
-## 9. Anti-Patterns (Never Do)
+## 11. Anti-Patterns (Never Do)
 
 - **Do not** install Radix UI or ShadcnUI directly in an app — use `@repo/ui-web`
 - **Do not** write inline font-size/font-weight Tailwind for headings — use Typography components
@@ -383,3 +533,6 @@ cd packages/ui-web && pnpm ui add <component-name>
 - **Do not** create a new package when an existing shared package can be extended
 - **Do not** skip Zod validation for user-facing form inputs
 - **Do not** add `client:load` to Astro components that don't need JS — keep islands minimal
+- **Do not** push directly to `main` — always use branches + PRs
+- **Do not** use static `upstream` blocks in nginx configs — use `resolver` + variables for Docker DNS resilience
+- **Do not** use named Docker volumes for host paths like `/etc/letsencrypt` — use bind mounts

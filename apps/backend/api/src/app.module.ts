@@ -1,9 +1,15 @@
 import { Module } from "@nestjs/common";
-import { AppController } from "./app.controller";
+import { TRPCModule } from "nestjs-trpc";
+import { AppController } from "./app.controller.js";
 import { AppService } from "./app.service";
 
+const trpcOptions = {
+  basePath: "/trpc",
+  autoSchemaFile: "./",
+};
+
 @Module({
-  imports: [],
+  imports: [TRPCModule.forRoot(trpcOptions)],
   controllers: [AppController],
   providers: [AppService],
 })
