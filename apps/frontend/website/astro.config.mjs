@@ -25,6 +25,8 @@ export default defineConfig({
       FLAGSMITH_DEV_KEY: envField.string({
         context: "client",
         access: "public",
+        optional: true,
+        default: "",
       }),
       FLAGSMITH_PROD_KEY: envField.string({
         context: "client",
