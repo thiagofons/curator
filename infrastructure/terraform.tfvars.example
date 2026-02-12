@@ -1,0 +1,9 @@
+project        = "curator"
+environment    = "production"
+aws_region     = "sa-east-1"
+instance_name  = "curator-production"
+bundle_id      = "small_3_0" # 2GB RAM, 1 vCPU, $5/mo
+blueprint_id   = "ubuntu_22_04"
+key_pair_name  = "your-lightsail-key-pair"
+static_ip_name = "curator-production-ip"
+open_ports     = [22, 80, 443]

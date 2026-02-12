@@ -38,10 +38,13 @@ curator/
 │   ├── eslint-config/      # Shared ESLint config
 │   ├── typescript-config/  # Shared tsconfig templates
 │   └── vitest-config/      # Shared Vitest config
-├── k8s/                    # Kubernetes manifests (Kustomize)
-├── infrastructure/         # Terraform / IaC
+├── infrastructure/         # Terraform — AWS Lightsail provisioning
+├── scripts/                # Operational scripts (SSL bootstrap, etc.)
+├── nginx/                  # Nginx configs (staging + production)
 ├── observability/          # Grafana, Prometheus, Loki configs
-└── docker-compose.yaml     # Local dev stack
+├── docker-compose.development.yaml   # Dev stack (hot reload, direct ports)
+├── docker-compose.staging.yaml       # Staging (production-like, *.curator.local)
+└── docker-compose.production.yaml    # Production (Docker Swarm, SSL, *.curator.com.br)
 ```
 
 **Workspace package aliases:** `@repo/ui-web`, `@repo/trpc`, `@repo/rabbitmq`, `@repo/lib`, `@backend/api-gateway`, `@backend/cms-service`, etc.
@@ -321,11 +324,17 @@ Scope examples: `frontend/website`, `backend/cms-service`, `ui-web`
 ## 7. Key Development Commands
 
 ```bash
-# Start all apps
+# Start all apps (native, no Docker)
 pnpm dev
 
-# Start only core backend services (Docker)
-pnpm compose:core
+# Start dev containers (hot reload, direct port access)
+pnpm compose:dev              # All services
+pnpm compose:dev:core         # API + DB + Redis only
+pnpm compose:dev:blog         # CMS + DB only
+
+# Start staging (production-like, *.curator.local)
+pnpm compose:staging          # Builds production images + nginx proxy
+pnpm compose:staging:down     # Tear down
 
 # Run frontend website only
 pnpm --filter @frontend/website dev
@@ -339,27 +348,29 @@ pnpm quality:format:fix
 
 # Add a new ShadcnUI component to ui-web
 cd packages/ui-web && pnpm ui add <component-name>
-
-# Kubernetes dev (local Kind cluster)
-pnpm k8s:dev
 ```
 
 ---
 
 ## 8. Critical Files Reference
 
-| File                                                   | Purpose                                   |
-| ------------------------------------------------------ | ----------------------------------------- |
-| `packages/ui-web/src/globals.css`                      | CSS custom properties (design tokens)     |
-| `packages/ui-web/src/components/custom/typography.tsx` | Typography component system               |
-| `packages/ui-web/tailwind.config.ts`                   | Tailwind design tokens (colors, fontSize) |
-| `apps/frontend/website/astro.config.mjs`               | Astro config (SSR, integrations, i18n)    |
-| `apps/frontend/website/src/layouts/Base.astro`         | Root page layout                          |
-| `apps/backend/api-gateway/src/application/`            | tRPC router definitions                   |
-| `packages/rabbitmq/src/messages/`                      | RabbitMQ message pattern constants        |
-| `docker-compose.yaml`                                  | Full local dev stack                      |
-| `turbo.json`                                           | Task pipeline (build, test, lint)         |
-| `pnpm-workspace.yaml`                                  | Dependency catalog (canonical versions)   |
+| File                                                   | Purpose                                     |
+| ------------------------------------------------------ | ------------------------------------------- |
+| `packages/ui-web/src/globals.css`                      | CSS custom properties (design tokens)       |
+| `packages/ui-web/src/components/custom/typography.tsx` | Typography component system                 |
+| `packages/ui-web/tailwind.config.ts`                   | Tailwind design tokens (colors, fontSize)   |
+| `apps/frontend/website/astro.config.mjs`               | Astro config (SSR, integrations, i18n)      |
+| `apps/frontend/website/src/layouts/Base.astro`         | Root page layout                            |
+| `apps/backend/api-gateway/src/application/`            | tRPC router definitions                     |
+| `packages/rabbitmq/src/messages/`                      | RabbitMQ message pattern constants          |
+| `docker-compose.development.yaml`                      | Dev stack (hot reload, direct ports)        |
+| `docker-compose.staging.yaml`                          | Staging (production-like, \*.curator.local) |
+| `docker-compose.production.yaml`                       | Production (Docker Swarm, SSL)              |
+| `nginx/nginx.staging.conf`                             | Nginx config for local staging              |
+| `nginx/nginx.prod.conf`                                | Nginx config for production (SSL)           |
+| `infrastructure/main.tf`                               | Terraform — Lightsail provisioning          |
+| `turbo.json`                                           | Task pipeline (build, test, lint)           |
+| `pnpm-workspace.yaml`                                  | Dependency catalog (canonical versions)     |
 
 ---
 

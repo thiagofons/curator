@@ -11,6 +11,7 @@ on:
       - "pnpm-lock.yaml"
       - "docker-compose.production.yaml"
       - "nginx/**"
+      - "infrastructure/**"
 
 permissions:
   contents: read
@@ -18,7 +19,43 @@ permissions:
 
 jobs:
   # ------------------------------------------------------------------
-  # 1. BUILD & PUSH DOCKER IMAGES TO GHCR
+  # 1. PROVISION INFRASTRUCTURE (only when infra files change)
+  # ------------------------------------------------------------------
+  provision:
+    name: 🏗️ Terraform
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.modified, 'infrastructure/') || contains(github.event.head_commit.added, 'infrastructure/')
+
+    steps:
+      - name: ⬇️ Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9"
+
+      - name: 🔑 Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: sa-east-1
+
+      - name: 📋 Terraform Init
+        working-directory: infrastructure
+        run: terraform init
+
+      - name: 📋 Terraform Plan
+        working-directory: infrastructure
+        run: terraform plan -var="key_pair_name=${{ secrets.LIGHTSAIL_KEY_PAIR_NAME }}" -out=tfplan
+
+      - name: 🚀 Terraform Apply
+        working-directory: infrastructure
+        run: terraform apply -auto-approve tfplan
+
+  # ------------------------------------------------------------------
+  # 2. BUILD & PUSH DOCKER IMAGES TO GHCR
   # ------------------------------------------------------------------
   build-and-push:
     name: 🐳 Build ${{ matrix.app }}
@@ -71,7 +108,7 @@ jobs:
           cache-to: type=gha,mode=max
 
   # ------------------------------------------------------------------
-  # 2. DEPLOY TO LIGHTSAIL VIA SSH
+  # 3. DEPLOY TO LIGHTSAIL VIA SSH
   # ------------------------------------------------------------------
   deploy:
     name: 🚀 Deploy Stack
@@ -101,7 +138,11 @@ jobs:
             # Pull latest compose + nginx config
             git pull origin main
 
-            # Deploy the stack
+            # Load production environment and deploy the stack
+            set -a && source .env.production && set +a
             REGISTRY_OWNER=${{ github.repository_owner }} \
             IMAGE_TAG=latest \
             docker stack deploy -c docker-compose.production.yaml curator --with-registry-auth
+
+            # Force-update nginx to pick up config changes
+            docker service update --force curator_nginx || true

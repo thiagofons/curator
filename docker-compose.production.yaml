@@ -9,8 +9,10 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx:/etc/nginx/custom:ro
+      - ./nginx/nginx.prod.conf:/etc/nginx/custom/nginx.conf:ro
       - nginx_logs:/var/log/nginx
+      - certbot_certs:/etc/letsencrypt:ro
+      - certbot_www:/var/www/certbot:ro
     command:
       ["nginx", "-c", "/etc/nginx/custom/nginx.conf", "-g", "daemon off;"]
     networks:
@@ -114,6 +116,28 @@ services:
         max-size: "10m"
         max-file: "5"
 
+  # >>> SSL — Certbot (Let's Encrypt auto-renewal) <<<
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - certbot_certs:/etc/letsencrypt
+      - certbot_www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    networks:
+      - curator-net
+    depends_on:
+      - nginx
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
   # >>> INFRASTRUCTURE <<<
   redis:
     image: redis:7-alpine
@@ -154,6 +178,12 @@ volumes:
     driver: local
   nginx_logs:
     name: nginx_logs
+    driver: local
+  certbot_certs:
+    name: certbot_certs
+    driver: local
+  certbot_www:
+    name: certbot_www
     driver: local
 
 networks:
