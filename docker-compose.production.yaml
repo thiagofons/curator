@@ -16,19 +16,11 @@ services:
     networks:
       - curator-net
     healthcheck:
-      test:
-        [
-          "CMD",
-          "wget",
-          "--quiet",
-          "--tries=1",
-          "--spider",
-          "http://localhost/health",
-        ]
+      test: ["CMD-SHELL", "nginx -t || exit 1"] # Testa se a config do nginx está ok
       interval: 30s
-      timeout: 10s
+      timeout: 5s
       retries: 3
-      start_period: 40s
+      start_period: 10s
     deploy:
       restart_policy:
         condition: on-failure
@@ -53,20 +45,16 @@ services:
       - "3300"
     networks:
       - curator-net
-    # healthcheck:
-    #   test:
-    #     [
-    #       "CMD",
-    #       "wget",
-    #       "--quiet",
-    #       "--tries=1",
-    #       "--spider",
-    #       "http://localhost:3300/health",
-    #     ]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 3
-    #   start_period: 40s
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget --quiet --tries=1 --spider http://localhost:3300/health || exit 1",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
     deploy:
       resources:
         limits:
@@ -98,20 +86,16 @@ services:
       - "3000"
     networks:
       - curator-net
-    # healthcheck:
-    #   test:
-    #     [
-    #       "CMD",
-    #       "wget",
-    #       "--quiet",
-    #       "--tries=1",
-    #       "--spider",
-    #       "http://localhost:3000/health",
-    #     ]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 3
-    #   start_period: 40s
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget --quiet --tries=1 --spider http://localhost:3000/admin || exit 1",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 80s
     deploy:
       resources:
         limits:
