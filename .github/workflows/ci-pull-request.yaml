@@ -8,8 +8,6 @@ on:
 permissions:
   id-token: write
   contents: read
-  packages: write
-  security-events: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
@@ -127,41 +125,7 @@ jobs:
         run: pnpm test:integration
 
   # ------------------------------------------------------------------
-  # 4. SNYK SCAN (Parallel)
-  # ------------------------------------------------------------------
-  snyk-scan:
-    name: 🕵️ Snyk Vulnerability Scan
-    needs: [static-checks]
-    runs-on: ubuntu-latest
-    steps:
-      - name: ⬇️ Checkout Repo
-        uses: actions/checkout@v4
-
-      - name: 📦 Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 9.5.0
-
-      - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: pnpm
-
-      - name: 📥 Install Dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: 🛡️ Run Snyk (Dependencies)
-        continue-on-error: true
-        uses: snyk/actions/node@0.4.0
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          command: test
-          args: --all-projects --severity-threshold=high
-
-  # ------------------------------------------------------------------
-  # 5. SONARQUBE ANALYSIS (Matrix Strategy)
+  # 4. SONARQUBE ANALYSIS (Matrix Strategy)
   # ------------------------------------------------------------------
   sonar-analysis:
     name: 🔍 Sonar (${{ matrix.service }})
@@ -173,16 +137,12 @@ jobs:
       matrix:
         include:
           # --- BACKEND ---
-          - service: backend/api-gateway
-            path: apps/backend/api-gateway
-          - service: backend/authentication-service
-            path: apps/backend/authentication-service
-          - service: backend/identity-service
-            path: apps/backend/identity-service
+          - service: backend/api
+            path: apps/backend/api
+          - service: backend/cms-service
+            path: apps/backend/cms-service
 
           # --- FRONTEND ---
-          - service: frontend/blog-cms
-            path: apps/frontend/blog-cms
           - service: frontend/docs
             path: apps/frontend/docs
           - service: frontend/website
@@ -219,174 +179,3 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_GLOBAL }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-
-  # -----------------------------------------------------------------
-  # 6. BUILD DOCKER IMAGES (Export to .tar)
-  # -----------------------------------------------------------------
-  build-docker-images:
-    name: 🐳 Build Images
-    # Otimização: Espera apenas testes passarem, não precisa esperar Sonar/Snyk
-    needs: [unit-tests, integration-tests]
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: "⬇️ Checkout Repo"
-        uses: actions/checkout@v4
-
-      - name: "🕵️ Detect Changes"
-        id: filter
-        uses: dorny/paths-filter@v2
-        with:
-          filters: |
-            api_gateway:
-              - 'apps/backend/api-gateway/**'
-              - 'packages/**'
-              - 'docker-compose.yaml'
-            auth_service:
-              - 'apps/backend/authentication-service/**'
-              - 'packages/**'
-              - 'docker-compose.yaml'
-            identity_service:
-              - 'apps/backend/identity-service/**'
-              - 'packages/**'
-              - 'docker-compose.yaml'
-            blog_cms:
-              - 'apps/frontend/blog-cms/**'
-              - 'packages/**'
-              - 'docker-compose.yaml'
-
-      - name: "🐳 Set up Docker Buildx"
-        uses: docker/setup-buildx-action@v3
-
-      # Cria pasta para armazenar os arquivos .tar
-      - name: "📁 Make Temp Dir"
-        run: mkdir -p /tmp/images
-
-      # --- BUILDS (Output = Docker Tarball) ---
-
-      - name: "🏗️ Build API Gateway"
-        if: steps.filter.outputs.api_gateway == 'true'
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./apps/backend/api-gateway/Dockerfile
-          push: false
-          tags: curator/api-gateway:${{ github.sha }}
-          # EXPORTA PARA ARQUIVO TAR
-          outputs: type=docker,dest=/tmp/images/api-gateway.tar
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: "🏗️ Build Identity Service"
-        if: steps.filter.outputs.identity_service == 'true'
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./apps/backend/identity-service/Dockerfile
-          push: false
-          tags: curator/identity-service:${{ github.sha }}
-          outputs: type=docker,dest=/tmp/images/identity-service.tar
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: "🏗️ Build Authentication Service"
-        if: steps.filter.outputs.auth_service == 'true'
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./apps/backend/authentication-service/Dockerfile
-          push: false
-          tags: curator/authentication-service:${{ github.sha }}
-          outputs: type=docker,dest=/tmp/images/authentication-service.tar
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: "🏗️ Build Blog CMS"
-        if: steps.filter.outputs.blog_cms == 'true'
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./apps/frontend/blog-cms/Dockerfile
-          push: false
-          tags: curator/blog-cms:${{ github.sha }}
-          outputs: type=docker,dest=/tmp/images/blog-cms.tar
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      # --- CRIAÇÃO DE PLACEHOLDER (Para evitar erro de artefato não encontrado) ---
-      - name: "📁 Create Placeholder"
-        run: touch /tmp/images/placeholder.txt
-
-      - name: "📤 Upload Image Artifacts"
-        uses: actions/upload-artifact@v4
-        with:
-          name: built-images
-          path: |
-            /tmp/images/*.tar
-            /tmp/images/placeholder.txt
-          retention-days: 1
-          if-no-files-found: error
-
-  # -----------------------------------------------------------------
-  # 7. SCAN DOCKER IMAGES (Trivy)
-  # -----------------------------------------------------------------
-  scan-images:
-    name: 🛡️ Scan Images (Trivy)
-    needs: [build-docker-images]
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: "⬇️ Checkout Repo"
-        uses: actions/checkout@v4
-
-      - name: "📥 Download Images"
-        uses: actions/download-artifact@v4
-        with:
-          name: built-images
-          path: /tmp/images
-
-      # --- SCANS (Só rodam se o .tar existir) ---
-
-      - name: "🔍 Scan API Gateway"
-        if: hashFiles('/tmp/images/api-gateway.tar') != ''
-        uses: aquasecurity/trivy-action@master
-        with:
-          input: /tmp/images/api-gateway.tar
-          format: "table"
-          exit-code: "1" # Falha se achar CRITICAL/HIGH
-          ignore-unfixed: true
-          vuln-type: "os,library"
-          severity: "CRITICAL,HIGH"
-
-      - name: "🔍 Scan Identity Service"
-        if: hashFiles('/tmp/images/identity-service.tar') != ''
-        uses: aquasecurity/trivy-action@master
-        with:
-          input: /tmp/images/identity-service.tar
-          format: "table"
-          exit-code: "1"
-          ignore-unfixed: true
-          vuln-type: "os,library"
-          severity: "CRITICAL,HIGH"
-
-      - name: "🔍 Scan Auth Service"
-        if: hashFiles('/tmp/images/authentication-service.tar') != ''
-        uses: aquasecurity/trivy-action@master
-        with:
-          input: /tmp/images/authentication-service.tar
-          format: "table"
-          exit-code: "1"
-          ignore-unfixed: true
-          vuln-type: "os,library"
-          severity: "CRITICAL,HIGH"
-
-      - name: "🔍 Scan Blog CMS"
-        if: hashFiles('/tmp/images/blog-cms.tar') != ''
-        uses: aquasecurity/trivy-action@master
-        with:
-          input: /tmp/images/blog-cms.tar
-          format: "table"
-          exit-code: "1"
-          ignore-unfixed: true
-          vuln-type: "os,library"
-          severity: "CRITICAL,HIGH"

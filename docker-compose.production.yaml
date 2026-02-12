@@ -1,12 +1,10 @@
 # =============================================================================
-# Curator — Production
+# Curator — Production (Docker Swarm)
 # =============================================================================
 services:
   # >>> NGINX — Reverse Proxy (ports 80/443) <<<
   nginx:
-    container_name: nginx
     image: nginx:alpine
-    restart: always
     ports:
       - "80:80"
       - "443:443"
@@ -15,9 +13,6 @@ services:
       - nginx_logs:/var/log/nginx
     command:
       ["nginx", "-c", "/etc/nginx/custom/nginx.conf", "-g", "daemon off;"]
-    depends_on:
-      - api
-      - cms-service
     networks:
       - curator-net
     healthcheck:
@@ -34,21 +29,20 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
     logging:
       driver: "json-file"
       options:
         max-size: "10m"
         max-file: "3"
-    profiles: ["all", "core", "blog"]
 
   # >>> API (port 3300) <<<
   api:
-    container_name: api
-    build:
-      context: .
-      dockerfile: ./apps/backend/api/Dockerfile
-      target: production
-    restart: always
+    image: ghcr.io/${REGISTRY_OWNER}/curator-api:${IMAGE_TAG:-latest}
     env_file:
       - .env.production
     environment:
@@ -59,9 +53,6 @@ services:
       - "3300"
     networks:
       - curator-net
-    depends_on:
-      redis:
-        condition: service_healthy
     healthcheck:
       test:
         [
@@ -84,21 +75,19 @@ services:
         reservations:
           cpus: "0.25"
           memory: 256M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
     logging:
       driver: "json-file"
       options:
         max-size: "10m"
         max-file: "5"
-    profiles: ["all", "core"]
 
   # >>> CMS (port 3000) <<<
   cms-service:
-    container_name: cms-service
-    build:
-      context: .
-      dockerfile: ./apps/backend/cms-service/Dockerfile
-      target: runner
-    restart: always
+    image: ghcr.io/${REGISTRY_OWNER}/curator-cms:${IMAGE_TAG:-latest}
     env_file:
       - .env.production
     environment:
@@ -131,18 +120,19 @@ services:
         reservations:
           cpus: "0.25"
           memory: 256M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
     logging:
       driver: "json-file"
       options:
         max-size: "10m"
         max-file: "5"
-    profiles: ["all", "blog"]
 
   # >>> INFRASTRUCTURE <<<
   redis:
-    container_name: infra-redis
     image: redis:7-alpine
-    restart: always
     command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
@@ -164,71 +154,19 @@ services:
         reservations:
           cpus: "0.25"
           memory: 128M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
     logging:
       driver: "json-file"
       options:
         max-size: "10m"
         max-file: "3"
-    profiles: ["all", "core"]
-
-  # >>> MONITORING (port 9xxx) <<<
-  prometheus:
-    container_name: prometheus
-    image: prom/prometheus:latest
-    restart: always
-    volumes:
-      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - prometheus_data:/prometheus
-    command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
-      - "--storage.tsdb.path=/prometheus"
-      - "--storage.tsdb.retention.time=30d"
-    expose:
-      - "9090"
-    networks:
-      - curator-net
-    deploy:
-      resources:
-        limits:
-          cpus: "0.5"
-          memory: 512M
-    profiles: ["monitoring"]
-
-  grafana:
-    container_name: grafana
-    image: grafana/grafana:latest
-    restart: always
-    environment:
-      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:-admin}
-      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
-      GF_SERVER_HTTP_PORT: "9091"
-      GF_INSTALL_PLUGINS: grafana-clock-panel
-    volumes:
-      - grafana_data:/var/lib/grafana
-      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
-      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
-    expose:
-      - "9091"
-    networks:
-      - curator-net
-    depends_on:
-      - prometheus
-    deploy:
-      resources:
-        limits:
-          cpus: "0.5"
-          memory: 256M
-    profiles: ["monitoring"]
 
 volumes:
   redis_data:
     name: redis_prod_data
-    driver: local
-  prometheus_data:
-    name: prometheus_data
-    driver: local
-  grafana_data:
-    name: grafana_data
     driver: local
   nginx_logs:
     name: nginx_logs
@@ -236,5 +174,5 @@ volumes:
 
 networks:
   curator-net:
-    driver: bridge
+    driver: overlay
     name: curator-network
