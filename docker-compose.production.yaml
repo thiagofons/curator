@@ -84,6 +84,7 @@ services:
       NODE_ENV: production
       CMS_DATABASE_URL: ${CMS_DATABASE_URL}
       PAYLOAD_SECRET: ${PAYLOAD_SECRET}
+      PAYLOAD_SERVER_URL: https://cms.curator.com.br
     expose:
       - "3000"
     networks:
