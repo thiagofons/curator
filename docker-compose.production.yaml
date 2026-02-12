@@ -4,6 +4,7 @@
 services:
   # >>> NGINX — Reverse Proxy (ports 80/443) <<<
   nginx:
+    container_name: nginx
     image: nginx:alpine
     ports:
       - "80:80"
@@ -36,6 +37,7 @@ services:
 
   # >>> API (port 3300) <<<
   api:
+    container_name: api
     image: ghcr.io/${REGISTRY_OWNER}/curator-api:${IMAGE_TAG:-latest}
     env_file:
       - .env.production
@@ -77,6 +79,7 @@ services:
 
   # >>> CMS (port 3000) <<<
   cms-service:
+    container_name: cms-service
     image: ghcr.io/${REGISTRY_OWNER}/curator-cms:${IMAGE_TAG:-latest}
     env_file:
       - .env.production
@@ -119,6 +122,7 @@ services:
 
   # >>> SSL — Certbot (Let's Encrypt auto-renewal) <<<
   certbot:
+    container_name: certbot
     image: certbot/certbot
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
@@ -141,6 +145,7 @@ services:
 
   # >>> INFRASTRUCTURE <<<
   redis:
+    container_name: redis
     image: redis:7-alpine
     command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
     environment:
