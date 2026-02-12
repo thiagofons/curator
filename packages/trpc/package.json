@@ -18,11 +18,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@trpc/client": "catalog:trpc11",
-    "class-validator": "^0.14.2"
+    "@backend/api": "workspace:*",
+    "@trpc/client": "catalog:trpc11"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@repo/vitest-config": "workspace:*",
     "@types/node": "catalog:tooling"

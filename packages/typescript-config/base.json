@@ -12,7 +12,6 @@
     "moduleResolution": "bundler",
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
-
     "strict": true,
     "strictNullChecks": true,
     "strictBindCallApply": false,
