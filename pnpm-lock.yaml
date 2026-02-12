@@ -508,12 +508,21 @@ importers:
       '@nestjs/platform-express':
         specifier: ^11.0.1
         version: 11.1.9(@nestjs/common@11.1.9(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.9)
+      '@trpc/server':
+        specifier: ^11.10.0
+        version: 11.10.0(typescript@5.9.3)
+      nestjs-trpc:
+        specifier: ^2.5.0
+        version: 2.5.0(@nestjs/common@11.1.9(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.9(@nestjs/common@11.1.9(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/microservices@11.1.9)(@nestjs/platform-express@11.1.9)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@trpc/server@11.10.0(typescript@5.9.3))(reflect-metadata@0.2.2)(rxjs@7.8.2)(zod@4.3.6)
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2
       rxjs:
         specifier: ^7.8.1
         version: 7.8.2
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.2.0
@@ -533,6 +542,9 @@ importers:
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../../packages/eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../../../packages/typescript-config
       '@repo/vitest-config':
         specifier: workspace:*
         version: link:../../../packages/vitest-config
@@ -1122,16 +1134,13 @@ importers:
 
   packages/trpc:
     dependencies:
+      '@backend/api':
+        specifier: workspace:*
+        version: link:../../apps/backend/api
       '@trpc/client':
         specifier: catalog:trpc11
-        version: 11.7.1(@trpc/server@11.7.1(typescript@5.9.3))(typescript@5.9.3)
-      class-validator:
-        specifier: ^0.14.2
-        version: 0.14.2
+        version: 11.7.1(@trpc/server@11.10.0(typescript@5.9.3))(typescript@5.9.3)
     devDependencies:
-      '@repo/eslint-config':
-        specifier: workspace:*
-        version: link:../eslint-config
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
@@ -4625,6 +4634,11 @@ packages:
       '@trpc/server': 11.7.1
       typescript: '>=5.7.2'
 
+  '@trpc/server@11.10.0':
+    resolution: {integrity: sha512-zZjTrR6He61e5TiT7e/bQqab/jRcXBZM8Fg78Yoo8uh5pz60dzzbYuONNUCOkafv5ppXVMms4NHYfNZgzw50vg==}
+    peerDependencies:
+      typescript: '>=5.7.2'
+
   '@trpc/server@11.7.1':
     resolution: {integrity: sha512-N3U8LNLIP4g9C7LJ/sLkjuPHwqlvE3bnspzC4DEFVdvx2+usbn70P80E3wj5cjOTLhmhRiwJCSXhlB+MHfGeCw==}
     peerDependencies:
@@ -7400,6 +7414,7 @@ packages:
 
   glob@10.5.0:
     resolution: {integrity: sha512-DfXN8DfhJ7NH3Oe7cFmu3NCu1wKbkReJ8TorzSAFbSKrlNaQSKfIzqYqVY8zlbs2NLBbWpRiU52GX2PbaBVNkg==}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   glob@13.0.0:
@@ -8956,6 +8971,17 @@ packages:
       '@nestjs/common': ^9.3.8 || ^10.0.0
       '@nestjs/core': ^9.3.8 || ^10.0.0
       '@trpc/server': ^10.0.0
+      reflect-metadata: ^0.1.13 || ^0.2.0
+      rxjs: 7.8.1
+      zod: ^3.14.0
+
+  nestjs-trpc@2.5.0:
+    resolution: {integrity: sha512-TEgHtDF3HT9F8CA0V/YrY9DPxcUDsM1CcI9eH4o7m7yRTsiIZtW/OvLfVP4/YSQCiF0Q91n/XPz+7B622xIhGw==}
+    hasBin: true
+    peerDependencies:
+      '@nestjs/common': ^9.3.8 || ^10.0.0
+      '@nestjs/core': ^9.3.8 || ^10.0.0
+      '@trpc/server': ^11.0.0
       reflect-metadata: ^0.1.13 || ^0.2.0
       rxjs: 7.8.1
       zod: ^3.14.0
@@ -15895,9 +15921,13 @@ snapshots:
   '@tootallnate/once@2.0.0':
     optional: true
 
-  '@trpc/client@11.7.1(@trpc/server@11.7.1(typescript@5.9.3))(typescript@5.9.3)':
+  '@trpc/client@11.7.1(@trpc/server@11.10.0(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
-      '@trpc/server': 11.7.1(typescript@5.9.3)
+      '@trpc/server': 11.10.0(typescript@5.9.3)
+      typescript: 5.9.3
+
+  '@trpc/server@11.10.0(typescript@5.9.3)':
+    dependencies:
       typescript: 5.9.3
 
   '@trpc/server@11.7.1(typescript@5.9.3)':
@@ -21417,6 +21447,17 @@ snapshots:
       ts-morph: 22.0.0
       tslib: 2.8.1
       zod: 3.25.76
+
+  nestjs-trpc@2.5.0(@nestjs/common@11.1.9(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.9(@nestjs/common@11.1.9(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/microservices@11.1.9)(@nestjs/platform-express@11.1.9)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@trpc/server@11.10.0(typescript@5.9.3))(reflect-metadata@0.2.2)(rxjs@7.8.2)(zod@4.3.6):
+    dependencies:
+      '@nestjs/common': 11.1.9(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@nestjs/core': 11.1.9(@nestjs/common@11.1.9(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/microservices@11.1.9)(@nestjs/platform-express@11.1.9)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      '@trpc/server': 11.10.0(typescript@5.9.3)
+      lodash: 4.17.21
+      reflect-metadata: 0.2.2
+      rxjs: 7.8.2
+      tslib: 2.8.1
+      zod: 4.3.6
 
   next-themes@0.4.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
     dependencies:

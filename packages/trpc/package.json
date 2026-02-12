@@ -2,10 +2,7 @@
   "name": "@repo/trpc",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/client.js",
-  "types": "./dist/client.d.ts",
   "scripts": {
-    "build": "tsc",
     "test:unit": "vitest run",
     "test:unit:coverage": "vitest run --coverage",
     "test:unit:watch": "vitest run --watch",
@@ -18,11 +15,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@trpc/client": "catalog:trpc11",
-    "class-validator": "^0.14.2"
+    "@backend/api": "workspace:*",
+    "@trpc/client": "catalog:trpc11"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@repo/vitest-config": "workspace:*",
     "@types/node": "catalog:tooling"
