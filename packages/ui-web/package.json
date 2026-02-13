@@ -58,6 +58,7 @@
     "@radix-ui/react-toggle": "catalog:radix",
     "@radix-ui/react-toggle-group": "catalog:radix",
     "@radix-ui/react-tooltip": "catalog:radix",
+    "@repo/ui": "workspace:*",
     "@repo/vitest-config": "workspace:*",
     "@storybook/react": "catalog:storybook9",
     "class-validator": "^0.14.2",

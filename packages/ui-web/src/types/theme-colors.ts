@@ -1,52 +1,14 @@
-/**
- * Primitive/Brand colors from the Curator design system.
- * These are the raw color values defined in globals.css.
- */
-export type PrimitiveColor =
-  | "white"
-  | "black"
-  | "brand-blue"
-  | "brand-blue-dark"
-  | "gray-lighter"
-  | "gray-light"
-  | "gray-normal"
-  | "gray-dark"
-  | "status-green"
-  | "status-red";
+export type {
+  PrimitiveColor,
+  SemanticColor,
+  ThemeColor,
+} from "@repo/ui/types/theme-colors";
 
-/**
- * Semantic colors that adapt to light/dark theme.
- * These map to CSS custom properties and change based on theme.
- */
-export type SemanticColor =
-  | "background"
-  | "foreground"
-  | "primary"
-  | "primary-foreground"
-  | "secondary"
-  | "secondary-foreground"
-  | "muted"
-  | "muted-foreground"
-  | "accent"
-  | "accent-foreground"
-  | "destructive"
-  | "destructive-foreground"
-  | "border"
-  | "card"
-  | "card-foreground"
-  | "popover"
-  | "popover-foreground";
-
-/**
- * All available theme colors for the Curator design system.
- * Use semantic colors for theme-aware styling (recommended).
- * Use primitive colors for fixed brand elements.
- */
-export type ThemeColor = SemanticColor | PrimitiveColor;
+import type { ThemeColor } from "@repo/ui/types/theme-colors";
 
 /**
  * Mapping of theme colors to Tailwind CSS classes.
- * Used internally by components to apply correct styles.
+ * Used internally by web components to apply correct styles.
  */
 export const themeColorClasses: Record<ThemeColor, string> = {
   // Semantic colors (theme-aware)

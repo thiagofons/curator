@@ -98,6 +98,7 @@ services:
       NODE_ENV: production
       CMS_DATABASE_URL: postgresql://${POSTGRES_USER:-curator}:${POSTGRES_PASSWORD:-curator}@cms-db:5432/${BLOGCMS_DB:-blogcms}
       PAYLOAD_SECRET: ${PAYLOAD_SECRET:-change-me-in-production}
+      PAYLOAD_SERVER_URL: http://cms.curator.local
     expose:
       - "3000"
     networks:

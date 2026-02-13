@@ -15,22 +15,18 @@ import { Users } from "./collections/users";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
+const serverURL = process.env.PAYLOAD_SERVER_URL || "http://localhost:3000";
+
 export default buildConfig({
-  serverURL: process.env.PAYLOAD_SERVER_URL || "http://localhost:3000",
+  serverURL,
   admin: {
     user: Users.slug,
     importMap: {
       baseDir: path.resolve(dirname),
     },
   },
-  cors:
-    process.env.NODE_ENV === "production"
-      ? ["https://cms.curator.com.br"]
-      : ["http://localhost:3000", "http://localhost:4321"],
-  csrf:
-    process.env.NODE_ENV === "production"
-      ? ["https://cms.curator.com.br"]
-      : ["http://localhost:3000", "http://localhost:4321"],
+  cors: [serverURL, "http://localhost:4321"],
+  csrf: [serverURL, "http://localhost:4321"],
   collections: [Users, Media, Authors, Categories, Posts],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
