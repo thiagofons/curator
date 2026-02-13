@@ -59,7 +59,8 @@
     "observability",
     "backend/api",
     "backend/cms-service",
-    "_templates"
+    "_templates",
+    "frontend/mobile"
   ],
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
