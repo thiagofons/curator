@@ -1,9 +1,9 @@
 import {
-  useFonts,
   Lexend_400Regular,
   Lexend_500Medium,
   Lexend_600SemiBold,
   Lexend_700Bold,
+  useFonts,
 } from "@expo-google-fonts/lexend";
 
 export type LexendFontResult = {

@@ -1,36 +1,88 @@
-import {
-  Lexend_400Regular,
-  Lexend_500Medium,
-  Lexend_600SemiBold,
-  Lexend_700Bold,
-  useFonts,
-} from "@expo-google-fonts/lexend";
 import * as SplashScreen from "expo-splash-screen";
 import { useCallback } from "react";
-import { View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { StatusBar } from "expo-status-bar";
 
-// Impede que a Splash Screen suma sozinha
+import {
+  Display,
+  SubheadingXL,
+  H2,
+  H3,
+  H4,
+  SubheadingLG,
+  SubheadingMD,
+  SubheadingSM,
+  SubheadingXS,
+  BodyBase,
+  BodySmall,
+  ButtonText,
+  useLexendFonts,
+  useThemeColors,
+} from "@repo/ui-mobile";
+
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const [fontsLoaded] = useFonts({
-    "Lexend-Regular": Lexend_400Regular,
-    "Lexend-Medium": Lexend_500Medium,
-    "Lexend-SemiBold": Lexend_600SemiBold,
-    "Lexend-Bold": Lexend_700Bold,
-  });
+  const colors = useThemeColors();
+  const { fontsLoaded, fontError } = useLexendFonts();
 
   const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
+    if (fontsLoaded || fontError) {
       await SplashScreen.hideAsync();
     }
-  }, [fontsLoaded]);
+  }, [fontsLoaded, fontError]);
 
-  if (!fontsLoaded) return null;
+  if (!fontsLoaded && !fontError) return null;
 
   return (
-    <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      {/* Seus Providers e Navigation aqui */}
-    </View>
+    <ScrollView
+      style={{ backgroundColor: colors.background }}
+      contentContainerStyle={styles.container}
+      onLayout={onLayoutRootView}
+    >
+      <Display>Stop consuming noise.</Display>
+      <SubheadingXL>Start building wisdom.</SubheadingXL>
+
+      <View style={styles.divider} />
+
+      <H2>Curator Design System</H2>
+      <H3>Typography Scale</H3>
+      <H4>All variants below</H4>
+
+      <View style={styles.divider} />
+
+      <SubheadingLG>SubheadingLG — Section intro</SubheadingLG>
+      <SubheadingMD>SubheadingMD — Descriptive text</SubheadingMD>
+      <SubheadingSM>SubheadingSM — Label</SubheadingSM>
+      <SubheadingXS>SubheadingXS — Micro label</SubheadingXS>
+
+      <View style={styles.divider} />
+
+      <BodyBase>
+        BodyBase — The quick brown fox jumps over the lazy dog. Standard reading
+        text for most content across the app.
+      </BodyBase>
+      <BodySmall color="muted-foreground">
+        BodySmall — Secondary info, captions, footnotes.
+      </BodySmall>
+
+      <View style={styles.divider} />
+
+      <ButtonText color="primary">ButtonText — Call to action</ButtonText>
+
+      <StatusBar style="auto" />
+    </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 24,
+    gap: 12,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: "#d5d5d5",
+    marginVertical: 8,
+  },
+});
