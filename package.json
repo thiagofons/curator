@@ -27,6 +27,8 @@
     "compose:prod:blog:down": "docker compose -f docker-compose.production.yaml --env-file=.env.production --profile blog down",
     "// --- Database ---": "",
     "db:generate": "turbo run db:generate",
+    "db:push:auth:dev": "cross-env NODE_ENV=development turbo run db:push:auth",
+    "db:push:auth:prod": "cross-env NODE_ENV=production turbo run db:push:auth",
     "db:migrate:dev": "turbo run db:migrate:dev",
     "db:migrate:deploy": "turbo run db:migrate:deploy",
     "db:studio": "turbo run db:studio",

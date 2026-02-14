@@ -103,8 +103,9 @@ catalogs:
     payload: 3.63.0
 
   prisma7:
-    "@prisma/client": ^7.0.0
-    prisma: ^7.0.0
+    "@prisma/client": ^7.4.0
+    prisma: ^7.4.0
+    "prisma-zod-generator": ^2.1.2
 
   rabbitmq:
     "@types/amqplib": 0.10.7

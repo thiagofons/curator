@@ -16,14 +16,17 @@
     "FIREBASE_MEASUREMENT_ID",
     "FIREBASE_SERVICE_ACCOUNT_KEY",
     "FIREBASE_API_KEY",
-    "NODE_ENV"
+    "NODE_ENV",
+    "AUTH_DATABASE_URL",
+    "ROADMAP_DATABASE_URL",
+    "PRISMA_TARGET"
   ],
   "ui": "tui",
   "tasks": {
     "build": {
       "dependsOn": ["^build", "^db:generate"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+      "outputs": ["dist/**", ".next/**", "!.ext/cache/**", ".expo/**"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
     "check-types": {
       "dependsOn": ["^check-types"]
@@ -35,18 +38,24 @@
     },
     "db:generate": {
       "dependsOn": ["^db:generate"],
-      "env": ["DATABASE_URL"]
+      "outputs": ["src/client/**", "../shared/src/generated/**"]
     },
     "db:migrate:dev": {
-      "dependsOn": ["^db:migrate:dev"],
-      "env": ["DATABASE_URL"]
+      "cache": false,
+      "env": ["AUTH_DATABASE_URL", "ROADMAP_DATABASE_URL", "PRISMA_TARGET"]
     },
     "db:migrate:deploy": {
       "dependsOn": ["^db:migrate:deploy"],
-      "env": ["DATABASE_URL"]
+      "env": ["AUTH_DATABASE_URL", "ROADMAP_DATABASE_URL", "PRISMA_TARGET"]
     },
     "db:studio": {
       "dependsOn": ["^db:studio"]
+    },
+    "db:push:auth": {
+      "cache": false
+    },
+    "db:push:roadmap": {
+      "cache": false
     },
     "docker:build": {
       "cache": true,
