@@ -1,12 +1,12 @@
 // O "engineType" que antigamente ficava aqui, agora é gerenciado pelo prisma.config.ts!
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/auth/client"
+  output   = "../src/user/client"
 }
 
 generator zod {
   provider = "prisma-zod-generator"
-  output   = "../../../packages/model/src/auth"
+  output   = "../../../packages/model/src/user"
 }
 
 datasource authDb {

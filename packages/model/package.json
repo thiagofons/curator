@@ -29,6 +29,7 @@
     "typescript": "catalog:tooling"
   },
   "exports": {
-    ".": {}
+    "./auth": "./src/auth/index.ts",
+    "./user": "./src/user/index.ts"
   }
 }

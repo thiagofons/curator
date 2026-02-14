@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 // Discovers all *.prisma files in prisma/ and runs `prisma generate` for each one.
 // PRISMA_TARGET is derived from the filename (e.g. auth.prisma → PRISMA_TARGET=auth).
-import { readdirSync } from "fs";
 import { execSync } from "child_process";
-import { join, basename, dirname } from "path";
+import { readdirSync } from "fs";
+import { basename, dirname, join } from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -16,7 +16,9 @@ if (schemas.length === 0) {
   process.exit(1);
 }
 
-console.log(`🔍 ${schemas.length} schema(s) encontrado(s): ${schemas.join(", ")}\n`);
+console.log(
+  `🔍 ${schemas.length} schema(s) encontrado(s): ${schemas.join(", ")}\n`,
+);
 
 let hasError = false;
 
