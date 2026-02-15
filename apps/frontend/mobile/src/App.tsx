@@ -1,21 +1,22 @@
 import * as SplashScreen from "expo-splash-screen";
+import { StatusBar } from "expo-status-bar";
 import { useCallback } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { StatusBar } from "expo-status-bar";
+import "./styles/global.css";
 
 import {
+  BodyBase,
+  BodySmall,
+  ButtonText,
   Display,
-  SubheadingXL,
   H2,
   H3,
   H4,
   SubheadingLG,
   SubheadingMD,
   SubheadingSM,
+  SubheadingXL,
   SubheadingXS,
-  BodyBase,
-  BodySmall,
-  ButtonText,
   useLexendFonts,
   useThemeColors,
 } from "@repo/ui-mobile";
@@ -36,7 +37,7 @@ export default function App() {
 
   return (
     <ScrollView
-      style={{ backgroundColor: colors.background }}
+      className="bg-black"
       contentContainerStyle={styles.container}
       onLayout={onLayoutRootView}
     >

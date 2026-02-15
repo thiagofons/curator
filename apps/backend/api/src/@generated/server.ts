@@ -13,15 +13,12 @@ import { z } from "zod";
 
 const t = initTRPC.create();
 const publicProcedure = t.procedure;
+import { Auth } from "@repo/model";
 
 const appRouter = t.router({
-  dogsRouter: t.router({
+  usersRouter: t.router({
     findAll: publicProcedure
-      .output(z.array(z.object({
-  name: z.string(),
-  breed: z.enum(["Labrador", "Corgi", "Beagle", "Golden Retriver"]),
-  size: z.number(),
-})))
+      .output(Auth.UserFindManySchema)
       .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     })
 });

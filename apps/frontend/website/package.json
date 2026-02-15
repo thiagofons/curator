@@ -70,7 +70,7 @@
     "tailwindcss": "catalog:ui-libs",
     "tailwindcss-animate": "catalog:ui-libs",
     "vite": "catalog:vite7",
-    "zod": "^4.3.6"
+    "zod": "catalog:core-libs"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

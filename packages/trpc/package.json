@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "build": "tsc",
     "test:unit": "vitest run",
     "test:unit:coverage": "vitest run --coverage",
     "test:unit:watch": "vitest run --watch",
@@ -16,7 +17,9 @@
   "license": "ISC",
   "dependencies": {
     "@backend/api": "workspace:*",
-    "@trpc/client": "catalog:trpc11"
+    "@tanstack/react-query": "^5.90.21",
+    "@trpc/client": "catalog:trpc11",
+    "@trpc/react-query": "^11.10.0"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
@@ -24,6 +27,6 @@
     "@types/node": "catalog:tooling"
   },
   "exports": {
-    ".": "./src/client.ts"
+    ".": "./src/index.tsx"
   }
 }

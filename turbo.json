@@ -19,7 +19,9 @@
     "NODE_ENV",
     "AUTH_DATABASE_URL",
     "ROADMAP_DATABASE_URL",
-    "PRISMA_TARGET"
+    "PRISMA_TARGET",
+    "NEXT_PUBLIC_API_URL",
+    "EXPO_PUBLIC_API_URL"
   ],
   "ui": "tui",
   "tasks": {

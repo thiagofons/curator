@@ -1,23 +1,16 @@
+import { Auth } from "@repo/model";
 import { Query, Router } from "nestjs-trpc";
-import { z } from "zod";
-
-const dogsSchema = z.object({
-  name: z.string(),
-  breed: z.enum(["Labrador", "Corgi", "Beagle", "Golden Retriver"]),
-  size: z.number(),
-});
+import { z } from "zod"; // 👈 Não esqueça de importar o zod
 
 @Router()
-export class DogsRouter {
-  constructor() {}
+export class UsersRouter {
+  @Query({
+    output: Auth.UserFindManySchema,
+  })
+  async findAll(): Promise<z.infer<typeof Auth.UserFindManySchema>> {
+    const users = [{ id: "123", email: "thiago@exemplo.com" }];
 
-  @Query({ output: z.array(dogsSchema) })
-  async findAll() {
-    const dogs = [
-      { name: "Buddy", breed: "Labrador" },
-      { name: "Charlie", breed: "Corgi" },
-    ];
-
-    return dogs;
+    // Se você tentar retornar um objeto Zod ou dados errados aqui, o TS vai chiar!
+    return users as z.infer<typeof Auth.UserFindManySchema>;
   }
 }

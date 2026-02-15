@@ -8,8 +8,6 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc -w",
     "test:unit": "vitest run",
     "test:unit:coverage": "vitest run --coverage",
     "test:unit:watch": "vitest run --watch",
@@ -22,6 +20,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {},
+  "peerDependencies": {
+    "zod": "catalog:core-libs"
+  },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
@@ -29,7 +30,6 @@
     "typescript": "catalog:tooling"
   },
   "exports": {
-    "./auth": "./src/auth/index.ts",
-    "./user": "./src/user/index.ts"
+    ".": "./src/index.ts"
   }
 }
