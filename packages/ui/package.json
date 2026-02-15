@@ -5,7 +5,12 @@
   "type": "module",
   "exports": {
     "./types/*": "./src/types/*.ts",
-    "./theme/*": "./src/theme/*.ts"
+    "./theme/*": "./src/theme/*.ts",
+    "./components/*": "./src/components/*.tsx",
+    "./lib/*": "./src/lib/*.ts",
+    "./utils": "./src/lib/utils.ts",
+    "./preset": "./src/theme/preset.ts",
+    ".": "./src/index.ts"
   },
   "scripts": {
     "lint": "eslint .",
@@ -21,9 +26,17 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@repo/vitest-config": "workspace:*",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "nativewind": "^4.0.1",
+    "react-native-web": "^0.21.2",
+    "tailwind-merge": "^3.4.1",
+    "tailwindcss": "^3.4.1",
     "vitest": "catalog:testing"
   },
   "devDependencies": {
+    "@types/react": "catalog:react19",
+    "@types/react-native": "^0.73.0",
     "typescript": "catalog:tooling"
   }
 }

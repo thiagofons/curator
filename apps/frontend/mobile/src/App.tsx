@@ -23,6 +23,10 @@ import {
 
 SplashScreen.preventAutoHideAsync();
 
+import { Button } from "@repo/ui";
+
+// ... existing imports
+
 export default function App() {
   const colors = useThemeColors();
   const { fontsLoaded, fontError } = useLexendFonts();
@@ -37,12 +41,24 @@ export default function App() {
 
   return (
     <ScrollView
-      className="bg-black"
+      className="bg-background"
       contentContainerStyle={styles.container}
       onLayout={onLayoutRootView}
     >
       <Display>Stop consuming noise.</Display>
       <SubheadingXL>Start building wisdom.</SubheadingXL>
+
+      <View style={styles.divider} />
+
+      <H2>Universal Design System</H2>
+      <Button
+        label="Universal Button"
+        onPress={() => console.log("Pressed!")}
+      />
+      <Button variant="secondary" label="Secondary" className="mt-4" />
+      <Button variant="destructive" label="Destructive" className="mt-4" />
+      <Button variant="outline" label="Outline" className="mt-4" />
+      <Button variant="ghost" label="Ghost" className="mt-4" />
 
       <View style={styles.divider} />
 
