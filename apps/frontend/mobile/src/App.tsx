@@ -1,9 +1,4 @@
-import * as SplashScreen from "expo-splash-screen";
-import { StatusBar } from "expo-status-bar";
-import { useCallback } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
-import "./styles/global.css";
-
+import { Button } from "@/components/Button";
 import {
   BodyBase,
   BodySmall,
@@ -17,18 +12,18 @@ import {
   SubheadingSM,
   SubheadingXL,
   SubheadingXS,
-  useLexendFonts,
-  useThemeColors,
-} from "@repo/ui-mobile";
+} from "@/components/Typography";
+import { useLexendFonts } from "@/hooks/useLexendFonts";
+import * as SplashScreen from "expo-splash-screen";
+import { StatusBar } from "expo-status-bar";
+import { useCallback } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
 
 SplashScreen.preventAutoHideAsync();
-
-import { Button } from "@repo/ui";
 
 // ... existing imports
 
 export default function App() {
-  const colors = useThemeColors();
   const { fontsLoaded, fontError } = useLexendFonts();
 
   const onLayoutRootView = useCallback(async () => {
@@ -41,7 +36,6 @@ export default function App() {
 
   return (
     <ScrollView
-      className="bg-background"
       contentContainerStyle={styles.container}
       onLayout={onLayoutRootView}
     >
@@ -55,10 +49,10 @@ export default function App() {
         label="Universal Button"
         onPress={() => console.log("Pressed!")}
       />
-      <Button variant="secondary" label="Secondary" className="mt-4" />
-      <Button variant="destructive" label="Destructive" className="mt-4" />
-      <Button variant="outline" label="Outline" className="mt-4" />
-      <Button variant="ghost" label="Ghost" className="mt-4" />
+      <Button variant="secondary" label="Secondary" />
+      <Button variant="destructive" label="Destructive" />
+      <Button variant="outline" label="Outline" />
+      <Button variant="ghost" label="Ghost" />
 
       <View style={styles.divider} />
 
