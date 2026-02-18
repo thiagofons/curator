@@ -1,7 +1,7 @@
 {
   "name": "@frontend/mobile",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -9,25 +9,28 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@expo-google-fonts/lexend": "^0.4.1",
-    "@react-native-async-storage/async-storage": "^2.2.0",
-    "@repo/model": "workspace:*",
-    "@repo/trpc": "workspace:*",
-    "expo": "~54.0.33",
-    "expo-font": "^14.0.11",
-    "expo-modules-core": "^3.0.29",
-    "expo-splash-screen": "^31.0.13",
-    "expo-status-bar": "~3.0.9",
-    "nativewind": "5.0.0-preview.2",
-    "react": "^19.1.0",
-    "react-native": "^0.81.5",
-    "react-native-css": "^3.0.1",
-    "react-native-reanimated": "^4.2.1",
-    "react-native-safe-area-context": "^5.6.2"
+    "react": "catalog:react19",
+    "react-dom": "catalog:react19",
+    "react-native": "catalog:react-native",
+    "react-native-safe-area-context": "catalog:react-native",
+    "react-native-screens": "catalog:react-native",
+    "react-native-worklets": "catalog:react-native",
+    "react-native-reanimated": "catalog:react-native",
+    "@react-navigation/native": "catalog:mobile-nav",
+    "@expo/vector-icons": "catalog:expo54",
+    "expo": "catalog:expo54",
+    "expo-router": "catalog:expo54",
+    "expo-constants": "catalog:expo54",
+    "expo-font": "catalog:expo54",
+    "expo-linking": "catalog:expo54",
+    "expo-splash-screen": "catalog:expo54",
+    "expo-status-bar": "catalog:expo54",
+    "expo-web-browser": "catalog:expo54"
   },
   "devDependencies": {
-    "@types/react": "~19.1.0",
-    "typescript": "~5.9.2"
+    "@types/react": "catalog:react19",
+    "react-test-renderer": "catalog:react19",
+    "typescript": "catalog:tooling"
   },
   "private": true
 }
