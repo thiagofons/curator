@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo-google-fonts/lexend": "^0.4.1",
     "@expo/vector-icons": "catalog:expo54",
     "@react-navigation/native": "catalog:mobile-nav",
     "expo": "catalog:expo54",

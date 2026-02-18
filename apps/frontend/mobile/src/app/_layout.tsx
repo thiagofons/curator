@@ -1,5 +1,5 @@
+import { appFonts } from "@/global/constants/fonts";
 import i18n from "@/global/lib/i18n";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
   DarkTheme,
   DefaultTheme,
@@ -13,26 +13,17 @@ import { I18nextProvider } from "react-i18next";
 import { useColorScheme } from "react-native";
 import "react-native-reanimated";
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from "expo-router";
-
-export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: "(tabs)",
-};
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
-  const [loaded, error] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-    ...FontAwesome.font,
-  });
+export { ErrorBoundary } from "expo-router";
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
+export const unstable_settings = {
+  initialRouteName: "(app)",
+};
+
+export default function RootLayout() {
+  const [loaded, error] = useFonts(appFonts);
+
   useEffect(() => {
     if (error) throw error;
   }, [error]);
@@ -47,19 +38,22 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return (
+    <I18nextProvider i18n={i18n}>
+      <RootLayoutNav />
+    </I18nextProvider>
+  );
 }
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <I18nextProvider i18n={i18n}>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack>
-      </ThemeProvider>
-    </I18nextProvider>
+    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(app)" />
+        <Stack.Screen name="(auth)" />
+      </Stack>
+    </ThemeProvider>
   );
 }
