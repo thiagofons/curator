@@ -1,9 +1,9 @@
 import React from "react";
 import { Text, type TextProps, type TextStyle } from "react-native";
 
-import { ThemeColor } from "@/constants/colors";
-import { useThemeColors } from "@/hooks";
-import { type TypographyVariant, typographyStyles } from "./Typography.styles";
+import { ThemeColor } from "@/global/constants/colors";
+import { useColors } from "@/global/hooks/use-colors";
+import { type TypographyVariant, typographyStyles } from "./typography.styles";
 
 export interface TypographyProps extends TextProps {
   variant?: TypographyVariant;
@@ -25,7 +25,7 @@ export const Typography = ({
   children,
   ...props
 }: TypographyProps) => {
-  const colors = useThemeColors();
+  const colors = useColors();
 
   const resolvedStyle: TextStyle = {
     ...typographyStyles[variant],

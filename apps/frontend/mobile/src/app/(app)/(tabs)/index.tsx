@@ -1,20 +1,14 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 
-import EditScreenInfo from "@/components/EditScreenInfo";
-import { Text, View } from "@/components/Themed";
+import { Display } from "@/global/components/ui/typography";
 import { useTranslation } from "react-i18next";
 
 export default function TabOneScreen() {
   const { t } = useTranslation();
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{t("tab_one")}</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
+      <Display>{t("tab_one")}</Display>
+      <View style={styles.separator} />
     </View>
   );
 }

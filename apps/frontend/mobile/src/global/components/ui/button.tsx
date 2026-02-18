@@ -1,4 +1,4 @@
-import { useTheme } from "@/hooks/useTheme"; // Ajuste para o caminho correto do seu hook
+import { useColors } from "@/global/hooks/use-colors";
 import React, { ComponentRef, forwardRef } from "react";
 import {
   Pressable,
@@ -15,7 +15,7 @@ import {
   sizeStyles,
   type ButtonSize,
   type ButtonVariant,
-} from "./Button.styles";
+} from "./button.styles";
 
 export interface ButtonProps extends Omit<PressableProps, "style"> {
   variant?: ButtonVariant;
@@ -43,7 +43,7 @@ export const Button = forwardRef<ComponentRef<typeof Pressable>, ButtonProps>(
     ref,
   ) => {
     // 1. Extraímos as cores baseadas no esquema atual (light/dark)
-    const { colors } = useTheme();
+    const colors = useColors();
 
     return (
       <Pressable

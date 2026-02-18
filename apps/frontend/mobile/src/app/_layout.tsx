@@ -1,4 +1,3 @@
-import { useColorScheme } from "@/components/useColorScheme";
 import i18n from "@/global/lib/i18n";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
@@ -11,6 +10,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { I18nextProvider } from "react-i18next";
+import { useColorScheme } from "react-native";
 import "react-native-reanimated";
 
 export {
@@ -58,7 +58,6 @@ function RootLayoutNav() {
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
         </Stack>
       </ThemeProvider>
     </I18nextProvider>
