@@ -29,7 +29,7 @@ i18n.use(initReactI18next).init({
     escapeValue: false,
   },
   react: {
-    useSuspense: false, // OBRIGATÓRIO para evitar o erro de Context no Mobile
+    useSuspense: false,
   },
 });
 
