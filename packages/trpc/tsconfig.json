@@ -6,6 +6,6 @@
     "types": ["node"],
     "rootDir": "src"
   },
-  "include": ["src/**/*.ts", "src/index.tsx"],
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules", "dist"]
 }

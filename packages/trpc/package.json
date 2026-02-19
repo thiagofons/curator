@@ -27,6 +27,6 @@
     "@types/node": "catalog:tooling"
   },
   "exports": {
-    ".": "./src/index.tsx"
+    ".": "./src/index.ts"
   }
 }
