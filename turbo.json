@@ -2,6 +2,7 @@
   "$schema": "https://turborepo.com/schema.json",
   "globalEnv": [
     "DEV",
+    "BACKEND_API_PORT",
     "PAYLOAD_SECRET",
     "DATABASE_URL",
     "FLAGSMITH_DEV_KEY",
@@ -21,7 +22,8 @@
     "ROADMAP_DATABASE_URL",
     "PRISMA_TARGET",
     "NEXT_PUBLIC_API_URL",
-    "EXPO_PUBLIC_API_URL"
+    "EXPO_PUBLIC_API_URL",
+    "JWT_SECRET"
   ],
   "ui": "tui",
   "tasks": {

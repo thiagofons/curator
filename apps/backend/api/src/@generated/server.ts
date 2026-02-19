@@ -13,13 +13,14 @@ import { z } from "zod";
 
 const t = initTRPC.create();
 const publicProcedure = t.procedure;
-import { Auth } from "@repo/model";
+import { createUserDto } from "@/modules/user/application";
 
 const appRouter = t.router({
-  usersRouter: t.router({
-    findAll: publicProcedure
-      .output(Auth.UserFindManySchema)
-      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
+  auth: t.router({
+    register: publicProcedure
+      .input(createUserDto)
+      .output(z.object({ message: z.string() }))
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
     })
 });
 

@@ -24,6 +24,9 @@
   "explorer.compactFolders": true,
   "javascript.updateImportsOnFileMove.enabled": "always",
   "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "javascript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.preferences.importModuleSpecifierEnding": "minimal",
   "workbench.editor.tabSizing": "shrink",
   "editor.foldingImportsByDefault": false,
   "editor.formatOnPaste": true,
@@ -84,5 +87,9 @@
   },
   "[terraform]": {
     "editor.defaultFormatter": "hashicorp.terraform"
-  }
+  },
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  },
+  "vitest.disableWorkspaceWarning": true
 }

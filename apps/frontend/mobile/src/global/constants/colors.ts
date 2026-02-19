@@ -82,27 +82,27 @@ export const lightSemanticColors: Record<SemanticColor, string> = {
 };
 
 // -----------------------------------------------------------------------
-// Semantic tokens — dark mode
+// Semantic tokens — dark mode (Refined for 2026 Branding)
 // -----------------------------------------------------------------------
 
 export const darkSemanticColors: Record<SemanticColor, string> = {
-  background: "#1a1a1a", // hsl(0 0% 10%)
-  foreground: "#ffffff",
+  background: "#020817",
+  foreground: "#f8fafc",
   primary: "#0060f7",
   "primary-foreground": "#ffffff",
-  secondary: "#4b5563",
-  "secondary-foreground": "#ffffff",
-  muted: "#001f4d", // hsl(216 100% 15%)
-  "muted-foreground": "#999999", // hsl(0 0% 60%)
-  accent: "#001f4d",
+  secondary: "#1e293b",
+  "secondary-foreground": "#f1f5f9",
+  muted: "#0f172a",
+  "muted-foreground": "#94a3b8",
+  accent: "#1d4ed8",
   "accent-foreground": "#ffffff",
-  destructive: "#ff383c",
+  destructive: "#ef4444",
   "destructive-foreground": "#ffffff",
-  border: "#4b5563",
-  card: "#001433", // hsl(216 100% 10%)
-  "card-foreground": "#ffffff",
-  popover: "#001433",
-  "popover-foreground": "#ffffff",
+  border: "#1e293b",
+  card: "#030e21",
+  "card-foreground": "#f8fafc",
+  popover: "#030e21",
+  "popover-foreground": "#f8fafc",
 };
 
 export type ThemeColors = Record<ThemeColor, string>;

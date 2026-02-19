@@ -18,10 +18,11 @@ services:
       CHOKIDAR_USEPOLLING: "true"
       WATCHPACK_POLLING: "true"
     volumes:
-      - ./apps/backend/api/src:/app/apps/backend/api/src
+      - ./apps/backend/api:/app/apps/backend/api
+      - /app/apps/backend/api/node_modules
+      - /app/apps/backend/api/dist
       - ./packages:/app/packages
       - /app/node_modules
-      - /app/apps/backend/api/node_modules
     networks:
       - curator-net
     depends_on:
@@ -42,7 +43,7 @@ services:
     env_file:
       - .env.development
     ports:
-      - "5433:5432"
+      - "5433:5433"
     volumes:
       - api_data:/var/lib/postgresql/data
     healthcheck:

@@ -1,3 +1,4 @@
+import { AuthProvider } from "@/features/auth/context/auth-context";
 import { appFonts } from "@/global/constants/fonts";
 import i18n from "@/global/lib/i18n";
 import {
@@ -17,10 +18,6 @@ SplashScreen.preventAutoHideAsync();
 
 export { ErrorBoundary } from "expo-router";
 
-export const unstable_settings = {
-  initialRouteName: "(app)",
-};
-
 export default function RootLayout() {
   const [loaded, error] = useFonts(appFonts);
 
@@ -34,13 +31,14 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
-  if (!loaded) {
-    return null;
-  }
+  if (!loaded) return null;
 
   return (
     <I18nextProvider i18n={i18n}>
-      <RootLayoutNav />
+      {/* 1. O AuthProvider deve envolver toda a navegação */}
+      <AuthProvider>
+        <RootLayoutNav />
+      </AuthProvider>
     </I18nextProvider>
   );
 }
@@ -50,6 +48,8 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      {/* 2. O Stack aqui apenas define as rotas.
+          A lógica de proteção fica dentro de (app)/_layout.tsx */}
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(app)" />
         <Stack.Screen name="(auth)" />
