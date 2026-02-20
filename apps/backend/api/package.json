@@ -1,6 +1,6 @@
 {
   "name": "@backend/api",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "",
   "author": "",
   "private": true,
@@ -9,7 +9,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
-    "trpc:generate": "nestjs-trpc generate --entrypoint src/app.module.ts --output src && node scripts/fix-trpc-aliases.mjs",
+    "trpc:generate": "pnpm exec nestjs-trpc generate --entrypoint src/app.module.ts --output src && node scripts/fix-trpc-aliases.mjs",
     "predev": "pnpm trpc:generate",
     "dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
