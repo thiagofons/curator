@@ -71,8 +71,20 @@ services:
       context: .
       dockerfile: ./apps/frontend/website/Dockerfile
       target: staging
+      args:
+        FLAGSMITH_PROD_KEY: ${FLAGSMITH_PROD_KEY}
+        DISCORD_WEBHOOK_URL: ${DISCORD_WEBHOOK_URL}
+        FIREBASE_API_KEY: ${FIREBASE_API_KEY}
+        FIREBASE_AUTH_DOMAIN: ${FIREBASE_AUTH_DOMAIN}
+        FIREBASE_PROJECT_ID: ${FIREBASE_PROJECT_ID}
+        FIREBASE_STORAGE_BUCKET: ${FIREBASE_STORAGE_BUCKET}
+        FIREBASE_MESSAGING_SENDER_ID: ${FIREBASE_MESSAGING_SENDER_ID}
+        FIREBASE_APP_ID: ${FIREBASE_APP_ID}
+        FIREBASE_MEASUREMENT_ID: ${FIREBASE_MEASUREMENT_ID}
     env_file:
       - .env.staging
+    environment:
+      - FLAGSMITH_API_URL=http://flagsmith:8000/api/v1/
     expose:
       - "4003"
     networks:
@@ -81,7 +93,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "wget --quiet --tries=1 --spider http://localhost:4003/ || exit 1",
+          "wget --quiet --tries=1 --spider http://127.0.0.1:4003/favicon.ico || exit 1",
         ]
       interval: 30s
       timeout: 10s
@@ -95,7 +107,7 @@ services:
     env_file:
       - .env.staging
     environment:
-      DATABASE_URL: postgresql://flagsmith:${FLAGSMITH_DB_PASSWORD}@flagsmith-db:5432/flagsmith
+      DATABASE_URL: ${FLAGS_DATABASE_URL}
       DJANGO_ALLOWED_HOSTS: "flagsmith,flags.curator.local,localhost"
       DJANGO_CSRF_TRUSTED_ORIGINS: "http://flags.curator.local"
       ALLOW_REGISTRATION_WITHOUT_INVITE: "True"
@@ -105,35 +117,18 @@ services:
     networks:
       - curator-net
     depends_on:
-      flagsmith-db:
+      db:
         condition: service_healthy
     healthcheck:
       test:
         [
           "CMD-SHELL",
-          "wget --quiet --tries=1 --spider http://localhost:8000/health || exit 1",
+          'python3 -c "import urllib.request; urllib.request.urlopen(''http://localhost:8000/health'')" || exit 1',
         ]
       interval: 30s
       timeout: 10s
       retries: 5
       start_period: 60s
-
-  flagsmith-db:
-    container_name: flagsmith-db
-    image: postgres:15-alpine
-    environment:
-      POSTGRES_USER: flagsmith
-      POSTGRES_PASSWORD: ${FLAGSMITH_DB_PASSWORD}
-      POSTGRES_DB: flagsmith
-    volumes:
-      - staging_flagsmith_db_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U flagsmith -d flagsmith"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - curator-net
 
   # >>> Infrastructure <<<
   nginx:
@@ -212,9 +207,6 @@ volumes:
     driver: local
   staging_redis_data:
     name: staging_redis_data
-    driver: local
-  staging_flagsmith_db_data:
-    name: staging_flagsmith_db_data
     driver: local
 
 networks:

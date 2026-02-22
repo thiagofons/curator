@@ -4,7 +4,7 @@ CREATE EXTENSION IF NOT EXISTS "hstore";
 -- 2. Criação dos Usuários (Sem aspas = case-insensitive)
 CREATE ROLE api_user LOGIN PASSWORD 'api_password';
 CREATE ROLE cms_user LOGIN PASSWORD 'cms_password';
-CREATE ROLE flags_user LOGIN PASSWORD 'flags_password';
+CREATE ROLE flags_user LOGIN PASSWORD 'flags_password' SUPERUSER;
 
 -- 3. Criação dos Schemas (Sem aspas = o Postgres salvará como api, cms, flags)
 CREATE SCHEMA api;

@@ -41,6 +41,11 @@ export default defineConfig({
         context: "client",
         access: "public",
       }),
+      FLAGSMITH_API_URL: envField.string({
+        context: "server",
+        access: "public",
+        optional: true,
+      }),
       FIREBASE_API_KEY: envField.string({
         context: "client",
         access: "public",
