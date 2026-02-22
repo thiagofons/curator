@@ -9,7 +9,60 @@
 #   127.0.0.1  api.curator.local cms.curator.local
 # =============================================================================
 services:
-  # >>> NGINX — Reverse Proxy (port 80) <<<
+  # >>> Application <<<
+  api:
+    build:
+      context: .
+      dockerfile: ./apps/backend/api/Dockerfile
+      target: production
+    env_file:
+      - .env.development
+    expose:
+      - "3300"
+    networks:
+      - curator-net
+    depends_on:
+      api-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget --quiet --tries=1 --spider http://localhost:3300/ || exit 1",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  cms:
+    build:
+      context: .
+      dockerfile: ./apps/backend/cms/Dockerfile
+      target: runner
+    env_file:
+      - .env.development
+    expose:
+      - "3000"
+    networks:
+      - curator-net
+    depends_on:
+      cms-db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget --quiet --tries=1 --spider http://localhost:3000/admin || exit 1",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 80s
+
+  # >>> Infrastructure <<<
   nginx:
     image: nginx:alpine
     ports:
@@ -32,116 +85,29 @@ services:
       retries: 3
       start_period: 10s
 
-  # >>> API (port 3300) <<<
-  api:
-    build:
-      context: .
-      dockerfile: ./apps/backend/api/Dockerfile
-      target: production
-    env_file:
-      - .env.development
-    environment:
-      NODE_ENV: production
-      DATABASE_URL: postgresql://${POSTGRES_USER:-curator}:${POSTGRES_PASSWORD:-curator}@api-db:5432/${API_DB:-api}
-      REDIS_URL: redis://:${REDIS_PASSWORD:-curator}@redis:6379
-    expose:
-      - "3300"
-    networks:
-      - curator-net
-    depends_on:
-      api-db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "wget --quiet --tries=1 --spider http://localhost:3300/ || exit 1",
-        ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 60s
-
-  api-db:
+  db:
     image: postgres:15-alpine
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-curator}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-curator}
-      POSTGRES_DB: ${API_DB:-api}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_DB}
     env_file:
       - .env.development
     volumes:
-      - staging_api_data:/var/lib/postgresql/data
+      - staging_db_data:/var/lib/postgresql/data
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "pg_isready -U ${POSTGRES_USER:-curator} -d ${API_DB:-api}",
-        ]
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER} -d ${DATABASE_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
       - curator-net
 
-  # >>> CMS (port 3000) <<<
-  cms:
-    build:
-      context: .
-      dockerfile: ./apps/backend/cms/Dockerfile
-      target: runner
-    env_file:
-      - .env.development
-    environment:
-      NODE_ENV: production
-      CMS_DATABASE_URL: postgresql://${POSTGRES_USER:-curator}:${POSTGRES_PASSWORD:-curator}@cms-db:5432/${BLOGCMS_DB:-blogcms}
-      PAYLOAD_SECRET: ${PAYLOAD_SECRET:-change-me-in-production}
-    expose:
-      - "3000"
-    networks:
-      - curator-net
-    depends_on:
-      cms-db:
-        condition: service_healthy
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "wget --quiet --tries=1 --spider http://localhost:3000/admin || exit 1",
-        ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 80s
-
-  cms-db:
-    image: postgres:15-alpine
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER:-curator}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-curator}
-      POSTGRES_DB: ${BLOGCMS_DB:-blogcms}
-    env_file:
-      - .env.development
-    volumes:
-      - staging_cms_data:/var/lib/postgresql/data
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "pg_isready -U ${POSTGRES_USER:-curator} -d ${BLOGCMS_DB:-blogcms}",
-        ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - curator-net
-
-  # >>> INFRASTRUCTURE <<<
   redis:
     image: redis:7-alpine
-    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-curator}
+    env_file:
+      - .env.development
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
     volumes:
       - staging_redis_data:/data
     healthcheck:
@@ -153,11 +119,8 @@ services:
       - curator-net
 
 volumes:
-  staging_api_data:
-    name: staging_api_data
-    driver: local
-  staging_cms_data:
-    name: staging_cms_data
+  staging_db_data:
+    name: staging_db_data
     driver: local
   staging_redis_data:
     name: staging_redis_data

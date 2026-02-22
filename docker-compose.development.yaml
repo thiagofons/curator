@@ -49,6 +49,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    command: ["pnpm", "dev", "--filter=@backend/cms"]
 
   # >>> Infrastructure <<
   db:

@@ -26,11 +26,11 @@ export default buildConfig({
   cors:
     process.env.NODE_ENV === "production"
       ? ["https://cms.curator.com.br"]
-      : ["http://localhost:3000", "http://localhost:4321"],
+      : ["http://localhost:3000"],
   csrf:
     process.env.NODE_ENV === "production"
       ? ["https://cms.curator.com.br"]
-      : ["http://localhost:3000", "http://localhost:4321"],
+      : ["http://localhost:3000"],
   collections: [Users, Media, Authors, Categories, Posts],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
