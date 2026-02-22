@@ -16,6 +16,7 @@ catalogs:
   astro:
     "@astrojs/check": ^0.9.5
     "@astrojs/mdx": 4.3.10
+    "@astrojs/node": ^9.0.0
     "@astrojs/react": ^4.4.2
     "@astrojs/rss": ^4.0.13
     "@astrojs/sitemap": ^3.6.0

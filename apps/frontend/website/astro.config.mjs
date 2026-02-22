@@ -13,6 +13,11 @@ import vercel from "@astrojs/vercel";
 
 import partytown from "@astrojs/partytown";
 
+const adapter =
+  process.env.ASTRO_ADAPTER === "node"
+    ? (await import("@astrojs/node")).default({ mode: "standalone" })
+    : vercel();
+
 // https://astro.build/config
 export default defineConfig({
   output: "server",
@@ -122,5 +127,5 @@ export default defineConfig({
     extendDefaultPlugins: true,
   },
 
-  adapter: vercel(),
+  adapter,
 });

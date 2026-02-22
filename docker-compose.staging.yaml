@@ -65,6 +65,29 @@ services:
       retries: 5
       start_period: 80s
 
+  website:
+    container_name: website
+    build:
+      context: .
+      dockerfile: ./apps/frontend/website/Dockerfile
+      target: staging
+    env_file:
+      - .env.staging
+    expose:
+      - "4003"
+    networks:
+      - curator-net
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget --quiet --tries=1 --spider http://localhost:4003/ || exit 1",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
   # >>> Infrastructure <<<
   nginx:
     container_name: nginx
@@ -81,6 +104,8 @@ services:
       api:
         condition: service_started
       cms:
+        condition: service_started
+      website:
         condition: service_started
     healthcheck:
       test: ["CMD-SHELL", "nginx -t || exit 1"]

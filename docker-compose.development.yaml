@@ -51,6 +51,25 @@ services:
         condition: service_healthy
     command: ["pnpm", "dev", "--filter=@backend/cms"]
 
+  website:
+    container_name: website
+    build:
+      context: .
+      dockerfile: ./apps/frontend/website/Dockerfile
+      target: development
+    restart: unless-stopped
+    env_file:
+      - .env.development
+    ports:
+      - "4003:4003"
+    volumes:
+      - ./apps/frontend/website:/app/apps/frontend/website
+      - ./packages:/app/packages
+      - /app/node_modules
+      - /app/apps/frontend/website/node_modules
+    networks:
+      - curator-net
+
   # >>> Infrastructure <<
   db:
     container_name: db
