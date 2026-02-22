@@ -6,7 +6,7 @@
 #   pnpm compose:staging:down     # Tear down
 #
 # Add to /etc/hosts:
-#   127.0.0.1  api.curator.local cms.curator.local
+#   127.0.0.1  api.curator.local cms.curator.local flags.curator.local
 # =============================================================================
 services:
   # >>> Application <<<
@@ -88,6 +88,53 @@ services:
       retries: 5
       start_period: 60s
 
+  # >>> Feature Flags <<<
+  flagsmith:
+    container_name: flagsmith
+    image: flagsmith/flagsmith:latest
+    env_file:
+      - .env.staging
+    environment:
+      DATABASE_URL: postgresql://flagsmith:${FLAGSMITH_DB_PASSWORD}@flagsmith-db:5432/flagsmith
+      DJANGO_ALLOWED_HOSTS: "flagsmith,flags.curator.local,localhost"
+      DJANGO_CSRF_TRUSTED_ORIGINS: "http://flags.curator.local"
+      ALLOW_REGISTRATION_WITHOUT_INVITE: "True"
+      SECRET_KEY: ${FLAGSMITH_SECRET_KEY}
+    expose:
+      - "8000"
+    networks:
+      - curator-net
+    depends_on:
+      flagsmith-db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget --quiet --tries=1 --spider http://localhost:8000/health || exit 1",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  flagsmith-db:
+    container_name: flagsmith-db
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: flagsmith
+      POSTGRES_PASSWORD: ${FLAGSMITH_DB_PASSWORD}
+      POSTGRES_DB: flagsmith
+    volumes:
+      - staging_flagsmith_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U flagsmith -d flagsmith"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - curator-net
+
   # >>> Infrastructure <<<
   nginx:
     container_name: nginx
@@ -106,6 +153,8 @@ services:
       cms:
         condition: service_started
       website:
+        condition: service_started
+      flagsmith:
         condition: service_started
     healthcheck:
       test: ["CMD-SHELL", "nginx -t || exit 1"]
@@ -163,6 +212,9 @@ volumes:
     driver: local
   staging_redis_data:
     name: staging_redis_data
+    driver: local
+  staging_flagsmith_db_data:
+    name: staging_flagsmith_db_data
     driver: local
 
 networks:

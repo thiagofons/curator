@@ -70,6 +70,27 @@ services:
     networks:
       - curator-net
 
+  # >>> Feature Flags <<<
+  flags:
+    container_name: flags
+    image: flagsmith/flagsmith:latest
+    restart: unless-stopped
+    env_file:
+      - .env.development
+    environment:
+      DATABASE_URL: ${FLAGS_DATABASE_URL}
+      DJANGO_SECRET_KEY: ${FLAGS_SECRET_KEY}
+      DJANGO_ALLOWED_HOSTS: "*"
+      ALLOW_REGISTRATION_WITHOUT_INVITE: "True"
+      USE_POSTGRES_FOR_ANALYTICS: "true"
+    ports:
+      - "8000:8000"
+    networks:
+      - curator-net
+    depends_on:
+      db:
+        condition: service_healthy
+
   # >>> Infrastructure <<
   db:
     container_name: db
@@ -93,9 +114,8 @@ services:
     networks:
       - curator-net
 
-  # >>> Infrastructure <<<<
   redis:
-    container_name: infra-redis
+    container_name: redis
     image: redis:7-alpine
     env_file:
       - .env.development
@@ -118,6 +138,9 @@ volumes:
     driver: local
   redis_data:
     name: redis_data
+    driver: local
+  flagsmith_db_data:
+    name: flagsmith_db_data
     driver: local
 
 networks:

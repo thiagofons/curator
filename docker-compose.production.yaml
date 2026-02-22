@@ -120,6 +120,49 @@ services:
         max-size: "10m"
         max-file: "5"
 
+  # >>> Feature Flags — Flagsmith (port 8000) <<<
+  flagsmith:
+    container_name: flagsmith
+    image: flagsmith/flagsmith:latest
+    env_file:
+      - .env.production
+    environment:
+      DATABASE_URL: ${FLAGS_DATABASE_URL}
+      DJANGO_ALLOWED_HOSTS: "flagsmith,flags.curator.com.br"
+      DJANGO_CSRF_TRUSTED_ORIGINS: "https://flags.curator.com.br"
+      SECRET_KEY: ${FLAGSMITH_SECRET_KEY}
+    expose:
+      - "8000"
+    networks:
+      - curator-net
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget --quiet --tries=1 --spider http://localhost:8000/health || exit 1",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
   # >>> SSL — Certbot (Let's Encrypt auto-renewal) <<<
   certbot:
     container_name: certbot
