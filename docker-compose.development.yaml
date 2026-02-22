@@ -52,11 +52,11 @@ services:
     profiles: ["all", "core"]
 
   # >>> CMS (port 3000) <<<
-  cms-service:
-    container_name: cms-service
+  cms:
+    container_name: cms
     build:
       context: .
-      dockerfile: ./apps/backend/cms-service/Dockerfile
+      dockerfile: ./apps/backend/cms/Dockerfile
       target: development
     restart: unless-stopped
     env_file:
@@ -67,11 +67,11 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./apps/backend/cms-service/.env.local:/app/apps/backend/cms-service/.env.local
-      - ./apps/backend/cms-service/src:/app/apps/backend/cms-service/src
+      - ./apps/backend/cms/.env.local:/app/apps/backend/cms/.env.local
+      - ./apps/backend/cms/src:/app/apps/backend/cms/src
       - ./packages:/app/packages
       - /app/node_modules
-      - /app/apps/backend/cms-service/node_modules
+      - /app/apps/backend/cms/node_modules
     networks:
       - curator-net
     depends_on:

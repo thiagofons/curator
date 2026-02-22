@@ -9,7 +9,7 @@ RUN apk add --no-cache libc6-compat && \
 FROM base AS pruner
 WORKDIR /app
 COPY . .
-RUN turbo prune --scope=@backend/cms-service --docker
+RUN turbo prune --scope=@backend/cms --docker
 
 # STAGE 3: Deps
 FROM base AS deps
@@ -29,23 +29,23 @@ RUN pnpm install --frozen-lockfile
 COPY --from=pruner /app/out/full/ .
 
 # --- ADICIONE ESTA LINHA AQUI ---
-RUN mkdir -p apps/backend/cms-service/public
+RUN mkdir -p apps/backend/cms/public
 # -------------------------------
 
 ENV NEXT_TELEMETRY_DISABLED 1
-RUN turbo run build --filter=@backend/cms-service...
+RUN turbo run build --filter=@backend/cms...
 
 # --- TARGET: DEVELOPMENT ---
 FROM deps AS development
 WORKDIR /app
 COPY --from=pruner /app/out/full/ .
-RUN mkdir -p apps/backend/cms-service/public
+RUN mkdir -p apps/backend/cms/public
 ENV NODE_ENV development
 ENV NEXT_TELEMETRY_DISABLED 1
 EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
-CMD ["sh", "-c", "pnpm --filter=@backend/cms-service db:push && pnpm dev --filter=@backend/cms-service"]
+CMD ["sh", "-c", "pnpm --filter=@backend/cms db:push && pnpm dev --filter=@backend/cms"]
 
 # --- TARGET: RUNNER ---
 FROM base AS runner
@@ -63,4 +63,4 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["sh", "-c", "pnpm --filter=@backend/cms-service db:push && pnpm --filter=@backend/cms-service start"]
+CMD ["sh", "-c", "pnpm --filter=@backend/cms db:push && pnpm --filter=@backend/cms start"]

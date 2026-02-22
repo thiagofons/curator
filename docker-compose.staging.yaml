@@ -23,7 +23,7 @@ services:
     depends_on:
       api:
         condition: service_started
-      cms-service:
+      cms:
         condition: service_started
     healthcheck:
       test: ["CMD-SHELL", "nginx -t || exit 1"]
@@ -87,10 +87,10 @@ services:
       - curator-net
 
   # >>> CMS (port 3000) <<<
-  cms-service:
+  cms:
     build:
       context: .
-      dockerfile: ./apps/backend/cms-service/Dockerfile
+      dockerfile: ./apps/backend/cms/Dockerfile
       target: runner
     env_file:
       - .env.development

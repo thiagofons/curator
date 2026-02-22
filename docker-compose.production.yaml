@@ -78,8 +78,8 @@ services:
         max-file: "5"
 
   # >>> CMS (port 3000) <<<
-  cms-service:
-    container_name: cms-service
+  cms:
+    container_name: cms
     image: ghcr.io/${REGISTRY_OWNER}/curator-cms:${IMAGE_TAG:-latest}
     env_file:
       - .env.production
