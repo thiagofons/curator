@@ -1,15 +1,13 @@
 declare namespace App {
   interface Locals {
-    // Vamos criar um helper para facilitar o uso
     isFeatureEnabled: (featureName: string) => boolean;
-    // Opcional: Se você quiser passar todas as flags brutas para o front
     allFlags?: any;
   }
 }
 
 interface ImportMetaEnv {
-  readonly FLAGSMITH_DEV_KEY: string;
-  readonly FLAGSMITH_PROD_KEY: string;
+  readonly FLAGS_ENVIRONMENT_KEY: string;
+  readonly FLAGS_API_URL: string;
   readonly DISCORD_WEBHOOK_URL: string;
   readonly FIREBASE_API_KEY: string;
   readonly FIREBASE_AUTH_DOMAIN: string;

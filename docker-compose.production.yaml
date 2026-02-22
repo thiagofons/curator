@@ -122,15 +122,17 @@ services:
 
   # >>> Feature Flags — Flagsmith (port 8000) <<<
   flagsmith:
-    container_name: flagsmith
+    container_name: flags
     image: flagsmith/flagsmith:latest
+    restart: unless-stopped
     env_file:
       - .env.production
     environment:
       DATABASE_URL: ${FLAGS_DATABASE_URL}
-      DJANGO_ALLOWED_HOSTS: "flagsmith,flags.curator.com.br"
-      DJANGO_CSRF_TRUSTED_ORIGINS: "https://flags.curator.com.br"
-      SECRET_KEY: ${FLAGSMITH_SECRET_KEY}
+      DJANGO_SECRET_KEY: ${FLAGS_SECRET_KEY}
+      DJANGO_ALLOWED_HOSTS: "*"
+      ALLOW_REGISTRATION_WITHOUT_INVITE: "True"
+      USE_POSTGRES_FOR_ANALYTICS: "true"
     expose:
       - "8000"
     networks:

@@ -24,27 +24,19 @@ export default defineConfig({
   site: config.site.base_url,
   base: config.site.base_path,
   trailingSlash: "ignore",
-
   env: {
     schema: {
-      FLAGSMITH_DEV_KEY: envField.string({
+      FLAGS_ENVIRONMENT_KEY: envField.string({
         context: "client",
         access: "public",
-        optional: true,
-        default: "",
       }),
-      FLAGSMITH_PROD_KEY: envField.string({
+      FLAGS_API_URL: envField.string({
         context: "client",
         access: "public",
       }),
       DISCORD_WEBHOOK_URL: envField.string({
         context: "client",
         access: "public",
-      }),
-      FLAGSMITH_API_URL: envField.string({
-        context: "server",
-        access: "public",
-        optional: true,
       }),
       FIREBASE_API_KEY: envField.string({
         context: "client",

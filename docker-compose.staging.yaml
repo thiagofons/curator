@@ -72,7 +72,8 @@ services:
       dockerfile: ./apps/frontend/website/Dockerfile
       target: staging
       args:
-        FLAGSMITH_PROD_KEY: ${FLAGSMITH_PROD_KEY}
+        FLAGS_ENVIRONMENT_KEY: ${FLAGS_ENVIRONMENT_KEY}
+        FLAGS_API_URL: ${FLAGS_API_URL}
         DISCORD_WEBHOOK_URL: ${DISCORD_WEBHOOK_URL}
         FIREBASE_API_KEY: ${FIREBASE_API_KEY}
         FIREBASE_AUTH_DOMAIN: ${FIREBASE_AUTH_DOMAIN}
@@ -84,7 +85,8 @@ services:
     env_file:
       - .env.staging
     environment:
-      - FLAGSMITH_API_URL=http://flagsmith:8000/api/v1/
+      - FLAGS_API_URL=http://flagsmith:8000/api/v1/
+      - FLAGS_ENVIRONMENT_KEY=${FLAGS_ENVIRONMENT_KEY}
     expose:
       - "4003"
     networks:
@@ -99,6 +101,9 @@ services:
       timeout: 10s
       retries: 5
       start_period: 60s
+    depends_on:
+      flagsmith:
+        condition: service_healthy
 
   # >>> Feature Flags <<<
   flagsmith:
@@ -111,7 +116,7 @@ services:
       DJANGO_ALLOWED_HOSTS: "flagsmith,flags.curator.local,localhost"
       DJANGO_CSRF_TRUSTED_ORIGINS: "http://flags.curator.local"
       ALLOW_REGISTRATION_WITHOUT_INVITE: "True"
-      SECRET_KEY: ${FLAGSMITH_SECRET_KEY}
+      SECRET_KEY: ${FLAGS_SECRET_KEY}
     expose:
       - "8000"
     networks:

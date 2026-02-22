@@ -69,26 +69,8 @@ services:
       - /app/apps/frontend/website/node_modules
     networks:
       - curator-net
-
-  # >>> Feature Flags <<<
-  flags:
-    container_name: flags
-    image: flagsmith/flagsmith:latest
-    restart: unless-stopped
-    env_file:
-      - .env.development
-    environment:
-      DATABASE_URL: ${FLAGS_DATABASE_URL}
-      DJANGO_SECRET_KEY: ${FLAGS_SECRET_KEY}
-      DJANGO_ALLOWED_HOSTS: "*"
-      ALLOW_REGISTRATION_WITHOUT_INVITE: "True"
-      USE_POSTGRES_FOR_ANALYTICS: "true"
-    ports:
-      - "8000:8000"
-    networks:
-      - curator-net
     depends_on:
-      db:
+      flags:
         condition: service_healthy
 
   # >>> Infrastructure <<
