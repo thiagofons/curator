@@ -11,18 +11,19 @@
 services:
   # >>> Application <<<
   api:
+    container_name: api
     build:
       context: .
       dockerfile: ./apps/backend/api/Dockerfile
       target: production
     env_file:
-      - .env.development
+      - .env.staging
     expose:
       - "3300"
     networks:
       - curator-net
     depends_on:
-      api-db:
+      db:
         condition: service_healthy
       redis:
         condition: service_healthy
@@ -38,19 +39,21 @@ services:
       start_period: 60s
 
   cms:
+    container_name: cms
     build:
       context: .
       dockerfile: ./apps/backend/cms/Dockerfile
       target: runner
     env_file:
-      - .env.development
+      - .env.staging
     expose:
       - "3000"
     networks:
       - curator-net
     depends_on:
-      cms-db:
+      db:
         condition: service_healthy
+    command: ["pnpm", "--filter=@backend/cms", "start"]
     healthcheck:
       test:
         [
@@ -64,6 +67,7 @@ services:
 
   # >>> Infrastructure <<<
   nginx:
+    container_name: nginx
     image: nginx:alpine
     ports:
       - "80:80"
@@ -86,15 +90,17 @@ services:
       start_period: 10s
 
   db:
+    container_name: db
     image: postgres:15-alpine
     environment:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_DB: ${DATABASE_DB}
     env_file:
-      - .env.development
+      - .env.staging
     volumes:
       - staging_db_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER} -d ${DATABASE_DB}"]
       interval: 10s
@@ -104,10 +110,18 @@ services:
       - curator-net
 
   redis:
+    container_name: redis
     image: redis:7-alpine
     env_file:
-      - .env.development
-    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+      - .env.staging
+    command:
+      [
+        "redis-server",
+        "--appendonly",
+        "yes",
+        "--requirepass",
+        "${REDIS_PASSWORD}",
+      ]
     volumes:
       - staging_redis_data:/data
     healthcheck:

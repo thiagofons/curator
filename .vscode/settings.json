@@ -58,7 +58,7 @@
     "cli",
     "observability",
     "backend/api",
-    "backend/cms-service",
+    "backend/cms",
     "_templates"
   ],
   "[javascript]": {
