@@ -5,6 +5,7 @@ on:
     workflows: ["🤖 CI - Pull Request Validation"]
     types: [completed]
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
