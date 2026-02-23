@@ -95,7 +95,7 @@ jobs:
             image_name: curator-api
 
           - app: cms-service
-            dockerfile: ./apps/backend/cms-service/Dockerfile
+            dockerfile: ./apps/backend/cms/Dockerfile
             image_name: curator-cms
 
     steps:
@@ -137,7 +137,7 @@ jobs:
   # ------------------------------------------------------------------
   deploy:
     name: 🚀 Deploy Stack
-    needs: [build-and-push]
+    needs: [build-and-push, provision]
     runs-on: ubuntu-latest
     environment: production
 
