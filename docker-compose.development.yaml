@@ -12,8 +12,8 @@ services:
     restart: unless-stopped
     env_file:
       - .env.development
-    ports:
-      - "3300:3300"
+    expose:
+      - "3300"
     volumes:
       - ./apps/backend/api/src:/app/apps/backend/api/src
       - ./packages:/app/packages
@@ -37,8 +37,8 @@ services:
     restart: unless-stopped
     env_file:
       - .env.development
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     volumes:
       - ./apps/backend/cms/src:/app/apps/backend/cms/src
       - ./packages:/app/packages
@@ -57,11 +57,13 @@ services:
       context: .
       dockerfile: ./apps/frontend/website/Dockerfile
       target: development
+      args:
+        - ENV_FILE=.env.development
     restart: unless-stopped
     env_file:
       - .env.development
-    ports:
-      - "4003:4003"
+    expose:
+      - "4003"
     volumes:
       - ./apps/frontend/website:/app/apps/frontend/website
       - ./packages:/app/packages
@@ -69,11 +71,33 @@ services:
       - /app/apps/frontend/website/node_modules
     networks:
       - curator-net
-    depends_on:
-      flags:
-        condition: service_healthy
 
   # >>> Infrastructure <<
+  nginx:
+    container_name: nginx
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.dev.conf:/etc/nginx/custom/nginx.conf:ro
+    command:
+      ["nginx", "-c", "/etc/nginx/custom/nginx.conf", "-g", "daemon off;"]
+    networks:
+      - curator-net
+    depends_on:
+      api:
+        condition: service_started
+      cms:
+        condition: service_started
+      website:
+        condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "nginx -t || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
   db:
     container_name: db
     image: postgres:15-alpine
@@ -86,7 +110,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - dev_db_data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER} -d ${DATABASE_DB}"]
@@ -115,14 +139,11 @@ services:
       - curator-net
 
 volumes:
-  db_data:
-    name: db_data
+  dev_db_data:
+    name: dev_db_data
     driver: local
   redis_data:
     name: redis_data
-    driver: local
-  flagsmith_db_data:
-    name: flagsmith_db_data
     driver: local
 
 networks:

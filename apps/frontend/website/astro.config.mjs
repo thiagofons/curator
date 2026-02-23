@@ -1,6 +1,8 @@
 import mdx from "@astrojs/mdx";
+import partytown from "@astrojs/partytown";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
+import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
 import AutoImport from "astro-auto-import";
 import { defineConfig, envField } from "astro/config";
@@ -8,10 +10,6 @@ import remarkCollapse from "remark-collapse";
 import remarkToc from "remark-toc";
 import sharp from "sharp";
 import config from "./src/config/config.json";
-
-import vercel from "@astrojs/vercel";
-
-import partytown from "@astrojs/partytown";
 
 const adapter =
   process.env.ASTRO_ADAPTER === "node"
@@ -77,8 +75,15 @@ export default defineConfig({
     service: sharp(),
   },
 
+  server: {
+    host: true,
+  },
+
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      allowedHosts: ["curator.local"],
+    },
   },
 
   i18n: {

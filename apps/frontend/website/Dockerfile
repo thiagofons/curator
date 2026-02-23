@@ -9,6 +9,7 @@ RUN apk add --no-cache libc6-compat && \
 FROM base AS pruner
 WORKDIR /app
 COPY . .
+# Removemos o "RUN cp" daqui, pois o turbo ignoraria o arquivo por causa do .gitignore
 RUN turbo prune --scope=@frontend/website --docker
 
 # STAGE 3: Deps
@@ -27,37 +28,23 @@ ENV NEXT_TELEMETRY_DISABLED=1
 EXPOSE 4003
 CMD ["pnpm", "--filter=@frontend/website", "dev:docker"]
 
-# STAGE 4: Builder (for staging — uses @astrojs/node adapter)
+# STAGE 4: Builder (for staging/production)
 FROM base AS builder
 WORKDIR /app
 COPY --from=pruner /app/out/json/ .
 COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 RUN pnpm install --frozen-lockfile
 COPY --from=pruner /app/out/full/ .
+
+# 👉 O PULO DO GATO ESTÁ AQUI:
+# Injetamos o argumento no estágio de builder
+ARG ENV_FILE=.env.development
+# E usamos o COPY nativo do Docker para puxar o arquivo do host (contexto da raiz do monorepo)
+# direto para dentro da pasta do website, contornando o turbo prune!
+COPY ${ENV_FILE} ./apps/frontend/website/.env
+
 ENV ASTRO_ADAPTER=node
 ENV NEXT_TELEMETRY_DISABLED=1
-
-ARG FLAGS_ENVIRONMENT_KEY
-ARG FLAGS_API_URL
-ARG DISCORD_WEBHOOK_URL
-ARG FIREBASE_API_KEY
-ARG FIREBASE_AUTH_DOMAIN
-ARG FIREBASE_PROJECT_ID
-ARG FIREBASE_STORAGE_BUCKET
-ARG FIREBASE_MESSAGING_SENDER_ID
-ARG FIREBASE_APP_ID
-ARG FIREBASE_MEASUREMENT_ID
-
-ENV FLAGS_ENVIRONMENT_KEY=$FLAGS_ENVIRONMENT_KEY
-ENV FLAGS_API_URL=$FLAGS_API_URL
-ENV DISCORD_WEBHOOK_URL=$DISCORD_WEBHOOK_URL
-ENV FIREBASE_API_KEY=$FIREBASE_API_KEY
-ENV FIREBASE_AUTH_DOMAIN=$FIREBASE_AUTH_DOMAIN
-ENV FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID
-ENV FIREBASE_STORAGE_BUCKET=$FIREBASE_STORAGE_BUCKET
-ENV FIREBASE_MESSAGING_SENDER_ID=$FIREBASE_MESSAGING_SENDER_ID
-ENV FIREBASE_APP_ID=$FIREBASE_APP_ID
-ENV FIREBASE_MEASUREMENT_ID=$FIREBASE_MEASUREMENT_ID
 
 RUN turbo run build --filter=@frontend/website...
 RUN pnpm prune --prod
