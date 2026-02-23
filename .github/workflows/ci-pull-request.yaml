@@ -139,8 +139,8 @@ jobs:
           # --- BACKEND ---
           - service: backend/api
             path: apps/backend/api
-          - service: backend/cms-service
-            path: apps/backend/cms-service
+          - service: backend/cms
+            path: apps/backend/cms
 
           # --- FRONTEND ---
           - service: frontend/docs
