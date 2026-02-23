@@ -95,7 +95,7 @@ jobs:
             dockerfile: ./apps/backend/api/Dockerfile
             image_name: curator-api
 
-          - app: cms-service
+          - app: cms
             dockerfile: ./apps/backend/cms/Dockerfile
             image_name: curator-cms
 
