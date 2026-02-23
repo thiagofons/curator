@@ -5,6 +5,7 @@ on:
     workflows: ["🤖 CI - Pull Request Validation"]
     types: [completed]
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -94,7 +95,7 @@ jobs:
             dockerfile: ./apps/backend/api/Dockerfile
             image_name: curator-api
 
-          - app: cms-service
+          - app: cms
             dockerfile: ./apps/backend/cms/Dockerfile
             image_name: curator-cms
 
