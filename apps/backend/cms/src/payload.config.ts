@@ -15,6 +15,16 @@ import { Users } from "./collections/users";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
+type Environment = "development" | "staging" | "production";
+
+const addresses: Record<Environment, string> = {
+  development: "http://localhost:3000",
+  staging: "cms.curator.local",
+  production: "cms.curator.com.br",
+};
+
+const address = addresses[process.env.NODE_ENV as Environment];
+
 export default buildConfig({
   serverURL: process.env.PAYLOAD_SERVER_URL || "http://localhost:3000",
   admin: {
@@ -23,14 +33,8 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  cors:
-    process.env.NODE_ENV === "production"
-      ? ["https://cms.curator.com.br"]
-      : ["http://localhost:3000", "http://localhost:4321"],
-  csrf:
-    process.env.NODE_ENV === "production"
-      ? ["https://cms.curator.com.br"]
-      : ["http://localhost:3000", "http://localhost:4321"],
+  cors: [address],
+  csrf: [address],
   collections: [Users, Media, Authors, Categories, Posts],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",

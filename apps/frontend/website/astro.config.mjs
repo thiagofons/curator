@@ -1,6 +1,8 @@
 import mdx from "@astrojs/mdx";
+import partytown from "@astrojs/partytown";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
+import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
 import AutoImport from "astro-auto-import";
 import { defineConfig, envField } from "astro/config";
@@ -9,9 +11,10 @@ import remarkToc from "remark-toc";
 import sharp from "sharp";
 import config from "./src/config/config.json";
 
-import vercel from "@astrojs/vercel";
-
-import partytown from "@astrojs/partytown";
+const adapter =
+  process.env.ASTRO_ADAPTER === "node"
+    ? (await import("@astrojs/node")).default({ mode: "standalone" })
+    : vercel();
 
 // https://astro.build/config
 export default defineConfig({
@@ -19,16 +22,13 @@ export default defineConfig({
   site: config.site.base_url,
   base: config.site.base_path,
   trailingSlash: "ignore",
-
   env: {
     schema: {
-      FLAGSMITH_DEV_KEY: envField.string({
+      FLAGS_ENVIRONMENT_KEY: envField.string({
         context: "client",
         access: "public",
-        optional: true,
-        default: "",
       }),
-      FLAGSMITH_PROD_KEY: envField.string({
+      FLAGS_API_URL: envField.string({
         context: "client",
         access: "public",
       }),
@@ -75,8 +75,15 @@ export default defineConfig({
     service: sharp(),
   },
 
+  server: {
+    host: true,
+  },
+
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      allowedHosts: ["curator.local"],
+    },
   },
 
   i18n: {
@@ -122,5 +129,5 @@ export default defineConfig({
     extendDefaultPlugins: true,
   },
 
-  adapter: vercel(),
+  adapter,
 });

@@ -45,12 +45,12 @@ design/
 
 # >> Images & Media (If not used by the app at runtime)
 # If your apps serve static files, comment out these lines
-**/*.png
-**/*.jpg
-**/*.jpeg
-**/*.svg
-**/*.mp4
-**/*.mov
+# **/*.png
+# **/*.jpg
+# **/*.jpeg
+# **/*.svg
+# **/*.mp4
+# **/*.mov
 
 # >> E2E Tests & Reports (Failed test videos are huge)
 cypress/

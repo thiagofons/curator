@@ -58,8 +58,9 @@
     "cli",
     "observability",
     "backend/api",
-    "backend/cms-service",
-    "_templates"
+    "backend/cms",
+    "_templates",
+    "backend/flags"
   ],
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev --port 4003",
+    "dev:docker": "astro dev --port 4003 --host",
     "preview": "astro preview --port 4003",
     "build": "astro build",
     "lint": "eslint .",
@@ -18,6 +19,7 @@
   },
   "dependencies": {
     "@astrojs/check": "catalog:astro",
+    "@astrojs/node": "catalog:astro",
     "@astrojs/mdx": "catalog:astro",
     "@astrojs/partytown": "^2.1.4",
     "@astrojs/react": "catalog:astro",
