@@ -17,8 +17,7 @@ services:
     networks:
       - curator-net
     depends_on:
-      redis:
-        condition: service_healthy
+      - redis
     healthcheck:
       test:
         [
@@ -149,12 +148,9 @@ services:
     networks:
       - curator-net
     depends_on:
-      api:
-        condition: service_started
-      cms:
-        condition: service_started
-      flagsmith:
-        condition: service_started
+      - api
+      - cms
+      - flagsmith
     healthcheck:
       test: ["CMD-SHELL", "nginx -t || exit 1"]
       interval: 30s
