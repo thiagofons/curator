@@ -7,3 +7,11 @@ blueprint_id   = "ubuntu_22_04"
 key_pair_name  = "your-lightsail-key-pair"
 static_ip_name = "curator-production-ip"
 open_ports     = [22, 80, 443]
+
+# --- Managed PostgreSQL Database ---
+db_name            = "curator-production-db"
+db_master_database = "curator"
+db_master_username = "curator_master"
+db_master_password = "CHANGE_ME"  # set as GitHub Secret: DB_MASTER_PASSWORD
+db_bundle_id       = "micro_2_0"  # upgrade to small_2_0 if needed
+db_blueprint_id    = "postgres_15"

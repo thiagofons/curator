@@ -72,11 +72,15 @@ jobs:
       - name: 📋 Terraform Plan
         if: steps.changes.outputs.infra_changed == 'true'
         working-directory: infrastructure
+        env:
+          TF_VAR_db_master_password: ${{ secrets.DB_MASTER_PASSWORD }}
         run: terraform plan -var="key_pair_name=${{ secrets.LIGHTSAIL_KEY_PAIR_NAME }}" -out=tfplan
 
       - name: 🚀 Terraform Apply
         if: steps.changes.outputs.infra_changed == 'true'
         working-directory: infrastructure
+        env:
+          TF_VAR_db_master_password: ${{ secrets.DB_MASTER_PASSWORD }}
         run: terraform apply -auto-approve tfplan
 
   # ------------------------------------------------------------------
@@ -143,6 +147,28 @@ jobs:
     environment: production
 
     steps:
+      - name: 🗄️ Initialize Database
+        uses: appleboy/ssh-action@v1
+        env:
+          DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+          DATABASE_DB: ${{ secrets.DATABASE_DB }}
+          DATABASE_USER: ${{ secrets.DATABASE_USER }}
+          DATABASE_MASTER_PASSWORD: ${{ secrets.DB_MASTER_PASSWORD }}
+          DB_API_PASSWORD: ${{ secrets.DB_API_PASSWORD }}
+          DB_CMS_PASSWORD: ${{ secrets.DB_CMS_PASSWORD }}
+          DB_FLAGS_PASSWORD: ${{ secrets.DB_FLAGS_PASSWORD }}
+        with:
+          host: ${{ secrets.LIGHTSAIL_HOST }}
+          username: ${{ secrets.LIGHTSAIL_USER }}
+          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          envs: DATABASE_HOST,DATABASE_DB,DATABASE_USER,DATABASE_MASTER_PASSWORD,DB_API_PASSWORD,DB_CMS_PASSWORD,DB_FLAGS_PASSWORD
+          script: |
+            set -e
+            cd ~/curator
+            git pull origin main
+            chmod +x ./scripts/init-db.sh
+            ./scripts/init-db.sh
+
       - name: 🚀 Deploy via SSH
         uses: appleboy/ssh-action@v1
         with:
