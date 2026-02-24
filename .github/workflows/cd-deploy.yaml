@@ -22,7 +22,7 @@ jobs:
   gate:
     name: 🔒 CI Gate
     runs-on: ubuntu-latest
-    if: github.event.workflow_run.conclusion == 'success'
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: ✅ CI passed
         run: echo "CI workflow passed — proceeding with deployment"
@@ -172,4 +172,4 @@ jobs:
             docker stack deploy -c docker-compose.production.yaml curator --with-registry-auth
 
             # Force-update nginx to pick up config changes
-            docker service update --force curator_nginx || true
+            docker service update --force curator_nginx || echo "⚠️  Warning: nginx service update failed — check Docker Swarm logs"
