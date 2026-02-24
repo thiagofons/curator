@@ -154,17 +154,16 @@ jobs:
             docker pull ghcr.io/$REPO_OWNER/curator-cms:latest
 
             # 3. Inicializa DB
-            # FIX: Exportamos explicitamente para que o script filho as veja
-            export DATABASE_HOST=$DATABASE_HOST
-            export DATABASE_DB=$DATABASE_DB
-            export DATABASE_USER=$DATABASE_USER
-            export DATABASE_MASTER_PASSWORD=$DATABASE_MASTER_PASSWORD
-            export DB_API_PASSWORD=$DB_API_PASSWORD
-            export DB_CMS_PASSWORD=$DB_CMS_PASSWORD
-            export DB_FLAGS_PASSWORD=$DB_FLAGS_PASSWORD
-
             chmod +x ./scripts/init-db.sh
-            ./scripts/init-db.sh
+            env \
+              DATABASE_HOST="$DATABASE_HOST" \
+              DATABASE_DB="$DATABASE_DB" \
+              DATABASE_USER="$DATABASE_USER" \
+              DATABASE_MASTER_PASSWORD="$DATABASE_MASTER_PASSWORD" \
+              DB_API_PASSWORD="$DB_API_PASSWORD" \
+              DB_CMS_PASSWORD="$DB_CMS_PASSWORD" \
+              DB_FLAGS_PASSWORD="$DB_FLAGS_PASSWORD" \
+              ./scripts/init-db.sh
 
             # 4. Deploy via Stack
             set -a && source .env.production && set +a
