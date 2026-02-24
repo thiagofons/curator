@@ -26,6 +26,8 @@ set -euo pipefail
 : "${DB_CMS_PASSWORD:?DB_CMS_PASSWORD is required}"
 : "${DB_FLAGS_PASSWORD:?DB_FLAGS_PASSWORD is required}"
 
+echo "Host is: $DATABASE_HOST"
+
 export PGPASSWORD="${DATABASE_MASTER_PASSWORD}"
 export PGSSLMODE="require"
 
