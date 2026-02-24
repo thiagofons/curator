@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   # ------------------------------------------------------------------
-  # 0. GATE — Only deploy if CI passed
+  # 0. GATE — Only deploy if CI passed or manual trigger
   # ------------------------------------------------------------------
   gate:
     name: 🔒 CI Gate
@@ -34,17 +34,20 @@ jobs:
     name: 🏗️ Terraform
     needs: [gate]
     runs-on: ubuntu-latest
+    outputs:
+      infra_changed: ${{ steps.changes.outputs.infra_changed }}
 
     steps:
       - name: ⬇️ Checkout Repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: 🔍 Check for infrastructure changes
         id: changes
         run: |
-          if git diff --name-only HEAD~1 HEAD | grep -q '^infrastructure/'; then
+          # Verifica mudanças entre o commit atual e o anterior
+          if git diff --name-only HEAD^ HEAD | grep -q '^infrastructure/'; then
             echo "infra_changed=true" >> "$GITHUB_OUTPUT"
           else
             echo "infra_changed=false" >> "$GITHUB_OUTPUT"
@@ -64,33 +67,23 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: sa-east-1
 
-      - name: 📋 Terraform Init
-        if: steps.changes.outputs.infra_changed == 'true'
-        working-directory: infrastructure
-        run: terraform init
-
-      - name: 📋 Terraform Plan
+      - name: 📋 Terraform Init & Apply
         if: steps.changes.outputs.infra_changed == 'true'
         working-directory: infrastructure
         env:
           TF_VAR_db_master_password: ${{ secrets.DB_MASTER_PASSWORD }}
-        run: terraform plan -var="key_pair_name=${{ secrets.LIGHTSAIL_KEY_PAIR_NAME }}" -out=tfplan
-
-      - name: 🚀 Terraform Apply
-        if: steps.changes.outputs.infra_changed == 'true'
-        working-directory: infrastructure
-        env:
-          TF_VAR_db_master_password: ${{ secrets.DB_MASTER_PASSWORD }}
-        run: terraform apply -auto-approve tfplan
+        run: |
+          terraform init
+          terraform plan -var="key_pair_name=${{ secrets.LIGHTSAIL_KEY_PAIR_NAME }}" -out=tfplan
+          terraform apply -auto-approve tfplan
 
   # ------------------------------------------------------------------
-  # 2. BUILD & PUSH DOCKER IMAGES TO GHCR
+  # 2. BUILD & PUSH DOCKER IMAGES
   # ------------------------------------------------------------------
   build-and-push:
     name: 🐳 Build ${{ matrix.app }}
     needs: [gate]
     runs-on: ubuntu-latest
-
     strategy:
       fail-fast: false
       matrix:
@@ -98,7 +91,6 @@ jobs:
           - app: api
             dockerfile: ./apps/backend/api/Dockerfile
             image_name: curator-api
-
           - app: cms
             dockerfile: ./apps/backend/cms/Dockerfile
             image_name: curator-cms
@@ -138,7 +130,7 @@ jobs:
           cache-to: type=gha,mode=max
 
   # ------------------------------------------------------------------
-  # 3. DEPLOY TO LIGHTSAIL VIA SSH
+  # 3. CONSOLIDATED DEPLOY
   # ------------------------------------------------------------------
   deploy:
     name: 🚀 Deploy Stack
@@ -147,9 +139,10 @@ jobs:
     environment: production
 
     steps:
-      - name: 🗄️ Initialize Database
+      - name: 🚀 Update Instance & Deploy
         uses: appleboy/ssh-action@v1
         env:
+          # DB Env Vars
           DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
           DATABASE_DB: ${{ secrets.DATABASE_DB }}
           DATABASE_USER: ${{ secrets.DATABASE_USER }}
@@ -157,45 +150,37 @@ jobs:
           DB_API_PASSWORD: ${{ secrets.DB_API_PASSWORD }}
           DB_CMS_PASSWORD: ${{ secrets.DB_CMS_PASSWORD }}
           DB_FLAGS_PASSWORD: ${{ secrets.DB_FLAGS_PASSWORD }}
+          # Docker Env Vars
+          GHCR_PAT: ${{ secrets.GHCR_PAT }}
+          REPO_OWNER: ${{ github.repository_owner }}
         with:
           host: ${{ secrets.LIGHTSAIL_HOST }}
           username: ${{ secrets.LIGHTSAIL_USER }}
           key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
-          envs: DATABASE_HOST,DATABASE_DB,DATABASE_USER,DATABASE_MASTER_PASSWORD,DB_API_PASSWORD,DB_CMS_PASSWORD,DB_FLAGS_PASSWORD
+          envs: DATABASE_HOST,DATABASE_DB,DATABASE_USER,DATABASE_MASTER_PASSWORD,DB_API_PASSWORD,DB_CMS_PASSWORD,DB_FLAGS_PASSWORD,GHCR_PAT,REPO_OWNER
           script: |
             set -e
+
+            # 1. Atualiza código fonte (Compose e Scripts)
             cd ~/curator
             git pull origin main
+
+            # 2. Docker Login
+            echo "$GHCR_PAT" | docker login ghcr.io -u "$REPO_OWNER" --password-stdin
+
+            # 3. Pull das imagens novas
+            docker pull ghcr.io/$REPO_OWNER/curator-api:latest
+            docker pull ghcr.io/$REPO_OWNER/curator-cms:latest
+
+            # 4. Inicializa DB (se necessário)
             chmod +x ./scripts/init-db.sh
             ./scripts/init-db.sh
 
-      - name: 🚀 Deploy via SSH
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.LIGHTSAIL_HOST }}
-          username: ${{ secrets.LIGHTSAIL_USER }}
-          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
-          script: |
-            set -e
-
-            # Login to GHCR
-            echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u "${{ github.repository_owner }}" --password-stdin
-
-            # Pull latest images
-            docker pull ghcr.io/${{ github.repository_owner }}/curator-api:latest
-            docker pull ghcr.io/${{ github.repository_owner }}/curator-cms:latest
-
-            # Navigate to project directory
-            cd ~/curator
-
-            # Pull latest compose + nginx config
-            git pull origin main
-
-            # Load production environment and deploy the stack
+            # 5. Deploy via Stack (Docker Swarm)
             set -a && source .env.production && set +a
-            REGISTRY_OWNER=${{ github.repository_owner }} \
+            REGISTRY_OWNER=$REPO_OWNER \
             IMAGE_TAG=latest \
             docker stack deploy -c docker-compose.production.yaml curator --with-registry-auth
 
-            # Force-update nginx to pick up config changes
-            docker service update --force curator_nginx || echo "⚠️  Warning: nginx service update failed — check Docker Swarm logs"
+            # 6. Nginx Reload
+            docker service update --force curator_nginx || echo "⚠️ Warning: Nginx update failed"
