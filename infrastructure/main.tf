@@ -5,7 +5,7 @@ module "lightsail" {
   availability_zone = "${var.aws_region}a"
   blueprint_id      = var.blueprint_id
   bundle_id         = var.bundle_id
-  key_pair_name     = var.key_pair_name
+  key_pair_name     = aws_lightsail_key_pair.this.name
   static_ip_name    = var.static_ip_name
   user_data         = file("${path.module}/scripts/user-data.sh")
   open_ports        = var.open_ports

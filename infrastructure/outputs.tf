@@ -22,3 +22,9 @@ output "db_port" {
   description = "Managed DB port"
   value       = module.lightsail.db_port
 }
+
+output "private_key_pem" {
+  description = "Private SSH key for the Lightsail instance — stored only in encrypted remote state"
+  value       = tls_private_key.ssh.private_key_pem
+  sensitive   = true
+}
