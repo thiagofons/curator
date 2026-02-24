@@ -38,4 +38,7 @@ apt-get install -y certbot
 # --- Install Git ---
 apt-get install -y git
 
+# --- Install PostgreSQL Client (for managed DB init script) ---
+apt-get install -y postgresql-client
+
 echo "=== Curator instance bootstrap complete ==="

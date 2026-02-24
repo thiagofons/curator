@@ -12,3 +12,13 @@ output "instance_username" {
   description = "Default SSH username for the instance"
   value       = module.lightsail.instance_username
 }
+
+output "db_endpoint" {
+  description = "Managed DB private endpoint — set as DATABASE_HOST in .env.production"
+  value       = module.lightsail.db_endpoint
+}
+
+output "db_port" {
+  description = "Managed DB port"
+  value       = module.lightsail.db_port
+}
