@@ -54,8 +54,9 @@ Clone the repository and install all dependencies using `pnpm`:
 ```bash
 # Clone the repository
 git clone [https://github.com/thiagofons/curator.git](https://github.com/thiagofons/curator.git)
-cd curator
 
+cd curator
+1
 # Install all dependencies across all apps and packages
 pnpm install
 ```
