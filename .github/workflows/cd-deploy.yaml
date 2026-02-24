@@ -30,6 +30,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       infra_changed: ${{ steps.changes.outputs.infra_changed }}
+      db_endpoint: ${{ steps.tf_output.outputs.db_endpoint }}
+      private_key: ${{ steps.tf_output.outputs.private_key }}
     steps:
       - name: ⬇️ Checkout Repo
         uses: actions/checkout@v4
@@ -46,28 +48,42 @@ jobs:
           fi
 
       - name: 🔧 Setup Terraform
-        if: steps.changes.outputs.infra_changed == 'true'
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: "1.9"
 
       - name: 🔑 Configure AWS Credentials
-        if: steps.changes.outputs.infra_changed == 'true'
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: sa-east-1
+          aws-region: us-east-1
 
-      - name: 📋 Terraform Init & Apply
+      - name: 🔧 Terraform Init
+        working-directory: infrastructure
+        run: |
+          terraform init -input=false \
+            -backend-config="bucket=${{ secrets.TF_BACKEND_BUCKET }}" \
+            -backend-config="key=${{ secrets.TF_BACKEND_KEY }}" \
+            -backend-config="region=us-east-1" \
+            -backend-config="encrypt=true"
+
+      - name: 📋 Terraform Apply
         if: steps.changes.outputs.infra_changed == 'true'
         working-directory: infrastructure
         env:
           TF_VAR_db_master_password: ${{ secrets.DB_MASTER_PASSWORD }}
         run: |
-          terraform init
-          terraform plan -var="key_pair_name=${{ secrets.LIGHTSAIL_KEY_PAIR_NAME }}" -out=tfplan
+          terraform plan -out=tfplan
           terraform apply -auto-approve tfplan
+
+      - name: 📤 Read Terraform Outputs
+        id: tf_output
+        working-directory: infrastructure
+        run: |
+          echo "db_endpoint=$(terraform output -raw db_endpoint)" >> "$GITHUB_OUTPUT"
+          # private_key é sensitive — o valor não aparece em logs do Actions
+          echo "private_key=$(terraform output -raw private_key_pem)" >> "$GITHUB_OUTPUT"
 
   build-and-push:
     name: 🐳 Build ${{ matrix.app }}
@@ -126,7 +142,7 @@ jobs:
       - name: 🚀 Update Instance & Deploy
         uses: appleboy/ssh-action@v1
         env:
-          DATABASE_HOST: ${{ secrets.DATABASE_HOST }}
+          DATABASE_HOST: ${{ needs.provision.outputs.db_endpoint }}
           DATABASE_DB: ${{ secrets.DATABASE_DB }}
           DATABASE_USER: ${{ secrets.DATABASE_USER }}
           DATABASE_MASTER_PASSWORD: ${{ secrets.DB_MASTER_PASSWORD }}
@@ -138,7 +154,7 @@ jobs:
         with:
           host: ${{ secrets.LIGHTSAIL_HOST }}
           username: ${{ secrets.LIGHTSAIL_USER }}
-          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          key: ${{ needs.provision.outputs.private_key }}
           # Importante: Listar todas as envs aqui para o SSH injetá-las
           envs: DATABASE_HOST,DATABASE_DB,DATABASE_USER,DATABASE_MASTER_PASSWORD,DB_API_PASSWORD,DB_CMS_PASSWORD,DB_FLAGS_PASSWORD,GHCR_PAT,REPO_OWNER
           script: |
