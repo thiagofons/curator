@@ -82,8 +82,10 @@ jobs:
         working-directory: infrastructure
         run: |
           echo "db_endpoint=$(terraform output -raw db_endpoint)" >> "$GITHUB_OUTPUT"
-          # private_key é sensitive — o valor não aparece em logs do Actions
-          echo "private_key=$(terraform output -raw private_key_pem)" >> "$GITHUB_OUTPUT"
+          # Sintaxe heredoc para valor multiline (chave PEM tem quebras de linha)
+          echo "private_key<<EOF" >> "$GITHUB_OUTPUT"
+          terraform output -raw private_key_pem >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
 
   build-and-push:
     name: 🐳 Build ${{ matrix.app }}
