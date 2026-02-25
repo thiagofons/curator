@@ -153,51 +153,34 @@ jobs:
           DB_FLAGS_PASSWORD: ${{ secrets.DB_FLAGS_PASSWORD }}
           GHCR_PAT: ${{ secrets.GHCR_PAT }}
           REPO_OWNER: ${{ github.repository_owner }}
+          LETSENCRYPT_EMAIL: ${{ secrets.LETSENCRYPT_EMAIL }}
         with:
           host: ${{ secrets.LIGHTSAIL_HOST }}
           username: ${{ secrets.LIGHTSAIL_USER }}
           key: ${{ needs.provision.outputs.private_key }}
-          # Importante: Listar todas as envs aqui para o SSH injetá-las
-          envs: DATABASE_HOST,DATABASE_DB,DATABASE_USER,DATABASE_MASTER_PASSWORD,DB_API_PASSWORD,DB_CMS_PASSWORD,DB_FLAGS_PASSWORD,GHCR_PAT,REPO_OWNER
+          envs: DATABASE_HOST,DATABASE_DB,DATABASE_USER,DATABASE_MASTER_PASSWORD,DB_API_PASSWORD,DB_CMS_PASSWORD,DB_FLAGS_PASSWORD,GHCR_PAT,REPO_OWNER,LETSENCRYPT_EMAIL
           script: |
             set -e
             export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-            # 0. Bootstrap: instala Docker se não estiver presente
-            if ! command -v docker &> /dev/null; then
-              sudo apt-get update -y
-              sudo apt-get install -y ca-certificates curl gnupg
-              sudo install -m 0755 -d /etc/apt/keyrings
-              curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-              sudo chmod a+r /etc/apt/keyrings/docker.gpg
-              echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
-                | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-              sudo apt-get update -y
-              sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-              sudo usermod -aG docker ubuntu
-              sudo docker swarm init || true
-            fi
-
-            # 0. Bootstrap: instala dependências se não estiverem presentes
+            # 0. Bootstrap: instala dependências ausentes
             NEEDS_APT_UPDATE=false
-
-            if ! command -v docker &> /dev/null; then
-              NEEDS_APT_UPDATE=true
-            fi
-            if ! command -v psql &> /dev/null; then
-              NEEDS_APT_UPDATE=true
-            fi
+            command -v docker  &>/dev/null || NEEDS_APT_UPDATE=true
+            command -v psql    &>/dev/null || NEEDS_APT_UPDATE=true
+            command -v certbot &>/dev/null || NEEDS_APT_UPDATE=true
 
             if [ "$NEEDS_APT_UPDATE" = "true" ]; then
               sudo apt-get update -y
             fi
 
-            if ! command -v docker &> /dev/null; then
+            if ! command -v docker &>/dev/null; then
               sudo apt-get install -y ca-certificates curl gnupg
               sudo install -m 0755 -d /etc/apt/keyrings
-              curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+              curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
+                | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
               sudo chmod a+r /etc/apt/keyrings/docker.gpg
-              echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
+              echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+                https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
                 | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
               sudo apt-get update -y
               sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
@@ -205,8 +188,12 @@ jobs:
               sudo docker swarm init || true
             fi
 
-            if ! command -v psql &> /dev/null; then
+            if ! command -v psql &>/dev/null; then
               sudo apt-get install -y postgresql-client
+            fi
+
+            if ! command -v certbot &>/dev/null; then
+              sudo apt-get install -y certbot
             fi
 
             # 1. Atualiza código fonte
@@ -216,7 +203,7 @@ jobs:
             cd ~/curator
             git pull origin main
 
-            # 2. Login e Pull (Usando as envs injetadas)
+            # 2. Login e pull das imagens
             echo "$GHCR_PAT" | sudo docker login ghcr.io -u "$REPO_OWNER" --password-stdin
             sudo docker pull ghcr.io/$REPO_OWNER/curator-api:latest
             sudo docker pull ghcr.io/$REPO_OWNER/curator-cms:latest
@@ -233,11 +220,37 @@ jobs:
               DB_FLAGS_PASSWORD="$DB_FLAGS_PASSWORD" \
               ./scripts/init-db.sh
 
-            # 4. Deploy via Stack
-            set -a && source .env.production && set +a
-            REGISTRY_OWNER=$REPO_OWNER \
-            IMAGE_TAG=latest \
-            sudo --preserve-env docker stack deploy -c docker-compose.production.yaml curator --with-registry-auth
+            # 4. Bootstrap SSL: emite certificados se não existirem (primeira vez)
+            SSL_DOMAINS=("api.curator.com.br" "cms.curator.com.br" "flags.curator.com.br")
+            CERTS_MISSING=false
+            for DOMAIN in "${SSL_DOMAINS[@]}"; do
+              [ ! -f "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" ] && CERTS_MISSING=true && break
+            done
 
-            # 5. Nginx Reload
-            sudo docker service update --force curator_nginx || echo "⚠️ Warning: Nginx update failed"
+            if [ "$CERTS_MISSING" = "true" ]; then
+              echo "=== SSL certs ausentes — emitindo via Certbot ==="
+              sudo docker service rm curator_nginx 2>/dev/null || true
+              sleep 5
+              for DOMAIN in "${SSL_DOMAINS[@]}"; do
+                if [ ! -f "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" ]; then
+                  sudo certbot certonly \
+                    --standalone \
+                    --non-interactive \
+                    --agree-tos \
+                    --email "$LETSENCRYPT_EMAIL" \
+                    -d "$DOMAIN"
+                fi
+              done
+              echo "=== Certificados SSL emitidos ==="
+            fi
+
+            # 5. Deploy via Stack
+            set -a && source .env.production && set +a
+            REGISTRY_OWNER=$REPO_OWNER IMAGE_TAG=latest \
+              sudo --preserve-env docker stack deploy \
+                -c docker-compose.production.yaml curator \
+                --with-registry-auth
+
+            # 6. Força reload do nginx
+            sudo docker service update --force curator_nginx \
+              || echo "⚠️ Warning: Nginx update failed"
