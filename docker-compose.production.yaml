@@ -113,15 +113,15 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 60s
+      start_period: 120s
     deploy:
       resources:
         limits:
           cpus: "0.5"
-          memory: 256M
+          memory: 512M
         reservations:
           cpus: "0.25"
-          memory: 128M
+          memory: 256M
       restart_policy:
         condition: on-failure
         delay: 5s
