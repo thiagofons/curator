@@ -178,6 +178,37 @@ jobs:
               sudo docker swarm init || true
             fi
 
+            # 0. Bootstrap: instala dependências se não estiverem presentes
+            NEEDS_APT_UPDATE=false
+
+            if ! command -v docker &> /dev/null; then
+              NEEDS_APT_UPDATE=true
+            fi
+            if ! command -v psql &> /dev/null; then
+              NEEDS_APT_UPDATE=true
+            fi
+
+            if [ "$NEEDS_APT_UPDATE" = "true" ]; then
+              sudo apt-get update -y
+            fi
+
+            if ! command -v docker &> /dev/null; then
+              sudo apt-get install -y ca-certificates curl gnupg
+              sudo install -m 0755 -d /etc/apt/keyrings
+              curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+              sudo chmod a+r /etc/apt/keyrings/docker.gpg
+              echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
+                | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+              sudo apt-get update -y
+              sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+              sudo usermod -aG docker ubuntu
+              sudo docker swarm init || true
+            fi
+
+            if ! command -v psql &> /dev/null; then
+              sudo apt-get install -y postgresql-client
+            fi
+
             # 1. Atualiza código fonte
             if [ ! -d ~/curator ]; then
               git clone https://github.com/$REPO_OWNER/curator.git ~/curator
