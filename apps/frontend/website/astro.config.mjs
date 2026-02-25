@@ -83,6 +83,11 @@ export default defineConfig({
     plugins: [tailwindcss()],
     server: {
       allowedHosts: ["curator.local"],
+      hmr: {
+        // When behind nginx (port 80), the HMR WebSocket client must connect
+        // to port 80, not the internal container port (4003)
+        clientPort: 80,
+      },
     },
   },
 
