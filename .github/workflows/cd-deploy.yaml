@@ -163,6 +163,9 @@ jobs:
             set -e
 
             # 1. Atualiza código fonte
+            if [ ! -d ~/curator ]; then
+              git clone https://github.com/$REPO_OWNER/curator.git ~/curator
+            fi
             cd ~/curator
             git pull origin main
 
