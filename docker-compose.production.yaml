@@ -57,6 +57,7 @@ services:
       PAYLOAD_SECRET: ${PAYLOAD_SECRET}
       PAYLOAD_SERVER_URL: https://cms.curator.com.br
       NODE_OPTIONS: "--dns-result-order=ipv4first"
+      NODE_TLS_REJECT_UNAUTHORIZED: "0"
     expose:
       - "3000"
     networks:
@@ -108,7 +109,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "wget --quiet --tries=1 --spider http://localhost:8000/health || exit 1",
+          'python -c "import urllib.request; urllib.request.urlopen(''http://localhost:8000/health'')" || exit 1',
         ]
       interval: 30s
       timeout: 10s
