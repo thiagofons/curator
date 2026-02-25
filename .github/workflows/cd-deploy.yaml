@@ -162,6 +162,21 @@ jobs:
           script: |
             set -e
 
+            # 0. Bootstrap: instala Docker se não estiver presente
+            if ! command -v docker &> /dev/null; then
+              sudo apt-get update -y
+              sudo apt-get install -y ca-certificates curl gnupg
+              sudo install -m 0755 -d /etc/apt/keyrings
+              curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+              sudo chmod a+r /etc/apt/keyrings/docker.gpg
+              echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
+                | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+              sudo apt-get update -y
+              sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+              sudo usermod -aG docker ubuntu
+              sudo docker swarm init || true
+            fi
+
             # 1. Atualiza código fonte
             if [ ! -d ~/curator ]; then
               git clone https://github.com/$REPO_OWNER/curator.git ~/curator
@@ -170,9 +185,9 @@ jobs:
             git pull origin main
 
             # 2. Login e Pull (Usando as envs injetadas)
-            echo "$GHCR_PAT" | docker login ghcr.io -u "$REPO_OWNER" --password-stdin
-            docker pull ghcr.io/$REPO_OWNER/curator-api:latest
-            docker pull ghcr.io/$REPO_OWNER/curator-cms:latest
+            echo "$GHCR_PAT" | sudo docker login ghcr.io -u "$REPO_OWNER" --password-stdin
+            sudo docker pull ghcr.io/$REPO_OWNER/curator-api:latest
+            sudo docker pull ghcr.io/$REPO_OWNER/curator-cms:latest
 
             # 3. Inicializa DB
             chmod +x ./scripts/init-db.sh
@@ -190,7 +205,7 @@ jobs:
             set -a && source .env.production && set +a
             REGISTRY_OWNER=$REPO_OWNER \
             IMAGE_TAG=latest \
-            docker stack deploy -c docker-compose.production.yaml curator --with-registry-auth
+            sudo --preserve-env docker stack deploy -c docker-compose.production.yaml curator --with-registry-auth
 
             # 5. Nginx Reload
-            docker service update --force curator_nginx || echo "⚠️ Warning: Nginx update failed"
+            sudo docker service update --force curator_nginx || echo "⚠️ Warning: Nginx update failed"
