@@ -242,6 +242,17 @@ jobs:
                 fi
               done
               echo "=== Certificados SSL emitidos ==="
+
+              # Atualiza renewal config para usar webroot (nginx serve o ACME challenge na porta 80)
+              # Sem isso, certbot renew tentaria usar standalone e conflitaria com o nginx
+              for DOMAIN in "${SSL_DOMAINS[@]}"; do
+                RENEWAL_CONF="/etc/letsencrypt/renewal/$DOMAIN.conf"
+                if [ -f "$RENEWAL_CONF" ]; then
+                  sudo sed -i 's/^authenticator = standalone/authenticator = webroot/' "$RENEWAL_CONF"
+                  sudo grep -q '^webroot_path' "$RENEWAL_CONF" \
+                    || sudo sed -i '/^authenticator = webroot/a webroot_path = /var/www/certbot' "$RENEWAL_CONF"
+                fi
+              done
             fi
 
             # 5. Deploy via Stack
