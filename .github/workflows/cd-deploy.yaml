@@ -161,6 +161,7 @@ jobs:
           envs: DATABASE_HOST,DATABASE_DB,DATABASE_USER,DATABASE_MASTER_PASSWORD,DB_API_PASSWORD,DB_CMS_PASSWORD,DB_FLAGS_PASSWORD,GHCR_PAT,REPO_OWNER
           script: |
             set -e
+            export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
             # 1. Atualiza código fonte
             if [ ! -d ~/curator ]; then
