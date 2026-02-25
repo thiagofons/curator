@@ -80,13 +80,14 @@ ALTER SCHEMA cms   OWNER TO cms_user;
 ALTER SCHEMA flags OWNER TO flags_user;
 
 ALTER ROLE api_user   SET search_path TO api, public;
-ALTER ROLE cms_user   SET search_path TO cms, public;
-ALTER ROLE flags_user SET search_path TO flags, public;
+ALTER ROLE cms_user   SET search_path TO public;
+ALTER ROLE flags_user SET search_path TO public;
 
 GRANT ALL ON SCHEMA api    TO api_user;
 GRANT ALL ON SCHEMA cms    TO cms_user;
 GRANT ALL ON SCHEMA public TO cms_user;
 GRANT ALL ON SCHEMA flags  TO flags_user;
+GRANT ALL ON SCHEMA public TO flags_user;
 
 GRANT CONNECT ON DATABASE ${DATABASE_DB} TO api_user;
 GRANT CONNECT ON DATABASE ${DATABASE_DB} TO cms_user;
