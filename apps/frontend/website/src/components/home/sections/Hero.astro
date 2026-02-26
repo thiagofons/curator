@@ -31,7 +31,6 @@ const cta = {
     class="absolute top-0 left-0 -z-10 h-full w-full object-cover"
   />
 
-  <!-- z-10: conteúdo do hero sempre acima do mockup -->
   <div class="relative z-0 flex min-h-screen items-center justify-center p-5">
     <HeroCard>
       <Display color="foreground" className="text-center">
@@ -81,12 +80,10 @@ const cta = {
 
     function update() {
       if (window.innerWidth < 768) {
-        // Mobile: parallax + escala alta fixa.
         const offset = 80 + window.scrollY * 0.2;
         el!.style.transform = `translateY(${offset}px) scale(2)`;
         el!.style.transformOrigin = "top center";
       } else {
-        // Desktop/tablet: parallax — mockup avança a 72% da velocidade da página.
         el!.style.transform = `translateY(${window.scrollY * 0.28}px)`;
         el!.style.transformOrigin = "";
       }
