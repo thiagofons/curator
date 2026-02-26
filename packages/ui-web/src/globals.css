@@ -35,7 +35,7 @@
     /* ------------------------------------------------------------------ */
 
     --background: 0 0% 100%; /* #ffffff */
-    --foreground: 216 100% 8%; /* Texto padrão -> Blue Dark */
+    --foreground: 0 0% 0%; /* Texto padrão -> Preto */
 
     --card: 0 0% 100%;
     --card-foreground: 216 100% 8%; /* Blue Dark */

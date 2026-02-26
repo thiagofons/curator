@@ -77,6 +77,24 @@ export const ui = {
     "home.how_it_works.step3.description":
       "Assista, marque como visto e acompanhe seu progresso. Sua jornada fica salva e pode ser compartilhada.",
 
+    // Home - Exemplos de roadmaps reais
+    "home.examples.title": "Exemplos de roadmaps reais",
+    "home.examples.subtitle":
+      "Explore universos cinematográficos que você ainda não conhece",
+    "home.examples.card1.title": "Entendendo Stanley Kubrick",
+    "home.examples.card1.description":
+      "Um mergulho completo na mente do diretor mais obsessivo do cinema. Do início de carreira ao legado — entenda por que Kubrick mudou tudo.",
+    "home.examples.card2.title": "Introdução ao Cinema Japonês",
+    "home.examples.card2.description":
+      "Do samurai ao cotidiano silencioso. Uma porta de entrada para uma das cinematografias mais ricas e influentes da história.",
+    "home.examples.card3.title": "Os Filmes que Definiram o Terror Moderno",
+    "home.examples.card3.description":
+      "Esqueça jumpscares. Esses são os filmes que criaram o medo psicológico que todo diretor de terror ainda tenta replicar.",
+    "home.examples.card4.title":
+      "Nouvelle Vague: O Cinema Francês que Mudou Tudo",
+    "home.examples.card4.description":
+      "Nos anos 60, um grupo de críticos pegou câmeras e reinventou a linguagem do cinema. Esse roadmap conta como — e por quê ainda importa.",
+
     // Home - Comparação Redes Sociais vs Curator
     "home.comparison.left.title": "Redes Sociais",
     "home.comparison.left.algorithm":

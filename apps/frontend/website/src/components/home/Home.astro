@@ -3,6 +3,7 @@ import CTA from "@/components/common/CTA.astro";
 
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 import Base from "@/layouts/Base.astro";
+import Examples from "./sections/Examples.astro";
 import Hero from "./sections/Hero.astro";
 import HowItWorks from "./sections/HowItWorks.astro";
 import Problem from "./sections/Problem.astro";
@@ -28,7 +29,7 @@ const status = (feat: Feature) => isFeatureEnabled(feat);
 
   {status("home.how_it_works") && <HowItWorks />}
 
-  {status("home.examples") && <></>}
+  {status("home.examples") && <Examples />}
 
   {status("home.cta") && <CTA />}
 </Base>

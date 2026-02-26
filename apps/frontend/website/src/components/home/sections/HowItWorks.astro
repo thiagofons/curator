@@ -23,6 +23,8 @@ const steps = [
     description: t("home.how_it_works.step1.description"),
     image: Step1,
     reversed: false,
+    loading: "eager" as const,
+    fetchpriority: "high" as const,
   },
   {
     badge: t("home.how_it_works.step2.badge"),
@@ -30,6 +32,8 @@ const steps = [
     description: t("home.how_it_works.step2.description"),
     image: Step2,
     reversed: true,
+    loading: "eager" as const,
+    fetchpriority: "auto" as const,
   },
   {
     badge: t("home.how_it_works.step3.badge"),
@@ -37,6 +41,8 @@ const steps = [
     description: t("home.how_it_works.step3.description"),
     image: Step3,
     reversed: false,
+    loading: "lazy" as const,
+    fetchpriority: "low" as const,
   },
 ];
 ---
@@ -62,10 +68,14 @@ const steps = [
             class={`flex flex-col items-center gap-10 md:flex-row md:items-center md:gap-16 ${step.reversed ? "md:flex-row-reverse" : ""}`}
           >
             <!-- Image -->
-            <div class="w-full max-w-xs shrink-0 md:w-2/5 md:max-w-none">
+            <div class="w-full max-w-xs shrink-0 md:w-2/5 md:max-w-none lg:w-1/2 xl:w-[55%]">
               <Image
                 src={step.image}
                 alt={step.title}
+                loading={step.loading}
+                fetchpriority={step.fetchpriority}
+                widths={[320, 480, 640, 800, 1024]}
+                sizes="(max-width: 768px) 80vw, (max-width: 1024px) 40vw, (max-width: 1280px) 50vw, 55vw"
                 class="mx-auto h-auto w-full drop-shadow-xl"
               />
             </div>
