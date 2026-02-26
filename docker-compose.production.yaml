@@ -100,7 +100,7 @@ services:
       DJANGO_SECRET_KEY: ${FLAGS_SECRET_KEY}
       DJANGO_ALLOWED_HOSTS: "*"
       ALLOW_REGISTRATION_WITHOUT_INVITE: "True"
-      USE_POSTGRES_FOR_ANALYTICS: "true"
+      DISABLE_ANALYTICS_FEATURES: "true"
     expose:
       - "8000"
     networks:
@@ -119,7 +119,7 @@ services:
       resources:
         limits:
           cpus: "0.5"
-          memory: 512M
+          memory: 800M
         reservations:
           cpus: "0.25"
           memory: 256M
