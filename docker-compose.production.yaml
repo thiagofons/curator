@@ -133,6 +133,45 @@ services:
         max-size: "10m"
         max-file: "3"
 
+  metabase:
+    container_name: metabase
+    image: metabase/metabase:latest
+    env_file:
+      - .env.production
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_CONNECTION_URI: ${METABASE_DATABASE_URL}
+      MB_SITE_URL: https://metabase.curator.com.br
+      MB_ENCRYPTION_SECRET_KEY: ${METABASE_SECRET_KEY}
+      MB_ANON_TRACKING_ENABLED: "false"
+      JAVA_OPTS: "-Xmx512m"
+    expose:
+      - "3000" # interno apenas, sem conflito com o cms
+    networks:
+      - curator-net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1G
+        reservations:
+          cpus: "0.25"
+          memory: 512M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
   # >>> Infrastructure <<<
   nginx:
     container_name: nginx
