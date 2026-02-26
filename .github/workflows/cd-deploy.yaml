@@ -218,10 +218,11 @@ jobs:
               DB_API_PASSWORD="$DB_API_PASSWORD" \
               DB_CMS_PASSWORD="$DB_CMS_PASSWORD" \
               DB_FLAGS_PASSWORD="$DB_FLAGS_PASSWORD" \
+              DB_CRM_PASSWORD="$DB_CRM_PASSWORD" \
               ./scripts/init-db.sh
 
             # 4. Bootstrap SSL: emite certificados se não existirem (primeira vez)
-            SSL_DOMAINS=("api.curator.com.br" "cms.curator.com.br" "flags.curator.com.br")
+            SSL_DOMAINS=("api.curator.com.br" "cms.curator.com.br" "flags.curator.com.br" "crm.curator.com.br")
             CERTS_MISSING=false
             for DOMAIN in "${SSL_DOMAINS[@]}"; do
               [ ! -f "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" ] && CERTS_MISSING=true && break
