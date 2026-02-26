@@ -25,30 +25,57 @@ const config = {
         sans: ["var(--font-primary)", "sans-serif"],
       },
       fontSize: {
+        // Fluid range: 320px → 1280px viewport
         "display-h1": [
-          "clamp(2rem, 4vw + 1rem, 3rem)",
-          {
-            lineHeight: "1.1",
-            letterSpacing: "-0.02em",
-            fontWeight: "700",
-          },
+          "clamp(2rem, 4vw + 1rem, 3rem)", // 32px → 48px
+          { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "700" },
         ],
         "heading-h2": [
-          "clamp(1.5rem, 3vw + 1rem, 2.25rem)",
+          "clamp(1.5rem, 3vw + 1rem, 2.25rem)", // 24px → 36px
           { lineHeight: "1.2", letterSpacing: "-0.01em", fontWeight: "600" },
         ],
-        "heading-h3": ["24px", { lineHeight: "1.33", fontWeight: "600" }],
-        "heading-h4": ["20px", { lineHeight: "1.4", fontWeight: "600" }],
-        "subheading-xl": ["24px", { lineHeight: "1.3", fontWeight: "500" }],
-        "subheading-lg": ["20px", { lineHeight: "1.4", fontWeight: "500" }],
-        "subheading-md": ["18px", { lineHeight: "1.4", fontWeight: "500" }],
-        "subheading-sm": ["16px", { lineHeight: "1.0", fontWeight: "500" }],
-        "subheading-xs": ["14px", { lineHeight: "1.0", fontWeight: "500" }],
-        "body-large": ["18px", { lineHeight: "1.6" }],
-        "body-base": ["16px", { lineHeight: "1.5" }],
-        "body-small": ["14px", { lineHeight: "1.4" }],
+        "heading-h3": [
+          "clamp(1.125rem, 0.625vw + 1rem, 1.5rem)", // 18px → 24px
+          { lineHeight: "1.33", fontWeight: "600" },
+        ],
+        "heading-h4": [
+          "clamp(1rem, 0.5vw + 0.875rem, 1.25rem)", // 16px → 20px
+          { lineHeight: "1.4", fontWeight: "600" },
+        ],
+        "subheading-xl": [
+          "clamp(1.125rem, 0.625vw + 1rem, 1.5rem)", // 18px → 24px
+          { lineHeight: "1.3", fontWeight: "500" },
+        ],
+        "subheading-lg": [
+          "clamp(1rem, 0.5vw + 0.875rem, 1.25rem)", // 16px → 20px
+          { lineHeight: "1.4", fontWeight: "500" },
+        ],
+        "subheading-md": [
+          "clamp(0.9375rem, 0.3125vw + 0.875rem, 1.125rem)", // 15px → 18px
+          { lineHeight: "1.4", fontWeight: "500" },
+        ],
+        "subheading-sm": [
+          "clamp(0.8125rem, 0.3125vw + 0.75rem, 1rem)", // 13px → 16px
+          { lineHeight: "1.0", fontWeight: "500" },
+        ],
+        "subheading-xs": [
+          "clamp(0.6875rem, 0.3125vw + 0.625rem, 0.875rem)", // 11px → 14px
+          { lineHeight: "1.0", fontWeight: "500" },
+        ],
+        "body-large": [
+          "clamp(0.9375rem, 0.3125vw + 0.875rem, 1.125rem)", // 15px → 18px
+          { lineHeight: "1.6" },
+        ],
+        "body-base": [
+          "clamp(0.875rem, 0.25vw + 0.8rem, 1rem)", // 14px → 16px
+          { lineHeight: "1.5" },
+        ],
+        "body-small": [
+          "clamp(0.75rem, 0.25vw + 0.7rem, 0.875rem)", // 12px → 14px
+          { lineHeight: "1.4" },
+        ],
         "btn-text": [
-          "16px",
+          "clamp(0.875rem, 0.25vw + 0.8rem, 1rem)", // 14px → 16px
           { lineHeight: "1.0", fontWeight: "600", letterSpacing: "0.01em" },
         ],
       },
