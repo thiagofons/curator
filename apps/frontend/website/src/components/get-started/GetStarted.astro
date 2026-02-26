@@ -1,4 +1,5 @@
 ---
+import BG from "@/assets/images/home/hero-bg.svg";
 import { APP_ROUTES } from "@/constants/routes";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 import Base from "@/layouts/Base.astro";
@@ -6,7 +7,8 @@ import {
   Display,
   SubheadingXL,
 } from "@repo/ui-web/components/custom/typography.jsx";
-import HeroCard from "../common/HeroCard.astro";
+import { cn } from "@repo/ui-web/lib/utils";
+import { Image } from "astro:assets";
 import GetStartedForm from "./GetStartedForm";
 
 const lang = getLangFromUrl(Astro.url);
@@ -21,18 +23,37 @@ const t = useTranslations(lang);
     id={APP_ROUTES.GET_STARTED.path}
     class="relative flex min-h-screen items-center justify-center p-5"
   >
-    <HeroCard orientation="horizontal" imageSide="right">
-      <div slot="image" class="w-full">
-        <GetStartedForm client:load />
+    <Image
+      src={BG}
+      alt="Hero Background"
+      class="absolute top-0 left-0 -z-10 h-full w-full object-cover"
+    />
+    <div
+      class={cn(
+        "bg-card text-card-foreground mt-24 min-h-[627px] flex flex-col justify-center w-full max-w-300 rounded-3xl text-center shadow-sm md:mt-0",
+        "border-border border",
+      )}
+    >
+      <div
+        class={cn(
+          "gap-8 p-6 py-8 md:gap-12 md:p-10 flex w-full justify-center",
+        )}
+      >
+        <div
+          class="flex h-auto w-full max-w-[700px] flex-col items-center gap-4.5 rounded-2xl object-cover"
+        >
+          <Display variant="display-h1" color="black">
+            {t("get_started.hero.title")}
+          </Display>
+
+          <SubheadingXL color="gray-normal">
+            {t("get_started.hero.subtitle")}
+          </SubheadingXL>
+          <div class="w-full">
+            <GetStartedForm client:load />
+          </div>
+        </div>
       </div>
-
-      <Display variant="display-h1" color="black">
-        {t("get_started.hero.title")}
-      </Display>
-
-      <SubheadingXL color="gray-normal">
-        {t("get_started.hero.subtitle")}
-      </SubheadingXL>
-    </HeroCard>
+    </div>
   </main>
 </Base>
