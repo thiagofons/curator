@@ -190,9 +190,9 @@ export const ui = {
       "Descubra como o Curator pode transformar sua forma de aprender. Explore trilhas estruturadas, participe da comunidade e acesse ferramentas exclusivas para potencializar seu aprendizado.",
 
     // Get Started - Hero
-    "get_started.hero.title": "Chega de conteúdo raso!",
+    "get_started.hero.title": "Seu próximo roadmap está quase pronto!",
     "get_started.hero.subtitle":
-      "Junte-se a outros curadores e aprendizes construindo o futuro da educação.",
+      "Entre na lista e seja o primeiro a explorar o cinema com direção de verdade.",
 
     "get_started.form.name.label": "Nome",
     "get_started.form.name.placeholder": "João",
