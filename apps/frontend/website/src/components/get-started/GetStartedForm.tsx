@@ -113,7 +113,7 @@ const GetStartedForm = () => {
           )}
         />
 
-        <div className="flex justify-end">
+        <div className="flex justify-center">
           <Button type="submit">{t("get_started.form.submit")}</Button>
         </div>
       </FieldGroup>
