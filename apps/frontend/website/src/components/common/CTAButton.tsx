@@ -1,14 +1,22 @@
-import { Button } from "@repo/ui-web/components/base/button.jsx";
+import {
+  Button,
+  type ButtonProps,
+} from "@repo/ui-web/components/base/button.jsx";
 import * as React from "react";
 
-interface CTAButtonProps {
+interface CTAButtonProps extends ButtonProps {
   href: string;
   children: React.ReactNode;
 }
 
-export function CTAButton({ href, children }: CTAButtonProps) {
+export function CTAButton({
+  href,
+  children,
+  size = "cta",
+  ...props
+}: CTAButtonProps) {
   return (
-    <Button asChild>
+    <Button asChild size={size} {...props}>
       <a href={href}>{children}</a>
     </Button>
   );
