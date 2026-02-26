@@ -159,7 +159,7 @@ jobs:
           host: ${{ secrets.LIGHTSAIL_HOST }}
           username: ${{ secrets.LIGHTSAIL_USER }}
           key: ${{ needs.provision.outputs.private_key }}
-          envs: DATABASE_HOST,DATABASE_DB,DATABASE_USER,DATABASE_MASTER_PASSWORD,DB_API_PASSWORD,DB_CMS_PASSWORD,DB_FLAGS_PASSWORD,GHCR_PAT,REPO_OWNER,LETSENCRYPT_EMAIL
+          envs: DATABASE_HOST,DATABASE_DB,DATABASE_USER,DATABASE_MASTER_PASSWORD,DB_API_PASSWORD,DB_CMS_PASSWORD,DB_FLAGS_PASSWORD,DB_CRM_PASSWORD,GHCR_PAT,REPO_OWNER,LETSENCRYPT_EMAIL
           script: |
             set -e
             export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
