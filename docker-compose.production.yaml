@@ -140,7 +140,7 @@ services:
       - .env.production
     environment:
       MB_DB_TYPE: postgres
-      MB_DB_CONNECTION_URI: ${METABASE_DATABASE_URL}
+      MB_DB_CONNECTION_URI: ${CRM_DATABASE_URL}
       MB_SITE_URL: https://metabase.curator.com.br
       MB_ENCRYPTION_SECRET_KEY: ${METABASE_SECRET_KEY}
       MB_ANON_TRACKING_ENABLED: "false"
