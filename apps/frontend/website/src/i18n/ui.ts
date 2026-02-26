@@ -50,6 +50,16 @@ export const ui = {
       "Para cinéfilos com uma lista enorme de intenções. Montamos o caminho, você só precisa assistir.",
     "home.hero.cta": "Comeaçr Jornada",
 
+    // Home - Problema
+    "home.problem.first":
+      "Você abre o streaming e fecha sem <highlight>asssistir nada</highlight>",
+    "home.problem.second":
+      "Você quer ir além do mainstream, mas não sabe <highlight>por onde começar</highlight>",
+    "home.problem.third":
+      "Você tem uma lista enorme de filmes salvos que nunca <highlight>são assistidos</highlight>",
+    "home.problem.fourth":
+      "<highlight>O Curator resolve isso! Você descreve o que quer explorar, a IA monta o caminho e você só precisa assistir</highlight>",
+
     // Home - Comparação Redes Sociais vs Curator
     "home.comparison.left.title": "Redes Sociais",
     "home.comparison.left.algorithm":

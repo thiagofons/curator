@@ -31,11 +31,11 @@ function parseHighlight(text: string): string {
         return (
           <div class="flex w-full flex-col items-center">
             <div
-              class={`border-primary w-full rounded-full border-2 px-10 py-6 text-center text-lg leading-relaxed ${isLast ? "bg-primary/10 text-primary" : "bg-background text-foreground"}`}
+              class={`border-primary w-full rounded-full border-2 px-10 py-6 text-center text-lg leading-relaxed ${isLast ? "text-primary floating z-10 bg-[#d1e2fd]" : "bg-background text-foreground"}`}
               set:html={parseHighlight(message)}
             />
             {index < messages.length - 1 && (
-              <div class="bg-primary h-10 w-[2px]" />
+              <div class="bg-primary z-0 h-10 w-[2px]" />
             )}
           </div>
         );
@@ -43,3 +43,21 @@ function parseHighlight(text: string): string {
     }
   </div>
 </section>
+
+<style>
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+      box-shadow: 0 8px 32px -4px hsl(217 100% 48% / 0.3);
+    }
+    50% {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 48px -4px hsl(217 100% 48% / 0.45);
+    }
+  }
+
+  .floating {
+    animation: float 3.5s ease-in-out infinite;
+  }
+</style>
