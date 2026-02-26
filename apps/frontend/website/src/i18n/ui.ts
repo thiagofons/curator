@@ -60,6 +60,23 @@ export const ui = {
     "home.problem.fourth":
       "<highlight>O Curator resolve isso! Você descreve o que quer explorar, a IA monta o caminho e você só precisa assistir</highlight>",
 
+    // Home - Como funciona
+    "home.how_it_works.title": "Como funciona",
+    "home.how_it_works.subtitle":
+      "Em três passos, você sai do zero para um roadmap completo de filmes",
+    "home.how_it_works.step1.badge": "Passo 1",
+    "home.how_it_works.step1.title": "Você descreve",
+    "home.how_it_works.step1.description":
+      "Descreva o que quer explorar do seu jeito. Um diretor, um gênero, uma época. Sem formulário, sem filtros.",
+    "home.how_it_works.step2.badge": "Passo 2",
+    "home.how_it_works.step2.title": "A IA monta o seu roadmap",
+    "home.how_it_works.step2.description":
+      "A IA analisa e monta uma sequência curada de filmes, vídeos e artigos — na ordem certa para você evoluir.",
+    "home.how_it_works.step3.badge": "Passo 3",
+    "home.how_it_works.step3.title": "Você assiste e marca",
+    "home.how_it_works.step3.description":
+      "Assista, marque como visto e acompanhe seu progresso. Sua jornada fica salva e pode ser compartilhada.",
+
     // Home - Comparação Redes Sociais vs Curator
     "home.comparison.left.title": "Redes Sociais",
     "home.comparison.left.algorithm":

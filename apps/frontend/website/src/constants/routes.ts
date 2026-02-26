@@ -18,6 +18,7 @@ export const APP_ROUTES = {
       OPEN_SOURCE: "open_source",
       COME_TOGETHER: "come_together",
       PROBLEM: "problem",
+      HOW_IT_WORKS: "how_it_works",
     },
   },
   GET_STARTED: {
