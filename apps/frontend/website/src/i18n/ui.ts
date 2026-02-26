@@ -33,9 +33,8 @@ export const ui = {
 
     // Footer
     "footer.description":
-      "O Curator nasceu para devolver o controle do aprendizado a você. Somos uma iniciativa Open Source que transforma o caos da informação em trilhas estruturadas, priorizando a profundidade sobre o engajamento e a comunidade sobre o algoritmo.",
-    "footer.open_source":
-      "Orgulhosamente Open Source & Built in Public no Brasil",
+      "O Curator nasceu para cinéfilos que querem ir além do algoritmo. Roadmaps de filmes criados por IA e por pessoas que realmente entendem de cinema.",
+    "footer.open_source": "Feito com obsessão cinematográfica no Brasil",
     "footer.copyright": "Curator. Todos os direitos reservados.",
     "footer.email": "contato@curator.com.br",
 
@@ -43,6 +42,12 @@ export const ui = {
     "home.meta.title": "Curator - Comece sua jornada pelo cinema",
     "home.meta.description":
       "Para cinéfilos com uma lista enorme de intenções. Montamos o caminho, você só precisa assistir.",
+
+    // Home - CTA Final
+    "home.cta.title": "Qual vai ser o seu primeiro roadmap?",
+    "home.cta.subtitle":
+      "Sem cartão de crédito. Sem cadastro complicado. Só você e o cinema.",
+    "home.cta.button": "Começar Jornada",
 
     // Home - Hero
     "home.hero.title": "Pare de rolar Netflix. Comece sua jornada pelo cinema.",
@@ -185,22 +190,13 @@ export const ui = {
       "Descubra como o Curator pode transformar sua forma de aprender. Explore trilhas estruturadas, participe da comunidade e acesse ferramentas exclusivas para potencializar seu aprendizado.",
 
     // Get Started - Hero
-    "get_started.hero.title": "Chega de conteúdo raso!",
+    "get_started.hero.title": "Seu próximo roadmap está quase pronto!",
     "get_started.hero.subtitle":
-      "Junte-se a outros curadores e aprendizes construindo o futuro da educação.",
-
-    "get_started.form.name.label": "Nome",
-    "get_started.form.name.placeholder": "João",
-    "get_started.form.name.description": "Insira o seu nome",
-    "get_started.form.email.label": "E-mail",
+      "Entre na lista e seja o primeiro a explorar o cinema com direção de verdade.",
+    "get_started.form.email.label": "Seu melhor e-mail",
     "get_started.form.email.placeholder": "joao@email.com",
     "get_started.form.email.description":
       "Insira o seu melhor endereço de e-mail",
-    "get_started.form.theme.label":
-      "Qual tema você mais gostaria de ver um roadmap hoje?",
-    "get_started.form.theme.placeholder":
-      "Literatura Russa, Filmes Nacionais, Machado de Assis...",
-    "get_started.form.theme.description": "Diga-nos o que você quer explorar",
     "get_started.form.submit": "Entrar na lista de espera",
     "get_started.form.success_message":
       "Obrigado por se inscrever! Estamos animados para ter você conosco.",

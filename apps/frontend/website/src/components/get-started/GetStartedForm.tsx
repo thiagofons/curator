@@ -15,9 +15,7 @@ const GetStartedForm = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
       email: "",
-      theme: "",
     },
   });
 
@@ -66,22 +64,6 @@ const GetStartedForm = () => {
     >
       <FieldGroup>
         <Controller
-          name="name"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel>{t("get_started.form.name.label")}*</FieldLabel>
-              <Input
-                {...field}
-                id="form-name"
-                aria-invalid={fieldState.invalid}
-                placeholder={t("get_started.form.name.placeholder")}
-              />
-            </Field>
-          )}
-        />
-
-        <Controller
           name="email"
           control={form.control}
           render={({ field, fieldState }) => (
@@ -97,23 +79,7 @@ const GetStartedForm = () => {
           )}
         />
 
-        <Controller
-          name="theme"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel>{t("get_started.form.theme.label")}</FieldLabel>
-              <Input
-                {...field}
-                id="form-theme"
-                aria-invalid={fieldState.invalid}
-                placeholder={t("get_started.form.theme.placeholder")}
-              />
-            </Field>
-          )}
-        />
-
-        <div className="flex justify-end">
+        <div className="flex justify-center">
           <Button type="submit">{t("get_started.form.submit")}</Button>
         </div>
       </FieldGroup>

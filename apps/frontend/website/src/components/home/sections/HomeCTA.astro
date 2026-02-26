@@ -1,0 +1,29 @@
+---
+import { CTAButton } from "@/components/common/CTAButton";
+import { APP_ROUTES } from "@/constants/routes";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import {
+  Display,
+  SubheadingLG,
+} from "@repo/ui-web/components/custom/typography.jsx";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<section
+  id={APP_ROUTES.COMMON.sections.CTA}
+  class="bg-brand-dark relative z-10 flex min-h-[55vh] flex-col items-center justify-center gap-8 px-6 py-24 text-center"
+>
+  <Display color="primary-foreground" className="max-w-3xl">
+    {t("home.cta.title")}
+  </Display>
+
+  <SubheadingLG color="primary-foreground" className="max-w-md">
+    {t("home.cta.subtitle")}
+  </SubheadingLG>
+
+  <CTAButton href="/get-started" client:load>
+    {t("home.cta.button")}
+  </CTAButton>
+</section>
