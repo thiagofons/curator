@@ -193,19 +193,10 @@ export const ui = {
     "get_started.hero.title": "Seu próximo roadmap está quase pronto!",
     "get_started.hero.subtitle":
       "Entre na lista e seja o primeiro a explorar o cinema com direção de verdade.",
-
-    "get_started.form.name.label": "Nome",
-    "get_started.form.name.placeholder": "João",
-    "get_started.form.name.description": "Insira o seu nome",
-    "get_started.form.email.label": "E-mail",
+    "get_started.form.email.label": "Seu melhor e-mail",
     "get_started.form.email.placeholder": "joao@email.com",
     "get_started.form.email.description":
       "Insira o seu melhor endereço de e-mail",
-    "get_started.form.theme.label":
-      "Qual tema você mais gostaria de ver um roadmap hoje?",
-    "get_started.form.theme.placeholder":
-      "Literatura Russa, Filmes Nacionais, Machado de Assis...",
-    "get_started.form.theme.description": "Diga-nos o que você quer explorar",
     "get_started.form.submit": "Entrar na lista de espera",
     "get_started.form.success_message":
       "Obrigado por se inscrever! Estamos animados para ter você conosco.",
