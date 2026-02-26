@@ -1,0 +1,63 @@
+---
+import { APP_ROUTES } from "@/constants/routes";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const messages = [
+  t("home.problem.first"),
+  t("home.problem.second"),
+  t("home.problem.third"),
+  t("home.problem.fourth"),
+];
+
+function parseHighlight(text: string): string {
+  return text.replace(
+    /<highlight>(.*?)<\/highlight>/gs,
+    '<span class="text-primary font-medium">$1</span>',
+  );
+}
+---
+
+<section
+  id={APP_ROUTES.HOME.sections.PROBLEM}
+  class="bg-background relative z-10 flex flex-col items-center py-24"
+>
+  <div class="flex w-full max-w-2xl flex-col items-center px-6">
+    {
+      messages.map((message, index) => {
+        const isLast = index === messages.length - 1;
+        return (
+          <div class="flex w-full flex-col items-center">
+            <div
+              class={`border-primary w-full rounded-full border-2 px-10 py-6 text-center text-lg leading-relaxed ${isLast ? "text-primary floating z-10 bg-[#d1e2fd]" : "bg-background text-foreground"}`}
+              set:html={parseHighlight(message)}
+            />
+            {index < messages.length - 1 && (
+              <div class="bg-primary z-0 h-10 w-[2px]" />
+            )}
+          </div>
+        );
+      })
+    }
+  </div>
+</section>
+
+<style>
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+      box-shadow: 0 8px 32px -4px hsl(217 100% 48% / 0.3);
+    }
+    50% {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 48px -4px hsl(217 100% 48% / 0.45);
+    }
+  }
+
+  .floating {
+    animation: float 3.5s ease-in-out infinite;
+  }
+</style>
