@@ -3,32 +3,30 @@ import CTA from "@/components/common/CTA.astro";
 
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 import Base from "@/layouts/Base.astro";
-import BuildInCommunity from "./sections/BuildInCommunity.astro";
-import ComeTogether from "./sections/ComeTogether.astro";
-import FAQ from "./sections/FAQ.astro";
 import Hero from "./sections/Hero.astro";
-import LearnFromTheSource from "./sections/LearnFromTheSource.astro";
-import OpenSource from "./sections/OpenSource.astro";
-import SocialMediaVsCurator from "./sections/SocialMediaVsCurator.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+const { isFeatureEnabled } = Astro.locals;
+
+type Feature =
+  | "home.hero"
+  | "home.problem"
+  | "home.how_it_works"
+  | "home.examples"
+  | "home.cta";
+
+const status = (feat: Feature) => isFeatureEnabled(feat);
 ---
 
 <Base title={t("home.meta.title")} description={t("home.meta.description")}>
-  <Hero />
+  {status("home.hero") && <Hero />}
 
-  <SocialMediaVsCurator />
+  {status("home.problem") && <></>}
 
-  <LearnFromTheSource />
+  {status("home.how_it_works") && <></>}
 
-  <BuildInCommunity />
+  {status("home.examples") && <></>}
 
-  <CTA />
-
-  <FAQ />
-
-  <OpenSource />
-
-  <ComeTogether />
+  {status("home.cta") && <CTA />}
 </Base>

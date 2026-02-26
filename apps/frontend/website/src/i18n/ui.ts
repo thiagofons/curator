@@ -40,14 +40,15 @@ export const ui = {
     "footer.email": "contato@curator.com.br",
 
     // Home - Meta
-    "home.meta.title": "Curator - Aprenda de forma estruturada e consciente",
+    "home.meta.title": "Curator - Comece sua jornada pelo cinema",
     "home.meta.description":
-      "O Curator é uma plataforma de curadoria que transforma conteúdos dispersos da web em trilhas de aprendizado estruturadas. Pare de consumir ruído e comece a construir sabedoria.",
+      "Para cinéfilos com uma lista enorme de intenções. Montamos o caminho, você só precisa assistir.",
 
     // Home - Hero
-    "home.hero.title": "Pare de consumir ruído. Comece a construir sabedoria.",
+    "home.hero.title": "Pare de rolar Netflix. Comece sua jornada pelo cinema.",
     "home.hero.subtitle":
-      "Uma plataforma de curadoria que transforma conteúdos dispersos da web em trilhas de aprendizado estruturadas.",
+      "Para cinéfilos com uma lista enorme de intenções. Montamos o caminho, você só precisa assistir.",
+    "home.hero.cta": "Comeaçr Jornada",
 
     // Home - Comparação Redes Sociais vs Curator
     "home.comparison.left.title": "Redes Sociais",
