@@ -151,6 +151,7 @@ jobs:
           DB_API_PASSWORD: ${{ secrets.DB_API_PASSWORD }}
           DB_CMS_PASSWORD: ${{ secrets.DB_CMS_PASSWORD }}
           DB_FLAGS_PASSWORD: ${{ secrets.DB_FLAGS_PASSWORD }}
+          DB_CRM_PASSWORD: ${{ secrets.DB_CRM_PASSWORD }}
           GHCR_PAT: ${{ secrets.GHCR_PAT }}
           REPO_OWNER: ${{ github.repository_owner }}
           LETSENCRYPT_EMAIL: ${{ secrets.LETSENCRYPT_EMAIL }}
