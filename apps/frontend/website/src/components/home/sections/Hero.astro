@@ -1,6 +1,6 @@
 ---
 import BG from "@/assets/images/home/hero-bg.svg";
-import HeroImage from "@/assets/images/home/hero.png";
+import Mockup from "@/assets/images/home/hero.png";
 import { CTAButton } from "@/components/common/CTAButton";
 import HeroCard from "@/components/common/HeroCard.astro";
 import { APP_ROUTES } from "@/constants/routes";
@@ -24,41 +24,76 @@ const cta = {
 };
 ---
 
-<main
-  id={APP_ROUTES.HOME.sections.HERO}
-  class="relative flex min-h-screen items-center justify-center p-5"
->
+<main id={APP_ROUTES.HOME.sections.HERO} class="relative">
   <Image
     src={BG}
     alt="Hero Background"
     class="absolute top-0 left-0 -z-10 h-full w-full object-cover"
   />
 
-  <HeroCard orientation="horizontal" imageSide="right">
-    <div slot="image">
+  <!-- z-10: conteúdo do hero sempre acima do mockup -->
+  <div class="relative z-0 flex min-h-screen items-center justify-center p-5">
+    <HeroCard>
+      <Display color="foreground" className="text-center">
+        {t("home.hero.title")}
+      </Display>
+
+      <SubheadingXL color="muted-foreground">
+        {t("home.hero.subtitle")}
+      </SubheadingXL>
+
+      <div
+        class="z-20 mt-6 flex items-center justify-center gap-4 md:justify-start"
+      >
+        {
+          cta.enabled && (
+            <CTAButton href="/get-started" client:load>
+              {cta.label}
+            </CTAButton>
+          )
+        }
+      </div>
+    </HeroCard>
+  </div>
+
+  <div
+    class="relative z-0 -mt-60 flex justify-center pb-[80vw] md:pb-0"
+    id="mockup-section"
+  >
+    <div
+      id="mockup-parallax"
+      class="w-4/5 will-change-transform md:w-full md:max-w-6xl md:px-6"
+    >
       <Image
-        src={HeroImage}
-        alt="Hero Image"
-        class="h-auto w-full object-cover"
+        src={Mockup}
+        alt="Mockup"
+        class="object-c h-auto min-w-full"
+        loading="eager"
       />
     </div>
-
-    <Display variant="display-h1" color="black">
-      {t("home.hero.title")}
-    </Display>
-
-    <SubheadingXL color="gray-normal">
-      {t("home.hero.subtitle")}
-    </SubheadingXL>
-
-    <div class="mt-6 flex items-center justify-center gap-4 md:justify-start">
-      {
-        cta.enabled && (
-          <CTAButton href="/get-started" client:load>
-            {cta.label}
-          </CTAButton>
-        )
-      }
-    </div>
-  </HeroCard>
+  </div>
 </main>
+
+<script>
+  (function () {
+    const el = document.getElementById("mockup-parallax") as HTMLElement | null;
+    if (!el) return;
+
+    function update() {
+      if (window.innerWidth < 768) {
+        // Mobile: parallax + escala alta fixa.
+        const offset = 80 + window.scrollY * 0.2;
+        el!.style.transform = `translateY(${offset}px) scale(2)`;
+        el!.style.transformOrigin = "top center";
+      } else {
+        // Desktop/tablet: parallax — mockup avança a 72% da velocidade da página.
+        el!.style.transform = `translateY(${window.scrollY * 0.28}px)`;
+        el!.style.transformOrigin = "";
+      }
+    }
+
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update, { passive: true });
+    update();
+  })();
+</script>

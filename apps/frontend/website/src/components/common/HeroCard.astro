@@ -2,29 +2,16 @@
 import { cn } from "@repo/ui-web/lib/utils";
 
 interface Props {
-  orientation?: "horizontal" | "vertical";
-  imageSide?: "left" | "right";
   class?: string;
   containerClass?: string;
 }
 
-const {
-  orientation = "horizontal",
-  imageSide = "right",
-  class: className,
-  containerClass,
-  ...props
-} = Astro.props;
-
-const isHorizontal = orientation === "horizontal";
-
-const imageOrderClass =
-  isHorizontal && imageSide === "left" ? "md:-order-1" : "";
+const { class: className, containerClass, ...props } = Astro.props;
 ---
 
 <div
   class={cn(
-    "bg-card text-card-foreground mt-24 min-h-[627px] flex flex-col justify-center w-full max-w-300 rounded-3xl text-center shadow-sm md:mt-0 md:text-left",
+    "bg-card text-card-foreground mt-24 min-h-[627px] flex flex-col justify-center w-full max-w-300 rounded-3xl text-center shadow-sm md:mt-0",
     "border-border border",
     className,
   )}
@@ -32,19 +19,14 @@ const imageOrderClass =
 >
   <div
     class={cn(
-      "grid gap-8 p-6 py-8 md:gap-12 md:p-10",
-      isHorizontal ? "items-center md:grid-cols-2" : "grid-cols-1",
+      "gap-8 p-6 py-8 md:gap-12 md:p-10 flex w-full justify-center",
       containerClass,
     )}
   >
-    <div class="flex h-auto w-full flex-col gap-4.5 rounded-2xl object-cover">
-      <slot />
-    </div>
-
     <div
-      class={cn("flex w-full justify-center md:justify-end", imageOrderClass)}
+      class="flex h-auto w-full max-w-[700px] flex-col items-center gap-4.5 rounded-2xl object-cover"
     >
-      <slot name="image" />
+      <slot />
     </div>
   </div>
 </div>
