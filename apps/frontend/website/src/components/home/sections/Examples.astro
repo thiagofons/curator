@@ -1,0 +1,80 @@
+---
+import Horror from "@/assets/images/home/horror.jpg";
+import JapaneseCinema from "@/assets/images/home/japanese-cinema.jpg";
+import Kubrick from "@/assets/images/home/kubrick.jpg";
+import NouvelleVague from "@/assets/images/home/nouvelle-vague.jpg";
+import { APP_ROUTES } from "@/constants/routes";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import { H2, H3, SubheadingLG } from "@repo/ui-web/components/custom/typography.jsx";
+import { Image } from "astro:assets";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const cards = [
+  {
+    image: Kubrick,
+    title: t("home.examples.card1.title"),
+    description: t("home.examples.card1.description"),
+  },
+  {
+    image: JapaneseCinema,
+    title: t("home.examples.card2.title"),
+    description: t("home.examples.card2.description"),
+  },
+  {
+    image: Horror,
+    title: t("home.examples.card3.title"),
+    description: t("home.examples.card3.description"),
+  },
+  {
+    image: NouvelleVague,
+    title: t("home.examples.card4.title"),
+    description: t("home.examples.card4.description"),
+  },
+];
+---
+
+<section
+  id={APP_ROUTES.HOME.sections.EXAMPLES}
+  class="relative z-10 bg-background py-24"
+>
+  <div class="mx-auto max-w-5xl px-6">
+    <!-- Header -->
+    <div class="mb-14 flex flex-col items-center gap-4 text-center">
+      <H2 color="foreground">{t("home.examples.title")}</H2>
+      <SubheadingLG color="muted-foreground" className="max-w-sm">
+        {t("home.examples.subtitle")}
+      </SubheadingLG>
+    </div>
+
+    <!-- Grid -->
+    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+      {
+        cards.map((card) => (
+          <div class="group relative overflow-hidden rounded-2xl">
+            <!-- Image -->
+            <Image
+              src={card.image}
+              alt={card.title}
+              class="h-72 w-full object-cover transition-transform duration-500 group-hover:scale-105 sm:h-80"
+            />
+
+            <!-- Gradient overlay -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black from-30% via-black/70 via-60% to-transparent" />
+
+            <!-- Text content -->
+            <div class="absolute bottom-0 left-0 right-0 p-6">
+              <H3 color="card" className="mb-2">
+                {card.title}
+              </H3>
+              <p class="text-sm leading-relaxed text-card">
+                {card.description}
+              </p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

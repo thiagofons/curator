@@ -19,6 +19,7 @@ export const APP_ROUTES = {
       COME_TOGETHER: "come_together",
       PROBLEM: "problem",
       HOW_IT_WORKS: "how_it_works",
+      EXAMPLES: "examples",
     },
   },
   GET_STARTED: {

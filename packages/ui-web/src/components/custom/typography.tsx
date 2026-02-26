@@ -39,13 +39,13 @@ const typographyVariants = cva(
         /** Extra large subheading - prominent descriptive text */
         "subheading-xl": "text-subheading-xl font-normal",
         /** Large subheading - descriptive text */
-        "subheading-lg": "text-subheading-lg font-medium",
+        "subheading-lg": "text-subheading-lg font-normal",
         /** Medium subheading - standard descriptive text */
         "subheading-md": "text-subheading-md font-normal",
         /** Small subheading - labels and tags (uppercase) */
-        "subheading-sm": "text-subheading-sm font-medium tracking-wide",
+        "subheading-sm": "text-subheading-sm font-normal tracking-wide",
         /** Extra small subheading - micro labels (uppercase) */
-        "subheading-xs": "text-subheading-xs font-medium tracking-wide",
+        "subheading-xs": "text-subheading-xs font-normal tracking-wide",
 
         // --- Body ---
         /** Large body text - emphasized paragraphs */
