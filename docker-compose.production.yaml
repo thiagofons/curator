@@ -100,7 +100,7 @@ services:
       DJANGO_SECRET_KEY: ${FLAGS_SECRET_KEY}
       DJANGO_ALLOWED_HOSTS: "*"
       ALLOW_REGISTRATION_WITHOUT_INVITE: "True"
-      USE_POSTGRES_FOR_ANALYTICS: "true"
+      DISABLE_ANALYTICS_FEATURES: "true"
     expose:
       - "8000"
     networks:
