@@ -4,6 +4,7 @@ import CTA from "@/components/common/CTA.astro";
 import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 import Base from "@/layouts/Base.astro";
 import Hero from "./sections/Hero.astro";
+import HowItWorks from "./sections/HowItWorks.astro";
 import Problem from "./sections/Problem.astro";
 
 const lang = getLangFromUrl(Astro.url);
@@ -25,7 +26,7 @@ const status = (feat: Feature) => isFeatureEnabled(feat);
 
   {status("home.problem") && <Problem />}
 
-  {status("home.how_it_works") && <></>}
+  {status("home.how_it_works") && <HowItWorks />}
 
   {status("home.examples") && <></>}
 
