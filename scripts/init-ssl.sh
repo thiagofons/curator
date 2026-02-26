@@ -16,6 +16,7 @@ DOMAINS=(
   "api.curator.com.br"
   "cms.curator.com.br"
   "flags.curator.com.br"
+  "crm.curator.com.br"
 )
 
 echo "=== Obtaining SSL certificates for: ${DOMAINS[*]} ==="
