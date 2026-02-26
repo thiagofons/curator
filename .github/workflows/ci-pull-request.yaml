@@ -93,6 +93,7 @@ jobs:
             packages/**/coverage/lcov.info
             packages/**/test-report.xml
           retention-days: 1
+          if-no-files-found: ignore
 
   # ------------------------------------------------------------------
   # 3. INTEGRATION TESTS (Parallel)
@@ -184,11 +185,22 @@ jobs:
 
       - name: 📥 Download Coverage Reports
         uses: actions/download-artifact@v4
+        continue-on-error: true
         with:
           name: coverage-reports
           path: .
 
+      - name: 🔎 Check if coverage exists for this service
+        id: check_coverage
+        run: |
+          if [ -f "${{ matrix.path }}/coverage/lcov.info" ] || [ -f "${{ matrix.path }}/test-report.xml" ]; then
+            echo "has_coverage=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_coverage=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: 🔍 SonarQube Scan
+        if: steps.check_coverage.outputs.has_coverage == 'true'
         uses: sonarsource/sonarqube-scan-action@v4
         with:
           projectBaseDir: ${{ matrix.path }}

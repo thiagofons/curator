@@ -25,6 +25,7 @@ set -euo pipefail
 : "${DB_API_PASSWORD:?DB_API_PASSWORD is required}"
 : "${DB_CMS_PASSWORD:?DB_CMS_PASSWORD is required}"
 : "${DB_FLAGS_PASSWORD:?DB_FLAGS_PASSWORD is required}"
+: "${DB_METABASE_PASSWORD:?DB_METABASE_PASSWORD is required}"
 
 echo "Host is: $DATABASE_HOST"
 
@@ -71,27 +72,58 @@ BEGIN
   END IF;
 END \$\$;
 
+DO \$\$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'metabase_user') THEN
+    CREATE ROLE metabase_user LOGIN PASSWORD '${DB_METABASE_PASSWORD}';
+  ELSE
+    ALTER ROLE metabase_user WITH PASSWORD '${DB_METABASE_PASSWORD}';
+  END IF;
+END \$\$;
+
 CREATE SCHEMA IF NOT EXISTS api;
 CREATE SCHEMA IF NOT EXISTS cms;
 CREATE SCHEMA IF NOT EXISTS flags;
+CREATE SCHEMA IF NOT EXISTS metabase;
 
 ALTER SCHEMA api   OWNER TO api_user;
 ALTER SCHEMA cms   OWNER TO cms_user;
 ALTER SCHEMA flags OWNER TO flags_user;
+ALTER SCHEMA metabase OWNER TO metabase_user;
 
 ALTER ROLE api_user   SET search_path TO api, public;
 ALTER ROLE cms_user   SET search_path TO public;
 ALTER ROLE flags_user SET search_path TO public;
+ALTER ROLE metabase_user SET search_path TO metabase, public;
 
 GRANT ALL ON SCHEMA api    TO api_user;
 GRANT ALL ON SCHEMA cms    TO cms_user;
 GRANT ALL ON SCHEMA public TO cms_user;
 GRANT ALL ON SCHEMA flags  TO flags_user;
 GRANT ALL ON SCHEMA public TO flags_user;
+GRANT ALL ON SCHEMA metabase TO metabase_user;
 
 GRANT CONNECT ON DATABASE ${DATABASE_DB} TO api_user;
 GRANT CONNECT ON DATABASE ${DATABASE_DB} TO cms_user;
 GRANT CONNECT ON DATABASE ${DATABASE_DB} TO flags_user;
+GRANT CONNECT ON DATABASE ${DATABASE_DB} TO metabase_user;
+
+-- Metabase options
+GRANT CONNECT ON DATABASE ${DATABASE_DB} TO metabase_user;
+GRANT USAGE  ON SCHEMA api    TO metabase_user;
+GRANT USAGE  ON SCHEMA cms    TO metabase_user;
+GRANT USAGE  ON SCHEMA flags  TO metabase_user;
+GRANT USAGE  ON SCHEMA public TO metabase_user;
+
+GRANT SELECT ON ALL TABLES IN SCHEMA api    TO metabase_user;
+GRANT SELECT ON ALL TABLES IN SCHEMA cms    TO metabase_user;
+GRANT SELECT ON ALL TABLES IN SCHEMA flags  TO metabase_user;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO metabase_user;
+
+ALTER DEFAULT PRIVILEGES FOR ROLE api_user   IN SCHEMA api    GRANT SELECT ON TABLES TO metabase_user;
+ALTER DEFAULT PRIVILEGES FOR ROLE cms_user   IN SCHEMA cms    GRANT SELECT ON TABLES TO metabase_user;
+ALTER DEFAULT PRIVILEGES FOR ROLE cms_user   IN SCHEMA public GRANT SELECT ON TABLES TO metabase_user;
+ALTER DEFAULT PRIVILEGES FOR ROLE flags_user IN SCHEMA flags  GRANT SELECT ON TABLES TO metabase_user;
 SQL
 
 echo "=== DB init complete ==="
