@@ -1,4 +1,5 @@
 import { Button } from "@repo/ui-web/base/button";
+import { H2 } from "@repo/ui-web/components/custom/typography.js";
 import { Menu, X } from "lucide-react";
 import React, { useEffect, useState, type ReactNode } from "react";
 
@@ -130,7 +131,7 @@ export default function Navbar({ items, cta, logo }: NavbarProps) {
                 transitionDelay: isOpen ? `${0.1 + index * 0.1}s` : "0s",
               }}
             >
-              {item.label}
+              <H2 as={"span"}>{item.label}</H2>
             </a>
           ))}
         </div>
