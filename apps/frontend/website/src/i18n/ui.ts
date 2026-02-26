@@ -33,9 +33,8 @@ export const ui = {
 
     // Footer
     "footer.description":
-      "O Curator nasceu para devolver o controle do aprendizado a você. Somos uma iniciativa Open Source que transforma o caos da informação em trilhas estruturadas, priorizando a profundidade sobre o engajamento e a comunidade sobre o algoritmo.",
-    "footer.open_source":
-      "Orgulhosamente Open Source & Built in Public no Brasil",
+      "O Curator nasceu para cinéfilos que querem ir além do algoritmo. Roadmaps de filmes criados por IA e por pessoas que realmente entendem de cinema.",
+    "footer.open_source": "Feito com obsessão cinematográfica no Brasil",
     "footer.copyright": "Curator. Todos os direitos reservados.",
     "footer.email": "contato@curator.com.br",
 
@@ -43,6 +42,12 @@ export const ui = {
     "home.meta.title": "Curator - Comece sua jornada pelo cinema",
     "home.meta.description":
       "Para cinéfilos com uma lista enorme de intenções. Montamos o caminho, você só precisa assistir.",
+
+    // Home - CTA Final
+    "home.cta.title": "Qual vai ser o seu primeiro roadmap?",
+    "home.cta.subtitle":
+      "Sem cartão de crédito. Sem cadastro complicado. Só você e o cinema.",
+    "home.cta.button": "Começar Jornada",
 
     // Home - Hero
     "home.hero.title": "Pare de rolar Netflix. Comece sua jornada pelo cinema.",
