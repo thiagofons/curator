@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Curator Blog CMS built with Payload CMS and Next.js",
   "license": "MIT",
+  "private": true,
   "type": "module",
   "scripts": {
     "build": "next build",
