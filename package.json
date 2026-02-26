@@ -61,6 +61,7 @@
     "vitest": "catalog:testing"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.29.8",
     "@typescript-eslint/eslint-plugin": "catalog:code-quality",
     "@typescript-eslint/parser": "catalog:code-quality",
     "@vitest/coverage-v8": "catalog:testing",
@@ -92,7 +93,8 @@
       "esbuild": "^0.25.0",
       "dompurify": "^3.2.4",
       "body-parser": "^2.2.1",
-      "js-yaml": "^4.1.1"
+      "js-yaml": "^4.1.1",
+      "read-yaml-file": "2.1.0"
     }
   },
   "engines": {
