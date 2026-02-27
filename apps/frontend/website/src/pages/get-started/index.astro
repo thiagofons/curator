@@ -1,16 +1,6 @@
 ---
 import GetStarted from "@/components/get-started/GetStarted.astro";
-import { getLangFromUrl, useTranslations } from "@/i18n/utils";
 import "@repo/ui-web/globals.css";
-
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
-
-const { isFeatureEnabled } = Astro.locals;
-
-if (!isFeatureEnabled("start_journey")) {
-  return Astro.redirect("/404");
-}
 ---
 
 <GetStarted />

@@ -1,18 +1,5 @@
 ---
 import Home from "@/components/home/Home.astro";
-import { getLangFromUrl, useTranslations } from "@/i18n/utils";
-
-// Mantendo seus utilitários de tradução caso precise passar props no futuro
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
-
-const { isFeatureEnabled } = Astro.locals;
-
-// Lógica de Redirecionamento (Guarda)
-if (!isFeatureEnabled("home")) {
-  // Redireciona para a rota /404
-  return Astro.redirect("/404");
-}
 ---
 
 <Home />

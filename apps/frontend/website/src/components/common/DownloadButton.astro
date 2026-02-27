@@ -16,14 +16,13 @@ const downloadLinks: Record<string, string> = {
 
 const href = downloadLinks[store];
 
-const { isFeatureEnabled } = Astro.locals;
 ---
 
 <a href={href} class="cursor-pointer" target="_blank">
   {
     store === "Google Play" && (
       <button
-        disabled={!isFeatureEnabled("download_google_play")}
+        disabled
         class="disabled:cursor-not-allowed disabled:opacity-50"
       >
         <Image
@@ -40,7 +39,7 @@ const { isFeatureEnabled } = Astro.locals;
   {
     store === "App Store" && (
       <button
-        disabled={!isFeatureEnabled("download_app_store")}
+        disabled
         class="disabled:cursor-not-allowed disabled:opacity-50"
       >
         <Image

@@ -9,7 +9,6 @@ import { GitPullRequestArrow } from "lucide-react";
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const { isFeatureEnabled } = Astro.locals;
 ---
 
 <CentralSection
@@ -39,7 +38,7 @@ const { isFeatureEnabled } = Astro.locals;
       color="white"
       className="bg-white text-black hover:bg-white/50"
       client:load
-      disabled={!isFeatureEnabled("open_source")}
+      disabled
     >
       {t("home.open_source.more")}
     </Button>
