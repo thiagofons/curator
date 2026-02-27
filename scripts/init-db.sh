@@ -47,6 +47,10 @@ $PSQL <<SQL
 
 CREATE EXTENSION IF NOT EXISTS "hstore";
 
+-- Necessário para o Metabase — cria o tipo citext no schema public
+-- Apenas superusuários podem criar extensões, portanto roda como master
+CREATE EXTENSION IF NOT EXISTS "citext" SCHEMA public;
+
 -- =============================================================================
 -- Roles
 -- =============================================================================
@@ -127,6 +131,11 @@ GRANT ALL ON SCHEMA flags  TO flags_user;
 GRANT ALL ON SCHEMA public TO flags_user;
 GRANT ALL ON SCHEMA crm    TO crm_user;
 
+-- Metabase precisa criar e gerenciar suas próprias tabelas no schema public
+GRANT ALL ON SCHEMA public TO crm_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES    TO crm_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO crm_user;
+
 -- =============================================================================
 -- Database connect
 -- =============================================================================
@@ -143,7 +152,6 @@ GRANT CONNECT ON DATABASE ${DATABASE_DB} TO crm_user;
 GRANT USAGE ON SCHEMA api    TO crm_user;
 GRANT USAGE ON SCHEMA cms    TO crm_user;
 GRANT USAGE ON SCHEMA flags  TO crm_user;
-GRANT USAGE ON SCHEMA public TO crm_user;
 
 -- Tabelas já existentes
 GRANT SELECT ON ALL TABLES IN SCHEMA api    TO crm_user;
