@@ -141,12 +141,12 @@ services:
     environment:
       MB_DB_TYPE: postgres
       MB_DB_CONNECTION_URI: ${CRM_DATABASE_URL}
-      MB_SITE_URL: https://metabase.curator.com.br
+      MB_SITE_URL: https://crm.curator.com.br
       MB_ENCRYPTION_SECRET_KEY: ${METABASE_SECRET_KEY}
       MB_ANON_TRACKING_ENABLED: "false"
       JAVA_OPTS: "-Xmx512m"
     expose:
-      - "3000" # interno apenas, sem conflito com o cms
+      - "3000"
     networks:
       - curator-net
     healthcheck:
