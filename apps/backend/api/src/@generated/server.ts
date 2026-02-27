@@ -13,17 +13,15 @@ import { z } from "zod";
 
 const t = initTRPC.create();
 const publicProcedure = t.procedure;
+import { createUserDto } from "@/modules/user/application";
 
 const appRouter = t.router({
-  dogsRouter: t.router({
-    findAll: publicProcedure
-      .output(z.array(z.object({
-  name: z.string(),
-  breed: z.enum(["Labrador", "Corgi", "Beagle", "Golden Retriver"]),
-  size: z.number(),
-})))
-      .query(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
-    })
+  auth: t.router({
+    register: publicProcedure
+      .input(createUserDto)
+      .output(z.object({ message: z.string() }))
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+  }),
 });
 
 export type AppRouter = typeof appRouter;

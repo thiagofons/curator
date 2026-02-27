@@ -36,12 +36,8 @@ COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 RUN pnpm install --frozen-lockfile
 COPY --from=pruner /app/out/full/ .
 
-# 👉 O PULO DO GATO ESTÁ AQUI:
-# Injetamos o argumento no estágio de builder
-ARG ENV_FILE=.env.development
-# E usamos o COPY nativo do Docker para puxar o arquivo do host (contexto da raiz do monorepo)
 # direto para dentro da pasta do website, contornando o turbo prune!
-COPY ${ENV_FILE} ./apps/frontend/website/.env
+COPY .env.development ./apps/frontend/website/.env
 
 ENV ASTRO_ADAPTER=node
 ENV NEXT_TELEMETRY_DISABLED=1

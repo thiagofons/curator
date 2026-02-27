@@ -58,9 +58,7 @@ playwright/
 **/*.webm
 
 # >> Secrets & Environment (CRITICAL SECURITY)
-**/.env
-**/.env.*
-!.env.example
+
 
 # >> System Files & IDEs
 .DS_Store

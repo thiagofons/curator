@@ -20,8 +20,8 @@
   },
   "dependencies": {
     "@astrojs/check": "catalog:astro",
-    "@astrojs/node": "catalog:astro",
     "@astrojs/mdx": "catalog:astro",
+    "@astrojs/node": "catalog:astro",
     "@astrojs/partytown": "^2.1.4",
     "@astrojs/react": "catalog:astro",
     "@astrojs/rss": "catalog:astro",
@@ -35,7 +35,7 @@
     "@repo/trpc": "workspace:*",
     "@repo/ui-web": "workspace:*",
     "@repo/vitest-config": "workspace:*",
-    "@storybook/react": "^10.1.8",
+    "@storybook/react": "^10.2.13",
     "@tailwindcss/forms": "catalog:ui-libs",
     "@tailwindcss/postcss": "catalog:ui-libs",
     "@tailwindcss/typography": "catalog:ui-libs",

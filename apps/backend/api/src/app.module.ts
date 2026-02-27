@@ -1,16 +1,17 @@
+import { AuthenticationModule } from "@/modules/authentication/presentation/authentication.module";
+import { PrismaModule } from "@/shared/infrastructure";
 import { Module } from "@nestjs/common";
 import { TRPCModule } from "nestjs-trpc";
-import { AppController } from "./app.controller.js";
-import { AppService } from "./app.service";
-
-const trpcOptions = {
-  basePath: "/trpc",
-  autoSchemaFile: "./",
-};
 
 @Module({
-  imports: [TRPCModule.forRoot(trpcOptions)],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    PrismaModule,
+    TRPCModule.forRoot({
+      basePath: "/",
+    }),
+    AuthenticationModule,
+  ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

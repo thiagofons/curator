@@ -2,8 +2,8 @@
   "name": "@repo/trpc",
   "version": "1.0.0",
   "description": "",
-  "private": true,
   "scripts": {
+    "build": "tsc",
     "test:unit": "vitest run",
     "test:unit:coverage": "vitest run --coverage",
     "test:unit:watch": "vitest run --watch",
@@ -16,15 +16,19 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "react": "catalog:react19",
     "@backend/api": "workspace:*",
-    "@trpc/client": "catalog:trpc11"
+    "@tanstack/react-query": "^5.90.21",
+    "@trpc/client": "catalog:trpc11",
+    "@trpc/react-query": "^11.10.0"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "@repo/vitest-config": "workspace:*",
-    "@types/node": "catalog:tooling"
+    "@types/node": "catalog:tooling",
+    "@types/react": "catalog:react19"
   },
   "exports": {
-    ".": "./src/client.ts"
+    ".": "./src/index.ts"
   }
 }

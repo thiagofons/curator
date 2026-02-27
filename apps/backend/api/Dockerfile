@@ -1,54 +1,51 @@
-FROM node:22.17.0-alpine AS base
+# STAGE 1: Base with PNPM + Turbo
+FROM node:22-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN apk add --no-cache libc6-compat && \
     npm install -g pnpm@9.5.0 turbo
 
-###################
-# 1. PRUNE
-###################
+# STAGE 2: Pruner — extract only what @backend/api needs
 FROM base AS pruner
 WORKDIR /app
 COPY . .
 RUN turbo prune --scope=@backend/api --docker
 
-###################
-# 2. DEPS
-###################
+# STAGE 3: Deps — install dependencies (reused by development target)
 FROM base AS deps
 WORKDIR /app
 COPY --from=pruner /app/out/json/ .
 COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 RUN pnpm install
 
-###################
-# 3. DEVELOPMENT
-###################
+# STAGE 4: Builder — generate Prisma client + compile NestJS
+FROM base AS builder
+WORKDIR /app
+COPY --from=pruner /app/out/json/ .
+COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+RUN pnpm install --frozen-lockfile
+COPY --from=pruner /app/out/full/ .
+RUN pnpm --filter=@backend/api db:generate
+RUN turbo run build --filter=@backend/api...
+
+# --- TARGET: DEVELOPMENT ---
 FROM deps AS development
 WORKDIR /app
 COPY --from=pruner /app/out/full/ .
-ENV NODE_ENV development
+RUN pnpm --filter=@backend/api db:generate
+ENV NODE_ENV=development
 EXPOSE 3300
-CMD ["pnpm", "dev", "--filter=@backend/api"]
 
-###################
-# 4. BUILD
-###################
-FROM deps AS builder
+# --- TARGET: RUNNER (production) ---
+FROM base AS runner
 WORKDIR /app
-COPY --from=pruner /app/out/full/ .
-RUN pnpm turbo run build --filter=@backend/api
-RUN pnpm prune --prod
+ENV NODE_ENV=production
 
-###################
-# 5. PRODUCTION
-###################
-FROM node:22.17.0-alpine AS production
-WORKDIR /app
-RUN apk add --no-cache libc6-compat && \
-    addgroup --system --gid 1001 nodejs && \
+RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nestjs
-COPY --from=builder --chown=nestjs:nodejs /app .
+
+COPY --from=builder --chown=nestjs:nodejs /app ./
+
 USER nestjs
 EXPOSE 3300
-CMD ["node", "apps/backend/api/dist/src/main.js"]
+CMD ["node", "apps/backend/api/dist/main.js"]
