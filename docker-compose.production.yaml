@@ -90,49 +90,6 @@ services:
         max-size: "10m"
         max-file: "5"
 
-  flagsmith:
-    container_name: flags
-    image: flagsmith/flagsmith:latest
-    env_file:
-      - .env.production
-    environment:
-      DATABASE_URL: ${FLAGS_DATABASE_URL}
-      DJANGO_SECRET_KEY: ${FLAGS_SECRET_KEY}
-      DJANGO_ALLOWED_HOSTS: "*"
-      ALLOW_REGISTRATION_WITHOUT_INVITE: "True"
-      DISABLE_ANALYTICS_FEATURES: "true"
-    expose:
-      - "8000"
-    networks:
-      - curator-net
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          'python -c "import urllib.request; urllib.request.urlopen(''http://localhost:8000/health'')" || exit 1',
-        ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 120s
-    deploy:
-      resources:
-        limits:
-          cpus: "0.5"
-          memory: 800M
-        reservations:
-          cpus: "0.25"
-          memory: 256M
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-
   metabase:
     container_name: metabase
     image: metabase/metabase:latest
@@ -191,7 +148,6 @@ services:
     depends_on:
       - api
       - cms
-      - flagsmith
     healthcheck:
       test: ["CMD-SHELL", "nginx -t || exit 1"]
       interval: 30s

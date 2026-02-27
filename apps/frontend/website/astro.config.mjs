@@ -24,14 +24,6 @@ export default defineConfig({
   trailingSlash: "ignore",
   env: {
     schema: {
-      FLAGS_ENVIRONMENT_KEY: envField.string({
-        context: "client",
-        access: "public",
-      }),
-      FLAGS_API_URL: envField.string({
-        context: "client",
-        access: "public",
-      }),
       DISCORD_WEBHOOK_URL: envField.string({
         context: "client",
         access: "public",

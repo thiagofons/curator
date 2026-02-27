@@ -1,13 +1,4 @@
-declare namespace App {
-  interface Locals {
-    isFeatureEnabled: (featureName: string) => boolean;
-    allFlags?: any;
-  }
-}
-
 interface ImportMetaEnv {
-  readonly FLAGS_ENVIRONMENT_KEY: string;
-  readonly FLAGS_API_URL: string;
   readonly DISCORD_WEBHOOK_URL: string;
   readonly FIREBASE_API_KEY: string;
   readonly FIREBASE_AUTH_DOMAIN: string;
