@@ -20,8 +20,8 @@ const appRouter = t.router({
     register: publicProcedure
       .input(createUserDto)
       .output(z.object({ message: z.string() }))
-      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any)
-    })
+      .mutation(async () => "PLACEHOLDER_DO_NOT_REMOVE" as any),
+  }),
 });
 
 export type AppRouter = typeof appRouter;
