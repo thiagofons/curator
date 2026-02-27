@@ -53,7 +53,6 @@
     "date-fns": "catalog:ui-libs",
     "firebase": "^12.8.0",
     "firebase-admin": "^13.6.0",
-    "flagsmith-nodejs": "^7.0.2",
     "framer-motion": "^12.23.26",
     "fuse.js": "catalog:search",
     "github-slugger": "catalog:astro",

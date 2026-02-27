@@ -59,8 +59,6 @@ const benefits: Benefit[] = [
   },
 ];
 
-const { isFeatureEnabled } = Astro.locals;
-const isCuratorProEnabled = isFeatureEnabled("curator_pro");
 ---
 
 <InfoSection
@@ -135,7 +133,7 @@ const isCuratorProEnabled = isFeatureEnabled("curator_pro");
               </div>
             ))
           }
-          <Button size={"full"} disabled={!isCuratorProEnabled} client:load>
+          <Button size={"full"} disabled client:load>
             {`${t("cta.subscribe")} (R$ 9,90/${t("cta.month")})`}
           </Button>
         </div>

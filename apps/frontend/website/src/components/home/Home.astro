@@ -9,26 +9,12 @@ import Problem from "./sections/Problem.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const { isFeatureEnabled } = Astro.locals;
-
-type Feature =
-  | "home.hero"
-  | "home.problem"
-  | "home.how_it_works"
-  | "home.examples"
-  | "home.cta";
-
-const status = (feat: Feature) => isFeatureEnabled(feat);
 ---
 
 <Base title={t("home.meta.title")} description={t("home.meta.description")}>
-  {status("home.hero") && <Hero />}
-
-  {status("home.problem") && <Problem />}
-
-  {status("home.how_it_works") && <HowItWorks />}
-
-  {status("home.examples") && <Examples />}
-
-  {status("home.cta") && <HomeCTA />}
+  <Hero />
+  <Problem />
+  <HowItWorks />
+  <Examples />
+  <HomeCTA />
 </Base>

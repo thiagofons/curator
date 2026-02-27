@@ -14,12 +14,7 @@ import { Image } from "astro:assets";
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const { isFeatureEnabled } = Astro.locals;
-
-const isCTAEnabled = isFeatureEnabled("start_journey");
-
 const cta = {
-  enabled: isCTAEnabled,
   label: t("nav.start_journey"),
 };
 ---
@@ -44,13 +39,9 @@ const cta = {
       <div
         class="z-20 mt-6 flex items-center justify-center gap-4 md:justify-start"
       >
-        {
-          cta.enabled && (
-            <CTAButton href="/get-started" client:load>
-              {cta.label}
-            </CTAButton>
-          )
-        }
+        <CTAButton href="/get-started" client:load>
+          {cta.label}
+        </CTAButton>
       </div>
     </HeroCard>
   </div>
