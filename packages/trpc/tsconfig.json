@@ -4,7 +4,10 @@
     "jsx": "react",
     "outDir": "dist",
     "types": ["node"],
-    "rootDir": "src"
+    "rootDir": "src",
+    "paths": {
+      "@/*": ["../../apps/backend/api/src/*"]
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules", "dist"]

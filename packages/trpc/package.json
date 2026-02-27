@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "react": "catalog:react19",
     "@backend/api": "workspace:*",
     "@tanstack/react-query": "^5.90.21",
     "@trpc/client": "catalog:trpc11",
@@ -24,7 +25,8 @@
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "@repo/vitest-config": "workspace:*",
-    "@types/node": "catalog:tooling"
+    "@types/node": "catalog:tooling",
+    "@types/react": "catalog:react19"
   },
   "exports": {
     ".": "./src/index.ts"

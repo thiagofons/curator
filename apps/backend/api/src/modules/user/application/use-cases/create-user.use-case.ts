@@ -1,4 +1,4 @@
-import { CreateUserInput } from "@/modules/user/application";
+import type { CreateUserInput } from "@/modules/user/application";
 import { User, UserRepository } from "@/modules/user/domain";
 import { Injectable } from "@nestjs/common";
 

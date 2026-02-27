@@ -15,9 +15,9 @@ services:
     build:
       context: .
       dockerfile: ./apps/backend/api/Dockerfile
-      target: production
+      target: runner
     env_file:
-      - .env.staging
+      - .env.development
     expose:
       - "3300"
     networks:
@@ -45,7 +45,7 @@ services:
       dockerfile: ./apps/backend/cms/Dockerfile
       target: runner
     env_file:
-      - .env.staging
+      - .env.development
     expose:
       - "3000"
     networks:
@@ -62,7 +62,7 @@ services:
       dockerfile: ./apps/frontend/website/Dockerfile
       target: staging
     env_file:
-      - .env.staging
+      - .env.development
     expose:
       - "4003"
     networks:
@@ -112,7 +112,7 @@ services:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_DB: ${DATABASE_DB}
     env_file:
-      - .env.staging
+      - .env.development
     volumes:
       - staging_db_data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
@@ -128,7 +128,7 @@ services:
     container_name: redis
     image: redis:7-alpine
     env_file:
-      - .env.staging
+      - .env.development
     command:
       [
         "redis-server",
