@@ -1,9 +1,11 @@
 {
   "extends": "@repo/typescript-config/base",
   "compilerOptions": {
+    "jsx": "react",
     "outDir": "dist",
+    "types": ["node"],
     "rootDir": "src"
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules", "dist"]
 }
