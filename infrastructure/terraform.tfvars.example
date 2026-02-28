@@ -1,17 +1,18 @@
-project        = "curator"
-environment    = "production"
-aws_region     = "sa-east-1"
-instance_name  = "curator-production"
-bundle_id      = "small_3_0" # 2GB RAM, 1 vCPU, $5/mo
-blueprint_id   = "ubuntu_22_04"
-key_pair_name  = "your-lightsail-key-pair"
-static_ip_name = "curator-production-ip"
-open_ports     = [22, 80, 443]
+project     = "curator"
+environment = "production"
 
-# --- Managed PostgreSQL Database ---
-db_name            = "curator-production-db"
-db_master_database = "curator"
-db_master_username = "curator_master"
-db_master_password = "CHANGE_ME"  # set as GitHub Secret: DB_MASTER_PASSWORD
-db_bundle_id       = "micro_2_0"  # upgrade to small_2_0 if needed
-db_blueprint_id    = "postgres_15"
+# --- Servidor ---
+server_name     = "curator-prod"
+server_location = "ash"   # Ashburn, EUA — mais próximo do Brasil na Hetzner
+server_type     = "cx32"  # 4 vCPUs, 8GB RAM, 80GB SSD — ~€18.49/mês
+open_ports      = [22, 80, 443]
+
+# --- Credenciais (NUNCA commitar os valores reais) ---
+# Passe via variáveis de ambiente para não criar um .tfvars com segredos:
+#
+#   export TF_VAR_hcloud_token="seu_token_aqui"
+#   export TF_VAR_ssh_public_key="$(cat ~/.ssh/curator_hetzner.pub)"
+#
+# Ou crie um arquivo terraform.tfvars (gitignored) com:
+#   hcloud_token   = "seu_token_aqui"
+#   ssh_public_key = "ssh-ed25519 AAAA... curator-prod"

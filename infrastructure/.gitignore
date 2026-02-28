@@ -1,0 +1,22 @@
+# =============================================================================
+# Terraform — arquivos sensíveis e gerados (nunca commitar)
+# =============================================================================
+
+# Valores de variáveis (podem conter tokens, senhas, chaves)
+*.tfvars
+!*.tfvars.example
+
+# Diretório de plugins e módulos baixados pelo terraform init
+.terraform/
+.terraform.lock.hcl
+
+# State local e backups (contêm toda a infraestrutura em plaintext)
+terraform.tfstate
+terraform.tfstate.backup
+
+# Planos de execução (podem conter valores sensíveis)
+*.tfplan
+
+# Chaves SSH geradas localmente
+*.pem
+*.key
