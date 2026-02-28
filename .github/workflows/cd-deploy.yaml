@@ -71,7 +71,7 @@ jobs:
           TF_VAR_ssh_public_key: ${{ secrets.HETZNER_SSH_PUBLIC_KEY }}
           TF_VAR_supabase_access_token: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           TF_VAR_supabase_organization_id: ${{ secrets.SUPABASE_ORG_ID }}
-          TF_VAR_supabase_db_password: ${{ secrets.DB_PASSWORD }}
+          TF_VAR_supabase_db_password: ${{ secrets.DATABASE_PASSWORD }}
         run: |
           terraform plan -out=tfplan
           terraform apply -auto-approve tfplan
