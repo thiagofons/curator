@@ -64,7 +64,7 @@ jobs:
             -backend-config="secret_key=${{ secrets.HOS_SECRET_ACCESS_KEY }}"
 
       - name: 📋 Terraform Apply
-        if: steps.changes.outputs.infra_changed == 'true'
+        if: steps.changes.outputs.infra_changed == 'true' || github.event_name == 'workflow_dispatch'
         working-directory: infrastructure
         env:
           TF_VAR_hcloud_token: ${{ secrets.HCLOUD_TOKEN }}
