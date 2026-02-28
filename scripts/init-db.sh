@@ -15,7 +15,7 @@ set -euo pipefail
 #   DATABASE_MASTER_PASSWORD — master user password
 #   DATABASE_API_PASSWORD          — password for api_user role
 #   DATABASE_CMS_PASSWORD          — password for cms_user role
-#   DB_CRM_PASSWORD          — password for crm_user role
+#   DATABASE_CRM_PASSWORD          — password for crm_user role
 # =============================================================================
 
 : "${DATABASE_HOST:?DATABASE_HOST is required}"
@@ -24,7 +24,7 @@ set -euo pipefail
 : "${DATABASE_MASTER_PASSWORD:?DATABASE_MASTER_PASSWORD is required}"
 : "${DATABASE_API_PASSWORD:?DATABASE_API_PASSWORD is required}"
 : "${DATABASE_CMS_PASSWORD:?DATABASE_CMS_PASSWORD is required}"
-: "${DB_CRM_PASSWORD:?DB_CRM_PASSWORD is required}"
+: "${DATABASE_CRM_PASSWORD:?DATABASE_CRM_PASSWORD is required}"
 
 echo "Host is: $DATABASE_HOST"
 
@@ -74,9 +74,9 @@ END \$\$;
 DO \$\$
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'crm_user') THEN
-    CREATE ROLE crm_user LOGIN PASSWORD '${DB_CRM_PASSWORD}';
+    CREATE ROLE crm_user LOGIN PASSWORD '${DATABASE_CRM_PASSWORD}';
   ELSE
-    ALTER ROLE crm_user WITH PASSWORD '${DB_CRM_PASSWORD}';
+    ALTER ROLE crm_user WITH PASSWORD '${DATABASE_CRM_PASSWORD}';
   END IF;
 END \$\$;
 
