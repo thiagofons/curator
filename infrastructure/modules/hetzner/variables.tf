@@ -10,9 +10,9 @@ variable "server_type" {
 }
 
 variable "server_location" {
-  description = "Localização do datacenter Hetzner (ex: ash, nbg1, fsn1)"
+  description = "Localização do datacenter Hetzner (ex: nbg1, fsn1, hel1 para cx series; ash para cpx series)"
   type        = string
-  default     = "ash"
+  default     = "nbg1"
 }
 
 variable "ssh_public_key" {
