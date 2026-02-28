@@ -1,85 +1,94 @@
 variable "project" {
-  description = "Project name used for resource tagging"
+  description = "Nome do projeto — usado em labels dos recursos"
   type        = string
   default     = "curator"
 }
 
 variable "environment" {
-  description = "Deployment environment (production, staging)"
+  description = "Ambiente de deploy (production, staging)"
   type        = string
   default     = "production"
 }
 
-variable "aws_region" {
-  description = "AWS region for all resources"
-  type        = string
-  default     = "us-east-1"
-}
+# =============================================================================
+# Hetzner Cloud — Autenticação
+# =============================================================================
 
-variable "instance_name" {
-  description = "Name of the Lightsail instance"
-  type        = string
-  default     = "curator-production"
-}
-
-variable "bundle_id" {
-  description = "Lightsail bundle ID (instance size). small_3_0 = 2GB RAM, 1 vCPU, $5/mo"
-  type        = string
-  default     = "small_3_0"
-}
-
-variable "blueprint_id" {
-  description = "Lightsail blueprint ID (OS image)"
-  type        = string
-  default     = "ubuntu_22_04"
-}
-
-
-
-variable "static_ip_name" {
-  description = "Name for the Lightsail static IP"
-  type        = string
-  default     = "curator-production-ip"
-}
-
-variable "open_ports" {
-  description = "TCP ports to open in the Lightsail firewall"
-  type        = list(number)
-  default     = [22, 80, 443]
-}
-
-variable "db_name" {
-  description = "Name of the Lightsail managed database instance"
-  type        = string
-  default     = "curator-production-db"
-}
-
-variable "db_master_database" {
-  description = "Name of the initial database created in the instance"
-  type        = string
-  default     = "curator"
-}
-
-variable "db_master_username" {
-  description = "Master username for the managed database"
-  type        = string
-  default     = "curator_master"
-}
-
-variable "db_master_password" {
-  description = "Master password. Provide via TF_VAR_db_master_password env var — never commit."
+variable "hcloud_token" {
+  description = "Token da API Hetzner Cloud (Read & Write). Passe via TF_VAR_hcloud_token — nunca commitar."
   type        = string
   sensitive   = true
 }
 
-variable "db_bundle_id" {
-  description = "Lightsail DB bundle ID. micro_2_0 ~$15/mo, small_2_0 ~$30/mo"
+variable "ssh_public_key" {
+  description = "Chave pública SSH que será registrada no servidor. Passe via TF_VAR_ssh_public_key — nunca commitar."
   type        = string
-  default     = "micro_2_0"
+  sensitive   = true
 }
 
-variable "db_blueprint_id" {
-  description = "Lightsail DB engine (blueprint)"
+# =============================================================================
+# Servidor
+# =============================================================================
+
+variable "server_name" {
+  description = "Nome do servidor Hetzner Cloud"
   type        = string
-  default     = "postgres_15"
+  default     = "curator-prod"
+}
+
+variable "server_type" {
+  description = "Plano do servidor Hetzner. cx32 = 4 vCPUs, 8GB RAM, 80GB SSD (~€18.49/mês)"
+  type        = string
+  default     = "cx32"
+}
+
+variable "server_location" {
+  description = "Localização do datacenter Hetzner. ash = Ashburn, EUA (mais próximo do Brasil)"
+  type        = string
+  default     = "ash"
+}
+
+variable "open_ports" {
+  description = "Portas TCP liberadas no firewall"
+  type        = list(number)
+  default     = [22, 80, 443]
+}
+
+# =============================================================================
+# Supabase — Banco de Dados PostgreSQL gerenciado
+# =============================================================================
+
+variable "supabase_access_token" {
+  description = "Personal Access Token da conta Supabase. Gere em: supabase.com/dashboard/account/tokens. Passe via TF_VAR_supabase_access_token — nunca commitar."
+  type        = string
+  sensitive   = true
+}
+
+variable "supabase_organization_id" {
+  description = "ID da organização Supabase. Encontre em: Settings → General da sua organização."
+  type        = string
+}
+
+variable "supabase_db_password" {
+  description = "Senha master do banco PostgreSQL. Passe via TF_VAR_supabase_db_password — nunca commitar."
+  type        = string
+  sensitive   = true
+}
+
+variable "supabase_project_name" {
+  description = "Nome do projeto Supabase"
+  type        = string
+  default     = "curator-production"
+}
+
+variable "supabase_region" {
+  description = "Região AWS onde o Supabase cria o banco. us-east-1 = N. Virginia (mesma costa do servidor Hetzner ash)"
+  type        = string
+  default     = "us-east-1"
+}
+
+variable "supabase_instance_size" {
+  description = "Plano do banco Supabase. micro = free tier. Upgrade: small ($10/mês), medium ($25/mês)"
+  type        = string
+  default     = "micro"
 }

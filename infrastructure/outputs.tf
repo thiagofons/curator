@@ -1,30 +1,39 @@
-output "instance_name" {
-  description = "Name of the Lightsail instance"
-  value       = module.lightsail.instance_name
+output "server_name" {
+  description = "Nome do servidor Hetzner Cloud"
+  value       = module.hetzner.server_name
 }
 
-output "static_ip" {
-  description = "Static IP address — point your DNS A records here"
-  value       = module.lightsail.static_ip
+output "floating_ip" {
+  description = "IP estático (Floating IP) — aponte os registros DNS A para este endereço"
+  value       = module.hetzner.floating_ip
 }
 
-output "instance_username" {
-  description = "Default SSH username for the instance"
-  value       = module.lightsail.instance_username
+output "server_ipv4" {
+  description = "IP primário do servidor (pode mudar se o servidor for recriado — prefira o floating_ip para DNS)"
+  value       = module.hetzner.server_ipv4
 }
 
-output "db_endpoint" {
-  description = "Managed DB private endpoint — set as DATABASE_HOST in .env.production"
-  value       = module.lightsail.db_endpoint
+# =============================================================================
+# Supabase — Database outputs
+# =============================================================================
+
+output "db_host" {
+  description = "Hostname do banco de dados Supabase — use em DATABASE_HOST"
+  value       = module.supabase.db_host
 }
 
-output "db_port" {
-  description = "Managed DB port"
-  value       = module.lightsail.db_port
+output "project_ref" {
+  description = "ID de referência do projeto Supabase — usado para montar a URL do connection pooler"
+  value       = module.supabase.project_ref
 }
 
-output "private_key_pem" {
-  description = "Private SSH key for the Lightsail instance — stored only in encrypted remote state"
-  value       = tls_private_key.ssh.private_key_pem
+output "api_url" {
+  description = "URL da API Supabase — use como NEXT_PUBLIC_SUPABASE_URL no frontend"
+  value       = module.supabase.api_url
+}
+
+output "db_url" {
+  description = "Connection string completa via pooler PgBouncer (transaction mode) — use como DATABASE_URL"
+  value       = module.supabase.db_url
   sensitive   = true
 }

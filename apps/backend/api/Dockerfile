@@ -32,8 +32,10 @@ RUN turbo run build --filter=@backend/api...
 FROM deps AS development
 WORKDIR /app
 COPY --from=pruner /app/out/full/ .
-RUN pnpm --filter=@backend/api db:generate
+RUN pnpm --filter=@backend/api db:generate && \
+    chown -R node:node /home/node
 ENV NODE_ENV=development
+ENV HOME=/home/node
 EXPOSE 3300
 
 # --- TARGET: RUNNER (production) ---
