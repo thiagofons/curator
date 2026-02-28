@@ -22,7 +22,7 @@ variable "region" {
 }
 
 variable "instance_size" {
-  description = "Plano do banco Supabase. micro = free tier. Upgrade: small ($10/mês), medium ($25/mês), large ($50/mês)"
+  description = "Plano do banco Supabase. null = free tier (padrão). Upgrade: small ($10/mês), medium ($25/mês), large ($50/mês)"
   type        = string
-  default     = "micro"
+  default     = null
 }

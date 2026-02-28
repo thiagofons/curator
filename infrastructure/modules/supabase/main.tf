@@ -21,5 +21,8 @@ resource "supabase_project" "this" {
   organization_id   = var.organization_id
   database_password = var.db_password
   region            = var.region
-  instance_size     = var.instance_size
+
+  # Omite instance_size no free tier — a API rejeita o campo em orgs gratuitas.
+  # Para upgrade, defina supabase_instance_size = "small" (ou maior) no tfvars.
+  instance_size = var.instance_size
 }

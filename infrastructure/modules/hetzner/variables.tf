@@ -4,9 +4,9 @@ variable "server_name" {
 }
 
 variable "server_type" {
-  description = "Plano do servidor Hetzner (ex: cx32 = 4 vCPUs, 8GB RAM)"
+  description = "Plano do servidor Hetzner. cx23 ($4/mês), cx33 ($6.59/mês), cx43 ($10.59/mês)"
   type        = string
-  default     = "cx32"
+  default     = "cx33"
 }
 
 variable "server_location" {

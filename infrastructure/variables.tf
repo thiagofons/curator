@@ -37,9 +37,9 @@ variable "server_name" {
 }
 
 variable "server_type" {
-  description = "Plano do servidor Hetzner. cx32 = 4 vCPUs, 8GB RAM, 80GB SSD (~€18.49/mês)"
+  description = "Plano do servidor Hetzner. cx23 ($4/mês), cx33 ($6.59/mês), cx43 ($10.59/mês)"
   type        = string
-  default     = "cx32"
+  default     = "cx33"
 }
 
 variable "server_location" {
@@ -88,7 +88,7 @@ variable "supabase_region" {
 }
 
 variable "supabase_instance_size" {
-  description = "Plano do banco Supabase. micro = free tier. Upgrade: small ($10/mês), medium ($25/mês)"
+  description = "Plano do banco Supabase. null = free tier (padrão). Upgrade: small ($10/mês), medium ($25/mês)"
   type        = string
-  default     = "micro"
+  default     = null
 }
