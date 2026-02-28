@@ -26,7 +26,7 @@ curator/
 │   │   └── storybook/      # Storybook 9 — component explorer
 │   └── backend/
 │       ├── api/            # NestJS 11 + tRPC — API service (port 3300)
-│       └── cms-service/    # Next.js 16 + Payload CMS 3 — headless CMS (port 3000)
+│       └── cms/    # Next.js 16 + Payload CMS 3 — headless CMS (port 3000)
 ├── packages/
 │   ├── ui-web/             # @repo/ui-web — shared React component library
 │   ├── ui-mobile/          # @repo/ui-mobile — React Native components
@@ -56,7 +56,7 @@ curator/
 └── docker-compose.production.yaml    # Production (Docker Swarm, SSL, *.curator.com.br)
 ```
 
-**Workspace package aliases:** `@repo/ui-web`, `@repo/trpc`, `@repo/rabbitmq`, `@repo/lib`, `@backend/api`, `@backend/cms-service`, etc.
+**Workspace package aliases:** `@repo/ui-web`, `@repo/trpc`, `@repo/rabbitmq`, `@repo/lib`, `@backend/api`, `@backend/cms`, etc.
 
 ---
 
@@ -81,7 +81,7 @@ Internet → Lightsail Static IP
               ↓
      nginx (ports 80/443, SSL termination)
        ├─ api.curator.com.br → api:3300
-       ├─ cms.curator.com.br → cms-service:3000
+       ├─ cms.curator.com.br → cms:3000
        └─ /health → 200 ok
      certbot (auto-renews certs every 12h)
      redis (password-protected, persistent)
@@ -146,7 +146,7 @@ Triggers on: CI passes on `main` (via `workflow_run`).
 ```
 CI Gate (only if CI succeeded)
     ├── Terraform Provision (only if infrastructure/ files changed)
-    └── Build & Push to GHCR (matrix: api, cms-service)
+    └── Build & Push to GHCR (matrix: api, cms)
             └── Deploy to Lightsail via SSH (environment: production)
                 - docker pull images
                 - git pull config
@@ -426,7 +426,7 @@ fix(scope): :bug: short description
 refactor(scope): :art: short description
 ```
 
-Scope examples: `frontend/website`, `backend/cms-service`, `ui-web`, `infrastructure`
+Scope examples: `frontend/website`, `backend/cms`, `ui-web`, `infrastructure`
 
 ### Git Workflow
 
@@ -507,7 +507,7 @@ terraform apply               # Apply changes
 | `apps/frontend/website/astro.config.mjs`               | Astro config (SSR, integrations, i18n)             |
 | `apps/frontend/website/src/layouts/Base.astro`         | Root page layout                                   |
 | `apps/backend/api/src/application/`                    | tRPC router definitions                            |
-| `apps/backend/cms-service/src/payload.config.ts`       | Payload CMS configuration                          |
+| `apps/backend/cms/src/payload.config.ts`               | Payload CMS configuration                          |
 | `packages/rabbitmq/src/messages/`                      | RabbitMQ message pattern constants                 |
 | `docker-compose.development.yaml`                      | Dev stack (hot reload, direct ports)               |
 | `docker-compose.staging.yaml`                          | Staging (production-like, \*.curator.local)        |

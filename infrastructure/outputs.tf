@@ -22,6 +22,11 @@ output "db_host" {
   value       = module.supabase.db_host
 }
 
+output "db_port" {
+  description = "Porta do banco de dados Supabase (conexão direta) — use em DATABASE_PORT"
+  value       = module.supabase.db_port
+}
+
 output "project_ref" {
   description = "ID de referência do projeto Supabase — usado para montar a URL do connection pooler"
   value       = module.supabase.project_ref
