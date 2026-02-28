@@ -146,9 +146,10 @@ jobs:
           PROJECT_REF: ${{ needs.provision.outputs.project_ref }}
           DATABASE_DB: ${{ secrets.DATABASE_DB }}
           DATABASE_USER: ${{ secrets.DATABASE_USER }}
-          DB_API_PASSWORD: ${{ secrets.DB_API_PASSWORD }}
-          DB_CMS_PASSWORD: ${{ secrets.DB_CMS_PASSWORD }}
-          DB_CRM_PASSWORD: ${{ secrets.DB_CRM_PASSWORD }}
+          DATABASE_MASTER_PASSWORD: ${{ secrets.DATABASE_MASTER_PASSWORD }}
+          DATABASE_API_PASSWORD: ${{ secrets.DATABASE_API_PASSWORD }}
+          DATABASE_CMS_PASSWORD: ${{ secrets.DATABASE_CMS_PASSWORD }}
+          DATABASE_CRM_PASSWORD: ${{ secrets.DATABASE_CRM_PASSWORD }}
           GHCR_PAT: ${{ secrets.GHCR_PAT }}
           REPO_OWNER: ${{ github.repository_owner }}
           LETSENCRYPT_EMAIL: ${{ secrets.LETSENCRYPT_EMAIL }}
@@ -156,7 +157,7 @@ jobs:
           host: ${{ needs.provision.outputs.floating_ip }}
           username: root
           key: ${{ secrets.HETZNER_SSH_KEY }}
-          envs: DATABASE_HOST,PROJECT_REF,DATABASE_DB,DATABASE_USER,DB_API_PASSWORD,DB_CMS_PASSWORD,DB_CRM_PASSWORD,GHCR_PAT,REPO_OWNER,LETSENCRYPT_EMAIL
+          envs: DATABASE_HOST,PROJECT_REF,DATABASE_DB,DATABASE_USER,DATABASE_MASTER_PASSWORD,DATABASE_API_PASSWORD,DATABASE_CMS_PASSWORD,DATABASE_CRM_PASSWORD,GHCR_PAT,REPO_OWNER,LETSENCRYPT_EMAIL
           script: |
             set -e
             export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -211,9 +212,10 @@ jobs:
               DATABASE_HOST="$DATABASE_HOST" \
               DATABASE_DB="$DATABASE_DB" \
               DATABASE_USER="$DATABASE_USER" \
-              DB_API_PASSWORD="$DB_API_PASSWORD" \
-              DB_CMS_PASSWORD="$DB_CMS_PASSWORD" \
-              DB_CRM_PASSWORD="$DB_CRM_PASSWORD" \
+              DATABASE_MASTER_PASSWORD="$DATABASE_MASTER_PASSWORD" \
+              DATABASE_API_PASSWORD="$DATABASE_API_PASSWORD" \
+              DATABASE_CMS_PASSWORD="$DATABASE_CMS_PASSWORD" \
+              DATABASE_CRM_PASSWORD="$DATABASE_CRM_PASSWORD" \
               ./scripts/init-db.sh
 
             # 4. Bootstrap SSL: emite certificados se não existirem (primeira vez)

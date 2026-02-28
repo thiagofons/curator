@@ -43,7 +43,7 @@ export default buildConfig({
   },
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.CMS_DATABASE_URL || "",
+      connectionString: process.env.DATABASE_CMS_URL || "",
     },
     push: true,
   }),
