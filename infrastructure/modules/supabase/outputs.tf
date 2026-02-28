@@ -5,17 +5,17 @@ output "project_ref" {
 
 output "db_host" {
   description = "Hostname direto do banco PostgreSQL (sem pooler)"
-  value       = supabase_project.this.database.host
+  value       = "db.${supabase_project.this.id}.supabase.co"
 }
 
 output "db_port" {
   description = "Porta do banco PostgreSQL (conexão direta)"
-  value       = supabase_project.this.database.port
+  value       = 5432
 }
 
 output "api_url" {
   description = "URL da API REST do Supabase — use como NEXT_PUBLIC_SUPABASE_URL"
-  value       = supabase_project.this.api_url
+  value       = "https://${supabase_project.this.id}.supabase.co"
 }
 
 output "db_url" {
