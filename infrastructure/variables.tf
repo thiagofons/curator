@@ -43,9 +43,9 @@ variable "server_type" {
 }
 
 variable "server_location" {
-  description = "Localização do datacenter Hetzner. ash = Ashburn, EUA (mais próximo do Brasil)"
+  description = "Localização do datacenter Hetzner. nbg1 = Nuremberg, EU (cx33 disponível). ash = Ashburn, EUA (cpx series)"
   type        = string
-  default     = "ash"
+  default     = "nbg1"
 }
 
 variable "open_ports" {
@@ -82,7 +82,7 @@ variable "supabase_project_name" {
 }
 
 variable "supabase_region" {
-  description = "Região AWS onde o Supabase cria o banco. us-east-1 = N. Virginia (mesma costa do servidor Hetzner ash)"
+  description = "Região AWS onde o Supabase cria o banco. us-east-1 = N. Virginia. Servidor em nbg1 (EU) — latência ~100ms para o banco é aceitável."
   type        = string
   default     = "us-east-1"
 }

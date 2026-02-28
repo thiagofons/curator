@@ -12,7 +12,7 @@ resource "hcloud_network" "this" {
 resource "hcloud_network_subnet" "this" {
   network_id   = hcloud_network.this.id
   type         = "cloud"
-  network_zone = "us-east" # Zona correspondente à localização ash (Ashburn, EUA)
+  network_zone = "eu-central" # Zona correspondente às localizações nbg1/fsn1/hel1
   ip_range     = "10.0.1.0/24"
 }
 
