@@ -53,3 +53,42 @@ variable "open_ports" {
   type        = list(number)
   default     = [22, 80, 443]
 }
+
+# =============================================================================
+# Supabase — Banco de Dados PostgreSQL gerenciado
+# =============================================================================
+
+variable "supabase_access_token" {
+  description = "Personal Access Token da conta Supabase. Gere em: supabase.com/dashboard/account/tokens. Passe via TF_VAR_supabase_access_token — nunca commitar."
+  type        = string
+  sensitive   = true
+}
+
+variable "supabase_organization_id" {
+  description = "ID da organização Supabase. Encontre em: Settings → General da sua organização."
+  type        = string
+}
+
+variable "supabase_db_password" {
+  description = "Senha master do banco PostgreSQL. Passe via TF_VAR_supabase_db_password — nunca commitar."
+  type        = string
+  sensitive   = true
+}
+
+variable "supabase_project_name" {
+  description = "Nome do projeto Supabase"
+  type        = string
+  default     = "curator-production"
+}
+
+variable "supabase_region" {
+  description = "Região AWS onde o Supabase cria o banco. us-east-1 = N. Virginia (mesma costa do servidor Hetzner ash)"
+  type        = string
+  default     = "us-east-1"
+}
+
+variable "supabase_instance_size" {
+  description = "Plano do banco Supabase. micro = free tier. Upgrade: small ($10/mês), medium ($25/mês)"
+  type        = string
+  default     = "micro"
+}

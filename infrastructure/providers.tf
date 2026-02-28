@@ -6,6 +6,10 @@ terraform {
       source  = "hetznercloud/hcloud"
       version = "~> 1.0"
     }
+    supabase = {
+      source  = "supabase/supabase"
+      version = "~> 1.0"
+    }
   }
 
   # =============================================================================
@@ -41,4 +45,11 @@ provider "hcloud" {
   # Token da API Hetzner Cloud.
   # Passe via TF_VAR_hcloud_token (env var) ou arquivo .tfvars (gitignored).
   token = var.hcloud_token
+}
+
+provider "supabase" {
+  # Personal Access Token da conta Supabase.
+  # Gere em: https://supabase.com/dashboard/account/tokens
+  # Passe via TF_VAR_supabase_access_token — nunca commitar.
+  access_token = var.supabase_access_token
 }

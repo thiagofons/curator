@@ -13,3 +13,13 @@ module "hetzner" {
     managed_by  = "terraform"
   }
 }
+
+module "supabase" {
+  source = "./modules/supabase"
+
+  project_name    = var.supabase_project_name
+  organization_id = var.supabase_organization_id
+  db_password     = var.supabase_db_password
+  region          = var.supabase_region
+  instance_size   = var.supabase_instance_size
+}
