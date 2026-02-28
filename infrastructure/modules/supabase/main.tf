@@ -1,3 +1,11 @@
+terraform {
+  required_providers {
+    supabase = {
+      source = "supabase/supabase"
+    }
+  }
+}
+
 # =============================================================================
 # Supabase Project — PostgreSQL gerenciado
 #

@@ -1,3 +1,11 @@
+terraform {
+  required_providers {
+    hcloud = {
+      source = "hetznercloud/hcloud"
+    }
+  }
+}
+
 # =============================================================================
 # SSH Key — registra a chave pública fornecida via variável
 # A chave privada correspondente fica FORA do Terraform (GitHub Secret: HETZNER_SSH_KEY)
