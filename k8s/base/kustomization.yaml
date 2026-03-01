@@ -13,17 +13,5 @@ resources:
   - cms/configmap.yaml
   - redis/statefulset.yaml
   - redis/service.yaml
-
-secretGenerator:
-  - name: api-secret
-    envs:
-      - api/secrets.env
-  - name: cms-secret
-    envs:
-      - cms/secrets.env
-  - name: redis-secret
-    envs:
-      - redis/secrets.env
-
-generatorOptions:
-  disableNameSuffixHash: true
+# Secrets are generated per-overlay via secretGenerator in each overlay's kustomization.yaml.
+# Each overlay provides its own secrets.env files (not committed — see secrets.env.example).

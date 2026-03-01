@@ -1,0 +1,5 @@
+# PVC is defined in the StatefulSet's volumeClaimTemplates.
+# This file is kept as a placeholder to document storage requirements.
+#
+# Storage: 5Gi (local-path provisioner from K3s)
+# Access Mode: ReadWriteOnce
