@@ -1,0 +1,29 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: curator
+
+resources:
+  - namespace.yaml
+  - api/deployment.yaml
+  - api/service.yaml
+  - api/configmap.yaml
+  - cms/deployment.yaml
+  - cms/service.yaml
+  - cms/configmap.yaml
+  - redis/statefulset.yaml
+  - redis/service.yaml
+
+secretGenerator:
+  - name: api-secret
+    envs:
+      - api/secrets.env
+  - name: cms-secret
+    envs:
+      - cms/secrets.env
+  - name: redis-secret
+    envs:
+      - redis/secrets.env
+
+generatorOptions:
+  disableNameSuffixHash: true
