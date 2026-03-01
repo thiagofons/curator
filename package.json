@@ -15,6 +15,7 @@
     "k3s:staging": "kubectl apply -k k8s/overlays/staging",
     "k3s:staging:down": "kubectl delete -k k8s/overlays/staging",
     "k3s:staging:status": "kubectl get pods,ingress,svc -n curator",
+    "k3s:website:build": "docker build --target staging --secret id=website_env,src=.env.development -f apps/frontend/website/Dockerfile -t curator-website:staging .",
     "// --- Database ---": "",
     "db:generate": "turbo run db:generate",
     "db:migrate:dev": "turbo run db:migrate:dev",
