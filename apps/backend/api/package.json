@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "k3s:build": "docker build --target runner -f Dockerfile -t ghcr.io/thiagofons/curator-api:staging ../../..",
+    "k8s:build": "docker build --target runner -f Dockerfile -t ghcr.io/thiagofons/curator-api:staging ../../..",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "trpc:generate": "pnpm exec nestjs-trpc generate --entrypoint src/app.module.ts --output src && node scripts/fix-trpc-aliases.mjs",

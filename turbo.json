@@ -62,7 +62,7 @@
       "cache": true,
       "inputs": ["Dockerfile", "../../package.json", "src/**", "public/**"]
     },
-    "k3s:build": {
+    "k8s:build": {
       "cache": false,
       "inputs": ["Dockerfile"]
     },

@@ -8,7 +8,7 @@
     "dev:docker": "astro dev --port 4003 --host",
     "preview": "astro preview --port 4003",
     "build": "astro build",
-    "k3s:build": "docker build --target staging --secret id=website_env,src=../../../.env.development -f Dockerfile -t curator-website:staging ../../..",
+    "k8s:build": "docker build --target staging --secret id=website_env,src=../../../.env.development -f Dockerfile -t curator-website:staging ../../..",
     "lint": "eslint .",
     "test:unit": "vitest run",
     "test:unit:coverage": "vitest run --coverage",
