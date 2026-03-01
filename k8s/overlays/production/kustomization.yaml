@@ -6,7 +6,7 @@ namespace: curator
 resources:
   - ../../base
   - ingress.yaml
-  - traefik-config.yaml
+  # traefik-config.yaml is applied separately by CD (must live in kube-system, not curator)
   - metabase/deployment.yaml
   - metabase/service.yaml
   - metabase/configmap.yaml
