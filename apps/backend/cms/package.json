@@ -11,6 +11,7 @@
     "dev:migrate": "pnpm db:push && pnpm dev",
     "db:push": "payload migrate",
     "docker:build": "docker build -t curator/backend/cms-service:latest -f Dockerfile ../../../",
+    "k3s:build": "docker build --target runner -f Dockerfile -t ghcr.io/thiagofons/curator-cms:staging ../../..",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "lint": "eslint .",

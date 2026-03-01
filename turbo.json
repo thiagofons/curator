@@ -62,6 +62,10 @@
       "cache": true,
       "inputs": ["Dockerfile", "../../package.json", "src/**", "public/**"]
     },
+    "k3s:build": {
+      "cache": false,
+      "inputs": ["Dockerfile"]
+    },
     "lint": {
       "dependsOn": ["^lint"]
     },
