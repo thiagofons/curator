@@ -84,6 +84,7 @@ END \$\$;
 -- necessário para ALTER DEFAULT PRIVILEGES funcionar corretamente
 GRANT api_user TO ${DATABASE_USER};
 GRANT cms_user TO ${DATABASE_USER};
+GRANT crm_user TO ${DATABASE_USER};
 
 -- =============================================================================
 -- Schemas
