@@ -1,10 +1,2 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-set -e
-
-echo "🧪 Running unit tests before push..."
-echo "⏳ Running tests..."
-pnpm test:unit:coverage
-
-echo "🎉 All checks passed! Pushing."
+pnpm turbo run check-types --affected
+pnpm turbo run test:unit --affected
