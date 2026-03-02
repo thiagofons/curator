@@ -310,3 +310,88 @@ jobs:
 
             echo "=== Deploy concluído com sucesso ==="
             kubectl get pods,ingress -n curator
+
+  # ------------------------------------------------------------------
+  # SMOKE TESTS — Post-deploy health checks
+  # ------------------------------------------------------------------
+  smoke-tests:
+    name: 🔥 Smoke Tests
+    needs: [deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔥 Health check API
+        run: |
+          for i in {1..6}; do
+            status=$(curl -s -o /dev/null -w "%{http_code}" https://api.curator.com.br/health)
+            if [ "$status" = "200" ]; then
+              echo "✅ API health check passed (attempt $i)"
+              exit 0
+            fi
+            echo "⏳ Attempt $i failed (HTTP $status), retrying in 10s..."
+            sleep 10
+          done
+          echo "❌ API health check failed after 6 attempts"
+          exit 1
+
+      - name: 🔥 Health check CMS
+        run: |
+          for i in {1..6}; do
+            status=$(curl -s -o /dev/null -w "%{http_code}" https://cms.curator.com.br/api/health)
+            if [ "$status" = "200" ]; then
+              echo "✅ CMS health check passed (attempt $i)"
+              exit 0
+            fi
+            echo "⏳ Attempt $i failed (HTTP $status), retrying in 10s..."
+            sleep 10
+          done
+          echo "❌ CMS health check failed after 6 attempts"
+          exit 1
+
+  # ------------------------------------------------------------------
+  # ROLLBACK — Auto-revert on smoke test failure
+  # ------------------------------------------------------------------
+  rollback:
+    name: ⏪ Rollback
+    needs: [smoke-tests, provision]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⏪ Rollback deployments to previous version
+        uses: appleboy/ssh-action@2ead5e36573f08b82fbfce1504f1a4b05a647c6f # v1.2.2
+        with:
+          host: ${{ needs.provision.outputs.floating_ip }}
+          username: root
+          key: ${{ secrets.HETZNER_SSH_KEY }}
+          command_timeout: 10m
+          script: |
+            set -e
+            export KUBECONFIG=/root/.kube/config
+            echo "=== Iniciando rollback ==="
+            kubectl rollout undo deployment/api -n curator
+            kubectl rollout undo deployment/cms -n curator
+            kubectl rollout status deployment/api -n curator --timeout=5m
+            kubectl rollout status deployment/cms -n curator --timeout=5m
+            echo "=== Rollback concluído ==="
+            kubectl get pods -n curator
+
+  # ------------------------------------------------------------------
+  # NOTIFY — Discord notification on deploy success or failure
+  # ------------------------------------------------------------------
+  notify:
+    name: 📣 Notify Discord
+    needs: [deploy, smoke-tests]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📣 Send Discord notification
+        uses: sarisia/actions-status-discord@eb045afee445dc055c18d3d90bd0f244fd062708 # v1.16.0
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          status: ${{ needs.smoke-tests.result == 'success' && 'success' || 'failure' }}
+          title: "Deploy to Production"
+          description: |
+            **Branch:** `${{ github.ref_name }}`
+            **Commit:** `${{ github.sha }}`
+            **Actor:** ${{ github.actor }}
+          url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          nodetail: false
