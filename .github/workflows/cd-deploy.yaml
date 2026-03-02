@@ -10,6 +10,7 @@ on:
 permissions:
   contents: read
   packages: write
+  security-events: write
 
 concurrency:
   group: production-deploy
@@ -130,9 +131,50 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+  # ------------------------------------------------------------------
+  # SCAN IMAGES — Trivy vulnerability scan (blocks deploy on CRITICAL CVEs)
+  # ------------------------------------------------------------------
+  scan-images:
+    name: 🔒 Scan ${{ matrix.app }}
+    needs: [build-and-push]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - app: api
+            image_name: curator-api
+          - app: cms
+            image_name: curator-cms
+
+    steps:
+      - name: 🔑 Login to GHCR
+        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3.4.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🔍 Run Trivy vulnerability scan
+        uses: aquasecurity/trivy-action@e368e328979b113139d6f9068e03accaed98a518 # 0.34.1
+        with:
+          image-ref: ghcr.io/${{ github.repository_owner }}/${{ matrix.image_name }}:latest
+          format: sarif
+          output: trivy-results.sarif
+          severity: CRITICAL,HIGH
+          exit-code: "1"
+          ignore-unfixed: true
+
+      - name: 📤 Upload Trivy results to GitHub Security
+        if: always()
+        uses: github/codeql-action/upload-sarif@89a39a4e59826350b863aa6b6252a07ad50cf83e # v4.32.4
+        with:
+          sarif_file: trivy-results.sarif
+          category: trivy-${{ matrix.app }}
+
   deploy:
     name: 🚀 Deploy to K3s
-    needs: [build-and-push, provision]
+    needs: [scan-images, provision]
     runs-on: ubuntu-latest
     environment: production
 
