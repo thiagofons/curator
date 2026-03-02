@@ -36,8 +36,15 @@ COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 RUN pnpm install --frozen-lockfile
 COPY --from=pruner /app/out/full/ .
 
-# direto para dentro da pasta do website, contornando o turbo prune!
-COPY .env.development ./apps/frontend/website/.env
+# Env file injected via BuildKit secret (never cached in image layers).
+# Build command: docker build --secret id=website_env,src=<env-file> ...
+# If no secret is provided (e.g. CI without env file), an empty .env is created.
+RUN --mount=type=secret,id=website_env \
+    if [ -f /run/secrets/website_env ]; then \
+      cp /run/secrets/website_env ./apps/frontend/website/.env; \
+    else \
+      touch ./apps/frontend/website/.env; \
+    fi
 
 ENV ASTRO_ADAPTER=node
 ENV NEXT_TELEMETRY_DISABLED=1

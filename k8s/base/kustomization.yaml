@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: curator
+
+resources:
+  - namespace.yaml
+  - api/deployment.yaml
+  - api/service.yaml
+  - api/configmap.yaml
+  - cms/deployment.yaml
+  - cms/service.yaml
+  - cms/configmap.yaml
+  - redis/statefulset.yaml
+  - redis/service.yaml
+# Secrets are generated per-overlay via secretGenerator in each overlay's kustomization.yaml.
+# Each overlay provides its own secrets.env files (not committed — see secrets.env.example).

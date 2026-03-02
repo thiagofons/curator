@@ -34,6 +34,8 @@ dist
 
 # Secrets
 k8s/**/secret.yaml
+k8s/**/secrets.env
+k8s/**/secrets/*.env
 
 # Debug
 npm-debug.log*

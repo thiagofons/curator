@@ -8,7 +8,7 @@ import { TRPCModule } from "nestjs-trpc";
   imports: [
     PrismaModule,
     TRPCModule.forRoot({
-      basePath: "/",
+      basePath: "/trpc",
     }),
     HealthModule,
     AuthenticationModule,

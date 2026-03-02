@@ -3,7 +3,10 @@ set -euo pipefail
 
 # =============================================================================
 # Curator — Hetzner Cloud Instance Bootstrap (cloud-init)
-# Instala Docker, inicializa Swarm, cria volumes/rede, configura o Floating IP.
+# Instala K3s (Kubernetes leve), Git, psql e configura o Floating IP.
+#
+# K3s inclui Traefik como ingress controller e ServiceLB para expor as
+# portas 80/443 diretamente na interface do host.
 #
 # Este arquivo é um template Terraform — ${floating_ip} é substituído pelo
 # endereço real do Floating IP antes de ser enviado como user-data ao servidor.
@@ -15,39 +18,29 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update -y
 apt-get upgrade -y
 
-# --- Install Docker CE ---
-apt-get install -y ca-certificates curl gnupg lsb-release
+# --- Install dependencies ---
+apt-get install -y curl git postgresql-client jq gettext-base
 
-install -m 0755 -d /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-chmod a+r /etc/apt/keyrings/docker.gpg
+# --- Install kustomize ---
+curl -sL "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.4.3/kustomize_v5.4.3_linux_amd64.tar.gz" | tar xz -C /usr/local/bin
 
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-  $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+# --- Install K3s ---
+# Inclui Traefik (ingress) + ServiceLB (expõe portas 80/443 no host)
+curl -sfL https://get.k3s.io | sh -
 
-apt-get update -y
-apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+# Aguarda K3s inicializar
+sleep 10
+until kubectl get nodes &>/dev/null; do
+  echo "Aguardando K3s inicializar..."
+  sleep 5
+done
 
-# --- Initialize Docker Swarm ---
-docker swarm init || true
+# Exporta kubeconfig para o usuário root
+mkdir -p /root/.kube
+cp /etc/rancher/k3s/k3s.yaml /root/.kube/config
+chmod 600 /root/.kube/config
 
-# --- Create persistent Docker volumes ---
-docker volume create redis_prod_data
-docker volume create nginx_logs
-docker volume create certbot_www
-
-# --- Create Docker overlay network for the stack ---
-docker network create --driver overlay --attachable curator-network || true
-
-# --- Install Certbot ---
-apt-get install -y certbot
-
-# --- Install Git ---
-apt-get install -y git
-
-# --- Install PostgreSQL Client (útil para debug de conexão ao Supabase) ---
-apt-get install -y postgresql-client
+echo "export KUBECONFIG=/root/.kube/config" >> /root/.bashrc
 
 # =============================================================================
 # Floating IP — configura o endereço estático no netplan de forma persistente.
@@ -65,4 +58,5 @@ EOF
 
 netplan apply
 
-echo "=== Curator Hetzner bootstrap complete — floating IP: ${floating_ip} ==="
+echo "=== Curator Hetzner bootstrap completo — floating IP: ${floating_ip} ==="
+echo "=== K3s versão: $(k3s --version | head -1) ==="

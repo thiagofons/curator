@@ -1,0 +1,27 @@
+# =============================================================================
+# Traefik — Let's Encrypt ACME Configuration for K3s
+# Applied to kube-system namespace (Traefik's default namespace in K3s)
+# =============================================================================
+#
+# BEFORE APPLYING: Replace ACME_EMAIL with a real email address.
+# This file is intentionally committed with a placeholder.
+# The CD pipeline injects the real email via environment substitution.
+#
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    additionalArguments:
+      - "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/data/acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+    persistence:
+      enabled: true
+      size: 128Mi
+    ports:
+      web:
+        redirectTo:
+          port: websecure
