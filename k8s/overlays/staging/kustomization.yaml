@@ -42,6 +42,9 @@ secretGenerator:
   - name: postgres-secret
     envs:
       - secrets/postgres.env
+  - name: website-secret
+    envs:
+      - secrets/website.env
 
 generatorOptions:
   disableNameSuffixHash: true

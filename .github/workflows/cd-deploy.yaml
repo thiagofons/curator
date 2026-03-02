@@ -247,8 +247,8 @@ jobs:
             EOF
 
             # 7. Atualiza image tags no overlay de produção (via kustomize)
-            API_VERSION=$(node -p "require('./apps/backend/api/package.json').version")
-            CMS_VERSION=$(node -p "require('./apps/backend/cms/package.json').version")
+            API_VERSION=$(jq -r '.version' apps/backend/api/package.json)
+            CMS_VERSION=$(jq -r '.version' apps/backend/cms/package.json)
 
             cd k8s/overlays/production
             kustomize edit set image \

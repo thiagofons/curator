@@ -10,6 +10,7 @@ resources:
   - metabase/deployment.yaml
   - metabase/service.yaml
   - metabase/configmap.yaml
+  - metabase/middleware.yaml
 
 patches:
   - path: patches/api-resources.yaml

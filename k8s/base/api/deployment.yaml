@@ -12,6 +12,8 @@ spec:
       labels:
         app: api
     spec:
+      imagePullSecrets:
+        - name: ghcr-credentials
       containers:
         - name: api
           image: ghcr.io/thiagofons/curator-api:latest

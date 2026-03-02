@@ -19,7 +19,10 @@ apt-get update -y
 apt-get upgrade -y
 
 # --- Install dependencies ---
-apt-get install -y curl git postgresql-client
+apt-get install -y curl git postgresql-client jq gettext-base
+
+# --- Install kustomize ---
+curl -sL "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.4.3/kustomize_v5.4.3_linux_amd64.tar.gz" | tar xz -C /usr/local/bin
 
 # --- Install K3s ---
 # Inclui Traefik (ingress) + ServiceLB (expõe portas 80/443 no host)

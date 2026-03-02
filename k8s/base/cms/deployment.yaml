@@ -12,6 +12,8 @@ spec:
       labels:
         app: cms
     spec:
+      imagePullSecrets:
+        - name: ghcr-credentials
       containers:
         - name: cms
           image: ghcr.io/thiagofons/curator-cms:latest

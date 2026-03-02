@@ -18,13 +18,16 @@ spec:
           image: curator-website:staging
           ports:
             - containerPort: 4003
+          envFrom:
+            - secretRef:
+                name: website-secret
           resources:
             requests:
               cpu: 50m
-              memory: 128Mi
-            limits:
-              cpu: 300m
               memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 1Gi
           readinessProbe:
             httpGet:
               path: /favicon.ico
