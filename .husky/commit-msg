@@ -1,0 +1,21 @@
+commit_msg=$(cat "$1")
+
+# Conventional Commits with optional gitmoji: <type>(<scope>): :<emoji>: <description>
+# Examples:
+#   feat(backend/api): :sparkles: add OAuth login
+#   fix(ui-web): :bug: fix button focus ring
+#   chore: update dependencies
+pattern='^(feat|fix|refactor|chore|docs|style|test|perf|ci|build|revert)(\(.+\))?(!)?: (:[a-z0-9_+-]+: )?.+'
+
+if ! echo "$commit_msg" | grep -qE "$pattern"; then
+  echo ""
+  echo "❌ Commit message does not follow Conventional Commits."
+  echo ""
+  echo "  Format : <type>(<scope>): :<gitmoji>: <description>"
+  echo "  Example: feat(backend/api): :sparkles: add OAuth login"
+  echo "  Example: fix(ui-web): :bug: fix button focus ring"
+  echo ""
+  echo "  Types: feat | fix | refactor | chore | docs | style | test | perf | ci | build | revert"
+  echo ""
+  exit 1
+fi
