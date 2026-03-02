@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout Repo
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
 
@@ -43,7 +43,7 @@ jobs:
       TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
     steps:
       - name: ⬇️ Checkout Repo
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0 # Necessário para o --affected comparar branches
 
@@ -53,7 +53,7 @@ jobs:
           version: 9.5.0
 
       - name: 🟢 Setup Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version-file: .node-version
           cache: pnpm
@@ -79,7 +79,7 @@ jobs:
       TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
     steps:
       - name: ⬇️ Checkout Repo
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
 
@@ -89,7 +89,7 @@ jobs:
           version: 9.5.0
 
       - name: 🟢 Setup Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version-file: .node-version
           cache: pnpm
@@ -101,7 +101,7 @@ jobs:
         run: pnpm turbo run test:unit:coverage --affected
 
       - name: 📤 Upload Test Artifacts
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: coverage-reports
           path: |
@@ -135,7 +135,7 @@ jobs:
 
     steps:
       - name: ⬇️ Checkout Repo
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
 
@@ -145,7 +145,7 @@ jobs:
           version: 9.5.0
 
       - name: 🟢 Setup Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version-file: .node-version
           cache: pnpm
@@ -196,12 +196,12 @@ jobs:
 
     steps:
       - name: ⬇️ Checkout Repo
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
 
       - name: 📥 Download Coverage Reports
-        uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
+        uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
         continue-on-error: true
         with:
           name: coverage-reports
@@ -218,7 +218,7 @@ jobs:
 
       - name: 🔍 SonarQube Scan
         if: steps.check_coverage.outputs.has_coverage == 'true'
-        uses: sonarsource/sonarqube-scan-action@bfd4e558cda28cda6b5defafb9232d191be8c203 # v4.2.1
+        uses: sonarsource/sonarqube-scan-action@a31c9398be7ace6bbfaf30c0bd5d415f843d45e9 # v7.0.0
         with:
           projectBaseDir: ${{ matrix.path }}
         env:
@@ -248,7 +248,7 @@ jobs:
       TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
     steps:
       - name: ⬇️ Checkout Repo
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: 📦 Setup pnpm
         uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0
@@ -256,7 +256,7 @@ jobs:
           version: 9.5.0
 
       - name: 🟢 Setup Node.js
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version-file: .node-version
           cache: pnpm
