@@ -261,8 +261,8 @@ jobs:
 
             # 9. Aguarda rollouts completarem
             kubectl rollout status deployment/api      -n curator --timeout=5m
-            kubectl rollout status deployment/cms      -n curator --timeout=5m
-            kubectl rollout status deployment/metabase -n curator --timeout=5m
+            kubectl rollout status deployment/cms      -n curator --timeout=10m
+            kubectl rollout status deployment/metabase -n curator --timeout=10m
             kubectl rollout status statefulset/redis   -n curator --timeout=3m
 
             echo "=== Deploy concluído com sucesso ==="
