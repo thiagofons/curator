@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: cms
 spec:
+  progressDeadlineSeconds: 900
   replicas: 1
   selector:
     matchLabels:
@@ -31,19 +32,25 @@ spec:
             limits:
               cpu: 1000m
               memory: 1Gi
-          readinessProbe:
+          startupProbe:
             httpGet:
               path: /admin
               port: 3000
             initialDelaySeconds: 60
             periodSeconds: 15
             timeoutSeconds: 10
-            failureThreshold: 5
+            failureThreshold: 20
+          readinessProbe:
+            httpGet:
+              path: /admin
+              port: 3000
+            periodSeconds: 15
+            timeoutSeconds: 10
+            failureThreshold: 3
           livenessProbe:
             httpGet:
               path: /admin
               port: 3000
-            initialDelaySeconds: 120
             periodSeconds: 30
             timeoutSeconds: 10
             failureThreshold: 3
